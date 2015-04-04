@@ -1,0 +1,617 @@
+/*
+  This file is part of Troff.
+
+  Troff is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License,
+  or (at your option) any later version.
+
+  Troff is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Troff. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/*
+   http://css-tricks.com/snippets/css/a-guide-to-flexbox/
+   https://developer.mozilla.org/en-US/docs/Web/CSS/flex
+*/
+
+.selected{
+  background-color: purple;
+  color: white;
+}
+
+
+
+
+
+
+video{
+  width: 100%;
+}
+
+.fullscreen{
+  /*  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 99;
+  */
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: black;
+/*  z-index: 99; */
+  display: flex;
+}
+
+.overFilm{
+  z-index: 10;
+}
+
+.onTop{
+  z-index: 99;
+}
+
+.mediaButton{
+/*  width: 97%; */
+  padding: 1px 6px;
+  margin: 2;
+  text-align: left;
+  display: block;
+}
+
+/*
+#gallery{
+  display: flex;
+  flex-direction: column;
+  /* height: 400px; * /
+  background: pink;
+  overflow-y: auto;
+  align-items: flex-start;
+}
+*/
+
+body{
+    display: flex;
+    background-color: black;
+    font-family: Arial, "Open Sans", sans-serif;
+    color: black;
+}
+
+
+
+
+h1, h2, h3, h4, h5, h6{
+    color: rgb(50, 50, 50);
+    font-weight: bold;
+}
+
+
+h1 {
+    font-weight: 200;
+    color: black;
+}
+
+h2{
+    font-family: helvetica;
+    font-size: 18px;
+    margin-right: 3px;
+}
+
+p{
+    display: inline-block;
+    color: rgb(50, 50, 50);
+    font-size: 11px;
+}
+
+.normalSize{
+  font-size: 16px;
+}
+
+#gallery{
+  overflow-y: auto;
+  overflow-x: hidden;
+  width:100%;
+  flex: 1;
+}
+
+input, .linkButton{
+  font-size: 14px;
+  margin: 2px;
+}
+
+.oneRow{
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+
+
+nav{
+  background-color: #aabbcc;
+  width: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-grow: initial;
+  flex-wrap: inherit;
+  justify-content: space-between;
+}
+nav input, nav button{
+  margin: 0;
+  flex-basis: 31%;
+  justify-content: space-between;
+  height: 27px;
+}
+
+/*
+#info {
+	border: 1px solid #aaa;
+	background-color: #777;
+	width: auto;
+	border-radius: 5px;
+	overflow: hidden;
+	padding: 5px;
+}
+*/
+
+
+
+
+#songsSection{
+    display: flex;
+    flex-direction: column;
+    background-color: #4f6b8a;
+    float: flex-right;
+    padding: 0 5px 0 5;
+    max-width: 300px;            /* site change this!*/
+    height: 100vh;
+/*    width: 300px;
+    top: 100px;
+    right: 10px;
+    position: fixed;
+*/
+}
+
+#markerSection{
+    background-color: #7792ad;
+    display: flex;
+    padding: 0 5px 0 0;
+    min-width: 100px;
+/*    width: 300px;
+    position: fixed;
+    top: 100px;
+    right: 320px;
+*/
+}
+#timeSection{
+    background-color: #aabbcc;
+
+    /* this is nessessary bc "I/E" not dissapering when big markers: */
+    min-width: 112px;
+
+
+    display: flex;
+    flex-direction: column;
+/*    width: 70px;
+    align-content:  stretch;
+    justify-content: space-between;
+*/
+    align-items: flex-end;
+}
+
+#playIndicator{
+    background-color: pink;
+}
+
+.dataOutput h2{
+ /*   background-color: green; */
+    display: inline-flex;
+}
+
+#ControlTime{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: #a4c5de;
+    width: 100%;
+}
+#ControlMarker{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: #7792ad; #4f6b8a;
+    width: 100%;
+}
+#ControlLoop{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: #a4c5de;
+    width: 100%;
+}
+#ControlLoop div p, #ControlLoop div div{
+    margin-right: 5px;
+}
+
+
+#markerSection ul li, #ControlMarker div, #ControlTime div, #ControlLoop div{
+    display: flex;
+    align-items: center;
+}
+
+.small{
+    margin: 1px;
+}
+
+.loopClass input{
+    margin: 1px;
+    border: 0;
+    padding: 0;
+    padding-right: 1px;
+}
+
+
+.sliderRange{
+    -webkit-appearance: slider-vertical;
+    appearance: slider-vertical;
+    height: 40vh;
+    height: calc(100vh - 20px);
+    width: 15px;
+}
+
+.doubleSliders{
+    display: flex;
+}
+
+.sliderInfo{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.popUpSquare{
+    display: flex;
+    flex-direction: column;
+/*    position: absolute; */
+    z-index: 2;
+    background-color: cornflowerblue;
+}
+
+.popUpSquare *{
+    margin: 5px;
+}
+
+#ImportExportPopUpSquare{
+    display: none;
+}
+
+
+.plussMinusButton{
+    display: flex;
+}
+
+.sliderInfo p{
+    display: inline-block;
+}
+
+.sliderInfo input{
+    background-color: rgb(230,230,230);
+    border: 0;
+}
+
+
+/* button style mm */
+.dataOutput div{
+   display: inline-flex;
+}
+
+#mediaInfoBox div{
+  text-align: center;
+}
+#currentSong{
+  font-size: 18px;
+  font-weight: bold;
+  color: rgb(36, 36, 36);
+}
+#currentArtist{
+  font-size: 14px;
+}
+#currentAlbum{
+  font-size: 12px;
+}
+
+.currentSong {
+  color: white;
+  background-color: purple;
+}
+
+.currentMarker{
+  color: white;
+  background-color: purple;
+}
+
+.currentStopMarker{
+  color: white;
+  background-color: purple;
+}
+
+.currentLoop{
+  color: white;
+  background-color: purple;
+}
+
+.pause{
+    color: red;
+}
+.wait{
+    color: orange;
+}
+.play{
+    color: green;
+}
+
+
+
+
+
+/* the style for the time ***************************************/
+#activePlayRegion{
+    width: 21px;
+    background-color: purple;
+    position: absolute;
+    margin-top: 16px;
+    height: calc(100vh - 32px);
+}
+
+
+#timeBar{
+    -webkit-appearance: slider-vertical;
+    -moz-appearance: slider-vertical;
+    appearance: slider-vertical;
+    height: 98vh;
+    height: calc(100vh - 20px);
+    margin: 10px 0;
+    /*
+        first margin component needs to be
+        half of second height component.
+    */
+    width: 15px;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+#timeBarDiv{
+    width: 20px;
+    margin-right: 4px;
+    margin-left: 3px;
+/*  background-color: red; */
+}
+
+
+
+
+
+
+/* the style for the Input number ***************************************/
+
+
+
+/* removes the upp/down arrows in number input boxes */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    margin: 0;
+    height: 0;
+    width: 0;
+}
+
+input[type=number]{
+    width: 20px;
+    margin-right: 3px;
+    padding: 0;
+    text-align: center;
+}
+
+/* the style for the loop *************************************** /
+
+.XLoopOn p, .XLoopOn div div{
+/*    margin-right: 5px;* /
+}
+.XLoopOff p, .XLoopOff div{
+/*    margin-right: 5px; * /
+    color: gray;
+}
+
+
+.XLoopOff input[type=number]{
+    color: gray;
+    background-color: lightgray;
+}
+
+*/
+#infoSection div{
+	margin-left: 3vh;
+	font-size: 48vh;
+}
+/*
+#secondsLeft{
+	margin-left: 3vh;
+	font-size: 48vh;
+}
+*/
+
+
+
+.loopSquare{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: flex-end;
+ /*   background-color: #a4c5de; */
+}
+
+#loopButtons input[type="button"]{
+    width: 28px;
+   /* padding: 1px 10px; */
+
+}
+
+/*
+#loopOld{
+    width: 100%;
+    flex-direction: column;
+}
+*/
+
+#loopButtons{
+    flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100px;
+    justify-content: space-around;
+}
+
+
+
+
+
+
+
+/* the style for the IO ***************************************/
+.active{
+    color: white;
+    background-color: green;
+}
+.grayOut{
+    color: gray;
+    background-color: lightgray;
+}
+.startStopWidth{
+  width: 85px;
+}
+
+/*
+.flatButton{
+    background-color: rgb(230,230,230);
+    border: 0px;
+    background-color: pink;
+    border: 40px;
+}
+*/
+.svgButt{
+  height: 27px;
+}
+rect.svg_rect_btn {
+  stroke:#fff;
+  fill:#fff;
+  fill-opacity:0;
+  stroke-opacity:0;
+}
+
+input, button, .linkButton{
+    border-width: 0;
+    padding: 1px 6px;
+}
+
+input[type="button"]:hover, button:hover, .linkButton:hover{
+    -ms-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+
+.important{
+    background-color:#ed8223;
+    color:#fff;
+    font-family:'Helvetica Neue',sans-serif;
+    text-shadow:#C17C3A 0 -1px 0;
+    padding: 4px;
+    border: 0;
+}
+
+.Big{font-size: 18px;}
+.big{font-size: 16px;}
+.normal{font-size: 14px;}
+.small{font-size: 12px;}
+.Small{font-size: 10px;}
+.removeButt{
+    font-size: 10px;
+    background-color: lightgray;
+}
+
+
+
+
+.outerDialog{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.innerDialog{
+  width: 600px;
+  padding: 10 15px;
+  background-color: cornflowerblue;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 8px;
+}
+
+.paragraph{
+  margin-bottom: 4px;
+}
+
+.flexScroll{
+  flex: 1;
+  overflow-y: auto;
+}
+
+.flexCol{
+  display: flex;
+  flex-direction: column;
+}
+
+.flexRow{
+  display: flex;
+  flex-direction: row;
+}
+
+.almostFullHeight{
+  height: 90vh;
+}
+
+.rowBreak{
+  white-space: normal;
+}
+
+.linkButton{
+  background-color: rgb(221, 221, 221);
+  color: rgb(0, 0, 0);
+  cursor: default;height: 18px;
+  line-height: normal;
+}
