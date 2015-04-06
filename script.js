@@ -185,8 +185,6 @@ function setSong(fullPath, galleryId){
                 } else {
                   $('#currentArtist').text(Troff.pathToName(path));
                 }
-//                slim sim site
-
 /*                if (metadata.attachedImages.length) {
                   var blob = metadata.attachedImages[0];
                   var posterBlobURL = URL.createObjectURL(blob);
@@ -388,7 +386,7 @@ var TroffClass = function(){
   };
   this.setCurrentWaitBetweenLoops = function(){
     var wait = $('#waitBetweenLoops').val();
-    DB.setCurrent(strCurrentSong, 'iWaitBetweenLoops', wait);
+    DB.setCurrent(strCurrentSong, 'wait', wait);
   };
 
   this.toggleStopAfter = function(){
@@ -409,32 +407,22 @@ var TroffClass = function(){
   };
 
   this.getNewMarkerId = function(){
+    return Troff.getNewMarkerIds(1)[0];
+  };
+
+  this.getNewMarkerIds = function(iNrOfIds){
+    var a = [];
+    var aRet = [];
     var nr = 0;
-    while($('#markerNr'+nr).length > 0){
-      nr++;
-    }
-    return "markerNr" + nr;
-  };
-
-  this.get2NewMarkerIds = function(){
-    var nr1 = 0;
-    var nr2 = 1;
-    var carryOn = true;
-    while(carryOn){
-      if( $('#markerNr'+nr1).length > 0){
-        nr1++;
-        nr2++;
+    for(var i=0; i<iNrOfIds; i++){
+      while($('#markerNr'+nr).length > 0 || a.indexOf(nr) != -1){
+        nr++;
       }
-      else if($('#markerNr'+nr2).length > 0 ){
-        nr2++;
-      } else{
-        carryOn = false; 
-      }
-        
+      a[i] = nr;
+      aRet[i] = "markerNr" + nr;
     }
-    return ["markerNr" + nr1, "markerNr" + nr2];
+    return aRet;
   };
-
 
   this.setCurrentStartBefore = function() {
     DB.setCurrentStartBefore(
@@ -513,9 +501,8 @@ var TroffClass = function(){
       else {
         IO.confirm('Out of range', 'You pressed outside the playing region, '
           + 'do you want to add a marker to the end of the song?', function(){
-          var songLength = document.getElementById('timeBar').max;
+          var songLength = parseInt(document.getElementById('timeBar').max);
           
-//          slim sim update
           var oMarker = {};
           oMarker.name = "End";
           oMarker.time = songLength;
@@ -819,7 +806,6 @@ var TroffClass = function(){
       return $('#markerList li input:nth-child(5)');
     }
     return $('#markerList li input:nth-child(3)');
-    //slim sim markers
   };
 
   /*
@@ -827,14 +813,19 @@ var TroffClass = function(){
   */
   this.exportMarker = function(){
     IO.pressEnter();
-    DB.getMarkers( strCurrentSong, function(oMarkers){
+    DB.getMarkers( strCurrentSong, function(aoMarkers){
       
-//      console.log("getMarkers -> oMarkers:");
-//      console.log(oMarkers);
+      var aoTmpMarkers = [];
+      var oTmp = {};
+      for (var i=0; i<aoMarkers.length; i++){
+        oTmp.name = aoMarkers[i].name;
+        oTmp.time = aoMarkers[i].time;
+        oTmp.info = aoMarkers[i].info;
+        aoTmpMarkers[i] = oTmp;
+      }
+      var sMarkers = JSON.stringify(aoTmpMarkers);
       
-      
-        var sMarkers = JSON.stringify(oMarkers);
-        IO.prompt("Copy the marked text to export your markers", sMarkers);
+      IO.prompt("Copy the marked text to export your markers", sMarkers);
     });
   }; // end exportMarker
 
@@ -846,16 +837,19 @@ var TroffClass = function(){
     IO.prompt("Please paste the text you recieved to import the markers",
               "Paste text here",
               function(sMarkers){
-          var aMarkers = JSON.parse(sMarkers);
+      var aMarkers = JSON.parse(sMarkers);
 
-//        for(var i=0; i<aMarkers; i++){
-//          Här borde jag kolla så att markörsnamnen inte redan finns
-//            Object.keys(aMarkers[i])[0] = jag kan inte sätta key'n på detta sätt...'
-//            men det är bra om jag gör denna koll, eller ska den göras på annat ställe?
-//        }
+      var aMarkerId = Troff.getNewMarkerIds(aMarkers.length);
 
-        Troff.addMarkers(aMarkers); // adds marker to html
-        DB.saveMarkers(Troff.getCurrentSong());
+      for(var i=0; i<aMarkers.length; i++){
+        var tmpName = Object.keys(aMarkers[i])[0];
+        aMarkers[i].name = aMarkers[i].name || tmpName;
+        aMarkers[i].time = aMarkers[i].time || parseInt(aMarkers[i][tmpName]);
+        aMarkers[i].info = aMarkers[i].info || Troff.getStandardMarkerInfo();
+        aMarkers[i].id = aMarkerId[i];
+      }
+      Troff.addMarkers(aMarkers); // adds marker to html
+      DB.saveMarkers(Troff.getCurrentSong());
 
     });
   };
@@ -879,10 +873,6 @@ var TroffClass = function(){
       oFI.strTextareaPlaceholder = "Add extra info about the marker here.";
       IO.promptDouble(oFI, function(markerName, markerInfo){
       if(markerName === "") return;
-      
-      
-      console.log("markerInfo = " + markerInfo);
-
 
       var oMarker = {};
       oMarker.name = markerName;
@@ -899,55 +889,18 @@ var TroffClass = function(){
     }, 0);
   }; // end createMarker   ********/
 
-/*
-    this.getUniqueMarkerName = function(markerName){
-      var done = false;
-      var nr = "";
-      var extra = "";
-      while(!done){
-          for(var j=0; j<$('#markerList li').length; j++){
-              var listName = $('#markerList li input:nth-child(3)')[j].value; // site is 3 right here, or is 4 better?
-              if(markerName+extra+nr == listName){
-                  nr++;
-                  extra = "_";
-                  break;
-              }
-          }
-          if(j==$('#markerList li').length){
-              markerName += extra + nr;
-              done=true;
-          }
-      }
-      return markerName;
-    };
-
-    this.getUniqueMarkerNameId = function(markerNameId){
-        var done = false;
-        var nr = "";
-        while(!done){
-          for(var j=0; j<$('#markerList li').length; j++){
-              var listName = $('#markerList li input:nth-child(3)')[j].id;
-              if(markerNameId+nr == listName){
-                  nr++;
-                  break;
-              }
-          }
-          if(j==$('#markerList li').length){
-              markerNameId += nr;
-              done=true;
-          }
-        }
-        return markerNameId;
-    };
-*/
     this.toggleImportExport = function(){
       $('#outerImportExportPopUpSquare').toggle();
         document.getElementById('blur-hack').focus();
     };
 
     this.addMarkers = function(aMarkers){
-console.log("\n\n\n\naddMarkers -> aMarkers:");
-console.log(aMarkers);
+
+      var tmpUpdateMarkerSoonBcMax = function(){
+        DB.updateMarker(nameId, name, info, parseInt(time), song);
+        clearInterval(quickTimeOut);
+      };
+
       for(var i=0; i<aMarkers.length; i++) {
         var oMarker = aMarkers[i];
         var name = oMarker.name;
@@ -955,12 +908,8 @@ console.log(aMarkers);
         var info = oMarker.info;
         var nameId = oMarker.id;
 
-console.log("oMarker:");
-console.log(oMarker);
 
-
-        if(!nameId){
-          //nameId = "markerx";
+        if(!nameId){ // slim sim remove!
           IO.alert("why is there no nameId (or markerId) with this marker!?");
           console.error("why is there no nameId (or markerId) with this marker!?");
           console.error("i = " + i);
@@ -968,7 +917,13 @@ console.log(oMarker);
           console.log(aMarkers[i]);
           return -1;
         }
-//        nameId = Troff.getUniqueMarkerNameId(nameId);
+        
+        
+        if(time == "max"){
+          time = parseInt(document.getElementById('timeBar').max);
+          var song = Troff.getCurrentSong();
+          var quickTimeOut = setTimeout(tmpUpdateMarkerSoonBcMax, 42);
+        }
 
         var button = document.createElement("input");
         button.type = "button";
@@ -1026,7 +981,6 @@ console.log(oMarker);
 
               updated = true;
 
-//              newMarkerName = Troff.getUniqueMarkerName(newMarkerName); //slim sim remove getUniqueMarkerName!
               var newMarkerId = Troff.getNewMarkerId();
 
               if($('.currentMarker')[0].id == child.childNodes[2].id)
@@ -1075,7 +1029,6 @@ console.log(oMarker);
           document.getElementById('blur-hack').focus();
         });
         document.getElementById(nameId + 'I').addEventListener('click', function() {
-          console.log("in eventlistener, info = " + info);
           // sending the buttonId instead of the infoId
           Troff.showInfo( this.id.slice(0,-1) );
           document.getElementById('blur-hack').focus();
@@ -1173,12 +1126,10 @@ console.log(oMarker);
       selectMarker - All, sets new Marker, sets playtime to markers playtime
     */
     this.selectMarker = function(markerId){
-      // if stopMarker befor Marker - unselect stopMarker:
-
-console.log("selectMarker -> markerId = " + markerId);
-
       var startTime = parseInt($('#'+markerId)[0].timeValue);
       var stopTime = Troff.getStopTime();
+      
+      // if stopMarker befor Marker - unselect stopMarker:
       if(stopTime <= (startTime +0.5)){
         $('.currentStopMarker').removeClass('currentStopMarker');
         var aFirstAndLast = Troff.getFirstAndLastMarkers();
@@ -1204,11 +1155,10 @@ console.log("selectMarker -> markerId = " + markerId);
       selectStopMarker - All, selects a marker to stop playing at
     */
     this.selectStopMarker = function(markerId){
-      // if Marker after stopMarker - unselect Marker:
-
       var stopTime = parseInt($('#'+markerId)[0].timeValue);
       var startTime = Troff.getStartTime();
 
+      // if Marker after stopMarker - unselect Marker:
       if((startTime + 0.5) >= stopTime ){
         var aFirstAndLast = Troff.getFirstAndLastMarkers();
         var firstMarkerId = aFirstAndLast[0];
@@ -1232,15 +1182,7 @@ console.log("selectMarker -> markerId = " + markerId);
     }; // end selectStopMarker
 
     this.showInfo = function(id){
-      console.log("showInfo, id:");
-      console.log(id);
-      
       var info = $('#' + id)[0].info;
-      
-      console.log("info:");
-      console.log(info);      
-      // slim sim info
-      
       IO.alert(info);
     };
 
@@ -1293,50 +1235,21 @@ console.log("selectMarker -> markerId = " + markerId);
       removeMarker, all, Tar bort en markör från html och DB
     */
     this.removeMarker = function(markerId){
-      console.log("markerId = " + markerId);
-//        var markerName = $("#"+nameId.slice(0,-1)).val();
+      // Remove Marker from HTML
+      $('#'+markerId).closest('li').remove();
+      Troff.settAppropriateMarkerDistance();
 
-        // Remove Marker from HTML
-        $('#'+markerId).closest('li').remove();
-        Troff.settAppropriateMarkerDistance();
-
-        // remove from DB
-        
-//        slim sim remove
-        DB.removeMarker(markerId, strCurrentSong);
+      // remove from DB
+      DB.removeMarker(markerId, strCurrentSong);
     }; // end removeMarker ******/
-/*
-    this.getMarkerTimeFromAnyId = function(markerId){
-        if($("#"+markerId)[0].timeValue || $("#"+markerId)[0].timeValue === 0)
-            return $("#"+markerId)[0].timeValue;
-        var id = markerId.slice(0,-1);
-        return $("#"+id)[0].timeValue;
-    }
-
-    this.getMarkerNameFromAnyId = function(markerId){
-        if($("#"+markerId)[0].timeValue || $("#"+markerId)[0].timeValue === 0)
-            return $("#"+markerId).val();
-        var id = markerId.slice(0,-1);
-        return $("#"+id).val();
-    }
-*/
 
     /*
       editMarker, all, Tar bort en markör från html och DB
     */
-    this.editMarker = function(markerId){   // (markerId)
-console.log("editMarker -> nameId = " + markerId);
-//      var oldMarkerId = nameId.slice(0,-1);
-      var oldName  = $('#'+markerId).val(); //Troff.getMarkerNameFromAnyId(oldMarkerId);
-console.log("oldName = " + oldName);
-
-      var oldTime = parseInt($('#'+markerId)[0].timeValue); //Troff.getMarkerTimeFromAnyId(oldMarkerId);
-console.log("oldTime = " + oldTime);
-
+    this.editMarker = function(markerId){
+      var oldName  = $('#'+markerId).val();
+      var oldTime = parseInt($('#'+markerId)[0].timeValue);
       var oldMarkerInfo = $('#'+markerId)[0].info;
-console.log("oldMarkerInfo = " + oldMarkerInfo);
-//      var newMarkerId = oldMarkerId;
-
 
       var text = "Please enter new marker name here";
       IO.promptEditMarker(markerId, function(newMarkerName, newMarkerInfo, newTime){
@@ -1346,7 +1259,6 @@ console.log("oldMarkerInfo = " + oldMarkerInfo);
       {
           return;
       }
-      console.log("newMarkerInfo = " + newMarkerInfo);
 
       if( newTime < 0 )
         newTime = 0;
@@ -1396,7 +1308,7 @@ console.log("oldMarkerInfo = " + oldMarkerInfo);
           markerId, 
           newMarkerName,
           newMarkerInfo,
-          newTime, 
+          parseInt(newTime), 
           strCurrentSong
         );
         /*
@@ -1426,10 +1338,10 @@ console.log("oldMarkerInfo = " + oldMarkerInfo);
         var aFirstAndLast = Troff.getFirstAndLastMarkers();
         var firstMarkerId = aFirstAndLast[0];
         var lastMarkerId = aFirstAndLast[1] + 'S';
-        if( $('.currentMarker').length == 0 ){
+        if( $('.currentMarker').length === 0 ){
             $('#' + firstMarkerId).addClass('currentMarker');
         }
-        if( $('.currentStopMarker').length == 0 )
+        if( $('.currentStopMarker').length === 0 )
             $('#' + lastMarkerId).addClass('currentStopMarker');
 
 
@@ -1532,25 +1444,23 @@ console.log("oldMarkerInfo = " + oldMarkerInfo);
 
   this.addStartAndEndMarkers = function(){
 
-  Troff.getNewMarkerId();
-        
+    var aNewMarkerId = Troff.getNewMarkerIds(2);
+    var songLength = parseInt(document.getElementById('timeBar').max);
+    
     var oStartMarker = {};
     oStartMarker.name = "Start";
     oStartMarker.time = 0;
-    oStartMarker.id   = 
-    oStartMarker.info = info;
+    oStartMarker.id   = aNewMarkerId[0];
+    oStartMarker.info = Troff.getStandardMarkerInfo();
+
     
+    var oEndMarker = {};
+    oEndMarker.name = "End";
+    oEndMarker.time = songLength;
+    oEndMarker.id   = aNewMarkerId[1];
+    oEndMarker.info = Troff.getStandardMarkerInfo();
     
-    
-    var oMarker = {};
-    oMarker.name = name;
-    oMarker.time = time;
-    oMarker.id   = id;
-    oMarker.info = info;
-    
-        
-    var songLength = document.getElementById('timeBar').max;
-    aMarkers = [{"Start":0},{"End":songLength}];
+    aMarkers = [oStartMarker, oEndMarker];
     Troff.addMarkers(aMarkers); // adds marker to html
     DB.saveMarkers(Troff.getCurrentSong() ); // tmp saves start and end markers to DB
   };
@@ -1598,8 +1508,7 @@ var DBClass = function(){
         ret = ret.replace(/[^A-Za-z0-9 ]/g, '');
         return ret;
     }
-    console.log("\n\n\ncleanSong -> songId = " + songId + ", songObject:");
-    console.log(songObject);
+
     
     
     
@@ -1610,14 +1519,6 @@ var DBClass = function(){
     // at 2015-02-19, and a later patch at 2015-04-sometime... 
     // this should be removed an around 2015-04??? is 2 months enough? no! not nearly enouth...
     // all the way down to XXX-here-XXX
-
-
-
-
-    
-    
-
-    
     if(songObject.currentStartMarker == "#Start" || songObject.currentStartMarker == 0 ) songObject.currentStartMarker = "Start";
     if(songObject.currentStopMarker == "#EndS" || songObject.currentStopMarker == 0) songObject.currentStopMarker = "EndS";
     // bStart o bEnd kollar om start och stopp är tillagda bland de sparade markörerna
@@ -1628,52 +1529,24 @@ var DBClass = function(){
       if( songObject.markers[j]['Start'] != undefined ) bStart = true;
       if( songObject.markers[j]['End'] != undefined ) bEnd = true;
     }
+    if(
+      songObject.markers.length < 2
+      ||
+      ( songObject.currentStartMarker == "Start" && !bStart )
+      ||
+      ( songObject.currentStopMarker == "EndS" && !bEnd )
+    )
+    {
+      var first = songObject.currentStartMarker == "Start" && !bStart ;
+      var second = songObject.currentStopMarker == "EndS" && !bEnd ;
+      var songLength = "max"; //"max" is a code that sets the marker to the end of the song when the marker is added.
 
-console.log("bEnd = " + bEnd);
-console.log("bStart = " + bStart);
+      songObject.markers.push({"Start":0}); // Yes, this is the old-marker-DB-layout,
+      songObject.markers.push({"End":songLength}); // but it shoult be like that, 
+      // because the conversion from the old- layout to the new layout is taken care of below!
 
+    }
 
-
-
-      if(
-        songObject.markers.length < 2
-        ||
-        ( songObject.currentStartMarker == "Start" && !bStart )
-        ||
-        ( songObject.currentStopMarker == "EndS" && !bEnd )
-      )
-      {
-        console.log("in if!");
-        console.log("song.markers.length < 2 = " + (songObject.markers.length < 2) );
-        var first = songObject.currentStartMarker == "Start" && !bStart ;
-        console.log("( the second iff... ) = " + first);
-        var second = songObject.currentStopMarker == "EndS" && !bEnd ;
-        console.log("( the third  iff... )= " + second);
-        var songLength = document.getElementById('timeBar').max;
-
-        songObject.markers.push({"Start":0}); // Yes, this is the old-marker-DB-layout,
-        songObject.markers.push({"End":songLength}); // but it shoult be like that, 
-        // because the conversion from the old- layout to the new layout is taken care of below!
-
-      }
-
-    
-      
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     var iMarkers = songObject.markers.length;
     for(var i=0; i<iMarkers; i++){
       if(countObjectLength(songObject.markers[i]) == 1){
@@ -1682,9 +1555,6 @@ console.log("bStart = " + bStart);
         var id = "markerNr" + i;
         var info = Troff.getStandardMarkerInfo();
         
-console.log("markerNameToId(name)          = " + markerNameToId(name) );
-console.log("songObject.currentStartMarker = " + songObject.currentStartMarker);
-console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
         if( markerNameToId(name) == songObject.currentStartMarker){
           songObject.currentStartMarker = id;
         }
@@ -1703,58 +1573,28 @@ console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
       }
     }
     
-    
     // remove from up there to here XXX-here-XXX
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    if(songObject.hasOwnProperty('iWaitBetweenLoops')){
+      songObject.wait = songObject.iWaitBetweenLoops;
+      delete songObject.iWaitBetweenLoops;
+    } 
   
-    
-    
-    
-      if(!songObject.startBefore) songObject.startBefore = [false, 4];
-      if(!songObject.stopAfter) songObject.stopAfter = [false, 2];
-      if(!songObject.pauseBefStart) songObject.pauseBefStart = [true, 3];
-      if(!songObject.speed) songObject.speed = 100;
-      if(!songObject.volume) songObject.volume = 100;
-      if(!songObject.loopTimes) songObject.loopTimes = 1;
-      if(!songObject.wait) songObject.wait = 1;
-      if(!songObject.tempo) songObject.tempo = "?";
-    
-    
-    
+    if(!songObject.startBefore) songObject.startBefore = [false, 4];
+    if(!songObject.stopAfter) songObject.stopAfter = [false, 2];
+    if(!songObject.pauseBefStart) songObject.pauseBefStart = [true, 3];
+    if(!songObject.speed) songObject.speed = 100;
+    if(!songObject.volume) songObject.volume = 100;
+    if(!songObject.loopTimes) songObject.loopTimes = 1;
+    if(!songObject.wait) songObject.wait = 1;
+    if(!songObject.tempo) songObject.tempo = "?";
+    if(songObject.tempo == "NaN") songObject.tempo = "?";
     
     var obj = {};
     obj[songId] = songObject;
     chrome.storage.local.set(obj);
-
-    console.log(obj);
-    
-    
-  };
+  }; // end cleanSong
 
 
   this.cleanDB = function(){
@@ -1766,14 +1606,6 @@ console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
       }
     });
   };
-
-
-
-
-
-
-
-
 
 
   this.setCurrentSong = function(path){
@@ -1788,101 +1620,65 @@ console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
 
   this.removeMarker = function(markerId, songId){
   chrome.storage.local.get(songId, function(ret){
-    
-    console.log("songId = " + songId);
-    console.log("markerId = " + markerId);
-      var song = ret[songId];
-      if(!song)
-          console.error('Error "removeMarker, noSong" occurred, songId=' + songId);
-      for(var i=0; i<song.markers.length; i++){
-        if(song.markers[i].id == markerId){
-            song.markers.splice(i,1); //
-            break;
-        }
+    var song = ret[songId];
+    if(!song)
+        console.error('Error "removeMarker, noSong" occurred, songId=' + songId);
+    for(var i=0; i<song.markers.length; i++){
+      if(song.markers[i].id == markerId){
+          song.markers.splice(i,1); //
+          break;
       }
+    }
 
 
-      var aFirstAndLast = Troff.getFirstAndLastMarkers();
-      var firstMarkerId = aFirstAndLast[0];
-      var lastMarkerId = aFirstAndLast[1] + 'S';
+    var aFirstAndLast = Troff.getFirstAndLastMarkers();
+    var firstMarkerId = aFirstAndLast[0];
+    var lastMarkerId = aFirstAndLast[1] + 'S';
 
-      if(markerId == song.currentStartMarker)
-        song.currentStartMarker = firstMarkerId;
-      if( (markerId+'S') == song.currentStopMarker)
-        song.currentStopMarker = lastMarkerId;
+    if(markerId == song.currentStartMarker)
+      song.currentStartMarker = firstMarkerId;
+    if( (markerId+'S') == song.currentStopMarker)
+      song.currentStopMarker = lastMarkerId;
 
-      var obj = {};
-      obj[songId] = song;
-      chrome.storage.local.set(obj);
+    var obj = {};
+    obj[songId] = song;
+    chrome.storage.local.set(obj);
   });
   };
 
   this.updateMarker = function(markerId, newName, newInfo, newTime, songId){
   chrome.storage.local.get(songId, function(ret){
-      var song = ret[songId];
-      if(!song)
-          console.error('Error "updateMarker, noSong" occurred, songId=' + songId);
-      for(var i=0; i<song.markers.length; i++){
-          if(song.markers[i].id == markerId){
-            song.markers[i].name = newName;
-            song.markers[i].time = newTime;
-            song.markers[i].info = newInfo;
-/*              if(oldName != newName){
-                  song.markers[i][newName] = song.markers[i][oldName];
-                  delete song.markers[i][oldName];
-              }
-              song.markers[i][newName] = newTime;
-*/              break;
-          }
+    var song = ret[songId];
+    if(!song)
+      console.error('Error "updateMarker, noSong" occurred, songId=' + songId);
+    for(var i=0; i<song.markers.length; i++){
+      if(song.markers[i].id == markerId){
+        song.markers[i].name = newName;
+        song.markers[i].time = newTime;
+        song.markers[i].info = newInfo;
+        break;
       }
+    }
 
-//      var oldNameId = oldName.replace(/\s+/g, '');
-//      var newNameId = newName.replace(/\s+/g, '');
-
-
-
-
-// must use id to save currentstartmarker instead (then i might not even need to do this check?)
-//      if(oldNameId == song.currentStartMarker)
-//          song.currentStartMarker = newNameId;
-//      if( (oldNameId+'S') == song.currentStopMarker)
-//          song.currentStopMarker = newNameId + 'S';
-
-
-
-      var obj = {};
-      obj[songId] = song;
-      chrome.storage.local.set(obj);
+    var obj = {};
+    obj[songId] = song;
+    chrome.storage.local.set(obj);
   });
-  };
+  };// end updateMarker
 
 
   this.saveMarkers = function(songId) {
   chrome.storage.local.get(songId, function(ret){
     var aAllMarkers = Troff.getCurrentMarkers();
 
-
     var aMarkers = [];
     for(var i=0; i<aAllMarkers.length; i++){
-      var markerName = aAllMarkers[i].value;
-      var markerTime = aAllMarkers[i].timeValue;
-      var markerInfo = aAllMarkers[i].info;
-      var markerId = aAllMarkers[i].id;
-
-      console.log("markerInfo = " + markerInfo);
-      console.log("markerid   = " + markerId);
-//  slim sim marker
-
       oMarker = {};
-      oMarker.name = markerName;
-      oMarker.time = markerTime;
-      oMarker.info = markerInfo;
-      oMarker.id = markerId;
-
-//      oMarker[markerName] = markerTime
-
+      oMarker.name = aAllMarkers[i].value;
+      oMarker.time = aAllMarkers[i].timeValue;
+      oMarker.info = aAllMarkers[i].info;
+      oMarker.id   = aAllMarkers[i].id;
       aMarkers[i] = oMarker;
-
     }
     var song = ret[songId];
     if(!song){
@@ -1892,34 +1688,15 @@ console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
     }
 
 
-      song.currentStartMarker = $('.currentMarker')[0].id;
-      song.currentStopMarker = $('.currentStopMarker')[0].id + "S";
-      song.markers = aMarkers;
-      var obj = {};
-      obj[songId] = song;
-      chrome.storage.local.set(obj);
+    song.currentStartMarker = $('.currentMarker')[0].id;
+    song.currentStopMarker = $('.currentStopMarker')[0].id;
+    song.markers = aMarkers;
+    var obj = {};
+    obj[songId] = song;
+    chrome.storage.local.set(obj);
   });
   // use    chrome.storage.sync  ?
   };// end saveMarkers
-
-/*
-  this.saveMarker = function(name, time, songId){
-  chrome.storage.local.get(songId, function(ret){
-      var song = ret[songId];
-      if(!song){
-      console.error('Error "saveMarker, noSong" occurred, songId=' + songId);
-      song = {};
-      song.markers = [];
-      }
-      var marker = {};
-      marker[name] = time;
-      song.markers.push(marker);
-      var obj = {};
-      obj[songId] = song;
-      chrome.storage.local.set(obj);
-  });
-
-  }// end save marker  */
 
   this.setCurrentStartAndStopMarker = function(startMarkerId, stopMarkerId,
                                                songId){
@@ -1937,6 +1714,8 @@ console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
     chrome.storage.local.set(obj);
   });
   };//end setCurrentStartAndStopMarker
+
+
 
   this.setCurrentStartMarker = function(name, songId){
       DB.setCurrent(songId, 'currentStartMarker', name);
@@ -1985,15 +1764,16 @@ console.log("songObject.currentStopMarker  = " + songObject.currentStopMarker);
   };//end setCurrent
 
 
+
+
   this.getMarkers = function(songId, funk) {
-console.log("getMarkers -> ");
-    chrome.storage.local.get(songId, function(ret){
-      var song = ret[songId];
-      if(!song || !song.markers ){ // new song or no markers
-          return;
-      }
-      funk(song.markers);
-    });
+  chrome.storage.local.get(songId, function(ret){
+    var song = ret[songId];
+    if(!song || !song.markers ){ // new song or no markers
+      return;
+    }
+    funk(song.markers);
+  });
   };
 
   this.getSongMetaDataOf = function(songId) {
@@ -2011,7 +1791,7 @@ console.log("getMarkers -> ");
       Troff.setLoopTo(song.loopTimes);
       if(song.bPlayInFullscreen !== undefined)
         Troff.setPlayInFullscreen(song.bPlayInFullscreen);
-      Troff.setWaitBetweenLoops(song.iWaitBetweenLoops);
+      Troff.setWaitBetweenLoops(song.wait);
       Troff.setTempo(song.tempo);
       Troff.setCurrentSong(songId); // site is this nessessarry??? det enda den gör är att anropa DB.setCurrentSong (som sparar strCurrentSong i DB) och kör Show-infosection...
 
@@ -2021,7 +1801,7 @@ console.log("getMarkers -> ");
 
       var song = ret[songId];
       if(!song){ // new song:
-        var songLength = document.getElementById('timeBar').max;
+        var songLength = parseInt(document.getElementById('timeBar').max);
 
         var oMarkerStart = {};
         oMarkerStart.name = "Start";
@@ -2243,8 +2023,6 @@ var IOClass = function(){
 
   this.promptEditMarker = function(markerId, func, funcCancle){
 
-console.log("promptEditMarker -> markerId = " + markerId);
-
     var time = Date.now();
 
     var textId = "textId" + time;
@@ -2280,12 +2058,9 @@ console.log("promptEditMarker -> markerId = " + markerId);
     };
 
 
-    var markerName = $('#'+markerId).val();// Troff.getMarkerNameFromAnyId(markerId);
-    var markerInfo = $('#'+markerId)[0].info;// Troff.getMarkerNameFromAnyId(markerId);
-    var markerTime = parseInt($('#'+markerId)[0].timeValue);// Troff.getMarkerTimeFromAnyId(markerId);
-
-console.log("markerInfo = " + markerInfo);
-console.log("markerTime = " + markerTime);
+    var markerName = $('#'+markerId).val();
+    var markerInfo = $('#'+markerId)[0].info;
+    var markerTime = parseInt($('#'+markerId)[0].timeValue);
 
     var buttOK = $("<input>", {
       "type":"button",
@@ -2391,8 +2166,6 @@ console.log("markerTime = " + markerTime);
   }; // end promptEditMarker   *******************/
 
   this.promptDouble = function(oInput, func, funcCancle){
-    console.log("promptDouble ->");
-    console.log(oInput);
     var textHead = oInput.strHead;
     var textBox  = oInput.strInput;
     var bDouble  = oInput.bDouble;
@@ -2456,56 +2229,14 @@ console.log("markerTime = " + markerTime);
     });
   }; // end promptDouble
 
-
   this.prompt = function(textHead, textBox, func, funcCancle){
-    console.log("prompt -> ");
-    var time = Date.now();
-    var buttEnterId = "buttOkId" + time;
-
-    var textId = "textId" + time;
-    var buttCancelId = "buttCancelId" + time;
-    var innerId = "innerId" + time;
-    var outerId = "outerId" + time;
-    var outerDivStyle = ""+
-        "position: fixed; "+
-        "top: 0px;left: 0px; "+
-        "width: 100vw; "+
-        "height: 100vh; "+
-        "background-color: rgba(0, 0, 0, 0.5);"+
-        "z-index: 99;"+
-        "display: flex;align-items: center;justify-content: center;";
-    var innerDivStyle = ""+
-        "width: 200px;"+
-        "padding: 10 15px;"+
-        "background-color: cornflowerblue;";
-    var pStyle = "" +
-        "font-size: 18px;";
-
-    $("body").append($("<div id='"+outerId+"' style='"+outerDivStyle+
-               "'><div id='"+innerId+"' style='"+innerDivStyle+
-               "'><p style='"+pStyle+"'>" + textHead +
-               "</p><input type='text' id='"+textId+
-               "'/> <input type='button' id='"+buttEnterId+
-               "' value='OK'/><input type='button' id='"+buttCancelId+
-               "' value='Cancel'/></div></div>"));
-
-    $("#"+textId).val(textBox);
-    var quickTimeOut = setTimeout(function(){
-        $("#"+textId).select();
-        clearInterval(quickTimeOut);
-    }, 0);
-
-    IOEnterFunction = function(){
-        if(func) func( $("#"+textId).val() );
-        $('#'+outerId).remove();
-        IOEnterFunction = false;
-    };
-    $("#"+buttEnterId).click( IOEnterFunction );
-    $("#"+buttCancelId).click( function(){
-        if(funcCancle) funcCancle();
-        $('#'+outerId).remove();
-        IOEnterFunction = false;
-    });
+    var oFI = {};
+    oFI.strHead = textHead;
+    oFI.strInput = textBox;
+    oFI.bDouble = false;
+    oFI.strTextarea = "";
+    oFI.strTextareaPlaceholder = "";
+    IO.promptDouble(oFI, func, funcCancle);
   }; // end prompt
 
   this.confirm = function(textHead, textBox, func, funcCancle){
