@@ -1510,12 +1510,7 @@ var DBClass = function(){
         return ret;
     }
 
-    
-    
-    
-    
-    
-    
+
     // this if-thing is only here to ease the transition from v 0.2.0.1 to next step.
     // at 2015-02-19, and a later patch at 2015-04-sometime... 
     // this should be removed an around 2015-04??? is 2 months enough? no! not nearly enouth...
@@ -1530,7 +1525,7 @@ var DBClass = function(){
       if( songObject.markers[j]['Start'] != undefined ) bStart = true;
       if( songObject.markers[j]['End'] != undefined ) bEnd = true;
     }
-    
+
     if(
       songObject.markers.length < 2
       ||
@@ -1593,7 +1588,9 @@ var DBClass = function(){
     if(!songObject.loopTimes) songObject.loopTimes = 1;
     if(!songObject.wait) songObject.wait = 1;
     if(!songObject.tempo) songObject.tempo = "?";
+
     if(songObject.tempo == "NaN") songObject.tempo = "?";
+    if(songObject.loopTimes > 9) songObject.loopTimes = "inf";
     
     var obj = {};
     obj[songId] = songObject;
