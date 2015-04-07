@@ -816,8 +816,8 @@ var TroffClass = function(){
     DB.getMarkers( strCurrentSong, function(aoMarkers){
       
       var aoTmpMarkers = [];
-      var oTmp = {};
       for (var i=0; i<aoMarkers.length; i++){
+        var oTmp = {};
         oTmp.name = aoMarkers[i].name;
         oTmp.time = aoMarkers[i].time;
         oTmp.info = aoMarkers[i].info;
@@ -1104,7 +1104,7 @@ var TroffClass = function(){
 
       Troff.settAppropriateActivePlayRegion();
       document.getElementById('blur-hack').focus();
-      DB.setCurrentStartMarker(0, strCurrentSong );
+      DB.setCurrentStartMarker(startMarkerId, strCurrentSong );
     };
     
     this.unselectStopMarker = function(){
@@ -1119,7 +1119,7 @@ var TroffClass = function(){
 
       Troff.settAppropriateActivePlayRegion();
       document.getElementById('blur-hack').focus();
-      DB.setCurrentStopMarker(0, strCurrentSong );
+      DB.setCurrentStopMarker(stopMarkerId, strCurrentSong );
     };
 
     /*
@@ -1564,7 +1564,7 @@ var DBClass = function(){
         
         var oMarker = {};
         oMarker.name = name;
-        oMarker.time = time;
+        oMarker.time = parseInt(time);
         oMarker.id   = id;
         oMarker.info = info;
         
