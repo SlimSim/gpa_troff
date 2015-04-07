@@ -896,6 +896,7 @@ var TroffClass = function(){
 
     this.addMarkers = function(aMarkers){
 
+      // slim sim remove when max-check is redundant...
       var tmpUpdateMarkerSoonBcMax = function(){
         DB.updateMarker(nameId, name, info, parseInt(time), song);
         clearInterval(quickTimeOut);
@@ -1529,6 +1530,7 @@ var DBClass = function(){
       if( songObject.markers[j]['Start'] != undefined ) bStart = true;
       if( songObject.markers[j]['End'] != undefined ) bEnd = true;
     }
+    
     if(
       songObject.markers.length < 2
       ||
@@ -1552,6 +1554,8 @@ var DBClass = function(){
       if(countObjectLength(songObject.markers[i]) == 1){
         var name = Object.keys(songObject.markers[i])[0];
         var time = songObject.markers[i][name];
+        if(time !== "max") 
+          time = parseInt(time);
         var id = "markerNr" + i;
         var info = Troff.getStandardMarkerInfo();
         
@@ -1564,7 +1568,7 @@ var DBClass = function(){
         
         var oMarker = {};
         oMarker.name = name;
-        oMarker.time = parseInt(time);
+        oMarker.time = time;
         oMarker.id   = id;
         oMarker.info = info;
         
