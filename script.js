@@ -433,6 +433,7 @@ var TroffClass = function(){
   };
 
   this.updateStartBefore = function() {
+    console.log("updateStartBefore -> ");
     if( $('audio, video')[0].paused )
         $('audio, video')[0].currentTime = Troff.getStartTime();
     Troff.settAppropriateActivePlayRegion();
@@ -1145,7 +1146,10 @@ var TroffClass = function(){
       //marks selected Marker:
       $('.currentMarker').removeClass('currentMarker');
       $('#'+markerId).addClass('currentMarker');
-
+//            var info = $('#' + markerId)[0].info;
+//            $('#markerNr2')[0].info
+      $('#markerInfoArea').val($('#'+markerId)[0].info);
+      
       Troff.goToStartMarker();
       Troff.settAppropriateActivePlayRegion();
 

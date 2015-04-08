@@ -207,7 +207,15 @@
             -->
             <div style="display: none;" id="currentArtist">The best artist</div>
         </div>
-        <ul id="gallery" ></ul>
+        
+        
+        <div class="flexRow">
+          <input type="button" value="Songs" id="songTab" />
+          <input type="button" value="Marker info" id="markerinfoTab" />
+        </div>
+        <ul style="display:none;" id="gallery" ></ul>
+        <textArea id="markerInfoArea" style="flex: 1; margin: 3px 0;">
+        </textArea> 
         <button id="donate" class="paragraph" title="">
           Do you like Troff?<br />Donate money or vote for new features here!
         </button>
