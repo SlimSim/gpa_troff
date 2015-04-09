@@ -336,6 +336,20 @@ nav input, nav button{
   font-size: 12px;
 }
 
+.textareaStandard{
+  flex: 1; 
+  margin: 3px 0;
+  outline: none;
+  width: 300px;
+
+  border: 4px solid lightblue; 
+  background: lightblue;
+}
+
+.textareaEdit{
+  background: white;
+}
+
 .currentSong {
   color: white;
   background-color: purple;

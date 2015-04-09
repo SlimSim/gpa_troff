@@ -433,7 +433,6 @@ var TroffClass = function(){
   };
 
   this.updateStartBefore = function() {
-    console.log("updateStartBefore -> ");
     if( $('audio, video')[0].paused )
         $('audio, video')[0].currentTime = Troff.getStartTime();
     Troff.settAppropriateActivePlayRegion();
@@ -893,6 +892,43 @@ var TroffClass = function(){
     this.toggleImportExport = function(){
       $('#outerImportExportPopUpSquare').toggle();
         document.getElementById('blur-hack').focus();
+    };
+    
+    
+    this.selectSongTab = function(){
+      $('#markerInfoArea').hide();
+      $('#gallery').show();
+    };
+    this.selectMarkerinfoTab = function(){
+      $('#gallery').hide();
+      $('#markerInfoArea').show();
+      
+    };
+    
+    this.enterMarkerInfo = function(a, b, c){
+      $('#markerInfoArea').addClass('textareaEdit');
+      IO.setEnterFunction(function(){return true;});
+      
+    };
+
+    this.exitMarkerInfo = function(){
+      $('#markerInfoArea').removeClass('textareaEdit');
+
+    };
+
+    this.updateMarkerInfo = function(){
+      var strInfo = $('#markerInfoArea')[0].value;
+      var markerId = $('.currentMarker').attr('id');
+      var time = $('.currentMarker')[0].timeValue;
+      var markerName = $('.currentMarker').val();
+      var songId = Troff.getCurrentSong();
+      
+      $('.currentMarker')[0].info = strInfo;
+      //Troff.exitMarkerInfo();
+      
+      DB.updateMarker(markerId, markerName, strInfo, time, songId);
+
+      IO.clearEnterFunction();
     };
 
     this.addMarkers = function(aMarkers){
@@ -1881,6 +1917,15 @@ var IOClass = function(){
     // Don't update as the user is typing:
     //$('#startBefore').change(Troff.updateStartBefore);
     $('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
+
+    $('#markerInfoArea').change(Troff.updateMarkerInfo);
+    $('#markerInfoArea').blur(Troff.exitMarkerInfo);
+    $('#markerInfoArea').click(Troff.enterMarkerInfo);
+    
+    
+    $('#songTab').click(Troff.selectSongTab);
+    $('#markerinfoTab').click(Troff.selectMarkerinfoTab);
+    
     $('#stopAfter')[0].addEventListener(
       'input', Troff.settAppropriateActivePlayRegion
     );
@@ -2024,7 +2069,13 @@ var IOClass = function(){
 
   }; // end keyboardKeydown *****************/
 
-
+  this.setEnterFunction = function(func){
+    IOEnterFunction = func;
+  };
+  
+  this.clearEnterFunction = function(){
+    IOEnterFunction = false;
+  };
 
   this.promptEditMarker = function(markerId, func, funcCancle){
 
