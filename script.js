@@ -904,10 +904,29 @@ var TroffClass = function(){
       $('#markerInfoArea').show();
       
     };
-    
+    this.focusMarkerInfoArea = function(){
+      $('#markerinfoTab').click();
+      var quickTimeOut = setTimeout(function(){
+        document.getElementById('markerInfoArea').click();
+        document.getElementById('markerInfoArea').focus();
+        clearInterval(quickTimeOut);
+      }, 0);
+    }
     this.enterMarkerInfo = function(a, b, c){
       $('#markerInfoArea').addClass('textareaEdit');
-      IO.setEnterFunction(function(){return true;});
+      IO.setEnterFunction(function(event){
+        console.log("slim sim enterfunction -> event:");
+        
+        console.log(event);
+        if(event.ctrlKey==1){
+          document.getElementById('blur-hack').focus();
+          return false;
+        }
+        
+
+        return true;
+        
+      });
       
     };
 
@@ -1295,10 +1314,10 @@ var TroffClass = function(){
       var text = "Please enter new marker name here";
       IO.promptEditMarker(markerId, function(newMarkerName, newMarkerInfo, newTime){
 
-      if(newMarkerName == null || newMarkerName == "" ||
+      if(newMarkerName === null || newMarkerName === "" ||
         newTime === null || newTime === "" )
       {
-          return;
+        return;
       }
 
       if( newTime < 0 )
@@ -1323,6 +1342,9 @@ var TroffClass = function(){
       if(newMarkerInfo != oldMarkerInfo){
         updated = true;
         $('#'+markerId)[0].info = newMarkerInfo;
+        
+        if( $('#' + markerId).hasClass('currentMarker') )
+          $('#markerInfoArea').val(newMarkerInfo);
       }
 
       // update HTML Time
@@ -1962,7 +1984,7 @@ var IOClass = function(){
   this.keyboardKeydown  = function(event) {
     if(IOEnterFunction){
       if(event.keyCode == 13){
-        IOEnterFunction();
+        IOEnterFunction(event);
       }
       return;
     }
@@ -2035,6 +2057,9 @@ var IOClass = function(){
     case 84: // T
       Troff.tappTime();
       break;
+    case 69: // E
+      Troff.focusMarkerInfoArea();
+      break;
     case 70: // F
       Troff.playInFullscreenChanged();
       break;
@@ -2063,7 +2088,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      //console.log("key " + event.keyCode);
+      console.log("key " + event.keyCode);
       //nothing
     }// end switch
 
