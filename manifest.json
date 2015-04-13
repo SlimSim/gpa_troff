@@ -9,9 +9,9 @@
     ,{"mediaGalleries": ["read", "allAutoDetected"]}
   ],
   "icons": {
-    "16" : "trofflogo16.png",
-    "48" : "trofflogo48.png",
-    "128": "trofflogo128.png"
+    "16" : "assets/trofflogo16.png",
+    "48" : "assets/trofflogo48.png",
+    "128": "assets/trofflogo128.png"
   },
   "app": {
     "background": {
