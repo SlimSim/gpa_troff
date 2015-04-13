@@ -803,7 +803,7 @@ var TroffClass = function(){
 
   this.getCurrentMarkers = function(bGetStopMarkers){
     if(bGetStopMarkers){
-      return $('#markerList li input:nth-child(5)');
+      return $('#markerList li input:nth-child(4)');
     }
     return $('#markerList li input:nth-child(3)');
   };
@@ -895,15 +895,96 @@ var TroffClass = function(){
     };
     
     
-    this.selectSongTab = function(){
-      $('#markerInfoArea').hide();
+    this.selectSonglistTab = function(){
+      DB.setCurrentTab('songlist', Troff.getCurrentSong());
+
       $('#gallery').show();
+      $('#markerInfoArea').hide();
+      $('#songInfoArea').hide();
+      $('#songlistTab').addClass('selected');
+      $('#songinfoTab').removeClass('selected');
+      $('#markerinfoTab').removeClass('selected');
+      document.getElementById('blur-hack').focus();
+    };
+    this.selectSonginfoTab = function(){
+      DB.setCurrentTab('songinfo', Troff.getCurrentSong());
+      
+      $('#gallery').hide();
+      $('#songInfoArea').show();
+      $('#markerInfoArea').hide();
+      $('#songlistTab').removeClass('selected');
+      $('#songinfoTab').addClass('selected');
+      $('#markerinfoTab').removeClass('selected');
+      document.getElementById('blur-hack').focus();
     };
     this.selectMarkerinfoTab = function(){
+      DB.setCurrentTab('markerinfo', Troff.getCurrentSong());
+
       $('#gallery').hide();
+      $('#songInfoArea').hide();
       $('#markerInfoArea').show();
-      
+      $('#songinfoTab').removeClass('selected');
+      $('#songlistTab').removeClass('selected');
+      $('#markerinfoTab').addClass('selected');
+      document.getElementById('blur-hack').focus();
     };
+    
+    this.setInfo = function(info){
+      console.log("setInfo -> info = " + info);
+      $('#songInfoArea').val(info);
+    };
+    this.setTab = function(tab){
+      console.log("settab -> tab = " + tab);
+      /**/ if(tab === "songlist") Troff.selectSonglistTab();
+      else if(tab === "songinfo") Troff.selectSonginfoTab();
+      else if(tab === "markerinfo") Troff.selectMarkerinfoTab();
+    };
+    this.focusSongInfoArea = function(){
+      $('#songinfoTab').click();
+      var quickTimeOut = setTimeout(function(){
+        document.getElementById('songInfoArea').click();
+        document.getElementById('songInfoArea').focus();
+        clearInterval(quickTimeOut);
+      }, 0);
+
+    };
+    this.enterSongInfo = function(a, b, c){
+      $('#songInfoArea').addClass('textareaEdit');
+      IO.setEnterFunction(function(event){
+        console.log("slim sim enterfunction -> event:");
+        
+        console.log(event);
+        if(event.ctrlKey==1){
+          document.getElementById('blur-hack').focus();
+          return false;
+        }
+        return true;
+      });
+    };
+
+    this.exitSongInfo = function(){
+      $('#songInfoArea').removeClass('textareaEdit');
+      IO.clearEnterFunction();
+      document.getElementById('blur-hack').focus();
+    };
+
+    this.updateSongInfo = function(){
+      var strInfo = $('#songInfoArea')[0].value;
+//      var markerId = $('.currentMarker').attr('id');
+//      var time = $('.currentMarker')[0].timeValue;
+//      var markerName = $('.currentMarker').val();
+      var songId = Troff.getCurrentSong();
+      
+      console.log("updateSongInfo, strInfo = " + strInfo + ", songId = " + songId);
+      
+      //$('.currentMarker')[0].info = strInfo;
+      //Troff.exitMarkerInfo();
+      
+      DB.setCurrentSongInfo(strInfo, songId);
+    };
+    
+    
+    
     this.focusMarkerInfoArea = function(){
       $('#markerinfoTab').click();
       var quickTimeOut = setTimeout(function(){
@@ -911,7 +992,7 @@ var TroffClass = function(){
         document.getElementById('markerInfoArea').focus();
         clearInterval(quickTimeOut);
       }, 0);
-    }
+    };
     this.enterMarkerInfo = function(a, b, c){
       $('#markerInfoArea').addClass('textareaEdit');
       IO.setEnterFunction(function(event){
@@ -922,17 +1003,14 @@ var TroffClass = function(){
           document.getElementById('blur-hack').focus();
           return false;
         }
-        
-
         return true;
-        
       });
-      
     };
 
     this.exitMarkerInfo = function(){
       $('#markerInfoArea').removeClass('textareaEdit');
-
+      IO.clearEnterFunction();
+      document.getElementById('blur-hack').focus();
     };
 
     this.updateMarkerInfo = function(){
@@ -947,8 +1025,20 @@ var TroffClass = function(){
       
       DB.updateMarker(markerId, markerName, strInfo, time, songId);
 
-      IO.clearEnterFunction();
     };
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     this.addMarkers = function(aMarkers){
 
@@ -989,10 +1079,10 @@ var TroffClass = function(){
         button.timeValue = time;
         button.info = info;
 
-        var buttonI = document.createElement("input");
-        buttonI.type = "button";
-        buttonI.id = nameId + 'I';
-        buttonI.value = 'Info';
+//        var buttonI = document.createElement("input");
+//        buttonI.type = "button";
+//        buttonI.id = nameId + 'I';
+//        buttonI.value = 'Info';
 //        buttonI.info = info;
 
         var buttonS = document.createElement("input");
@@ -1020,7 +1110,7 @@ var TroffClass = function(){
         listElement.appendChild(buttonE);
         listElement.appendChild(p);
         listElement.appendChild(button);
-        listElement.appendChild(buttonI);
+//        listElement.appendChild(buttonI);
         listElement.appendChild(buttonS);
 
 
@@ -1085,11 +1175,12 @@ var TroffClass = function(){
           Troff.selectStopMarker(this.id);
           document.getElementById('blur-hack').focus();
         });
-        document.getElementById(nameId + 'I').addEventListener('click', function() {
+/*        document.getElementById(nameId + 'I').addEventListener('click', function() {
           // sending the buttonId instead of the infoId
           Troff.showInfo( this.id.slice(0,-1) );
           document.getElementById('blur-hack').focus();
         });
+*/
         document.getElementById(nameId + 'E').addEventListener('click', function() {
           Troff.editMarker(this.id.slice(0,-1));
           document.getElementById('blur-hack').focus();
@@ -1398,31 +1489,29 @@ var TroffClass = function(){
 
     this.settAppropriateActivePlayRegion = function () {
 
-        var aFirstAndLast = Troff.getFirstAndLastMarkers();
-        var firstMarkerId = aFirstAndLast[0];
-        var lastMarkerId = aFirstAndLast[1] + 'S';
-        if( $('.currentMarker').length === 0 ){
-            $('#' + firstMarkerId).addClass('currentMarker');
-        }
-        if( $('.currentStopMarker').length === 0 )
-            $('#' + lastMarkerId).addClass('currentStopMarker');
+      var aFirstAndLast = Troff.getFirstAndLastMarkers();
+      var firstMarkerId = aFirstAndLast[0];
+      var lastMarkerId = aFirstAndLast[1] + 'S';
+      if( $('.currentMarker').length === 0 ){
+        $('#' + firstMarkerId).addClass('currentMarker');
+        $('#markerInfoArea').val( $('#' + firstMarkerId)[0].info);
+      }
+      if( $('.currentStopMarker').length === 0 )
+        $('#' + lastMarkerId).addClass('currentStopMarker');
 
 
-        var timeBarHeight = $('#timeBar').height() - 12;
-        var barMarginTop = parseInt($('#timeBar').css('margin-top')) + 6;
+      var timeBarHeight = $('#timeBar').height() - 12;
+      var barMarginTop = parseInt($('#timeBar').css('margin-top')) + 6;
 
-        var startTime = Troff.getStartTime();
-        var stopTime = Troff.getStopTime();
-        var songTime = $('audio, video')[0].duration;
+      var startTime = Troff.getStartTime();
+      var stopTime = Troff.getStopTime();
+      var songTime = $('audio, video')[0].duration;
 
-        var height = (stopTime - startTime) * timeBarHeight / songTime;
-        var top = startTime * timeBarHeight / songTime + barMarginTop;
+      var height = (stopTime - startTime) * timeBarHeight / songTime;
+      var top = startTime * timeBarHeight / songTime + barMarginTop;
 
-        $('#activePlayRegion').height(height);
-        $('#activePlayRegion').css("margin-top", top + "px");
-
-
-
+      $('#activePlayRegion').height(height);
+      $('#activePlayRegion').css("margin-top", top + "px");
 
     }; // end setAppropriateActivaePlayRegion
 
@@ -1549,7 +1638,6 @@ var DBClass = function(){
           "pauseBefStart": [true, 3],
           "startBefore": [false, 3],
           "stopAfter": [false, 3],
-          "loop": "off",   -- remove!!!
           "loopTimes": 1,  -- 1
           "wait": 1
      }
@@ -1649,6 +1737,8 @@ var DBClass = function(){
     if(!songObject.volume) songObject.volume = 100;
     if(!songObject.loopTimes) songObject.loopTimes = 1;
     if(!songObject.wait) songObject.wait = 1;
+    if(!songObject.info ) songObject.info = "";
+    if(!songObject.tab ) songObject.tab = "songlist";
     if(!songObject.tempo) songObject.tempo = "?";
 
     if(songObject.tempo == "NaN") songObject.tempo = "?";
@@ -1801,14 +1891,24 @@ var DBClass = function(){
   this.setCurrentVolume = function(songId, volume){
       DB.setCurrent(songId, 'volume', volume);
   };
+  /*
   this.setCurrentLoopMode = function(songId, mode){
       if(mode == 'off' || mode == 'times' || mode == 'inf')
           DB.setCurrent(songId, 'loop', mode);
       else
           console.error("Did not recognize the mode: " + mode);
   };
+  */
+  this.setCurrentTab = function(tab, songId){
+    DB.setCurrent(songId, 'tab', tab);
+  };
+  
+  this.setCurrentSongInfo = function(info, songId){
+    DB.setCurrent(songId, 'info', info);
+  };
+  
   this.setCurrentTempo = function(tempo, songId){
-      DB.setCurrent(songId, 'tempo', tempo);
+    DB.setCurrent(songId, 'tempo', tempo);
   };
 
   this.setCurrent = function(songId, key, value){
@@ -1855,6 +1955,8 @@ var DBClass = function(){
       if(song.bPlayInFullscreen !== undefined)
         Troff.setPlayInFullscreen(song.bPlayInFullscreen);
       Troff.setWaitBetweenLoops(song.wait);
+      Troff.setInfo(song.info);
+      Troff.setTab(song.tab);
       Troff.setTempo(song.tempo);
       Troff.setCurrentSong(songId); // site is this nessessarry??? det enda den gör är att anropa DB.setCurrentSong (som sparar strCurrentSong i DB) och kör Show-infosection...
 
@@ -1882,6 +1984,8 @@ var DBClass = function(){
           "volume": 100,
           "speed": 100,
           "tempo": "?",
+          "info": "",
+          "tab": "songlist",
           "pauseBefStart": [true, 3],
           "startBefore": [false, 4],
           "stopAfter": [false, 2],
@@ -1939,14 +2043,18 @@ var IOClass = function(){
     // Don't update as the user is typing:
     //$('#startBefore').change(Troff.updateStartBefore);
     $('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
+    
+    $('#songlistTab').click(Troff.selectSonglistTab);
+    $('#songinfoTab').click(Troff.selectSonginfoTab);
+    $('#markerinfoTab').click(Troff.selectMarkerinfoTab);
 
     $('#markerInfoArea').change(Troff.updateMarkerInfo);
     $('#markerInfoArea').blur(Troff.exitMarkerInfo);
     $('#markerInfoArea').click(Troff.enterMarkerInfo);
-    
-    
-    $('#songTab').click(Troff.selectSongTab);
-    $('#markerinfoTab').click(Troff.selectMarkerinfoTab);
+
+    $('#songInfoArea').change(Troff.updateSongInfo);
+    $('#songInfoArea').blur(Troff.exitSongInfo);
+    $('#songInfoArea').click(Troff.enterSongInfo);
     
     $('#stopAfter')[0].addEventListener(
       'input', Troff.settAppropriateActivePlayRegion
@@ -2018,6 +2126,9 @@ var IOClass = function(){
     case 27: // esc
       Troff.pauseSong();
       break;
+    case 27: // esc
+      Troff.pauseSong();
+      break;
     case 40: // downArrow
     case 77: // M
       Troff.createMarker();
@@ -2057,6 +2168,9 @@ var IOClass = function(){
     case 84: // T
       Troff.tappTime();
       break;
+    case 73: // I
+      Troff.focusSongInfoArea();
+      break;
     case 69: // E
       Troff.focusMarkerInfoArea();
       break;
@@ -2088,7 +2202,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      console.log("key " + event.keyCode);
+      //console.log("key " + event.keyCode);
       //nothing
     }// end switch
 

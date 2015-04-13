@@ -210,12 +210,20 @@
 -->        
         
         <div class="flexRow">
-          <input type="button" value="Songs" id="songTab" />
+          <input type="button" value="Songs" id="songlistTab" />
+          <input type="button" value="Song info" id="songinfoTab" />
           <input type="button" value="Marker info" id="markerinfoTab" />
         </div>
-        <ul style="display:none;" id="gallery" ></ul>
-        <textArea id="markerInfoArea" class="textareaStandard">
-        </textArea> 
+        <ul id="gallery" ></ul>
+        <textArea  
+          style="display:none;" 
+          id="songInfoArea" 
+          placeholder="Song specific info here!"
+          class="textareaStandard"></textArea>
+        <textArea  
+          style="display:none;" 
+          id="markerInfoArea" 
+          class="textareaStandard"></textArea>
         <button id="donate" class="paragraph" title="">
           Do you like Troff?<br />Donate money or vote for new features here!
         </button>
