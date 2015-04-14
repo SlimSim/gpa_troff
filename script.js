@@ -1706,9 +1706,23 @@ var DBClass = function(){
         
         if( markerNameToId(name) == songObject.currentStartMarker){
           songObject.currentStartMarker = id;
+        } else {
+          for(var l=0; l<101; l++){
+            if( (markerNameToId(name) + l ) == songObject.currentStartMarker){
+              songObject.currentStartMarker = id;
+              break;
+            }
+          }
         }
         if( (markerNameToId(name) + 'S') == songObject.currentStopMarker){
           songObject.currentStopMarker = id + 'S';
+        } else {
+          for(var k=0; k<101; k++){
+            if( (markerNameToId(name) + k + 'S') == songObject.currentStopMarker){
+              songObject.currentStopMarker = id + 'S';
+              break;
+            }
+          }
         }
         
         var oMarker = {};
