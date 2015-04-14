@@ -845,7 +845,7 @@ var TroffClass = function(){
         var tmpName = Object.keys(aMarkers[i])[0];
         aMarkers[i].name = aMarkers[i].name || tmpName;
         aMarkers[i].time = aMarkers[i].time || Number(aMarkers[i][tmpName]);
-        aMarkers[i].info = aMarkers[i].info || Troff.getStandardMarkerInfo();
+        aMarkers[i].info = aMarkers[i].info || "";
         aMarkers[i].id = aMarkerId[i];
       }
       Troff.addMarkers(aMarkers); // adds marker to html
@@ -1121,25 +1121,25 @@ var TroffClass = function(){
           var childTime = child.childNodes[2].timeValue;
           if(childTime != null && Math.abs(time - childTime) < 0.001){
 
+            if(child.childNodes[2].info != info){
+              var markerIdA = child.childNodes[2].id;
+              var newMarkerInfo = child.childNodes[2].info + "\n\n" + info;
+              updated = true;
+              
+              $('#'+markerIdA)[0].info = newMarkerInfo;
+            
+              if($('.currentMarker')[0].id == child.childNodes[2].id)
+                $('#markerInfoArea').val(newMarkerInfo);
+            }
+
             if(child.childNodes[2].value != name){
 
-              var oldMarkerId = child.childNodes[2].id;
+              var markerIdB = child.childNodes[2].id;
               var newMarkerName = child.childNodes[2].value + ", " + name;
 
               updated = true;
 
-              var newMarkerId = Troff.getNewMarkerId();
-
-              if($('.currentMarker')[0].id == child.childNodes[2].id)
-                DB.setCurrentStartMarker(newMarkerId, strCurrentSong);
-              if($('.currentStopMarker')[0].id == child.childNodes[3].id)
-                DB.setCurrentStopMarker(newMarkerId, strCurrentSong);
-
-              $('#'+oldMarkerId).val(newMarkerName);
-              $('#'+oldMarkerId).attr("id", newMarkerId);
-              $('#'+oldMarkerId + 'E').attr("id", newMarkerId + 'E');
-              $('#'+oldMarkerId + 'S').attr("id", newMarkerId + 'S');
-
+              $('#'+markerIdB).val(newMarkerName);
             }
             bContinue = true;
             break;
