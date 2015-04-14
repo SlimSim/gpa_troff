@@ -501,7 +501,7 @@ var TroffClass = function(){
       else {
         IO.confirm('Out of range', 'You pressed outside the playing region, '
           + 'do you want to add a marker to the end of the song?', function(){
-          var songLength = parseInt(document.getElementById('timeBar').max);
+          var songLength = Number(document.getElementById('timeBar').max);
           
           var oMarker = {};
           oMarker.name = "End";
@@ -844,7 +844,7 @@ var TroffClass = function(){
       for(var i=0; i<aMarkers.length; i++){
         var tmpName = Object.keys(aMarkers[i])[0];
         aMarkers[i].name = aMarkers[i].name || tmpName;
-        aMarkers[i].time = aMarkers[i].time || parseInt(aMarkers[i][tmpName]);
+        aMarkers[i].time = aMarkers[i].time || Number(aMarkers[i][tmpName]);
         aMarkers[i].info = aMarkers[i].info || Troff.getStandardMarkerInfo();
         aMarkers[i].id = aMarkerId[i];
       }
@@ -1044,7 +1044,7 @@ var TroffClass = function(){
 
       // slim sim remove when max-check is redundant...
       var tmpUpdateMarkerSoonBcMax = function(){
-        DB.updateMarker(nameId, name, info, parseInt(time), song);
+        DB.updateMarker(nameId, name, info, Number(time), song);
         clearInterval(quickTimeOut);
       };
 
@@ -1067,7 +1067,7 @@ var TroffClass = function(){
         
         
         if(time == "max"){
-          time = parseInt(document.getElementById('timeBar').max);
+          time = Number(document.getElementById('timeBar').max);
           var song = Troff.getCurrentSong();
           var quickTimeOut = setTimeout(tmpUpdateMarkerSoonBcMax, 42);
         }
@@ -1274,7 +1274,7 @@ var TroffClass = function(){
       selectMarker - All, sets new Marker, sets playtime to markers playtime
     */
     this.selectMarker = function(markerId){
-      var startTime = parseInt($('#'+markerId)[0].timeValue);
+      var startTime = Number($('#'+markerId)[0].timeValue);
       var stopTime = Troff.getStopTime();
       
       // if stopMarker befor Marker - unselect stopMarker:
@@ -1306,7 +1306,7 @@ var TroffClass = function(){
       selectStopMarker - All, selects a marker to stop playing at
     */
     this.selectStopMarker = function(markerId){
-      var stopTime = parseInt($('#'+markerId)[0].timeValue);
+      var stopTime = Number($('#'+markerId)[0].timeValue);
       var startTime = Troff.getStartTime();
 
       // if Marker after stopMarker - unselect Marker:
@@ -1399,7 +1399,7 @@ var TroffClass = function(){
     */
     this.editMarker = function(markerId){
       var oldName  = $('#'+markerId).val();
-      var oldTime = parseInt($('#'+markerId)[0].timeValue);
+      var oldTime = Number($('#'+markerId)[0].timeValue);
       var oldMarkerInfo = $('#'+markerId)[0].info;
 
       var text = "Please enter new marker name here";
@@ -1446,8 +1446,8 @@ var TroffClass = function(){
         $('#'+markerId + 'S')[0].timeValue = newTime;
         Troff.settAppropriateMarkerDistance();
 
-        var startTime = parseInt($('.currentMarker')[0].timeValue);
-        var stopTime = parseInt($('.currentStopMarker')[0].timeValue);
+        var startTime = Number($('.currentMarker')[0].timeValue);
+        var stopTime = Number($('.currentStopMarker')[0].timeValue);
 
         if( startTime >= stopTime ){
             $('.currentStopMarker').removeClass('currentStopMarker');
@@ -1462,7 +1462,7 @@ var TroffClass = function(){
           markerId, 
           newMarkerName,
           newMarkerInfo,
-          parseInt(newTime), 
+          Number(newTime), 
           strCurrentSong
         );
         /*
@@ -1597,7 +1597,7 @@ var TroffClass = function(){
   this.addStartAndEndMarkers = function(){
 
     var aNewMarkerId = Troff.getNewMarkerIds(2);
-    var songLength = parseInt(document.getElementById('timeBar').max);
+    var songLength = Number(document.getElementById('timeBar').max);
     
     var oStartMarker = {};
     oStartMarker.name = "Start";
@@ -1700,7 +1700,7 @@ var DBClass = function(){
         var name = Object.keys(songObject.markers[i])[0];
         var time = songObject.markers[i][name];
         if(time !== "max") 
-          time = parseInt(time);
+          time = Number(time);
         var id = "markerNr" + i;
         var info = Troff.getStandardMarkerInfo();
         
@@ -1966,7 +1966,7 @@ var DBClass = function(){
 
       var song = ret[songId];
       if(!song){ // new song:
-        var songLength = parseInt(document.getElementById('timeBar').max);
+        var songLength = Number(document.getElementById('timeBar').max);
 
         var oMarkerStart = {};
         oMarkerStart.name = "Start";
@@ -2255,7 +2255,7 @@ var IOClass = function(){
 
     var markerName = $('#'+markerId).val();
     var markerInfo = $('#'+markerId)[0].info;
-    var markerTime = parseInt($('#'+markerId)[0].timeValue);
+    var markerTime = Number($('#'+markerId)[0].timeValue);
 
     var buttOK = $("<input>", {
       "type":"button",
