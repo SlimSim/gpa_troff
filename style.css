@@ -420,10 +420,9 @@ nav input, nav button{
 
 
 
-
-/* the style for the Input number ***************************************/
-
-
+::-webkit-input-placeholder {
+  color: dimgray;
+}
 
 /* removes the upp/down arrows in number input boxes */
 input[type=number]::-webkit-outer-spin-button,

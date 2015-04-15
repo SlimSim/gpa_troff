@@ -378,7 +378,9 @@ var TroffClass = function(){
   };
 
   this.getStandardMarkerInfo = function(){
-    return "Type marker specific info here";
+    return "This text is specific for every marker. "
+      +"Notes written here will be saved untill next time."
+      +"\n\nUse this area for things regarding this marker.";
   };
 
   this.setWaitBetweenLoops = function(wait){
@@ -506,7 +508,7 @@ var TroffClass = function(){
           var oMarker = {};
           oMarker.name = "End";
           oMarker.time = songLength;
-          oMarker.info = Troff.getStandardMarkerInfo();
+          oMarker.info = "";
           oMarker.id = Troff.getNewMarkerId();
       
           aMarkers = [oMarker];
@@ -877,7 +879,7 @@ var TroffClass = function(){
       var oMarker = {};
       oMarker.name = markerName;
       oMarker.time = time;
-      oMarker.info = markerInfo || Troff.getStandardMarkerInfo();
+      oMarker.info = markerInfo || "";
       oMarker.id = Troff.getNewMarkerId();
 
       var markers = [oMarker];
@@ -930,14 +932,14 @@ var TroffClass = function(){
     };
     
     this.setInfo = function(info){
-      console.log("setInfo -> info = " + info);
       $('#songInfoArea').val(info);
     };
     this.setTab = function(tab){
-      console.log("settab -> tab = " + tab);
-      /**/ if(tab === "songlist") Troff.selectSonglistTab();
-      else if(tab === "songinfo") Troff.selectSonginfoTab();
+      /**/ if(tab === "songinfo") Troff.selectSonginfoTab();
       else if(tab === "markerinfo") Troff.selectMarkerinfoTab();
+      else if(tab === "songlist") Troff.selectSonglistTab();
+      else /* catch all... */ Troff.selectSonglistTab();
+
     };
     this.focusSongInfoArea = function(){
       $('#songinfoTab').click();
@@ -1610,7 +1612,7 @@ var TroffClass = function(){
     oEndMarker.name = "End";
     oEndMarker.time = songLength;
     oEndMarker.id   = aNewMarkerId[1];
-    oEndMarker.info = Troff.getStandardMarkerInfo();
+    oEndMarker.info = "";
     
     aMarkers = [oStartMarker, oEndMarker];
     Troff.addMarkers(aMarkers); // adds marker to html
@@ -1702,7 +1704,10 @@ var DBClass = function(){
         if(time !== "max") 
           time = Number(time);
         var id = "markerNr" + i;
-        var info = Troff.getStandardMarkerInfo();
+        var info = "";
+        if(i===0){
+          info = Troff.getStandardMarkerInfo();
+        }
         
         if( markerNameToId(name) == songObject.currentStartMarker){
           songObject.currentStartMarker = id;
@@ -1990,7 +1995,7 @@ var DBClass = function(){
         var oMarkerEnd = {};
         oMarkerEnd.name = "End";
         oMarkerEnd.time = songLength;
-        oMarkerEnd.info = Troff.getStandardMarkerInfo();
+        oMarkerEnd.info = "";
         oMarkerEnd.id = "markerNr1";
         
         song = {

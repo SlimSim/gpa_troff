@@ -22,248 +22,249 @@
 -->
 
 <html>
-  <head>
-    <title>Troff - Training with music</title>
+<head>
+  <title>Troff - Training with music</title>
 
-    <link rel="stylesheet" type="text/css" href="assets/reset.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+  <link rel="stylesheet" type="text/css" href="assets/reset.css" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
 
-    <script src="assets/jquery-2.1.3.min.js"></script>
-    <script src="assets/buy.js"></script>
-    <script src="script.js"></script>
-  </head>
+  <script src="assets/jquery-2.1.3.min.js"></script>
+  <script src="assets/buy.js"></script>
+  <script src="script.js"></script>
+</head>
 
 
 
 <body>
-    <input
-        id="blur-hack"
-        type="text"
-        style="position: absolute; opacity: 0; top:-100px;" />
+  <input
+      id="blur-hack"
+      type="text"
+      style="position: absolute; opacity: 0; top:-100px;" />
 
-    <section id="timeSection">
-
-
-        <nav>
-
-            <input style="display: block;" type="button"
-                title="move to selected marker (or start of song) and play song (key: space)"
-                class="important" id="buttSpacePlay" value="&#9654;" />
-            <input style="display: none;" type="button"
-                title="pause song (key: space or enter)"
-                class="important" id="buttSpacePause" value="II" />
-            <input style="display: block;" type="button"
-                title="get tips on how to best use Troff"
-                class="small" id="buttTip" value="Help" />
-            <button class="svgButt shareClass" title="Share the link to this app with your freinds via email">
-              <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
-                <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
-                <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
-              </svg>
-            </button>
-        </nav>
-        <div id="div_to_calc_height_of_timeSection">
-
-            <div id="ControlTime">
-                <h2>Time: </h2>
-                <div class="dataOutput">
-                    <div id="time"><p>0:00</p></div>/<div id="maxTime">0:00</div>
-                </div>
-                <div>
-                    <input type="button" title="toggle; wait a fiew seconds before song starts to play (key: p)" value="p&#818;ause bef start" id="buttPauseBefStart" class="active" />
-                    <input type="number" title="set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
-                </div>
-            </div> <!-- ControlTime -->
+  <section id="timeSection">
 
 
-            <div id="ControlMarker">
-                <h2>Marker</h2>
-                <div>
-                    <input type="button" title="import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
-                    <div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
-                      <div class="popUpSquare" id="innerImportExportPopUpSquare" >
-                          <div>
-                              Export your markers, or import new markers, for the current song! <br />
-                              Press anywhere outside this box to exit.
-                          </div>
-                          <div>
-                              <input type="button" id="buttExportMarker" value="Export Markers" />
-                              <input type="button" id="buttImportMarker" value="Import Markers" />
-                          </div>
-                      </div>
-                    </div>
-                    <input type="button" title="add a marker to the sogn timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
-                </div>
-                <div>
-                    <input type="button" title="unselect both markers (key: u)" class="" value="play fu&#818;ll song" id="buttUnselectMarkers" />
+    <nav>
+
+      <input style="display: block;" type="button"
+          title="move to selected marker (or start of song) and play song (key: space)"
+          class="important" id="buttSpacePlay" value="&#9654;" />
+      <input style="display: none;" type="button"
+          title="pause song (key: space or enter)"
+          class="important" id="buttSpacePause" value="II" />
+      <input style="display: block;" type="button"
+          title="get tips on how to best use Troff"
+          class="small" id="buttTip" value="Help" />
+      <button class="svgButt shareClass" title="Share the link to this app with your freinds via email">
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
+          <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
+          <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
+        </svg>
+      </button>
+    </nav>
+    <div id="div_to_calc_height_of_timeSection">
+
+      <div id="ControlTime">
+          <h2>Time: </h2>
+          <div class="dataOutput">
+            <div id="time"><p>0:00</p></div>/<div id="maxTime">0:00</div>
+          </div>
+          <div>
+            <input type="button" title="toggle; wait a fiew seconds before song starts to play (key: p)" value="p&#818;ause bef start" id="buttPauseBefStart" class="active" />
+            <input type="number" title="set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
+          </div>
+      </div> <!-- ControlTime -->
+
+
+      <div id="ControlMarker">
+        <h2>Marker</h2>
+        <div>
+          <input type="button" title="import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
+          <div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
+            <div class="popUpSquare" id="innerImportExportPopUpSquare" >
+              <div>
+                Export your markers, or import new markers, for the current song! <br />
+                Press anywhere outside this box to exit.
+              </div>
+              <div>
+                <input type="button" id="buttExportMarker" value="Export Markers" />
+                <input type="button" id="buttImportMarker" value="Import Markers" />
+              </div>
+            </div>
+          </div>
+          <input type="button" title="add a marker to the sogn timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
+        </div>
+        <div>
+          <input type="button" title="unselect both markers (key: u)" class="" value="play fu&#818;ll song" id="buttUnselectMarkers" />
 <!--
-                    <input type="button" title="unselect start marker (key: shift u)" class="Small" value="start" id="buttUnselectStart" />
-                    <input type="button" title="unselect stop marker (key: alt u)" class="Small" value="stop" id="buttUnselectStop" />
+          <input type="button" title="unselect start marker (key: shift u)" class="Small" value="start" id="buttUnselectStart" />
+          <input type="button" title="unselect stop marker (key: alt u)" class="Small" value="stop" id="buttUnselectStop" />
 -->
-                </div>
-                <input
-                  type="button"
-                  title="add Start and End markers"
-                  class=""
-                  value="add Start and End markers"
-                  id="buttAddStartAndEndMarkers"
-                  style="word-wrap: break-word; width: 95px; padding: 1px 4px;"/>
-                <div>
-                    <input type="button" title="toggle; start a fiew seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="startStopWidth"/>
-                    <input type="number" title="set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />
-                </div>
-
-                <div>
-                <input type="button" title="toggle; stop a fiew seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="startStopWidth"/>
-                <input type="number" title="set how many seconds after the stop marker to stop (key: shift/alt a)" value="2" min="0"  id="stopAfter" />
-                </div>
-            </div> <!-- ControlMarker -->
-
-            <div id="ControlLoop">
-                <h2>Loop</h2>
-                <span class="loopSquare" id="loopButtons" >
-                    <input type="button" title="play song only 1 time (key: 1)" class="loopButt" value="1" id="buttLoop1" />
-                    <input type="button" title="loop song 2 times (key: 2)" class="loopButt" value="2" id="buttLoop2" />
-                    <input type="button" title="loop song 3 times (key: 3)" class="loopButt" value="3" id="buttLoop3" />
-                    <input type="button" title="loop song 4 times (key: 4)" class="loopButt" value="4" id="buttLoop4" />
-                    <input type="button" title="loop song 5 times (key: 5)" class="loopButt" value="5" id="buttLoop5" />
-                    <input type="button" title="loop song 6 times (key: 6)" class="loopButt" value="6" id="buttLoop6" />
-                    <input type="button" title="loop song 7 times (key: 7)" class="loopButt" value="7" id="buttLoop7" />
-                    <input type="button" title="loop song 8 times (key: 8)" class="loopButt" value="8" id="buttLoop8" />
-                    <input type="button" title="loop song 9 times (key: 9)" class="loopButt" value="9" id="buttLoop9" />
-                    <input type="button" title="loop song &infin; times (key: 0)" class="loopButt" value="&infin;" id="buttLoopInf" />
-                </span>
-                <div id="LoopWait" class="XLoopOff"> <p>Wait</p> <input type="number" title="set how many seconds to wait between each loop"  value="1" id="waitBetweenLoops"  /> </div>
-            </div> <!-- ControlLoop -->
-
-
-
-        </div>  <!-- div_to_calc_height_of_timeSection -->
-
-
-
-
-
-
-        <div class="doubleSliders">
-            <div class="sliderInfo">
-                <input class="button small" type="button" title="set volume to 100% (key: v)" value="V&#818;olume:" id="buttResetVolume" />
-                <div class="plussMinusButton" id="plussMinusButtons">
-                    <input class="button small" type="button" title="decrease volume (key: alt v)" value="-" id="volumeMinus" />
-                    <input class="button small" type="button" title="increase volume (key: shift v)" value="+" id="volumePlus" />
-                </div>
-                <div class="dataOutput" id="volumeDataOutput">
-                    <div id="volume">100</div><p>%</p>
-                </div>
-                <input class="sliderRange" id="volumeBar" type="range" min="0" max="100" value="100" style="height: 40px;"/>
-            </div> <!-- sliderInfo -->
-
-            <div class="sliderInfo">
-                <input class="button small" type="button" title="set speed to 100% (key: s)" value="S&#818;peed:" id="buttResetSpeed" />
-                <div class="plussMinusButton">
-                    <input class="button small" type="button" title="decrease speed (key: alt s)" value="-" id="speedMinus" />
-                    <input class="button small" type="button" title="increase speed (key: shift s)" value="+" id="speedPlus" />
-                </div>
-                <div class="dataOutput">
-                    <div id="speed">100</div><p>%</p>
-                </div>
-                <input class="sliderRange" id="speedBar" type="range" min="50" max="200" value="100" style="height: 40px;" />
-            </div>  <!-- sliderInfo -->
-        </div> <!-- doubleSliders -->
-
-    </section> <!-- timeSection -->
-
-
-
-
-    <section id="markerSection">
-      <div id="activePlayRegion"></div>
-      <div id="timeBarDiv">
-        <input id="timeBar" type="range" min="0" max="42" value="0"/>
-      </div>
-      <ul id="markerList" />
-    </section>
-
-    <section id="songsSection">
-        <!--    <h1>Troff - music player for traning</h1> -->
-
-
-        <h1>
-            <input type="button" title="select folders to get songs from" id="configure-button" value="Select folders"/>
-            <input type="button" title="tapp repeatedly to calculate tempo (key: t)" id="buttTappTempo" value="T&#818;empo:" style="margin-left: 15px;"/>
-            <span id="tappTempo-value">?</span>
-        </h1>
-        <div id="mediaInfoBox" class="flexCol">
-          <div id="currentArtist">Please select a song from the list</div>
-          <div id="currentSong"></div>
-          <div id="currentAlbum"></div>
         </div>
-        <div id="content"></div>
+        <input
+          type="button"
+          title="add Start and End markers"
+          class=""
+          value="add Start and End markers"
+          id="buttAddStartAndEndMarkers"
+          style="word-wrap: break-word; width: 95px; padding: 1px 4px;"/>
+        <div>
+          <input type="button" title="toggle; start a fiew seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="startStopWidth"/>
+          <input type="number" title="set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />
+        </div>
+
+        <div>
+          <input type="button" title="toggle; stop a fiew seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="startStopWidth"/>
+          <input type="number" title="set how many seconds after the stop marker to stop (key: shift/alt a)" value="2" min="0"  id="stopAfter" />
+        </div>
+      </div> <!-- ControlMarker -->
+
+      <div id="ControlLoop">
+          <h2>Loop</h2>
+          <span class="loopSquare" id="loopButtons" >
+            <input type="button" title="play song only 1 time (key: 1)" class="loopButt" value="1" id="buttLoop1" />
+            <input type="button" title="loop song 2 times (key: 2)" class="loopButt" value="2" id="buttLoop2" />
+            <input type="button" title="loop song 3 times (key: 3)" class="loopButt" value="3" id="buttLoop3" />
+            <input type="button" title="loop song 4 times (key: 4)" class="loopButt" value="4" id="buttLoop4" />
+            <input type="button" title="loop song 5 times (key: 5)" class="loopButt" value="5" id="buttLoop5" />
+            <input type="button" title="loop song 6 times (key: 6)" class="loopButt" value="6" id="buttLoop6" />
+            <input type="button" title="loop song 7 times (key: 7)" class="loopButt" value="7" id="buttLoop7" />
+            <input type="button" title="loop song 8 times (key: 8)" class="loopButt" value="8" id="buttLoop8" />
+            <input type="button" title="loop song 9 times (key: 9)" class="loopButt" value="9" id="buttLoop9" />
+            <input type="button" title="loop song &infin; times (key: 0)" class="loopButt" value="&infin;" id="buttLoopInf" />
+          </span>
+          <div id="LoopWait" class="XLoopOff"> <p>Wait</p> <input type="number" title="set how many seconds to wait between each loop"  value="1" id="waitBetweenLoops"  /> </div>
+      </div> <!-- ControlLoop -->
+
+
+
+    </div>  <!-- div_to_calc_height_of_timeSection -->
+
+
+
+
+
+
+    <div class="doubleSliders">
+      <div class="sliderInfo">
+        <input class="button small" type="button" title="set volume to 100% (key: v)" value="V&#818;olume:" id="buttResetVolume" />
+        <div class="plussMinusButton" id="plussMinusButtons">
+          <input class="button small" type="button" title="decrease volume (key: alt v)" value="-" id="volumeMinus" />
+          <input class="button small" type="button" title="increase volume (key: shift v)" value="+" id="volumePlus" />
+        </div>
+        <div class="dataOutput" id="volumeDataOutput">
+          <div id="volume">100</div><p>%</p>
+        </div>
+        <input class="sliderRange" id="volumeBar" type="range" min="0" max="100" value="100" style="height: 40px;"/>
+      </div> <!-- sliderInfo -->
+
+      <div class="sliderInfo">
+        <input class="button small" type="button" title="set speed to 100% (key: s)" value="S&#818;peed:" id="buttResetSpeed" />
+        <div class="plussMinusButton">
+          <input class="button small" type="button" title="decrease speed (key: alt s)" value="-" id="speedMinus" />
+          <input class="button small" type="button" title="increase speed (key: shift s)" value="+" id="speedPlus" />
+        </div>
+        <div class="dataOutput">
+          <div id="speed">100</div><p>%</p>
+        </div>
+        <input class="sliderRange" id="speedBar" type="range" min="50" max="200" value="100" style="height: 40px;" />
+      </div>  <!-- sliderInfo -->
+    </div> <!-- doubleSliders -->
+
+  </section> <!-- timeSection -->
+
+
+
+
+  <section id="markerSection">
+    <div id="activePlayRegion"></div>
+    <div id="timeBarDiv">
+      <input id="timeBar" type="range" min="0" max="42" value="0"/>
+    </div>
+    <ul id="markerList" />
+  </section>
+
+  <section id="songsSection">
+    <!--    <h1>Troff - music player for traning</h1> -->
+
+
+    <h1>
+      <input type="button" title="select folders to get songs from" id="configure-button" value="Select folders"/>
+      <input type="button" title="tapp repeatedly to calculate tempo (key: t)" id="buttTappTempo" value="T&#818;empo:" style="margin-left: 15px;"/>
+      <span id="tappTempo-value">?</span>
+    </h1>
+    <div id="mediaInfoBox" class="flexCol">
+      <div id="currentArtist">Please select a song from the list</div>
+      <div id="currentSong"></div>
+      <div id="currentAlbum"></div>
+    </div>
+    <div id="content"></div>
 
 <!--
-        <div class="dataOutput">
-            <!--
-            <p>by</p>
-            - ->
-            <div style="display: none;" id="currentArtist">The best artist</div>
-        </div>
--->        
-        
-        <div class="flexRow">
-          <input type="button" value="Songs" id="songlistTab" />
-          <input type="button" value="Song info" id="songinfoTab" />
-          <input type="button" value="Marker info" id="markerinfoTab" />
-        </div>
-        <ul id="gallery" ></ul>
-        <textArea  
-          style="display:none;" 
-          id="songInfoArea" 
-          placeholder="Song specific info here!"
-          class="textareaStandard"></textArea>
-        <textArea  
-          style="display:none;" 
-          id="markerInfoArea" 
-          class="textareaStandard"></textArea>
-        <button id="donate" class="paragraph" title="">
-          Do you like Troff?<br />Donate money or vote for new features here!
-        </button>
-
-    </section>
-
-
-
-    <section id="infoSection">
-      <div id="loopTimesLeft">1</div>
-      <div id="secondsLeft">0</div>
-    </section>
-
-
-    <div style="display: none" id="donateDialog" class="outerDialog">
-      <div class="innerDialog flexCol almostFullHeight">
-        <h2 class="paragraph">Donate to Troff</h2>
-        <p class="paragraph normalSize">
-          Troff is free and open source and if you like this app,
-          feel free to donate as much or little as you want!
-          Any contribution is greatly appreciated!
-        </p>
-        <p class="paragraph normalSize">
-          You can also vote for features you would like to see in the future!
-          If enough people pay for a certain feature it might become a reality...
-        </p>
-        <div class="flexScroll">
-          <table class="table table-striped">
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <span class="flexRow">
-          <p class="paragraph normalSize">You can donate and/or vote more than once.</p>
-          <div style="flex:1"></div>
-          <input id="closeDonateDialog" type="button" value="Return" />
-        </span>
-      </div>
+    <div class="dataOutput">
+        <!--
+        <p>by</p>
+        - ->
+        <div style="display: none;" id="currentArtist">The best artist</div>
     </div>
+-->        
+    
+    <div class="flexRow">
+      <input type="button" value="Songs" id="songlistTab" />
+      <input type="button" value="Song info" id="songinfoTab" />
+      <input type="button" value="Marker info" id="markerinfoTab" />
+    </div>
+    <ul id="gallery" ></ul>
+    <textArea  
+        style="display:none;" 
+        id="songInfoArea" 
+        placeholder="Song specific info here!"
+        class="textareaStandard"></textArea>
+    <textArea  
+        style="display:none;" 
+        id="markerInfoArea" 
+        placeholder="Marker specific notes here!"
+        class="textareaStandard"></textArea>
+    <button id="donate" class="paragraph" title="">
+      Do you like Troff?<br />Donate money or vote for new features here!
+    </button>
+
+  </section>
 
 
-  </body>
+
+  <section id="infoSection">
+    <div id="loopTimesLeft">1</div>
+    <div id="secondsLeft">0</div>
+  </section>
+
+
+  <div style="display: none" id="donateDialog" class="outerDialog">
+    <div class="innerDialog flexCol almostFullHeight">
+      <h2 class="paragraph">Donate to Troff</h2>
+      <p class="paragraph normalSize">
+        Troff is free and open source and if you like this app,
+        feel free to donate as much or little as you want!
+        Any contribution is greatly appreciated!
+      </p>
+      <p class="paragraph normalSize">
+        You can also vote for features you would like to see in the future!
+        If enough people pay for a certain feature it might become a reality...
+      </p>
+      <div class="flexScroll">
+        <table class="table table-striped">
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+      <span class="flexRow">
+        <p class="paragraph normalSize">You can donate and/or vote more than once.</p>
+        <div style="flex:1"></div>
+        <input id="closeDonateDialog" type="button" value="Return" />
+      </span>
+    </div>
+  </div>
+
+
+</body>
 </html>
