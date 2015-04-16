@@ -378,7 +378,7 @@ var TroffClass = function(){
   };
 
   this.getStandardMarkerInfo = function(){
-    return "This text is specific for every marker. "
+    return "This text is specific for every selected marker. "
       +"Notes written here will be saved untill next time."
       +"\n\nUse this area for things regarding this marker.";
   };
@@ -844,10 +844,14 @@ var TroffClass = function(){
       var aMarkerId = Troff.getNewMarkerIds(aMarkers.length);
 
       for(var i=0; i<aMarkers.length; i++){
+        // these 4 lines are here to allow for import of markers
+        //from version 0.3.0 and earlier:
         var tmpName = Object.keys(aMarkers[i])[0];
         aMarkers[i].name = aMarkers[i].name || tmpName;
-        aMarkers[i].time = aMarkers[i].time || Number(aMarkers[i][tmpName]);
+        aMarkers[i].time = aMarkers[i].time || Number(aMarkers[i][tmpName]) || 0;
         aMarkers[i].info = aMarkers[i].info || "";
+        //:allow for version 0.3.0 end here
+        
         aMarkers[i].id = aMarkerId[i];
       }
       Troff.addMarkers(aMarkers); // adds marker to html
@@ -953,9 +957,6 @@ var TroffClass = function(){
     this.enterSongInfo = function(a, b, c){
       $('#songInfoArea').addClass('textareaEdit');
       IO.setEnterFunction(function(event){
-        console.log("slim sim enterfunction -> event:");
-        
-        console.log(event);
         if(event.ctrlKey==1){
           document.getElementById('blur-hack').focus();
           return false;
@@ -972,16 +973,7 @@ var TroffClass = function(){
 
     this.updateSongInfo = function(){
       var strInfo = $('#songInfoArea')[0].value;
-//      var markerId = $('.currentMarker').attr('id');
-//      var time = $('.currentMarker')[0].timeValue;
-//      var markerName = $('.currentMarker').val();
       var songId = Troff.getCurrentSong();
-      
-      console.log("updateSongInfo, strInfo = " + strInfo + ", songId = " + songId);
-      
-      //$('.currentMarker')[0].info = strInfo;
-      //Troff.exitMarkerInfo();
-      
       DB.setCurrentSongInfo(strInfo, songId);
     };
     
@@ -998,9 +990,6 @@ var TroffClass = function(){
     this.enterMarkerInfo = function(a, b, c){
       $('#markerInfoArea').addClass('textareaEdit');
       IO.setEnterFunction(function(event){
-        console.log("slim sim enterfunction -> event:");
-        
-        console.log(event);
         if(event.ctrlKey==1){
           document.getElementById('blur-hack').focus();
           return false;
@@ -1049,6 +1038,19 @@ var TroffClass = function(){
         DB.updateMarker(nameId, name, info, Number(time), song);
         clearInterval(quickTimeOut);
       };
+      
+      var startM = function() {
+        Troff.selectMarker(this.id);
+        document.getElementById('blur-hack').focus();
+      };
+      var stopM = function() {
+        Troff.selectStopMarker(this.id);
+        document.getElementById('blur-hack').focus();
+      };
+      var editM = function() {
+        Troff.editMarker(this.id.slice(0,-1));
+        document.getElementById('blur-hack').focus();
+      };
 
       for(var i=0; i<aMarkers.length; i++) {
         var oMarker = aMarkers[i];
@@ -1058,12 +1060,14 @@ var TroffClass = function(){
         var nameId = oMarker.id;
 
 
+        // use for debugging new marker system with ID saved and passed around
+        // (instead of using marker-name...)
         if(!nameId){ // slim sim remove!
-          IO.alert("why is there no nameId (or markerId) with this marker!?");
-          console.error("why is there no nameId (or markerId) with this marker!?");
+          //IO.alert("why is there no nameId (or markerId) with this marker!?");
+          console.error("Why is there no nameId (or markerId) with this marker!?");
           console.error("i = " + i);
-          console.log("aMarkers[i]:");
-          console.log(aMarkers[i]);
+          console.error("aMarkers[i]:");
+          console.error(aMarkers[i]);
           return -1;
         }
         
@@ -1169,24 +1173,15 @@ var TroffClass = function(){
           docMarkerList.appendChild(listElement);
         }
 
-        document.getElementById(nameId).addEventListener('click', function() {
-          Troff.selectMarker(this.id);
-          document.getElementById('blur-hack').focus();
-        });
-        document.getElementById(nameId + 'S').addEventListener('click', function() {
-          Troff.selectStopMarker(this.id);
-          document.getElementById('blur-hack').focus();
-        });
+        document.getElementById(nameId).addEventListener('click', startM);
+        document.getElementById(nameId + 'S').addEventListener('click', stopM);
 /*        document.getElementById(nameId + 'I').addEventListener('click', function() {
           // sending the buttonId instead of the infoId
           Troff.showInfo( this.id.slice(0,-1) );
           document.getElementById('blur-hack').focus();
         });
 */
-        document.getElementById(nameId + 'E').addEventListener('click', function() {
-          Troff.editMarker(this.id.slice(0,-1));
-          document.getElementById('blur-hack').focus();
-        });
+        document.getElementById(nameId + 'E').addEventListener('click', editM);
       }//end for-loop
       Troff.settAppropriateMarkerDistance();
     }; // end addMarker ****************/
@@ -1693,7 +1688,6 @@ var DBClass = function(){
       songObject.markers.push({"Start":0}); // Yes, this is the old-marker-DB-layout,
       songObject.markers.push({"End":songLength}); // but it shoult be like that, 
       // because the conversion from the old- layout to the new layout is taken care of below!
-
     }
 
     var iMarkers = songObject.markers.length;
@@ -1709,21 +1703,34 @@ var DBClass = function(){
           info = Troff.getStandardMarkerInfo();
         }
         
-        if( markerNameToId(name) == songObject.currentStartMarker){
+        if(
+            markerNameToId(name) == songObject.currentStartMarker ||
+            name == songObject.currentStartMarker
+            ){
           songObject.currentStartMarker = id;
+          
         } else {
           for(var l=0; l<101; l++){
-            if( (markerNameToId(name) + l ) == songObject.currentStartMarker){
+            if( 
+                (markerNameToId(name) + l ) == songObject.currentStartMarker ||
+                (name + l) == songObject.currentStartMarker 
+                ){
               songObject.currentStartMarker = id;
               break;
             }
           }
         }
-        if( (markerNameToId(name) + 'S') == songObject.currentStopMarker){
+        if( 
+            (markerNameToId(name) + 'S') == songObject.currentStopMarker ||
+            (name + 'S') == songObject.currentStopMarker
+            ){
           songObject.currentStopMarker = id + 'S';
         } else {
           for(var k=0; k<101; k++){
-            if( (markerNameToId(name) + k + 'S') == songObject.currentStopMarker){
+            if( 
+                (markerNameToId(name) + k + 'S') == songObject.currentStopMarker ||
+                (name + k + 'S') == songObject.currentStopMarker
+                ){
               songObject.currentStopMarker = id + 'S';
               break;
             }
@@ -2221,7 +2228,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      //console.log("key " + event.keyCode);
+      //console.info("key " + event.keyCode);
       //nothing
     }// end switch
 
