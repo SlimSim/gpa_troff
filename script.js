@@ -945,15 +945,23 @@ var TroffClass = function(){
       else /* catch all... */ Troff.selectSonglistTab();
 
     };
-    this.focusSongInfoArea = function(){
-      $('#songinfoTab').click();
+    this.editCurrentInfo = function(){
+      var infoAreaId = "";
+      if($('#songinfoTab').hasClass('selected'))
+        infoAreaId = 'songInfoArea';
+      if($('#markerinfoTab').hasClass('selected'))
+        infoAreaId = 'markerInfoArea';
       var quickTimeOut = setTimeout(function(){
-        document.getElementById('songInfoArea').click();
-        document.getElementById('songInfoArea').focus();
+        document.getElementById(infoAreaId).click();
+        document.getElementById(infoAreaId).focus();
         clearInterval(quickTimeOut);
       }, 0);
-
     };
+    
+    this.focusSongInfoArea = function(){
+      $('#songinfoTab').click();
+    };
+    
     this.enterSongInfo = function(a, b, c){
       $('#songInfoArea').addClass('textareaEdit');
       IO.setEnterFunction(function(event){
@@ -981,11 +989,6 @@ var TroffClass = function(){
     
     this.focusMarkerInfoArea = function(){
       $('#markerinfoTab').click();
-      var quickTimeOut = setTimeout(function(){
-        document.getElementById('markerInfoArea').click();
-        document.getElementById('markerInfoArea').focus();
-        clearInterval(quickTimeOut);
-      }, 0);
     };
     this.enterMarkerInfo = function(a, b, c){
       $('#markerInfoArea').addClass('textareaEdit');
@@ -2197,8 +2200,11 @@ var IOClass = function(){
     case 73: // I
       Troff.focusSongInfoArea();
       break;
-    case 69: // E
+    case 79: // O
       Troff.focusMarkerInfoArea();
+      break;
+    case 69: // E
+      Troff.editCurrentInfo();
       break;
     case 70: // F
       Troff.playInFullscreenChanged();
@@ -2228,7 +2234,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      //console.info("key " + event.keyCode);
+      console.info("key " + event.keyCode);
       //nothing
     }// end switch
 
