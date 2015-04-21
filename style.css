@@ -29,8 +29,6 @@
 
 
 
-
-
 video{
   width: 100%;
 }
@@ -614,6 +612,15 @@ table {
   flex-direction: row;
 }
 
+.flexRowWrap{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.flex{
+  flex: 1;
+}
+
 .almostFullHeight{
   height: 90vh;
 }
@@ -627,4 +634,38 @@ table {
   color: rgb(0, 0, 0);
   cursor: default;height: 18px;
   line-height: normal;
+}
+
+
+
+
+
+
+
+.poccibleColorsOfMarkers{
+  background: yellowgreen;
+  background: aqua;
+  background: bisque;
+  background: brown;
+  background: burlywood;
+  background: chartreuse;
+  background: chocolate;
+  background: coral;
+  background: cyan;
+  background: darkcyan;
+}
+
+.colorPickerWidth{
+  width: 110px;
+}
+
+.colorPicker{
+  width: 18px;
+  height: 18px;
+  padding: 0px;
+  border: solid 3px black;
+}
+
+.colorPickerSelected{
+  border: solid 4px purple;
 }

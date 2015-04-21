@@ -873,10 +873,29 @@ var TroffClass = function(){
       
       var oFI = {};
       oFI.strHead = "Please enter the marker name here";
+    var iMarkers =  $('#markerList li').length + 1;
       oFI.strInput = "marker nr " + iMarkers;
       oFI.bDouble = true;
       oFI.strTextarea = "";
       oFI.strTextareaPlaceholder = "Add extra info about the marker here.";
+
+      IO.promptEditMarker(0, function(newMarkerName, newMarkerInfo, newMarkerColor, newTime){
+        if(newMarkerName === "") return;
+        
+        var oMarker = {};
+        oMarker.name = newMarkerName;
+        oMarker.time = newTime;
+        oMarker.info = newMarkerInfo || "";
+        oMarker.color = newMarkerColor;
+        oMarker.id = Troff.getNewMarkerId();
+  
+        var markers = [oMarker];
+        Troff.addMarkers(markers); // adds marker to html
+        DB.saveMarkers(Troff.getCurrentSong() );
+
+        
+      });
+      /*
       IO.promptDouble(oFI, function(markerName, markerInfo){
       if(markerName === "") return;
 
@@ -891,7 +910,8 @@ var TroffClass = function(){
       DB.saveMarkers(Troff.getCurrentSong() );
 
       });
-          clearInterval(quickTimeout);
+      */
+      clearInterval(quickTimeout);
     }, 0);
   }; // end createMarker   ********/
 
@@ -1009,6 +1029,7 @@ var TroffClass = function(){
 
     this.updateMarkerInfo = function(){
       var strInfo = $('#markerInfoArea')[0].value;
+      var color = $('.currentMarker')[0].color;
       var markerId = $('.currentMarker').attr('id');
       var time = $('.currentMarker')[0].timeValue;
       var markerName = $('.currentMarker').val();
@@ -1017,7 +1038,7 @@ var TroffClass = function(){
       $('.currentMarker')[0].info = strInfo;
       //Troff.exitMarkerInfo();
       
-      DB.updateMarker(markerId, markerName, strInfo, time, songId);
+      DB.updateMarker(markerId, markerName, strInfo, color, time, songId);
 
     };
     
@@ -1038,7 +1059,7 @@ var TroffClass = function(){
 
       // slim sim remove when max-check is redundant...
       var tmpUpdateMarkerSoonBcMax = function(){
-        DB.updateMarker(nameId, name, info, Number(time), song);
+        DB.updateMarker(nameId, name, info, color, Number(time), song);
         clearInterval(quickTimeOut);
       };
       
@@ -1060,8 +1081,8 @@ var TroffClass = function(){
         var name = oMarker.name;
         var time = oMarker.time;
         var info = oMarker.info;
+        var color = oMarker.color || "none";
         var nameId = oMarker.id;
-
 
         // use for debugging new marker system with ID saved and passed around
         // (instead of using marker-name...)
@@ -1087,6 +1108,7 @@ var TroffClass = function(){
         button.value = name;
         button.timeValue = time;
         button.info = info;
+        button.color = color;
 
 //        var buttonI = document.createElement("input");
 //        buttonI.type = "button";
@@ -1121,6 +1143,8 @@ var TroffClass = function(){
         listElement.appendChild(button);
 //        listElement.appendChild(buttonI);
         listElement.appendChild(buttonS);
+
+        listElement.style.background = color;
 
 
         var child = $('#markerList li:first-child')[0];
@@ -1178,12 +1202,6 @@ var TroffClass = function(){
 
         document.getElementById(nameId).addEventListener('click', startM);
         document.getElementById(nameId + 'S').addEventListener('click', stopM);
-/*        document.getElementById(nameId + 'I').addEventListener('click', function() {
-          // sending the buttonId instead of the infoId
-          Troff.showInfo( this.id.slice(0,-1) );
-          document.getElementById('blur-hack').focus();
-        });
-*/
         document.getElementById(nameId + 'E').addEventListener('click', editM);
       }//end for-loop
       Troff.settAppropriateMarkerDistance();
@@ -1332,11 +1350,6 @@ var TroffClass = function(){
 
     }; // end selectStopMarker
 
-    this.showInfo = function(id){
-      var info = $('#' + id)[0].info;
-      IO.alert(info);
-    };
-
     this.selectPauseBefStart = function(bActive, iPauseBefStart){
         $('#pauseBeforeStart').val(iPauseBefStart);
         if(bActive){
@@ -1401,9 +1414,10 @@ var TroffClass = function(){
       var oldName  = $('#'+markerId).val();
       var oldTime = Number($('#'+markerId)[0].timeValue);
       var oldMarkerInfo = $('#'+markerId)[0].info;
+      var oldMarkerColor = $('#'+markerId)[0].color;
 
       var text = "Please enter new marker name here";
-      IO.promptEditMarker(markerId, function(newMarkerName, newMarkerInfo, newTime){
+      IO.promptEditMarker(markerId, function(newMarkerName, newMarkerInfo, newMarkerColor, newTime){
 
       if(newMarkerName === null || newMarkerName === "" ||
         newTime === null || newTime === "" )
@@ -1423,10 +1437,7 @@ var TroffClass = function(){
       // Update HTML Name
       if(newMarkerName != oldName){
           updated = true;
-
-
           $('#'+markerId).val(newMarkerName);
-
       }
 
       // update HTML Info
@@ -1436,6 +1447,13 @@ var TroffClass = function(){
         
         if( $('#' + markerId).hasClass('currentMarker') )
           $('#markerInfoArea').val(newMarkerInfo);
+      }
+      console.log("newMarkerColor = " + newMarkerColor);
+      console.log("oldMarkerColor = " + oldMarkerColor);
+      if(newMarkerColor != oldMarkerColor){
+        updated = true;
+        $('#'+markerId)[0].color = newMarkerColor;
+        $('#'+markerId)[0].parentNode.style.background = newMarkerColor;
       }
 
       // update HTML Time
@@ -1456,13 +1474,14 @@ var TroffClass = function(){
         $('#'+markerId).prev().html( Troff.secToDisp(newTime) );
       }
 
-      // update name and time and info in DB, if nessessarry
+      // update name and time and info and color in DB, if nessessarry
       if(updated){
         DB.updateMarker(
-          markerId, 
+          markerId,
           newMarkerName,
           newMarkerInfo,
-          Number(newTime), 
+          newMarkerColor,
+          Number(newTime),
           strCurrentSong
         );
         /*
@@ -1540,7 +1559,7 @@ var TroffClass = function(){
             var marginTop = freeDistanceToTop - totalDistanceTop + barMarginTop;
             totalDistanceTop = freeDistanceToTop + myRowHeight + barMarginTop;
 
-            child.setAttribute("style", "margin-top: "+ marginTop +"px;", true);
+            child.style.marginTop = marginTop + "px";
             child = child.nextSibling;
         }
 
@@ -1604,6 +1623,7 @@ var TroffClass = function(){
     oStartMarker.time = 0;
     oStartMarker.id   = aNewMarkerId[0];
     oStartMarker.info = Troff.getStandardMarkerInfo();
+    oStartMarker.color = "none";
 
     
     var oEndMarker = {};
@@ -1611,6 +1631,7 @@ var TroffClass = function(){
     oEndMarker.time = songLength;
     oEndMarker.id   = aNewMarkerId[1];
     oEndMarker.info = "";
+    oEndMarker.color = "none";
     
     aMarkers = [oStartMarker, oEndMarker];
     Troff.addMarkers(aMarkers); // adds marker to html
@@ -1702,6 +1723,7 @@ var DBClass = function(){
           time = Number(time);
         var id = "markerNr" + i;
         var info = "";
+        var color = "none";
         if(i===0){
           info = Troff.getStandardMarkerInfo();
         }
@@ -1741,10 +1763,11 @@ var DBClass = function(){
         }
         
         var oMarker = {};
-        oMarker.name = name;
-        oMarker.time = time;
-        oMarker.id   = id;
-        oMarker.info = info;
+        oMarker.name  = name;
+        oMarker.time  = time;
+        oMarker.id    = id;
+        oMarker.info  = info;
+        oMarker.color = color; 
         
         songObject.markers[i] = oMarker;
 
@@ -1828,7 +1851,7 @@ var DBClass = function(){
   });
   };
 
-  this.updateMarker = function(markerId, newName, newInfo, newTime, songId){
+  this.updateMarker = function(markerId, newName, newInfo, newColor, newTime, songId){
   chrome.storage.local.get(songId, function(ret){
     var song = ret[songId];
     if(!song)
@@ -1838,6 +1861,7 @@ var DBClass = function(){
         song.markers[i].name = newName;
         song.markers[i].time = newTime;
         song.markers[i].info = newInfo;
+        song.markers[i].color = newColor;
         break;
       }
     }
@@ -1856,10 +1880,11 @@ var DBClass = function(){
     var aMarkers = [];
     for(var i=0; i<aAllMarkers.length; i++){
       oMarker = {};
-      oMarker.name = aAllMarkers[i].value;
-      oMarker.time = aAllMarkers[i].timeValue;
-      oMarker.info = aAllMarkers[i].info;
-      oMarker.id   = aAllMarkers[i].id;
+      oMarker.name  = aAllMarkers[i].value;
+      oMarker.time  = aAllMarkers[i].timeValue;
+      oMarker.info  = aAllMarkers[i].info;
+      oMarker.color = aAllMarkers[i].color;
+      oMarker.id    = aAllMarkers[i].id;
       aMarkers[i] = oMarker;
     }
     var song = ret[songId];
@@ -2001,11 +2026,13 @@ var DBClass = function(){
         oMarkerStart.name = "Start";
         oMarkerStart.time = 0;
         oMarkerStart.info = Troff.getStandardMarkerInfo();
+        oMarkerStart.color = "none";
         oMarkerStart.id = "markerNr0";
         var oMarkerEnd = {};
-        oMarkerEnd.name = "End";
-        oMarkerEnd.time = songLength;
-        oMarkerEnd.info = "";
+        oMarkerEnd.name  = "End";
+        oMarkerEnd.time  = songLength;
+        oMarkerEnd.info  = "none";
+        oMarkerEnd.color = "none";
         oMarkerEnd.id = "markerNr1";
         
         song = {
@@ -2234,7 +2261,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      console.info("key " + event.keyCode);
+      //console.info("key " + event.keyCode);
       //nothing
     }// end switch
 
@@ -2249,6 +2276,23 @@ var IOClass = function(){
   };
 
   this.promptEditMarker = function(markerId, func, funcCancle){
+    var markerName;
+    var markerInfo;
+    var markerColor;
+    var markerTime;
+
+    if(markerId){
+      markerName = $('#'+markerId).val();
+      markerInfo = $('#'+markerId)[0].info;
+      markerColor = $('#'+markerId)[0].color;
+      markerTime = Number($('#'+markerId)[0].timeValue);
+    } else {
+      markerName = "marker nr " + ($('#markerList li').length + 1);
+      markerInfo = "";
+      markerColor = "none";
+      markerTime = $('audio, video')[0].currentTime;
+    }
+
 
     var time = Date.now();
 
@@ -2256,6 +2300,7 @@ var IOClass = function(){
     var markerNameId = "markerNameId" + time;
     var markerTimeId = "markerTimeId" + time;
     var markerInfoId = "markerInfoId" + time;
+    var markerColorId = "markerColorId" + time;
     var outerId = "outerId" + time;
     var outerDivStyle = ""+
       "position: fixed; "+
@@ -2277,18 +2322,15 @@ var IOClass = function(){
     IOEnterFunction = function(){
       if(func) func( 
         $("#"+markerNameId).val(), 
-        $("#"+markerInfoId).val(), 
+        $("#"+markerInfoId).val(),
+        $(".colorPickerSelected").attr("color"),
         $("#"+markerTimeId).val()
       );
       $('#'+outerId).remove();
       IOEnterFunction = false;
     };
 
-
-    var markerName = $('#'+markerId).val();
-    var markerInfo = $('#'+markerId)[0].info;
-    var markerTime = Number($('#'+markerId)[0].timeValue);
-
+    
     var buttOK = $("<input>", {
       "type":"button",
       "value": "OK"
@@ -2319,13 +2361,59 @@ var IOClass = function(){
         return;
       }
 
-
-      IO.confirm("Remove marker", "Are you sure?", function(){
-        Troff.removeMarker(markerId);
-      });
+      if(markerId){
+        IO.confirm("Remove marker", "Are you sure?", function(){
+            Troff.removeMarker(markerId);
+        });
+      }
     });
+    
+    function setColor(){
+      console.log("test -> this:");
+      console.log(this);
+      console.log(this.getAttribute('color'));
+      console.log(this.classList);
+      $('.colorPickerSelected').removeClass('colorPickerSelected');
+      
+      document.getElementById('blur-hack').focus();
 
+      this.classList.add('colorPickerSelected');
+      $("#"+markerColorId).html(this.getAttribute('color'));
+    }
+    function generateColorBut(col){
+      var clas = "colorPicker";
+      console.log("col = " + col + ", mC = " + markerColor);
+      if(col === markerColor){
+        clas += " colorPickerSelected";
+      }
+      return $("<input>", {
+                "type":"button",
+                "value":"",
+                "color":col,
+                "class":clas,
+                "style":"background: " + col
+              }).click(setColor);
+    }
+    var butColor0 = generateColorBut("none");
+    
+    var butColor1 = generateColorBut("bisque");
+    var butColor2 = generateColorBut("aqua");
+    var butColor3 = generateColorBut("chartreuse");
+    var butColor4 = generateColorBut("coral");
+    var butColor5 = generateColorBut("pink");
+    
+    
+    var butColor6 = generateColorBut("burlywood");
+    var butColor7 = generateColorBut("darkcyan");
+    var butColor8 = generateColorBut("yellowgreen");
+    var butColor9 = generateColorBut("brown");
+    var butColor10 = generateColorBut("violet");
+//    spring green
+//    plump
 
+    
+
+    
     var row0 = $("<span>", {"class": "oneRow"})
                .append($("<h2>", {"id": "p1"}).append("Edit marker"));
 
@@ -2361,13 +2449,49 @@ var IOClass = function(){
                         "rows": 6,
                         "style":"margin-left:13px; padding: 4px;"
                     }));
+                    
+    var row40= $("<span>", {"class": "oneRow"})
+                  .append(
+                    $("<div>", {"class": "flexCol flex"})
+                    .append($("<p>").append("Color:"))
+                    .append($("<p>", {"id":markerColorId}).append("red"))
+                  ) 
+                  .append(
+                    $("<div>", {"class":"flexRowWrap"})
+                    .append(butColor0)
+                  )
+                  .append(
+                    $("<div>", {"class":"flexRowWrap colorPickerWidth"})
+                    .append(butColor1)
+                    .append(butColor2)
+                    .append(butColor3)
+                    .append(butColor4)
+                    .append(butColor5)
+                    .append(butColor6)
+                    .append(butColor7)
+                    .append(butColor8)
+                    .append(butColor9)
+                    .append(butColor10)
+                  );
 
-
-    var row4 = $("<span>", {"class": "oneRow"})
-                    .append($("<p>").append("Remove this marker:"))
-                    .append(buttRemove);
-
-    var row5 = $("<span>", {"class": "oneRow"})
+    var row4 = "";/*$("<span>", {"class": "oneRow"})
+                  .append($("<p>").append("Color:"))
+                  .append($("<input>", {
+                      "id": markerColorId,
+                      "type":"text",
+                      "value":markerColor,
+                      "style":"width: 84px; text-align: left; "+
+                            "margin-left:8px; padding: 4px;"
+                  }))
+                  .append($("<p>").append("seconds"));
+                  */
+    var row5 = "";
+    if(markerId){
+      row5 = $("<span>", {"class": "oneRow"})
+                      .append($("<p>").append("Remove this marker:"))
+                      .append(buttRemove);
+    }
+    var row6 = $("<span>", {"class": "oneRow"})
                     .append(buttOK)
                     .append(buttCancel);
 
@@ -2380,13 +2504,16 @@ var IOClass = function(){
                         .append(row1)
                         .append(row2)
                         .append(row3)
+                        .append(row40)
                         .append(row4)
                         .append(row5)
+                        .append(row6)
                 )// end inner div
         );// end outer div
 
     var quickTimeOut = setTimeout(function(){
         $("#"+markerNameId).select();
+        $("#"+markerColorId).html(markerColor);
         clearInterval(quickTimeOut);
     }, 0);
 
