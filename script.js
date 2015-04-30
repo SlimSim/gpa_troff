@@ -976,7 +976,6 @@ var TroffClass = function(){
     $('#songInfoArea').val(info);
   };
   this.setTab = function(tab){
-    console.log("setTab -> tab = " + tab);
     /**/ if(tab === "songinfo") Troff.selectSonginfoTab();
     else if(tab === "markerinfo") Troff.selectMarkerinfoTab();
     else if(tab === "songs") Troff.selectSongsTab();
@@ -992,11 +991,16 @@ var TroffClass = function(){
   
   this.enterSongListName = function(){
     IO.setEnterFunction(function(event){
-      console.log("Enter!");
       document.getElementById('blur-hack').focus();
+      Troff.saveNewSongList();
       return false;
     });
   };
+  this.exitSongListName = function(){
+    IO.clearEnterFunction();
+    document.getElementById('blur-hack').focus();
+  };
+  
   this.saveNewSongList = function(){
     var name = $('#newSongListName').val();
     if(name === "" || name === undefined) {
@@ -1124,7 +1128,7 @@ var TroffClass = function(){
   this.enterSongInfo = function(a, b, c){
     $('#songInfoArea').addClass('textareaEdit');
     IO.setEnterFunction(function(event){
-      if(event.ctrlKey==1){
+      if(event.ctrlKey==1){ //Ctrl+Enter will exit
         document.getElementById('blur-hack').focus();
         return false;
       }
@@ -1152,7 +1156,7 @@ var TroffClass = function(){
   this.enterMarkerInfo = function(a, b, c){
     $('#markerInfoArea').addClass('textareaEdit');
     IO.setEnterFunction(function(event){
-      if(event.ctrlKey==1){
+      if(event.ctrlKey==1){//Ctrl+Enter will exit
         document.getElementById('blur-hack').focus();
         return false;
       }
@@ -2254,6 +2258,7 @@ var IOClass = function(){
     $('#songInfoArea').blur(Troff.exitSongInfo);
     $('#songInfoArea').click(Troff.enterSongInfo);
     $('#newSongListName').click(Troff.enterSongListName);
+    $('#newSongListName').blur(Troff.exitSongListName);
     $('#saveNewSongList').click(Troff.saveNewSongList);
     
     $('#stopAfter')[0].addEventListener(
