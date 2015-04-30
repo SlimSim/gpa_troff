@@ -134,7 +134,7 @@ function clearContentDiv() {
 }
 
 function clearList() {
-  document.getElementById("gallery").innerHTML = "";
+  document.getElementById("newSongListPartAllSongs").innerHTML = "";
 }
 
 function setSong(fullPath, galleryId){
