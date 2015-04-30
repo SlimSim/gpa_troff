@@ -200,11 +200,28 @@
     </div>
     <div id="content"></div>
     <div class="flexRow">
-      <input type="button" value="Songs" id="songlistTab" class="selected" />
+      <input type="button" value="Song lists" id="songlistsTab"/>
+      <input type="button" value="Songs" id="songsTab" class="selected" />
       <input type="button" value="Song i&#818;nfo" id="songinfoTab" />
       <input type="button" value="Marker info&#818;" id="markerinfoTab" />
     </div>
     <ul id="gallery" ></ul>
+    <div id="songlistsArea" class="flexCol">
+      <div id="songListPart">
+        <input type="button" value="New song list" id="buttNewSongList"/>
+        <ul id="songListPartTheLists">
+          <li>
+              <input type="button" value="E" class="removeButt grayOut">
+              <input type="button" id="songlistAll" class="selected" value="All songs"/>
+          </li>
+        </ul>
+      </div>
+      <div id="newSongListPart" display="none" class="flex">
+        <span>Name:<input type="text" placeholder="New song lists name" id="newSongListName"/></span>
+        <input type="button" value="Save" id="saveNewSongList" />
+        <ul id="newSongListPartAllSongs" class="bgEasyRead"></ul>
+      </div>
+    </div>
     <textArea  
         style="display:none;" 
         id="songInfoArea" 

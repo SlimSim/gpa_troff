@@ -34,13 +34,6 @@ video{
 }
 
 .fullscreen{
-  /*  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 99;
-  */
   width: 100vw;
   height: 100vh;
   position: absolute;
@@ -79,43 +72,43 @@ video{
 */
 
 body{
-    display: flex;
-    background-color: black;
-    font-family: Arial, "Open Sans", sans-serif;
-    color: black;
+  display: flex;
+  background-color: black;
+  font-family: Arial, "Open Sans", sans-serif;
+  color: black;
 }
 
 
 
 
 h1, h2, h3, h4, h5, h6{
-    color: rgb(50, 50, 50);
-    font-weight: bold;
+  color: rgb(50, 50, 50);
+  font-weight: bold;
 }
 
 
 h1 {
-    font-weight: 200;
-    color: black;
+  font-weight: 200;
+  color: black;
 }
 
 h2{
-    font-family: helvetica;
-    font-size: 18px;
-    margin-right: 3px;
+  font-family: helvetica;
+  font-size: 18px;
+  margin-right: 3px;
 }
 
 p{
-    display: inline-block;
-    color: rgb(50, 50, 50);
-    font-size: 11px;
+  display: inline-block;
+  color: rgb(50, 50, 50);
+  font-size: 11px;
 }
 
 .normalSize{
   font-size: 16px;
 }
 
-#gallery{
+#gallery, #songlistsArea{
   overflow-y: auto;
   overflow-x: hidden;
   width:100%;
@@ -151,33 +144,17 @@ nav input, nav button{
   height: 27px;
 }
 
-/*
-#info {
-	border: 1px solid #aaa;
-	background-color: #777;
-	width: auto;
-	border-radius: 5px;
-	overflow: hidden;
-	padding: 5px;
-}
-*/
-
 
 
 
 #songsSection{
-    display: flex;
-    flex-direction: column;
-    background-color: #4f6b8a;
-    float: flex-right;
-    padding: 0 5px 0 5;
-    max-width: 300px;            /* site change this!*/
-    height: 100vh;
-/*    width: 300px;
-    top: 100px;
-    right: 10px;
-    position: fixed;
-*/
+  display: flex;
+  flex-direction: column;
+  background-color: #4f6b8a;
+  float: flex-right;
+  padding: 0 5px 0 5;
+  max-width: 300px;            /* site change this! - Why? */
+  height: 100vh;
 }
 
 #markerSection{
@@ -185,35 +162,24 @@ nav input, nav button{
     display: flex;
     padding: 0 5px 0 0;
     min-width: 100px;
-/*    width: 300px;
-    position: fixed;
-    top: 100px;
-    right: 320px;
-*/
 }
 #timeSection{
-    background-color: #aabbcc;
+  background-color: #aabbcc;
 
-    /* this is nessessary bc "I/E" not dissapering when big markers: */
-    min-width: 112px;
+  /*
+    this is nessessary to prevent the "I/E"-button
+    (the "import/export"-button) from dissapering
+    when the marker-width is to big:
+  */
+  min-width: 112px;
 
-
-    display: flex;
-    flex-direction: column;
-/*    width: 70px;
-    align-content:  stretch;
-    justify-content: space-between;
-*/
-    align-items: flex-end;
-}
-
-#playIndicator{
-    background-color: pink;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .dataOutput h2{
- /*   background-color: green; */
-    display: inline-flex;
+  display: inline-flex;
 }
 
 #ControlTime{
@@ -248,20 +214,24 @@ nav input, nav button{
 }
 
 
-#markerSection ul li, #ControlMarker div, #ControlTime div, #ControlLoop div{
-    display: flex;
-    align-items: center;
+#markerSection ul li,
+#songlistsArea ul li,
+#ControlMarker div,
+#ControlTime div,
+#ControlLoop div{
+  display: flex;
+  align-items: center;
 }
 
 .small{
-    margin: 1px;
+  margin: 1px;
 }
 
 .loopClass input{
-    margin: 1px;
-    border: 0;
-    padding: 0;
-    padding-right: 1px;
+  margin: 1px;
+  border: 0;
+  padding: 0;
+  padding-right: 1px;
 }
 
 
@@ -536,25 +506,25 @@ rect.svg_rect_btn {
 }
 
 input, button, .linkButton{
-    border-width: 0;
-    padding: 1px 6px;
+  border-width: 0;
+  padding: 1px 6px;
 }
 
 input[type="button"]:hover, button:hover, .linkButton:hover{
-    -ms-transform: scale(1.1);
-    -webkit-transform: scale(1.1);
-    -moz-transform: scale(1.1);
-    transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 
 .important{
-    background-color:#ed8223;
-    color:#fff;
-    font-family:'Helvetica Neue',sans-serif;
-    text-shadow:#C17C3A 0 -1px 0;
-    padding: 4px;
-    border: 0;
+  background-color:#ed8223;
+  color:#fff;
+  font-family:'Helvetica Neue',sans-serif;
+  text-shadow:#C17C3A 0 -1px 0;
+  padding: 4px;
+  border: 0;
 }
 
 .Big{font-size: 18px;}
@@ -628,20 +598,22 @@ table {
 .rowBreak{
   white-space: normal;
 }
-
+/*
 .linkButton{
   background-color: rgb(221, 221, 221);
   color: rgb(0, 0, 0);
   cursor: default;height: 18px;
   line-height: normal;
 }
+*/
+.bgEasyRead{
+  background: lightblue;
+}
 
 
 
 
-
-
-
+/*
 .poccibleColorsOfMarkers{
   background: yellowgreen;
   background: aqua;
@@ -654,7 +626,7 @@ table {
   background: cyan;
   background: darkcyan;
 }
-
+*/
 .colorPickerWidth{
   width: 110px;
 }

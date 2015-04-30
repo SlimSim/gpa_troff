@@ -142,7 +142,6 @@ function setSong(fullPath, galleryId){
 
   var fsId = galleryId;
   var fs = null;
-
   // get the filesystem that the selected file belongs to
   for (var i=0; i < gGalleryArray.length; i++) {
     var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(gGalleryArray[i]);
@@ -154,9 +153,9 @@ function setSong(fullPath, galleryId){
   if (fs) {
     var path = fullPath;
 
-    DB.setCurrentSong(path);
+    DB.setCurrentSong(path, galleryId);
 
-    Troff.setWaitForLoad(path);
+    Troff.setWaitForLoad(path, galleryId);
     fs.root.getFile(path, {create: false}, function(fileEntry) {
        var newElem = null;
        // show the file data
@@ -203,9 +202,11 @@ function setSong(fullPath, galleryId){
 
 function addGallery(name, id) {
   var optGrp = document.createElement("h3");
+  var li = document.createElement("li");
   optGrp.appendChild(document.createTextNode(name));
   optGrp.setAttribute("id", id);
-  document.getElementById("gallery").appendChild(optGrp);
+  li.appendChild(optGrp);
+  document.getElementById("newSongListPartAllSongs").appendChild(li);
   return optGrp;
 }
 
@@ -220,12 +221,12 @@ function addItem(itemEntry) {
     });
     var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
 
-
+/*
     var pap = document.createElement("button");
     pap.setAttribute("class", "mediaButton");
     pap.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
-    pap.setAttribute("data-fullpath", itemEntry.fullPath );
-    pap.setAttribute("data-fsid", mData.galleryId );
+    pap.setAttribute("fullPath", itemEntry.fullPath );
+    pap.setAttribute("galleryId", mData.galleryId );
     pap.addEventListener('click', function(a, b, c){
       var selectedSong = document.querySelector('#gallery .selected');
       if(selectedSong)
@@ -238,14 +239,29 @@ function addItem(itemEntry) {
     if(itemEntry.fullPath == DB.strCurrentSong)
       pap.click();
 
+
     document.getElementById("gallery").appendChild(pap);
-   } else {
-
-
+*/
+    var li = document.createElement("li");
+    var label = document.createElement("label");
+    var checkbox = document.createElement("input");
+    var div = document.createElement("div");
+    div.setAttribute("class", "flex");
+    div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
+    checkbox.setAttribute("type", "checkbox");
+    label.setAttribute("class", "flexrow");
+    label.appendChild(checkbox);
+    label.appendChild(div);
+    li.setAttribute("fullPath", itemEntry.fullPath );
+    li.setAttribute("galleryId", mData.galleryId );
+    li.appendChild(label);
+    document.getElementById("newSongListPartAllSongs").appendChild(li);
+  } else {
+    var liHead = document.createElement("li");
     var group = document.createElement("h3");
     gruop.appendChild(document.createTextNode(itemEntry.name));
-
-    document.getElementById("gallery").appendChild(group);
+    liHead.appendChild(group);
+    document.getElementById("newSongListPartAllSongs").appendChild(liHead);
    }
 }
 
@@ -339,6 +355,7 @@ function FSstartFunk(){
 
 var TroffClass = function(){
     var strCurrentSong = "";
+    var iCurrentGalleryId = 0;
     var startTime = 0;
     var previousTime = 0;
     var time = 0;
@@ -780,7 +797,7 @@ var TroffClass = function(){
     return strCurrentSong;
   };
 
-  this.setWaitForLoad = function(path){
+  this.setWaitForLoad = function(path, iGalleryId){
     if(strCurrentSong){
         Troff.pauseSong();
         Troff.clearAllMarkers();
@@ -788,13 +805,14 @@ var TroffClass = function(){
         Troff.setWaitBetweenLoops(1);
     }
     strCurrentSong = path;
+    iCurrentGalleryId = iGalleryId;
 
     $('#currentArtist').text("Wait for song to load");
     $('#infoSection, #currentSong, #currentAlbum').hide();
   };
 
   this.setCurrentSong = function(){
-    DB.setCurrentSong(strCurrentSong);
+    DB.setCurrentSong(strCurrentSong, iCurrentGalleryId);
     $('#infoSection').show();
   }; // end SetCurrentSong
 
@@ -899,72 +917,208 @@ var TroffClass = function(){
     }, 0);
   }; // end createMarker   ********/
 
-    this.toggleImportExport = function(){
-      $('#outerImportExportPopUpSquare').toggle();
-        document.getElementById('blur-hack').focus();
-    };
-    
-    
-    this.selectSonglistTab = function(){
-      DB.setCurrentTab('songlist', Troff.getCurrentSong());
-
-      $('#gallery').show();
-      $('#markerInfoArea').hide();
-      $('#songInfoArea').hide();
-      $('#songlistTab').addClass('selected');
-      $('#songinfoTab').removeClass('selected');
-      $('#markerinfoTab').removeClass('selected');
+  this.toggleImportExport = function(){
+    $('#outerImportExportPopUpSquare').toggle();
       document.getElementById('blur-hack').focus();
-    };
-    this.selectSonginfoTab = function(){
-      DB.setCurrentTab('songinfo', Troff.getCurrentSong());
+  };
+  
+  this.selectSonglistsTab = function(){
+    DB.setCurrentTab('songlist', Troff.getCurrentSong());
+    $('#songlistsArea').show();
+    $('#gallery').hide();
+    $('#markerInfoArea').hide();
+    $('#songInfoArea').hide();
+    $('#songlistsTab').addClass('selected');
+    $('#songsTab').removeClass('selected');
+    $('#songinfoTab').removeClass('selected');
+    $('#markerinfoTab').removeClass('selected');
+    document.getElementById('blur-hack').focus();
+  };
+  
+  this.selectSongsTab = function(){
+    DB.setCurrentTab('songlist', Troff.getCurrentSong());
+    $('#songlistsArea').hide();
+    $('#gallery').show();
+    $('#markerInfoArea').hide();
+    $('#songInfoArea').hide();
+    $('#songlistsTab').removeClass('selected');
+    $('#songsTab').addClass('selected');
+    $('#songinfoTab').removeClass('selected');
+    $('#markerinfoTab').removeClass('selected');
+    document.getElementById('blur-hack').focus();
+  };
+  this.selectSonginfoTab = function(){
+    DB.setCurrentTab('songinfo', Troff.getCurrentSong());
+    $('#songlistsArea').hide();
+    $('#gallery').hide();
+    $('#songInfoArea').show();
+    $('#markerInfoArea').hide();
+    $('#songlistsTab').removeClass('selected');
+    $('#songsTab').removeClass('selected');
+    $('#songinfoTab').addClass('selected');
+    $('#markerinfoTab').removeClass('selected');
+    document.getElementById('blur-hack').focus();
+  };
+  this.selectMarkerinfoTab = function(){
+    DB.setCurrentTab('markerinfo', Troff.getCurrentSong());
+    $('#songlistsArea').hide();
+    $('#gallery').hide();
+    $('#songInfoArea').hide();
+    $('#markerInfoArea').show();
+    $('#songlistsTab').removeClass('selected');
+    $('#songinfoTab').removeClass('selected');
+    $('#songsTab').removeClass('selected');
+    $('#markerinfoTab').addClass('selected');
+    document.getElementById('blur-hack').focus();
+  };
+  
+  this.setInfo = function(info){
+    $('#songInfoArea').val(info);
+  };
+  this.setTab = function(tab){
+    /**/ if(tab === "songinfo") Troff.selectSonginfoTab();
+    else if(tab === "markerinfo") Troff.selectMarkerinfoTab();
+    else if(tab === "songlist") Troff.selectSongsTab();
+//      else if(tab === "songslist") Troff.selectSongsTab(); // vad kallas denna?
+    else /* catch all... */ Troff.selectSongsTab();
+
+  };
+  this.setSonglists = function(aoSonglists){
+    for(var i=0; i<aoSonglists.length; i++){
+      Troff.addSonglistToHTML(aoSonglists[i]);
+    }
+  };
+  
+  this.enterSongListName = function(){
+    IO.setEnterFunction(function(event){
+      console.log("Enter!");
+      document.getElementById('blur-hack').focus();
+      return false;
+    });
+  };
+  this.saveNewSongList = function(){
+    var name = $('#newSongListName').val();
+    if(name === "" || name === undefined) {
+      IO.alert("You must give the songlist a name");
+      return -1;
+    }
+    var aSongList = [];
+    var aRows = $('#newSongListPartAllSongs li');
+    for(var i=0; i<aRows.length; i++){
+      if(aRows[i].children[0].children[0] && aRows[i].children[0].children[0].checked){
+        var dfullpath = aRows[i].getAttribute('fullPath');
+        var dfsid = aRows[i].getAttribute('galleryId');
+        aSongList.push({'fullPath':dfullpath, 'galleryId':dfsid});
+      }
+    }
+
+    oSongList = {};
+    oSongList.id = $('#songListPartTheLists li').length + 1;
+    oSongList.name = name;
+    oSongList.songs = aSongList;
+    
+    Troff.addSonglistToHTML(oSongList);
+    
+    DB.saveSonglists();
+  };
+  
+  this.addSonglistToHTML = function(oSonglist){
+    var buttE = $('<input>')
+      .val('E')
+      .attr('type', 'button')
+      .addClass('removeButt')
+      .click(Troff.editSonglist);
+
+    var buttL = $('<input>')
+      .val(oSonglist.name)
+      .attr('type', 'button')
+      .click(Troff.selectSonglist);
+
+    var li = $('<li>')
+      .attr('stroSonglist', JSON.stringify(oSonglist))
+      .append(buttE)
+      .append(buttL);
+
+    $('#songListPartTheLists').append(li);
+
+  };
+  
+  this.setSonglistById = function(id){
+    var aSonglists = $('#songListPartTheLists li');
+    for(var i=1; i<aSonglists.length; i++){
+      if(JSON.parse(aSonglists.eq(i).attr('stroSonglist')).id === id){
+        aSonglists.eq(i).children().eq(1).click();
+        break;
+      }
+    }
+  };
+  
+  this.selectSong = function(){
+    var selectedSong = document.querySelector('#gallery .selected');
+    if(selectedSong)
+      selectedSong.classList.remove("selected");
+
+    this.classList.add("selected");
+
+    var fullPath = this.getAttribute('fullPath');
+    var galleryId = this.getAttribute('galleryId');
+    setSong(fullPath, galleryId);
+  };
+  
+  this.selectSonglist = function(event){
+    $('#songListPartTheLists li input').removeClass('selected');
+    this.classList.add('selected');
+    var li = this.parentNode;
+    var stroSonglist = li.getAttribute('stroSonglist');
+    var oSonglist = JSON.parse(stroSonglist);
+
+    DB.setCurrentSonglist(oSonglist.id);
+    
+    $('#gallery').empty();
+    
+    var aSongs = oSonglist.songs;
+    for(var i=0; i<aSongs.length; i++){
       
-      $('#gallery').hide();
-      $('#songInfoArea').show();
-      $('#markerInfoArea').hide();
-      $('#songlistTab').removeClass('selected');
-      $('#songinfoTab').addClass('selected');
-      $('#markerinfoTab').removeClass('selected');
-      document.getElementById('blur-hack').focus();
-    };
-    this.selectMarkerinfoTab = function(){
-      DB.setCurrentTab('markerinfo', Troff.getCurrentSong());
+      var pap = document.createElement("button");
+      pap.setAttribute("class", "mediaButton");
+      pap.appendChild(document.createTextNode(Troff.pathToName(aSongs[i].fullPath)));
+      pap.setAttribute("fullPath", aSongs[i].fullPath );
+      pap.setAttribute("galleryId", aSongs[i].galleryId );
+      pap.addEventListener('click', Troff.selectSong );
+//      if(aSongs[i]['fullPath'] == DB.strCurrentSong)
+//        pap.click();
 
-      $('#gallery').hide();
-      $('#songInfoArea').hide();
-      $('#markerInfoArea').show();
-      $('#songinfoTab').removeClass('selected');
-      $('#songlistTab').removeClass('selected');
-      $('#markerinfoTab').addClass('selected');
-      document.getElementById('blur-hack').focus();
-    };
-    
-    this.setInfo = function(info){
-      $('#songInfoArea').val(info);
-    };
-    this.setTab = function(tab){
-      /**/ if(tab === "songinfo") Troff.selectSonginfoTab();
-      else if(tab === "markerinfo") Troff.selectMarkerinfoTab();
-      else if(tab === "songlist") Troff.selectSonglistTab();
-      else /* catch all... */ Troff.selectSonglistTab();
 
-    };
-    this.editCurrentInfo = function(){
-      var infoAreaId = "";
-      if($('#songinfoTab').hasClass('selected'))
-        infoAreaId = 'songInfoArea';
-      if($('#markerinfoTab').hasClass('selected'))
-        infoAreaId = 'markerInfoArea';
-      var quickTimeOut = setTimeout(function(){
-        document.getElementById(infoAreaId).click();
-        document.getElementById(infoAreaId).focus();
-        clearInterval(quickTimeOut);
-      }, 0);
-    };
+    document.getElementById("gallery").appendChild(pap);
     
-    this.focusSongInfoArea = function(){
-      $('#songinfoTab').click();
-    };
+//      $('#gallery').append(liSong);
+    }
+    
+  };
+  
+  this.editSonglist = function(event){
+    console.log("editSonglist -> ");
+    console.log(this);
+    var li = this.parentNode;
+    console.log(li);
+  };
+  
+  this.editCurrentInfo = function(){
+    var infoAreaId = "";
+    if($('#songinfoTab').hasClass('selected'))
+      infoAreaId = 'songInfoArea';
+    if($('#markerinfoTab').hasClass('selected'))
+      infoAreaId = 'markerInfoArea';
+    var quickTimeOut = setTimeout(function(){
+      document.getElementById(infoAreaId).click();
+      document.getElementById(infoAreaId).focus();
+      clearInterval(quickTimeOut);
+    }, 0);
+  };
+  
+  this.focusSongInfoArea = function(){
+    $('#songinfoTab').click();
+  };
     
     this.enterSongInfo = function(a, b, c){
       $('#songInfoArea').addClass('textareaEdit');
@@ -1582,7 +1736,7 @@ var DBClass = function(){
 
 
 
-  var strCurrentSong = "";
+//  var strCurrentSong = "";
 
   /* every song is stored like this:
      var marker = {"name": time}
@@ -1633,7 +1787,6 @@ var DBClass = function(){
       if( songObject.markers[j]['Start'] != undefined ) bStart = true;
       if( songObject.markers[j]['End'] != undefined ) bEnd = true;
     }
-
     if(
       songObject.markers.length < 2
       ||
@@ -1726,7 +1879,6 @@ var DBClass = function(){
     if(!songObject.loopTimes) songObject.loopTimes = 1;
     if(!songObject.wait) songObject.wait = 1;
     if(!songObject.info ) songObject.info = "";
-    if(!songObject.tab ) songObject.tab = "songlist";
     if(!songObject.tempo) songObject.tempo = "?";
 
     if(songObject.tempo == "NaN") songObject.tempo = "?";
@@ -1742,20 +1894,77 @@ var DBClass = function(){
     chrome.storage.local.get(null, function(items) {   
       var allKeys = Object.keys(items);
       for(var key in items){
-        if(key === "strCurrentSongPath") continue;
+        if( // skipping all non-songs from DB:
+          key === "stroCurrentSongPathAndGalleryId" ||
+          key === "iCurrentSonglist" ||
+          key === "strCurrentTab" ||
+          key === "straoSongLists" ||
+          key === "stroCurrentSongPathAndGalleryId"
+        ) continue;
         DB.cleanSong(key, items[key]);
       }
     });
   };
+  
+  
+  this.saveSonglists = function(){
+    var aoSonglists = [];
+    
+    var aDOMSonglist = $('#songListPartTheLists li');
+    /*OBS ths first button is the All button, it should not be included OBS*/
+    for(var i=1/*OBS not 0 OBS*/; i<aDOMSonglist.length; i++){
+      aoSonglists.push(JSON.parse(aDOMSonglist[i].getAttribute('stroSonglist')));
+    }
+    
+
+    var straoSonglists = JSON.stringify(aoSonglists);
+    chrome.storage.local.set({'straoSongLists': straoSonglists});
+    
+  };
 
 
-  this.setCurrentSong = function(path){
-    chrome.storage.local.set({'strCurrentSongPath': path});
+  this.setCurrentTab = function(tab, songId){
+    chrome.storage.local.set({'strCurrentTab': tab});
+  };
+  
+  this.setCurrentSonglist = function(iSonglistId){
+    chrome.storage.local.set({'iCurrentSonglist': iSonglistId});
+  };
+
+  this.setCurrentSong = function(path, galleryId){
+    var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
+    chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
+  };
+
+  this.getAllSonglists = function(){
+    chrome.storage.local.get('straoSongLists', function(ret){
+      Troff.setSonglists(JSON.parse(ret['straoSongLists']));
+    });
+  };
+  
+  this.getCurrentSonglist = function(){
+    chrome.storage.local.get('iCurrentSonglist', function(ret){
+      Troff.setSonglistById(ret['iCurrentSonglist']);
+    });
+  };
+  
+  this.getCurrentTab = function(){
+    chrome.storage.local.get('strCurrentTab', function(ret){
+      Troff.setTab(ret['strCurrentTab']);
+    });
   };
 
   this.getCurrentSong = function(){
-    chrome.storage.local.get('strCurrentSongPath', function(ret){
-        DB.strCurrentSong = ret['strCurrentSongPath'];
+    chrome.storage.local.get('stroCurrentSongPathAndGalleryId', function(ret){
+      var stroSong = JSON.parse(ret['stroCurrentSongPathAndGalleryId']);
+      var aSongs = $('#gallery').children();
+      for(var i=0; i<aSongs.length; i++){
+        if(aSongs.eq(i).attr('fullpath') == stroSong.strPath)
+          aSongs.eq(i).click();
+      }
+      
+      setSong(stroSong.strPath, stroSong.iGalleryId);
+//      DB.strCurrentSong = ret['strCurrentSongPath'];
     });
   };
 
@@ -1889,10 +2098,6 @@ var DBClass = function(){
           console.error("Did not recognize the mode: " + mode);
   };
   */
-  this.setCurrentTab = function(tab, songId){
-    DB.setCurrent(songId, 'tab', tab);
-  };
-  
   this.setCurrentSongInfo = function(info, songId){
     DB.setCurrent(songId, 'info', info);
   };
@@ -1946,9 +2151,9 @@ var DBClass = function(){
         Troff.setPlayInFullscreen(song.bPlayInFullscreen);
       Troff.setWaitBetweenLoops(song.wait);
       Troff.setInfo(song.info);
-      Troff.setTab(song.tab);
+//      Troff.setTab(song.tab);
       Troff.setTempo(song.tempo);
-      Troff.setCurrentSong(songId); // site is this nessessarry??? det enda den gör är att anropa DB.setCurrentSong (som sparar strCurrentSong i DB) och kör Show-infosection...
+      Troff.setCurrentSong();
 
     };// end loadSongMetadata
 
@@ -1977,7 +2182,6 @@ var DBClass = function(){
           "speed": 100,
           "tempo": "?",
           "info": "",
-          "tab": "songlist",
           "pauseBefStart": [true, 3],
           "startBefore": [false, 4],
           "stopAfter": [false, 2],
@@ -2036,7 +2240,8 @@ var IOClass = function(){
     //$('#startBefore').change(Troff.updateStartBefore);
     $('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
     
-    $('#songlistTab').click(Troff.selectSonglistTab);
+    $('#songlistsTab').click(Troff.selectSonglistsTab);
+    $('#songsTab').click(Troff.selectSongsTab);
     $('#songinfoTab').click(Troff.selectSonginfoTab);
     $('#markerinfoTab').click(Troff.selectMarkerinfoTab);
 
@@ -2047,6 +2252,8 @@ var IOClass = function(){
     $('#songInfoArea').change(Troff.updateSongInfo);
     $('#songInfoArea').blur(Troff.exitSongInfo);
     $('#songInfoArea').click(Troff.enterSongInfo);
+    $('#newSongListName').click(Troff.enterSongListName);
+    $('#saveNewSongList').click(Troff.saveNewSongList);
     
     $('#stopAfter')[0].addEventListener(
       'input', Troff.settAppropriateActivePlayRegion
@@ -2073,6 +2280,24 @@ var IOClass = function(){
       document.getElementById('blur-hack').focus();
     });
     $('.loopButt').click( Troff.setLoop );
+    
+    
+    $('.shareClass').click(function(){
+      document.getElementById('blur-hack').focus();
+      var subject = "Troff is a great music player for practicing";
+      var body = "Hello\n\n"
+        + "I found this great app that is perfect for practicing dancing or "
+        + "instruments to songs. "
+        + "It let you loop a part of a song, slow it down "
+        + "and create markers on the song timeline.\n"
+        + "It even supports movies!\n\n"
+        + "It is free to download here:\n"
+        + "https://chrome.google.com/webstore/detail/"
+        + "troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl\n\n"
+        + "Best regards!";
+      var link = "mailto:?&subject="+subject+"&body=" + escape(body);
+      window.open(link);
+    });
 
     window.addEventListener('resize', function(){
       IO.setSliderHeight();
@@ -2661,31 +2886,17 @@ var IO = new IOClass();
 $(document).ready( function() {
     
     DB.cleanDB();
-    
-    DB.getCurrentSong();
-    //FS.startFunc();
-
+    DB.getAllSonglists();
+    DB.getCurrentTab();
     IO.startFunc();
+    //FS.startFunc();
     FSstartFunk();
+    DB.getCurrentSonglist();
+    DB.getCurrentSong();
 
-
-    $('.shareClass').click(function(){
-
-      document.getElementById('blur-hack').focus();
-      var subject = "Troff is a great music player for practicing";
-      var body = "Hello\n\n"
-        + "I found this great app that is perfect for practicing dancing or "
-        + "instruments to songs. "
-        + "It let you loop a part of a song, slow it down "
-        + "and create markers on the song timeline.\n"
-        + "It even supports movies!\n\n"
-        + "It is free to download here:\n"
-        + "https://chrome.google.com/webstore/detail/"
-        + "troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl\n\n"
-        + "Best regards!";
-      var link = "mailto:?&subject="+subject+"&body=" + escape(body);
-      window.open(link);
-    });
+    
+    
+    
 
 
 
