@@ -137,6 +137,21 @@ function clearList() {
   document.getElementById("newSongListPartAllSongs").innerHTML = "";
 }
 
+function checkIfSongExists(fullPath, galleryId){
+  var fsId = galleryId;
+  var fs = null;
+  // get the filesystem that the selected file belongs to
+  for (var i=0; i < gGalleryArray.length; i++) {
+    var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(gGalleryArray[i]);
+    if (mData.galleryId == fsId) {
+      fs = gGalleryArray[i];
+      break;
+    }
+  }
+  if(fs) return true;
+  return false;
+}
+
 function setSong(fullPath, galleryId){
   Troff.pauseSong();
 
@@ -316,6 +331,7 @@ function scanGalleries(fs) {
 function getGalleriesInfo(results) {
   clearContentDiv();
   clearList();
+  DB.getCurrentSonglist(); // this reloads the current songlist
   if (results.length) {
     gGalleryArray = results; // store the list of gallery directories
     gGalleryIndex = 0;
@@ -329,7 +345,6 @@ function getGalleriesInfo(results) {
   }
 
 }
-
 
 function FSstartFunk(){
   chrome.mediaGalleries.getMediaFileSystems({
@@ -1083,6 +1098,8 @@ var TroffClass = function(){
     
     var aSongs = oSonglist.songs;
     for(var i=0; i<aSongs.length; i++){
+      if(!checkIfSongExists(aSongs[i].fullPath, aSongs[i].galleryId)) 
+        continue;
       
       var pap = document.createElement("button");
       pap.setAttribute("class", "mediaButton");
