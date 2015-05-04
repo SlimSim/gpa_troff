@@ -26,7 +26,6 @@ var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jp
 var audFormats = ['wav', 'mp3'];
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'ogg', 'webm', 'wmv'];
 
-
 function errorPrintFactory(custom) {
    return function(e) {
       var msg = '';
@@ -295,6 +294,13 @@ function scanGallery(entries) {
         scanGalleries(gGalleryArray[gGalleryIndex]);
       }
     }
+
+
+    if(Troff.stopTimeout) clearInterval(Troff.stopTimeout);
+    Troff.stopTimeout = setTimeout(function(){
+      DB.getCurrentSonglist(); // this reloads the current songlist
+      clearInterval(Troff.stopTimeout);
+    }, 42);
     return;
   }
   for (var i = 0; i < entries.length; i++) {
@@ -331,7 +337,6 @@ function scanGalleries(fs) {
 function getGalleriesInfo(results) {
   clearContentDiv();
   clearList();
-  DB.getCurrentSonglist(); // this reloads the current songlist
   if (results.length) {
     gGalleryArray = results; // store the list of gallery directories
     gGalleryIndex = 0;
@@ -342,6 +347,10 @@ function getGalleriesInfo(results) {
      * Here i should display a message to the user, urging him or here
      * to add a directory, or a directory with a song in it...
      */
+    IO.alert(
+      'No songs or videos found, '+
+      'pleas add a directory with a song or video in it.'
+    );
   }
 
 }
@@ -1064,8 +1073,12 @@ var TroffClass = function(){
   };
   
   this.setSonglistById = function(id){
+    if(id === 0){
+      $('#songlistAll').click();
+      return;
+    }
     var aSonglists = $('#songListPartTheLists li');
-    for(var i=1; i<aSonglists.length; i++){
+    for(var i=0; i<aSonglists.length; i++){
       if(JSON.parse(aSonglists.eq(i).attr('stroSonglist')).id === id){
         aSonglists.eq(i).children().eq(1).click();
         break;
@@ -1085,8 +1098,38 @@ var TroffClass = function(){
     setSong(fullPath, galleryId);
   };
   
-  this.selectSonglist = function(event){
+  this.selectAllSongsSonglist = function(){
     $('#songListPartTheLists li input').removeClass('selected');
+    $('#songlistAll').addClass('selected');
+    $('#gallery').empty();
+    
+    
+    DB.setCurrentSonglist(0);
+
+    var aSongs = $('#newSongListPartAllSongs').children();
+    for(var i=0; i<aSongs.length; i++){
+      var songElement = $('#newSongListPartAllSongs').children().eq(i);
+      var fullPath = songElement.attr('fullPath');
+      var galleryId = songElement.attr('galleryId');
+      if (fullPath === undefined) { 
+        var head = document.createElement("h3");
+        head.appendChild(document.createTextNode( songElement.text() ));
+        document.getElementById("gallery").appendChild(head);
+        continue;
+      }
+      var pap = document.createElement("button");
+      pap.setAttribute("class", "mediaButton");
+      pap.appendChild(document.createTextNode(Troff.pathToName(fullPath)));
+      pap.setAttribute("fullPath", fullPath );
+      pap.setAttribute("galleryId", galleryId );
+      pap.addEventListener('click', Troff.selectSong );
+
+      document.getElementById("gallery").appendChild(pap);
+    }
+  };
+  
+  this.selectSonglist = function(event){
+    $('#songListPartTheLists li input, #songlistAll').removeClass('selected');
     this.classList.add('selected');
     var li = this.parentNode;
     var stroSonglist = li.getAttribute('stroSonglist');
@@ -1107,13 +1150,8 @@ var TroffClass = function(){
       pap.setAttribute("fullPath", aSongs[i].fullPath );
       pap.setAttribute("galleryId", aSongs[i].galleryId );
       pap.addEventListener('click', Troff.selectSong );
-//      if(aSongs[i]['fullPath'] == DB.strCurrentSong)
-//        pap.click();
 
-
-    document.getElementById("gallery").appendChild(pap);
-    
-//      $('#gallery').append(liSong);
+      document.getElementById("gallery").appendChild(pap);
     }
     
   };
@@ -1933,8 +1971,7 @@ var DBClass = function(){
     var aoSonglists = [];
     
     var aDOMSonglist = $('#songListPartTheLists li');
-    /*OBS ths first button is the All button, it should not be included OBS*/
-    for(var i=1/*OBS not 0 OBS*/; i<aDOMSonglist.length; i++){
+    for(var i=0; i<aDOMSonglist.length; i++){
       aoSonglists.push(JSON.parse(aDOMSonglist[i].getAttribute('stroSonglist')));
     }
     
@@ -2277,6 +2314,7 @@ var IOClass = function(){
     $('#newSongListName').click(Troff.enterSongListName);
     $('#newSongListName').blur(Troff.exitSongListName);
     $('#saveNewSongList').click(Troff.saveNewSongList);
+    $('#songlistAll').click(Troff.selectAllSongsSonglist);
     
     $('#stopAfter')[0].addEventListener(
       'input', Troff.settAppropriateActivePlayRegion
@@ -2914,7 +2952,6 @@ $(document).ready( function() {
     IO.startFunc();
     //FS.startFunc();
     FSstartFunk();
-    DB.getCurrentSonglist();
     DB.getCurrentSong();
 
     
