@@ -1025,30 +1025,103 @@ var TroffClass = function(){
     document.getElementById('blur-hack').focus();
   };
   
+  this.editSonglist = function(event){
+    console.log("editSonglist -> ");
+    var li = this.parentNode;
+    var oSonglist = JSON.parse(li.getAttribute('stroSonglist'));
+    $('#newSongListName').val(oSonglist.name);
+    $('#newSongListName').attr('iSonglistId', oSonglist.id);
+    
+    var aSongList = [];
+    var aRows = $('#newSongListPartAllSongs li');
+    var aSongs = oSonglist.songs;
+
+    for(var i=0; i<aRows.length; i++){
+      rowFP = aRows[i].getAttribute('fullPath');
+      rowGID = aRows[i].getAttribute('galleryId');
+      for(var j=0; j<aSongs.length; j++){
+        console.log(rowFP + " == " + aSongs[j].fullPath);
+        if(rowFP == aSongs[j].fullPath && rowGID == aSongs[j].galleryId){
+          console.log("in if");
+          if(aRows[i].children[0].children[0])
+            aRows[i].children[0].children[0].checked = true;
+        }
+      }
+    }
+  };
+  
+  this.createNewSonglist = function(){
+    console.log("createNewSonglist ->");
+    document.getElementById('blur-hack').focus();
+    Troff.resetNewSongListPartAllSongs();
+    $('#newSongListName').focus();
+    
+  //    show the sist of songs and such....
+    
+  };
+  
   this.saveNewSongList = function(){
+    document.getElementById('blur-hack').focus();
     var name = $('#newSongListName').val();
     if(name === "" || name === undefined) {
       IO.alert("You must give the songlist a name");
       return -1;
     }
-    var aSongList = [];
+    console.log($('#newSongListName').attr('iSonglistId'));
+    var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
+    
+    
+    var aSonglist = [];
     var aRows = $('#newSongListPartAllSongs li');
     for(var i=0; i<aRows.length; i++){
       if(aRows[i].children[0].children[0] && aRows[i].children[0].children[0].checked){
         var dfullpath = aRows[i].getAttribute('fullPath');
         var dfsid = aRows[i].getAttribute('galleryId');
-        aSongList.push({'fullPath':dfullpath, 'galleryId':dfsid});
+        aSonglist.push({'fullPath':dfullpath, 'galleryId':dfsid});
       }
     }
 
-    oSongList = {};
-    oSongList.id = $('#songListPartTheLists li').length + 1;
-    oSongList.name = name;
-    oSongList.songs = aSongList;
+    console.log(aSonglist);
+      console.log('iSonglistId = ' + iSonglistId);
+
+    if(iSonglistId === 0){
+      oSongList = {};
+      oSongList.id = $('#songListPartTheLists li').length + 1;
+      oSongList.name = name;
+      oSongList.songs = aSonglist;
+      
+      console.log(oSongList);
+      Troff.addSonglistToHTML(oSongList);
+    } else {
+      var aSonglists = $('#songListPartTheLists li');
+      for(var j=0; j<aSonglists.length; j++){
+        var oCurrSonglist = JSON.parse(aSonglists.eq(j).attr('stroSonglist'));
+        if(oCurrSonglist.id == iSonglistId){
+          oCurrSonglist.name = name;
+          oCurrSonglist.songs = aSonglist;
+          var stroNewSonglist = JSON.stringify(oCurrSonglist);
+          console.log("oCurrSonglist:");
+          console.log(oCurrSonglist);
+          aSonglists.eq(j).attr('stroSonglist', stroNewSonglist);
+          aSonglists.eq(j).children().eq(1).val(name);
+          break;
+        }
+      }
+      console.log("uppdate songlist " + iSonglistId);
+
+    }
     
-    Troff.addSonglistToHTML(oSongList);
-    
+
+    Troff.resetNewSongListPartAllSongs();
     DB.saveSonglists();
+    DB.getCurrentSonglist(); // this reloads the current songlist
+    
+  };
+  
+  this.resetNewSongListPartAllSongs = function(){
+    $('#newSongListName').attr('iSonglistId', 0);
+    $('#newSongListName').val('');
+    $('#newSongListPartAllSongs li label input').attr('checked', false);
   };
   
   this.addSonglistToHTML = function(oSonglist){
@@ -1154,13 +1227,6 @@ var TroffClass = function(){
       document.getElementById("gallery").appendChild(pap);
     }
     
-  };
-  
-  this.editSonglist = function(event){
-    console.log("editSonglist -> ");
-    console.log(this);
-    var li = this.parentNode;
-    console.log(li);
   };
   
   this.editCurrentInfo = function(){
@@ -2311,6 +2377,7 @@ var IOClass = function(){
     $('#songInfoArea').change(Troff.updateSongInfo);
     $('#songInfoArea').blur(Troff.exitSongInfo);
     $('#songInfoArea').click(Troff.enterSongInfo);
+    $('#buttNewSongList').click(Troff.createNewSonglist);
     $('#newSongListName').click(Troff.enterSongListName);
     $('#newSongListName').blur(Troff.exitSongListName);
     $('#saveNewSongList').click(Troff.saveNewSongList);
