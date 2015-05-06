@@ -1026,6 +1026,8 @@ var TroffClass = function(){
   };
   
   this.editSonglist = function(event){
+    $('#newSongListPart').show();
+    $('#songListPart').hide();
     var li = this.parentNode;
     var oSonglist = JSON.parse(li.getAttribute('stroSonglist'));
     $('#newSongListName').val(oSonglist.name);
@@ -1048,38 +1050,49 @@ var TroffClass = function(){
   };
   
   this.createNewSonglist = function(){
-    document.getElementById('blur-hack').focus();
     Troff.resetNewSongListPartAllSongs();
+    $('#newSongListPart').show();
+    $('#songListPart').hide();
+    $('#removeSongList').hide();
     $('#newSongListName').focus();
     $('#newSongListName').click();
-    var iSonglistId = $('#newSongListName').attr('iSonglistId');
-    
-    console.log(iSonglistId);
-    
-    
-    
-  //    show the sist of songs and such....
-    
+  };
+  
+  this.cancelSongList = function(){
+    document.getElementById('blur-hack').focus();
+    $('#newSongListPart').hide();
+    $('#songListPart').show();
+    Troff.resetNewSongListPartAllSongs();
   };
   
   this.removeSonglist = function(){
-    document.getElementById('blur-hack').focus();
-    var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
-    
-    var aSonglists = $('#songListPartTheLists li');
-    for(var j=0; j<aSonglists.length; j++){
-      var oCurrSonglist = JSON.parse(aSonglists.eq(j).attr('stroSonglist'));
-      if(oCurrSonglist.id === iSonglistId){
-        aSonglists.eq(j).remove();
-        break;
+    IO.confirm( 'Remove songlist?',
+                'Don you want to permanently remove this songlist?',
+                function(){
+      $('#newSongListPart').hide();
+      $('#songListPart').show();
+      document.getElementById('blur-hack').focus();
+      var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
+      
+      var aSonglists = $('#songListPartTheLists li');
+      for(var j=0; j<aSonglists.length; j++){
+        var oCurrSonglist = JSON.parse(aSonglists.eq(j).attr('stroSonglist'));
+        if(oCurrSonglist.id === iSonglistId){
+          aSonglists.eq(j).remove();
+          break;
+        }
       }
-    }
-    
-    DB.saveSonglists(); // this saves the current songlists from html to DB
-    Troff.resetNewSongListPartAllSongs();
+      
+      DB.saveSonglists(); // this saves the current songlists from html to DB
+      Troff.resetNewSongListPartAllSongs();
+
+    });
   };
   
   this.saveNewSongList = function(){
+    $('#newSongListPart').hide();
+    $('#songListPart').show();
+    
     document.getElementById('blur-hack').focus();
     var name = $('#newSongListName').val();
     if(name === "" || name === undefined) {
@@ -1148,6 +1161,7 @@ var TroffClass = function(){
     $('#newSongListName').attr('iSonglistId', 0);
     $('#newSongListName').val('');
     $('#newSongListPartAllSongs li label input').attr('checked', false);
+    $('#removeSongList').show();
   };
   
   this.addSonglistToHTML = function(oSonglist){
@@ -2407,6 +2421,7 @@ var IOClass = function(){
     $('#newSongListName').blur(Troff.exitSongListName);
     $('#saveNewSongList').click(Troff.saveNewSongList);
     $('#removeSongList').click(Troff.removeSonglist);
+    $('#cancelSongList').click(Troff.cancelSongList);
     $('#songlistAll').click(Troff.selectAllSongsSonglist);
     
     $('#stopAfter')[0].addEventListener(
