@@ -1026,7 +1026,6 @@ var TroffClass = function(){
   };
   
   this.editSonglist = function(event){
-    console.log("editSonglist -> ");
     var li = this.parentNode;
     var oSonglist = JSON.parse(li.getAttribute('stroSonglist'));
     $('#newSongListName').val(oSonglist.name);
@@ -1040,9 +1039,7 @@ var TroffClass = function(){
       rowFP = aRows[i].getAttribute('fullPath');
       rowGID = aRows[i].getAttribute('galleryId');
       for(var j=0; j<aSongs.length; j++){
-        console.log(rowFP + " == " + aSongs[j].fullPath);
         if(rowFP == aSongs[j].fullPath && rowGID == aSongs[j].galleryId){
-          console.log("in if");
           if(aRows[i].children[0].children[0])
             aRows[i].children[0].children[0].checked = true;
         }
@@ -1051,13 +1048,35 @@ var TroffClass = function(){
   };
   
   this.createNewSonglist = function(){
-    console.log("createNewSonglist ->");
     document.getElementById('blur-hack').focus();
     Troff.resetNewSongListPartAllSongs();
     $('#newSongListName').focus();
+    $('#newSongListName').click();
+    var iSonglistId = $('#newSongListName').attr('iSonglistId');
+    
+    console.log(iSonglistId);
+    
+    
     
   //    show the sist of songs and such....
     
+  };
+  
+  this.removeSonglist = function(){
+    document.getElementById('blur-hack').focus();
+    var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
+    
+    var aSonglists = $('#songListPartTheLists li');
+    for(var j=0; j<aSonglists.length; j++){
+      var oCurrSonglist = JSON.parse(aSonglists.eq(j).attr('stroSonglist'));
+      if(oCurrSonglist.id === iSonglistId){
+        aSonglists.eq(j).remove();
+        break;
+      }
+    }
+    
+    DB.saveSonglists(); // this saves the current songlists from html to DB
+    Troff.resetNewSongListPartAllSongs();
   };
   
   this.saveNewSongList = function(){
@@ -1067,7 +1086,6 @@ var TroffClass = function(){
       IO.alert("You must give the songlist a name");
       return -1;
     }
-    console.log($('#newSongListName').attr('iSonglistId'));
     var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
     
     
@@ -1081,16 +1099,11 @@ var TroffClass = function(){
       }
     }
 
-    console.log(aSonglist);
-      console.log('iSonglistId = ' + iSonglistId);
-
     if(iSonglistId === 0){
       oSongList = {};
-      oSongList.id = $('#songListPartTheLists li').length + 1;
+      oSongList.id = Troff.getUniqueSonglistId();
       oSongList.name = name;
       oSongList.songs = aSonglist;
-      
-      console.log(oSongList);
       Troff.addSonglistToHTML(oSongList);
     } else {
       var aSonglists = $('#songListPartTheLists li');
@@ -1100,22 +1113,35 @@ var TroffClass = function(){
           oCurrSonglist.name = name;
           oCurrSonglist.songs = aSonglist;
           var stroNewSonglist = JSON.stringify(oCurrSonglist);
-          console.log("oCurrSonglist:");
-          console.log(oCurrSonglist);
           aSonglists.eq(j).attr('stroSonglist', stroNewSonglist);
           aSonglists.eq(j).children().eq(1).val(name);
           break;
         }
       }
-      console.log("uppdate songlist " + iSonglistId);
-
     }
-    
 
     Troff.resetNewSongListPartAllSongs();
-    DB.saveSonglists();
+    DB.saveSonglists(); // this saves the current songlists from html to DB
     DB.getCurrentSonglist(); // this reloads the current songlist
     
+  };
+  
+  this.getUniqueSonglistId = function(){
+    var iSonglistId = 1;
+    var bFinniched = false;
+    var aSonglists = $('#songListPartTheLists li');
+    while(true){
+      bFinniched = true;
+      for(var i=0; i<aSonglists.length; i++){
+        var oCurrSonglist = JSON.parse(aSonglists.eq(i).attr('stroSonglist'));
+        if(oCurrSonglist.id == iSonglistId){
+          iSonglistId++;
+          bFinniched = false;
+        }
+      }
+      if(bFinniched)
+        return iSonglistId;
+    }
   };
   
   this.resetNewSongListPartAllSongs = function(){
@@ -2032,7 +2058,6 @@ var DBClass = function(){
     });
   };
   
-  
   this.saveSonglists = function(){
     var aoSonglists = [];
     
@@ -2381,6 +2406,7 @@ var IOClass = function(){
     $('#newSongListName').click(Troff.enterSongListName);
     $('#newSongListName').blur(Troff.exitSongListName);
     $('#saveNewSongList').click(Troff.saveNewSongList);
+    $('#removeSongList').click(Troff.removeSonglist);
     $('#songlistAll').click(Troff.selectAllSongsSonglist);
     
     $('#stopAfter')[0].addEventListener(
