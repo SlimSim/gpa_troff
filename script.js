@@ -1212,6 +1212,7 @@ var TroffClass = function(){
   };
   
   this.selectAllSongsSonglist = function(){
+    document.getElementById('blur-hack').focus();
     $('#songListPartTheLists li input').removeClass('selected');
     $('#songlistAll').addClass('selected');
     $('#gallery').empty();
@@ -1230,18 +1231,13 @@ var TroffClass = function(){
         document.getElementById("gallery").appendChild(head);
         continue;
       }
-      var pap = document.createElement("button");
-      pap.setAttribute("class", "mediaButton");
-      pap.appendChild(document.createTextNode(Troff.pathToName(fullPath)));
-      pap.setAttribute("fullPath", fullPath );
-      pap.setAttribute("galleryId", galleryId );
-      pap.addEventListener('click', Troff.selectSong );
-
+      var pap = Troff.getMediaButton(fullPath, galleryId);
       document.getElementById("gallery").appendChild(pap);
     }
   };
   
   this.selectSonglist = function(event){
+    document.getElementById('blur-hack').focus();
     $('#songListPartTheLists li input, #songlistAll').removeClass('selected');
     this.classList.add('selected');
     var li = this.parentNode;
@@ -1249,24 +1245,28 @@ var TroffClass = function(){
     var oSonglist = JSON.parse(stroSonglist);
 
     DB.setCurrentSonglist(oSonglist.id);
-    
     $('#gallery').empty();
     
     var aSongs = oSonglist.songs;
     for(var i=0; i<aSongs.length; i++){
       if(!checkIfSongExists(aSongs[i].fullPath, aSongs[i].galleryId)) 
         continue;
-      
-      var pap = document.createElement("button");
-      pap.setAttribute("class", "mediaButton");
-      pap.appendChild(document.createTextNode(Troff.pathToName(aSongs[i].fullPath)));
-      pap.setAttribute("fullPath", aSongs[i].fullPath );
-      pap.setAttribute("galleryId", aSongs[i].galleryId );
-      pap.addEventListener('click', Troff.selectSong );
-
+      var pap = Troff.getMediaButton(aSongs[i].fullPath, aSongs[i].galleryId);
       document.getElementById("gallery").appendChild(pap);
     }
     
+  };
+
+  this.getMediaButton = function(fullPath, galleryId){
+    var pap = document.createElement("button");
+    pap.setAttribute("class", "mediaButton");
+    if(fullPath == Troff.getCurrentSong())
+      pap.classList.add('selected');
+    pap.appendChild(document.createTextNode(Troff.pathToName(fullPath)));
+    pap.setAttribute("fullPath", fullPath );
+    pap.setAttribute("galleryId", galleryId );
+    pap.addEventListener('click', Troff.selectSong );
+    return pap;
   };
   
   this.editCurrentInfo = function(){
