@@ -2059,13 +2059,18 @@ var DBClass = function(){
   this.cleanDB = function(){
     chrome.storage.local.get(null, function(items) {   
       var allKeys = Object.keys(items);
+      if(allKeys.length === 0){ // This is the first time Troff is started:
+        DB.saveSonglists();
+        DB.setCurrentTab("songs");
+        DB.setCurrentSonglist(0);
+      }
+      
       for(var key in items){
         if( // skipping all non-songs from DB:
           key === "stroCurrentSongPathAndGalleryId" ||
           key === "iCurrentSonglist" ||
           key === "strCurrentTab" ||
-          key === "straoSongLists" ||
-          key === "stroCurrentSongPathAndGalleryId"
+          key === "straoSongLists"
         ) continue;
         DB.cleanSong(key, items[key]);
       }
@@ -2079,11 +2084,9 @@ var DBClass = function(){
     for(var i=0; i<aDOMSonglist.length; i++){
       aoSonglists.push(JSON.parse(aDOMSonglist[i].getAttribute('stroSonglist')));
     }
-    
 
     var straoSonglists = JSON.stringify(aoSonglists);
     chrome.storage.local.set({'straoSongLists': straoSonglists});
-    
   };
 
 
