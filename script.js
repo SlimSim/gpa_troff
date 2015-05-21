@@ -1667,7 +1667,7 @@ var TroffClass = function(){
     }; // end removeMarker ******/
 
     /*
-      editMarker, all, Tar bort en markör från html och DB
+      editMarker, all, Editerar en markör i både html och DB
     */
     this.editMarker = function(markerId){
       var oldName  = $('#'+markerId).val();
@@ -2613,17 +2613,20 @@ var IOClass = function(){
     var markerInfo;
     var markerColor;
     var markerTime;
+    var strHeadline;
 
     if(markerId){
       markerName = $('#'+markerId).val();
       markerInfo = $('#'+markerId)[0].info;
       markerColor = $('#'+markerId)[0].color;
       markerTime = Number($('#'+markerId)[0].timeValue);
+      strHeader = "Edit marker";
     } else {
       markerName = "marker nr " + ($('#markerList li').length + 1);
       markerInfo = "";
       markerColor = "None";
       markerTime = $('audio, video')[0].currentTime;
+      strHeader = "Create new marker";
     }
 
 
@@ -2737,7 +2740,7 @@ var IOClass = function(){
 
 
     var row0 = $("<span>", {"class": "oneRow"})
-               .append($("<h2>", {"id": "p1"}).append("Edit marker"));
+               .append($("<h2>", {"id": "p1"}).append(strHeader));
 
 
     var row1 = $("<span>", {"class": "oneRow"})
