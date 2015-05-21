@@ -1514,6 +1514,7 @@ var TroffClass = function(){
 
       $('.currentMarker').removeClass('currentMarker');
       $('#' + startMarkerId ).addClass('currentMarker');
+      $('#markerInfoArea').val($('#'+startMarkerId)[0].info);
       $('.currentStopMarker').removeClass('currentStopMarker');
       $('#' + stopMarkerId).addClass('currentStopMarker');
 
@@ -1530,6 +1531,7 @@ var TroffClass = function(){
 
       $('.currentMarker').removeClass('currentMarker');
       $('#' + startMarkerId).addClass('currentMarker');
+      $('#markerInfoArea').val($('#'+startMarkerId)[0].info);
 
       Troff.settAppropriateActivePlayRegion();
       document.getElementById('blur-hack').focus();
@@ -1594,6 +1596,7 @@ var TroffClass = function(){
 
         $('.currentMarker').removeClass('currentMarker');
         $('#' + firstMarkerId).addClass('currentMarker');
+        $('#markerInfoArea').val($('#'+firstMarkerId)[0].info);
       }
 
       var startMarker = $('.currentMarker').attr('id');
