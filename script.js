@@ -1435,7 +1435,7 @@ var TroffClass = function(){
         var bContinue = false;
         while(child) {
           var childTime = child.childNodes[2].timeValue;
-          if(childTime != null && Math.abs(time - childTime) < 0.001){
+          if(childTime !== undefined && Math.abs(time - childTime) < 0.001){
             var markerId = child.childNodes[2].id;
             
             if(child.childNodes[2].info != info){
