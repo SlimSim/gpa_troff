@@ -215,11 +215,17 @@ function setSong(fullPath, galleryId){
 
 
 function addGallery(name, id) {
-  var optGrp = document.createElement("h3");
   var li = document.createElement("li");
+  var label = document.createElement("label");
+  var checkbox = document.createElement("input");
+  var optGrp = document.createElement("h3");
   optGrp.appendChild(document.createTextNode(name));
   optGrp.setAttribute("id", id);
-  li.appendChild(optGrp);
+  checkbox.setAttribute("type", "checkbox");
+  label.setAttribute("class", "flexrow");
+  label.appendChild(checkbox);
+  label.appendChild(optGrp);
+  li.appendChild(label);
   document.getElementById("newSongListPartAllSongs").appendChild(li);
   return optGrp;
 }
@@ -234,7 +240,6 @@ function addItem(itemEntry) {
       }
     });
     var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
-
 /*
     var pap = document.createElement("button");
     pap.setAttribute("class", "mediaButton");
@@ -1036,14 +1041,21 @@ var TroffClass = function(){
     var aSongList = [];
     var aRows = $('#newSongListPartAllSongs li');
     var aSongs = oSonglist.songs;
+    var rowFP, rowGID, rowH;
 
     for(var i=0; i<aRows.length; i++){
       rowFP = aRows[i].getAttribute('fullPath');
       rowGID = aRows[i].getAttribute('galleryId');
+      rowH = aRows.eq(i).children().children().eq(1).text();
       for(var j=0; j<aSongs.length; j++){
-        if(rowFP == aSongs[j].fullPath && rowGID == aSongs[j].galleryId){
-          if(aRows[i].children[0].children[0])
-            aRows[i].children[0].children[0].checked = true;
+        if(rowH && rowH == aSongs[j].header ){
+          // checking headder:
+          aRows[i].children[0].children[0].checked = true;
+          continue;
+        }
+        if(rowFP && rowFP == aSongs[j].fullPath && rowGID == aSongs[j].galleryId){
+          // checking songs:
+          aRows[i].children[0].children[0].checked = true;
         }
       }
     }
@@ -1101,14 +1113,18 @@ var TroffClass = function(){
     }
     var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
     
-    
     var aSonglist = [];
     var aRows = $('#newSongListPartAllSongs li');
     for(var i=0; i<aRows.length; i++){
       if(aRows[i].children[0].children[0] && aRows[i].children[0].children[0].checked){
         var dfullpath = aRows[i].getAttribute('fullPath');
         var dfsid = aRows[i].getAttribute('galleryId');
-        aSonglist.push({'fullPath':dfullpath, 'galleryId':dfsid});
+        if(dfullpath !== null && dfsid !== null){
+          aSonglist.push({'fullPath':dfullpath, 'galleryId':dfsid});
+        }
+        else{
+          aSonglist.push({'header':aRows.eq(i).children(0).children(1).text()});
+        }
       }
     }
 
@@ -1249,12 +1265,17 @@ var TroffClass = function(){
     
     var aSongs = oSonglist.songs;
     for(var i=0; i<aSongs.length; i++){
+      if(aSongs[i].header !== undefined){
+        var header =  document.createElement("h3");
+        header.appendChild(document.createTextNode(aSongs[i].header));
+        document.getElementById("gallery").appendChild(header);
+        continue;
+      }
       if(!checkIfSongExists(aSongs[i].fullPath, aSongs[i].galleryId)) 
         continue;
       var pap = Troff.getMediaButton(aSongs[i].fullPath, aSongs[i].galleryId);
       document.getElementById("gallery").appendChild(pap);
     }
-    
   };
 
   this.getMediaButton = function(fullPath, galleryId){
