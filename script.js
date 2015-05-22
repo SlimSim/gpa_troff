@@ -240,27 +240,6 @@ function addItem(itemEntry) {
       }
     });
     var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
-/*
-    var pap = document.createElement("button");
-    pap.setAttribute("class", "mediaButton");
-    pap.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
-    pap.setAttribute("fullPath", itemEntry.fullPath );
-    pap.setAttribute("galleryId", mData.galleryId );
-    pap.addEventListener('click', function(a, b, c){
-      var selectedSong = document.querySelector('#gallery .selected');
-      if(selectedSong)
-        selectedSong.classList.remove("selected");
-
-      this.classList.add("selected");
-
-      setSong(itemEntry.fullPath, mData.galleryId);
-    });
-    if(itemEntry.fullPath == DB.strCurrentSong)
-      pap.click();
-
-
-    document.getElementById("gallery").appendChild(pap);
-*/
     var li = document.createElement("li");
     var label = document.createElement("label");
     var checkbox = document.createElement("input");
@@ -285,6 +264,7 @@ function addItem(itemEntry) {
 }
 
 function scanGallery(entries) {
+  
   // when the size of the entries array is 0,
   // we've processed all the directory contents
   if (entries.length === 0) {
@@ -312,11 +292,7 @@ function scanGallery(entries) {
     if (entries[i].isFile) {
       addItem(entries[i]);
       gGalleryData[gGalleryIndex].numFiles++;
-      (function(galData) {
-        entries[i].getMetadata(function(metadata){
-          galData.sizeBytes += metadata.size;
-        });
-      }(gGalleryData[gGalleryIndex]));
+      loopFunktion(entries, gGalleryData[gGalleryIndex], i);
     }
     else if (entries[i].isDirectory) {
       gDirectories.push(entries[i]);
@@ -328,6 +304,12 @@ function scanGallery(entries) {
   // readEntries has to be called until it returns an empty array. According to the spec,
   // the function might not return all of the directory's contents during a given call.
   gGalleryReader.readEntries(scanGallery, errorPrintFactory('readMoreEntries'));
+}
+
+function loopFunktion(entries, galData, i) {
+  entries[i].getMetadata(function(metadata){
+    galData.sizeBytes += metadata.size;
+  });
 }
 
 function scanGalleries(fs) {
