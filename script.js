@@ -254,12 +254,20 @@ function addItem(itemEntry) {
     li.setAttribute("galleryId", mData.galleryId );
     li.appendChild(label);
     document.getElementById("newSongListPartAllSongs").appendChild(li);
+    // Slim sim remove 
+    /*
+      This if is only to ease the transition between v0.3 to v0.4
+      it is not used a single time after they open the app with v0.4 
+    */
+    if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
+      setSong(itemEntry.fullPath, mData.galleryId);
   } else {
     var liHead = document.createElement("li");
     var group = document.createElement("h3");
     gruop.appendChild(document.createTextNode(itemEntry.name));
     liHead.appendChild(group);
     document.getElementById("newSongListPartAllSongs").appendChild(liHead);
+
    }
 }
 
@@ -1351,7 +1359,14 @@ var TroffClass = function(){
 
     this.addMarkers = function(aMarkers){
 
-      // site site site remove when max-check is redundant...
+      // Slim sim remove!
+      /*
+        denna funktion används för sista markören om den har tiden "max"
+        det som ska tas bort är alltså denna funktion och anropet till den.
+        det är tämligen självförklarande om man söker efter funktionsnamnet...
+        max-check är redundant när alla låtar (som har db-data sparat) 
+        har öppnats i v0.4 eller senare?
+      */
       var tmpUpdateMarkerSoonBcMax = function(){
         DB.updateMarker(nameId, name, info, color, Number(time), song);
         clearInterval(quickTimeOut);
@@ -1378,10 +1393,14 @@ var TroffClass = function(){
         var color = oMarker.color || "None";
         var nameId = oMarker.id;
 
-        //site site site
-        // use for debugging new marker system with ID saved and passed around
-        // (instead of using marker-name...)
-        if(!nameId){ // slim sim remove!
+        // slim sim remove!
+        /*
+          this entire if, below is used for debugging in the transition 
+          between v0.3 to v0.4, can be removed before v0.4
+          use for debugging new marker system with ID saved and passed around
+          (instead of using marker-name...)
+        */
+        if(!nameId){
           //IO.alert("why is there no nameId (or markerId) with this marker!?");
           console.error("Why is there no nameId (or markerId) with this marker!?");
           console.error("i = " + i);
@@ -1944,6 +1963,44 @@ var DBClass = function(){
         return ret;
     }
 
+//
+//
+//
+//
+
+    if(songId === "strCurrentSongPath"){
+      var path = songObject;
+      var galleryId = -1;
+      var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
+      chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
+      chrome.storage.local.remove("strCurrentSongPath");
+      /*
+      
+      // nu ska denna göras om till strCurrentSongPathAndGalleryId -'typ' 
+      // och sen sparas ner till DB'n!
+      och den där nissen ser ut som:
+      this.setCurrentSong = function(path, galleryId){
+        var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
+        chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
+      };
+      
+
+      
+      så, jag måste hitta vilket iGalleryId som aktiv låt har , och sen spara ner det till DB'n!
+      
+      
+      
+      
+      chrome storage local set
+      följt av en return!
+      */
+      return;
+    }
+
+
+
+
+
 
     // this if-thing is only here to ease the transition from v 0.2.0.1 to next step.
     // at 2015-02-19, and a later patch at 2015-04-sometime... 
@@ -2070,6 +2127,18 @@ var DBClass = function(){
         DB.setCurrentTab("songs");
         DB.setCurrentSonglist(0);
       }
+      // These is fore the first time Troff is started:
+      if(allKeys.indexOf("straoSongLists")   === -1 ) DB.saveSonglists();
+      if(allKeys.indexOf("strCurrentTab")    === -1 ) DB.setCurrentTab("songs");
+      if(allKeys.indexOf("iCurrentSonglist") === -1 ) DB.setCurrentSonglist(0);
+      /*
+      if(items.indexOf("straoSongLists") === -1 ){
+      
+        DB.setCurrentSonglist(0);
+        var straoSonglists = JSON.stringify([]);
+        chrome.storage.local.set({'straoSongLists': straoSonglists});
+      }
+      */
       
       for(var key in items){
         if( // skipping all non-songs from DB:
@@ -2080,7 +2149,14 @@ var DBClass = function(){
         ) continue;
         DB.cleanSong(key, items[key]);
       }
-    });
+      /*
+      if(items.indexOf("straoSongLists") === -1 ){
+        DB.setCurrentSonglist(0);
+        var straoSonglists = JSON.stringify([]);
+        chrome.storage.local.set({'straoSongLists': straoSonglists});
+      }
+      */
+    });//end get all keys
   };
   
   this.saveSonglists = function(){
@@ -2111,7 +2187,8 @@ var DBClass = function(){
 
   this.getAllSonglists = function(){
     chrome.storage.local.get('straoSongLists', function(ret){
-      Troff.setSonglists(JSON.parse(ret['straoSongLists']));
+      var straoSongLists = ret['straoSongLists'] || "[]";
+      Troff.setSonglists(JSON.parse(straoSongLists));
     });
   };
   
@@ -2129,15 +2206,32 @@ var DBClass = function(){
 
   this.getCurrentSong = function(){
     chrome.storage.local.get('stroCurrentSongPathAndGalleryId', function(ret){
-      var stroSong = JSON.parse(ret['stroCurrentSongPathAndGalleryId']);
-      var aSongs = $('#gallery').children();
-      for(var i=0; i<aSongs.length; i++){
-        if(aSongs.eq(i).attr('fullpath') == stroSong.strPath)
-          aSongs.eq(i).click();
+      var stroSong = ret['stroCurrentSongPathAndGalleryId'];
+      if(!stroSong){
+        // Slim sim remove 
+        /*
+          This setTimeout is only to ease the transition between v0.3 to v0.4
+          it is not used a single time after they open the app with v0.4 
+          so the standard is a oneline:
+          if(!stroSong) return;
+        */
+        setTimeout(DB.getCurrentSong, 0);
+        return;
+      }
+      var oSong = JSON.parse(stroSong);
+      if(oSong.iGalleryId == -1){
+        // Slim sim remove 
+        /*
+          This if is only to ease the transition between v0.3 to v0.4
+          it is not used a single time after they open the app with v0.4 
+          so the standard is the else, it should NOT be removed!
+        */
+        Troff.strCurrentSong = oSong.strPath;
+        Troff.iCurrentGalleryId = -1;
+      } else {
+        setSong(oSong.strPath, oSong.iGalleryId);
       }
       
-      setSong(stroSong.strPath, stroSong.iGalleryId);
-//      DB.strCurrentSong = ret['strCurrentSongPath'];
     });
   };
 
@@ -3010,19 +3104,6 @@ var IOClass = function(){
 
   this.openHelpWindow = function() {
     chrome.app.window.create('help.html');
-    /*window.open('help.html',
-      'slimSim',
-      'toolbar=no,'+
-      'location=no,'+
-      'directories=no,'+
-      'status=no,'+
-      'menubar=no,'+
-      'resizable=yes,'+
-      'copyhistory=no,'+
-      'scrollbars=yes,'+
-      'width=750,'+
-      'height=525');
-    */
     document.getElementById('blur-hack').focus();
   };
 
@@ -3065,20 +3146,14 @@ var DB = new DBClass();
 var IO = new IOClass();
 
 $(document).ready( function() {
-    
-    DB.cleanDB();
-    DB.getAllSonglists();
-    DB.getCurrentTab();
-    IO.startFunc();
-    //FS.startFunc();
-    FSstartFunk();
-    DB.getCurrentSong();
-
-    
-    
-    
-
-
+  
+  DB.cleanDB();
+  DB.getAllSonglists();
+  DB.getCurrentTab();
+  IO.startFunc();
+  //FS.startFunc();
+  FSstartFunk();
+  DB.getCurrentSong();
 
 
 });
