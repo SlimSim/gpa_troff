@@ -722,8 +722,6 @@ var TroffClass = function(){
         if(Troff.getMood() == 'pause' ) return;
         audio.play();
         Troff.setMood('play');
-        $('#buttSpacePause').css('display', 'block');
-        $('#buttSpacePlay').css('display', 'none');
     }, wait);
 
     // stopInterval is the counter
@@ -754,8 +752,6 @@ var TroffClass = function(){
     if(Troff.stopTimeout)  clearInterval(Troff.stopTimeout);
     if(Troff.stopInterval) clearInterval(Troff.stopInterval);
 
-    $('#buttSpacePlay').css('display', 'block');
-    $('#buttSpacePause').css('display', 'none');
   };
 
   this.updateSecondsLeft = function(){
@@ -769,46 +765,32 @@ var TroffClass = function(){
 
   this.setMood = function( mood ){
     if(mood == 'pause'){
-      $('#infoSection').removeClass('play');
-      $('#infoSection').removeClass('wait');
-      $('#infoSection').addClass('pause');
+      $('#infoSection').removeClass('play wait').addClass('pause');
       Troff.updateSecondsLeft();
-
       if(document.querySelector('#playInFullscreenButt.active')){
         document.querySelector('#videoBox').classList.remove('fullscreen');
         document.querySelector('#infoSection').classList.remove('overFilm');
       }
-
-
-      // site: flytta in #buttSpacePlay').css - att ändra play-markören till paus och tillbax hit?
-      // sitället för att ha det utspritt i koden???
-
+      $('#buttSpacePlay').css('display', 'block');
+      $('#buttSpacePause').css('display', 'none');
     }
     if(mood == 'wait'){
-      $('#infoSection').removeClass('play');
-      $('#infoSection').removeClass('pause');
-      $('#infoSection').addClass('wait');
-
-
+      $('#infoSection').removeClass('play pause').addClass('wait');
       if(document.querySelector('#playInFullscreenButt.active')){
         document.querySelector('#videoBox').classList.add('fullscreen');
         document.querySelector('#infoSection').classList.add('overFilm');
       }
-
       $('#buttSpacePlay').css('display', 'none');
       $('#buttSpacePause').css('display', 'block');
     }
     if(mood == 'play'){
-      $('#infoSection').removeClass('wait');
-      $('#infoSection').removeClass('pause');
-      $('#infoSection').addClass('play');
-
-
+      $('#infoSection').removeClass('wait pause').addClass('play');
       if(document.querySelector('#playInFullscreenButt.active')){
         document.querySelector('#videoBox').classList.add('fullscreen');
         document.querySelector('#infoSection').classList.remove('overFilm');
       }
-
+      $('#buttSpacePause').css('display', 'block');
+      $('#buttSpacePlay').css('display', 'none');
     }
   };
 
