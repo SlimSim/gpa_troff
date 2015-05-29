@@ -2571,10 +2571,20 @@ var IOClass = function(){
     if(event.keyCode == 229) // wierd thing but ok...
         return;
 
-    //if 0 to 9 or bakspace in a input-field, return,
-    //---- site add "or minus, delete, numpad mm"
-    if($(':input[type="number"]' ).is(":focus") &&
-      (event.keyCode>=48 && event.keyCode<=57 || event.keyCode==8 )){
+    //if 0 to 9 or bakspace, del, alt, arrows in a input-field, return,
+    //---- site add "numpad"
+    if(
+        $(':input[type="number"]' ).is(":focus") 
+        &&
+        (
+          (event.keyCode>=48 && event.keyCode<=57) || //numbers
+          event.keyCode==8  || //backspace
+          event.keyCode==18 || //alt
+          event.keyCode==37 || //left arrow
+          event.keyCode==39 || //right arrow
+          event.keyCode==46    //del
+        )
+      ){
       return;
     }
     document.getElementById('blur-hack').focus();
@@ -2676,7 +2686,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      //console.info("key " + event.keyCode);
+      console.info("key " + event.keyCode);
       //nothing
     }// end switch
 
