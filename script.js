@@ -2578,6 +2578,7 @@ var IOClass = function(){
         &&
         (
           (event.keyCode>=48 && event.keyCode<=57) || //numbers
+          (event.keyCode>=96 && event.keyCode<=105)|| //numpad
           event.keyCode==8  || //backspace
           event.keyCode==18 || //alt
           event.keyCode==37 || //left arrow
@@ -2686,7 +2687,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      console.info("key " + event.keyCode);
+      //console.info("key " + event.keyCode);
       //nothing
     }// end switch
 
