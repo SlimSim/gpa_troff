@@ -406,9 +406,6 @@ var TroffClass = function(){
     document.getElementById('timeBar').max = media.duration;
     $('#maxTime')[0].innerHTML = Troff.secToDisp(media.duration);
 
-    // add Start and End marker to html
-//    Troff.addMarkers([{"Start":0},{"End":songLength}]);
-
     DB.getSongMetaDataOf(Troff.getCurrentSong());
     media.addEventListener("timeupdate", Troff.timeupdateAudio );
   };
@@ -794,7 +791,9 @@ var TroffClass = function(){
     }
   };
 
+  // Troff. ...
   this.getCurrentSong = function() {
+    console.info("getCurrentSong -> strCurrentSong = " + strCurrentSong);
     return strCurrentSong;
   };
 
@@ -1343,7 +1342,7 @@ var TroffClass = function(){
 
       // Slim sim remove!
       /*
-        denna funktion används för sista markören om den har tiden "max"
+        denna funktion , nedan, används för sista markören om den har tiden "max"
         det som ska tas bort är alltså denna funktion och anropet till den.
         det är tämligen självförklarande om man söker efter funktionsnamnet...
         max-check är redundant när alla låtar (som har db-data sparat) 
@@ -1442,6 +1441,10 @@ var TroffClass = function(){
             if(child.childNodes[2].info != info){
               updated = true;
               var newMarkerInfo = child.childNodes[2].info + "\n\n" + info;
+              console.log("$('.currentMarker')[0]:");
+              console.log($('.currentMarker')[0]);
+              console.log("child.childNodes[2]:");
+              console.log(child.childNodes[2]);
               $('#'+markerId)[0].info = newMarkerInfo;
               if($('.currentMarker')[0].id == child.childNodes[2].id)
                 $('#markerInfoArea').val(newMarkerInfo);
@@ -1672,6 +1675,116 @@ var TroffClass = function(){
       // remove from DB
       DB.removeMarker(markerId, strCurrentSong);
     }; // end removeMarker ******/
+
+
+/*
+OK -- fixa att tangentbordet funkar bättre med denna popup
+OK -- i pup-uppen, större ruta för tidsinput?
+OK -- tiden borde också uppdateras
+OK -- om två markörer hamnar på samma tid så borde dom mergas, återanvända funktionalitet? - finns inte för annan flytt...
+man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan start och stop" (inklusive start o stopp)
+*/
+
+
+    /*
+      show the move markers pop up dialog. 
+    */
+    this.showMoveMarkers = function(){
+      IO.setEnterFunction(function(){
+        Troff.moveMarkers();
+      });
+      $('#moveMarkersDialog').show();
+      $('#moveMarkersNumber').select();
+    };
+
+    /*
+      hide the move markers pop up dialog. 
+    */
+    this.hideMoveMarkers = function(){
+      $('#moveMarkersDialog').hide();
+      IO.clearEnterFunction();
+    };
+
+    /*
+      move all or some markers. 
+    */
+    this.moveAllMarkersUp = function(){
+      $('#moveMarkersNumber').val(- $('#moveMarkersNumber').val());
+      Troff.moveMarkers(false);
+    };
+    this.moveAllMarkersDown = function(){
+      Troff.moveMarkers(false);
+    };
+    this.moveSomeMarkersUp = function(){
+      $('#moveMarkersNumber').val(- $('#moveMarkersNumber').val());
+      Troff.moveMarkers(true);
+    };
+    this.moveSomeMarkersDown = function(){
+      Troff.moveMarkers(true);
+    };
+    
+    /*
+      move all markers. 
+    */
+    this.moveMarkers = function(bMoveSelected){
+      $('#moveMarkersDialog').hide();
+      IO.clearEnterFunction();
+      
+      var value = $('#moveMarkersNumber').val();
+      $('#moveMarkersNumber').val( 0 );
+      
+      var aAllMarkers = Troff.getCurrentMarkers();
+    
+      var startNumber = 0;
+      var endNumber = aAllMarkers.length;
+      
+      if(bMoveSelected){
+        for(var k=0; k<aAllMarkers.length; k++){
+          var selectedId = $('.currentMarker').attr('id');
+          var selectedStopId = $('.currentStopMarker').attr('id');
+          if(selectedId == aAllMarkers.eq(k).attr('id'))
+            startNumber = k;
+  
+          var nextAttrId = aAllMarkers.eq(k).next().attr('id');
+          var attrId = aAllMarkers.eq(k).attr('id');
+          if(selectedStopId == aAllMarkers.eq(k).next().attr('id'))
+            endNumber = k+1;
+        }
+      }
+
+      for(var i=startNumber; i<endNumber; i++){
+        var markerId = aAllMarkers[i].id;
+        
+        var markerTime = Number(aAllMarkers[i].timeValue) + Number(value);
+        var maxTime = Number(document.getElementById('timeBar').max);
+        var newTime = Math.max(0, Math.min(maxTime, markerTime) );
+        
+        for(var j=0; j<i; j++){
+          if(aAllMarkers[j].timeValue == newTime){
+            var newMarkerName = $('#'+markerId).val();
+            if(newMarkerName != aAllMarkers.eq(j).val())
+              newMarkerName += ", " + aAllMarkers.eq(j).val();
+            $('#'+markerId).val( newMarkerName );
+
+            var newMarkerInfo = $('#'+markerId)[0].info;
+            if(newMarkerInfo !=  aAllMarkers[j].info)
+              newMarkerInfo += "\n\n" + aAllMarkers[j].info;
+            $('#'+markerId)[0].info = newMarkerInfo;
+            if( $('#' + markerId).hasClass('currentMarker') )
+              $('#markerInfoArea').val(newMarkerInfo);
+
+            aAllMarkers.eq(j).parent().remove();
+          }
+        }
+        
+        $('#'+markerId)[0].timeValue = newTime;
+        $('#'+markerId + 'S')[0].timeValue = newTime;
+        $('#'+markerId).prev().html( Troff.secToDisp(newTime) );
+      }
+      
+      Troff.settAppropriateMarkerDistance();
+      DB.saveMarkers(Troff.getCurrentSong() );
+    };
 
     /*
       editMarker, all, Editerar en markör i både html och DB
@@ -2295,6 +2408,7 @@ var DBClass = function(){
     var obj = {};
     obj[songId] = song;
     chrome.storage.local.set(obj);
+    
   });
   // use    chrome.storage.sync  ?
   };// end saveMarkers
@@ -2409,6 +2523,7 @@ var DBClass = function(){
     chrome.storage.local.get(songId, function(ret){
 
       var song = ret[songId];
+      
       if(!song){ // new song:
         var songLength = Number(document.getElementById('timeBar').max);
 
@@ -2443,6 +2558,7 @@ var DBClass = function(){
         var obj = {};
         obj[songId] = song;
         chrome.storage.local.set(obj);
+        
         loadSongMetadata(song, songId);
       } else {
         loadSongMetadata(song, songId);
@@ -2472,13 +2588,19 @@ var IOClass = function(){
     $('#buttTip').click(IO.openHelpWindow);
 
     $('#buttAddStartAndEndMarkers').click(Troff.addStartAndEndMarkers);
-
+    $('outerDialog').click(Troff.hidePopupDialogs); // ------------------- slim sim fix! 
 
     $('#timeBar')[0].addEventListener('change', Troff.timeUpdate );
     $('#volumeBar')[0].addEventListener('change', Troff.volumeUpdate );
     $('#speedBar')[0].addEventListener('change', Troff.speedUpdate );
 
     $('#buttMarker').click(Troff.createMarker);
+    $('#okMoveAllMarkersDialogUp').click(Troff.moveAllMarkersUp);
+    $('#okMoveAllMarkersDialogDown').click(Troff.moveAllMarkersDown);
+    $('#okMoveSomeMarkersDialogUp').click(Troff.moveSomeMarkersUp);
+    $('#okMoveSomeMarkersDialogDown').click(Troff.moveSomeMarkersDown);
+    $('#cancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
+    $('#buttPromptMoveMarkers').click(Troff.showMoveMarkers);
     $('#outerImportExportPopUpSquare').click(Troff.toggleImportExport);
     $('#buttImportExportMarker').click(Troff.toggleImportExport);
     $('#buttExportMarker').click(Troff.exportMarker);

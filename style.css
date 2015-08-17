@@ -409,6 +409,12 @@ input[type=number]{
     text-align: center;
 }
 
+input[type=number].numberWider{
+  width: 36px; /*enough for typing in "3600" = 1h */
+  text-align: right;
+  padding-right: 3px;
+}
+
 /* the style for the loop *************************************** /
 
 .XLoopOn p, .XLoopOn div div{
@@ -556,6 +562,10 @@ input[type="button"]:hover, button:hover, .linkButton:hover{
   width: 600px;
   padding: 10 15px;
   background-color: cornflowerblue;
+}
+
+.mediumDialog{
+  width: 400px;
 }
 
 table {

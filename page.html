@@ -96,6 +96,9 @@
           <input type="button" title="add a marker to the sogn timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
         </div>
         <div>
+          <input type="button" title="Move more than one marker" class="" value="move markers" id="buttPromptMoveMarkers" />
+        </div>
+        <div>
           <input type="button" title="unselect both markers (key: u)" class="" value="play fu&#818;ll song" id="buttUnselectMarkers" />
 <!--
           <input type="button" title="unselect start marker (key: shift u)" class="Small" value="start" id="buttUnselectStart" />
@@ -277,6 +280,34 @@
       </span>
     </div>
   </div>
+  
+  
+  
+  <div style="display: none" id="moveMarkersDialog" class="outerDialog">
+    <div class="innerDialog flexCol mediumDialog">
+      <h2 class="paragraph">Move markers</h2>
+      <p class="paragraph normalSize">
+        Move all the markers at the same time, or move only those markers 
+        between the selected markers (including the selected markers).
+      </p>
+      <span class="flexRow">
+        <input type="number" id="moveMarkersNumber" value=0 class="numberWider"/> seconds
+      </span>
+      <span class="flexRow">
+        <div class="flex"></div>
+        <input id="okMoveSomeMarkersDialogUp" type="button" value="move markers up" title="Move the markers between the selected markers up"/>
+        <input id="okMoveSomeMarkersDialogDown" type="button" value="move markers down" title="Move the markers between the selected markers down"/>
+      </span>
+      <span class="flexRow">
+        <input id="cancelMoveMarkersDialog" type="button" value="Cancel" />
+        <div class="flex"></div>
+        <input id="okMoveAllMarkersDialogUp" type="button" value="move all markers up" title="Move all the markers up" />
+        <input id="okMoveAllMarkersDialogDown" type="button" value="move all markers down" title="Move the markers down" />
+      </span>
+    </div>
+  </div>
+  
+  
 
 
 </body>
