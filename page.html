@@ -289,6 +289,22 @@
       <p class="paragraph normalSize">
         Move all the markers at the same time, or move only those markers 
         between the selected markers (including the selected markers).
+        <input type="button" id="buttPromptMoveMarkersMoreInfo" class="likeLink" value="More info" />
+      </p>
+      <p class="paragraph normalSize" style="display: none" id="moveMarkersMoreInfoDialog" >
+        Say you have 4 markers; A, B, C and D, in that order. 
+        If you select A as start-marker and C as stop-marker and move them down
+        by entering 20 seconds and hitting "Move markers down". Only marker
+        A, B and C will be moved down 20 seconds.
+        D will remain where it was.<br />
+        <br />
+        Now, say that the order after you moved the markers is A, B, D, C.
+        If you immediately move the markers again by 20 seconds by hitting 
+        "Move markers up"; only A, B and C will be moved up, 
+        D will still remain where it was, 
+        even though it was between the start and stop marker.<br />
+        In order for D to become part of the selected group, the song must 
+        be reloaded.
       </p>
       <span class="flexRow">
         <input type="number" id="moveMarkersNumber" value=0 class="numberWider"/> seconds

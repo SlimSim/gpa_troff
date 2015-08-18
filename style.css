@@ -511,6 +511,8 @@ rect.svg_rect_btn {
   stroke-opacity:0;
 }
 
+
+
 input, button, .linkButton{
   border-width: 0;
   padding: 1px 6px;
@@ -523,6 +525,12 @@ input[type="button"]:hover, button:hover, .linkButton:hover{
   transform: scale(1.1);
 }
 
+.likeLink{
+  background-color: transparent;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 .important{
   background-color:#ed8223;

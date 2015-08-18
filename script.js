@@ -1685,6 +1685,10 @@ OK -- om två markörer hamnar på samma tid så borde dom mergas, återanvända
 man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan start och stop" (inklusive start o stopp)
 */
 
+    this.toggleMoveMarkersMoreInfo = function(){
+      $('#moveMarkersMoreInfoDialog').toggle();
+      document.getElementById('blur-hack').focus();
+    };
 
     /*
       show the move markers pop up dialog. 
@@ -1702,6 +1706,8 @@ man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan s
     */
     this.hideMoveMarkers = function(){
       $('#moveMarkersDialog').hide();
+      $('#moveMarkersMoreInfoDialog').hide();
+      $('#moveMarkersNumber').val(0);
       IO.clearEnterFunction();
     };
 
@@ -2588,7 +2594,6 @@ var IOClass = function(){
     $('#buttTip').click(IO.openHelpWindow);
 
     $('#buttAddStartAndEndMarkers').click(Troff.addStartAndEndMarkers);
-    $('outerDialog').click(Troff.hidePopupDialogs); // ------------------- slim sim fix! 
 
     $('#timeBar')[0].addEventListener('change', Troff.timeUpdate );
     $('#volumeBar')[0].addEventListener('change', Troff.volumeUpdate );
@@ -2601,6 +2606,7 @@ var IOClass = function(){
     $('#okMoveSomeMarkersDialogDown').click(Troff.moveSomeMarkersDown);
     $('#cancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
     $('#buttPromptMoveMarkers').click(Troff.showMoveMarkers);
+    $('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
     $('#outerImportExportPopUpSquare').click(Troff.toggleImportExport);
     $('#buttImportExportMarker').click(Troff.toggleImportExport);
     $('#buttExportMarker').click(Troff.exportMarker);
