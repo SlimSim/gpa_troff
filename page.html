@@ -55,8 +55,8 @@
           class="important" id="buttSpacePause" value="II" />
       <input style="display: block;" type="button"
           title="get tips on how to best use Troff"
-          class="small" id="buttTip" value="Help" />
-      <button class="svgButt shareClass" title="Share the link to this app with your freinds via email">
+          class="small regularButton" id="buttTip" value="Help" />
+      <button class="svgButt shareClass regularButton" title="Share the link to this app with your freinds via email">
         <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
           <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
           <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
@@ -80,45 +80,29 @@
       <div id="ControlMarker">
         <h2>Marker</h2>
         <div>
-          <input type="button" title="import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
-          <div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
-            <div class="popUpSquare" id="innerImportExportPopUpSquare" >
-              <div>
-                Export your markers, or import new markers, for the current song! <br />
-                Press anywhere outside this box to exit.
-              </div>
-              <div>
-                <input type="button" id="buttExportMarker" value="Export Markers" />
-                <input type="button" id="buttImportMarker" value="Import Markers" />
-              </div>
-            </div>
-          </div>
+          <input type="button" class="regularButton" title="import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
           <input type="button" title="add a marker to the sogn timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
         </div>
         <div>
-          <input type="button" title="Move more than one marker" class="" value="move markers" id="buttPromptMoveMarkers" />
+          <input type="button" title="Move more than one marker" class="regularButton" value="move markers" id="buttPromptMoveMarkers" />
         </div>
         <div>
-          <input type="button" title="unselect both markers (key: u)" class="" value="play fu&#818;ll song" id="buttUnselectMarkers" />
-<!--
-          <input type="button" title="unselect start marker (key: shift u)" class="Small" value="start" id="buttUnselectStart" />
-          <input type="button" title="unselect stop marker (key: alt u)" class="Small" value="stop" id="buttUnselectStop" />
--->
+          <input type="button" title="unselect both markers (key: u)" class="regularButton" value="play fu&#818;ll song" id="buttUnselectMarkers" />
         </div>
         <input
           type="button"
           title="add Start and End markers"
-          class=""
+          class="regularButton"
           value="add Start and End markers"
           id="buttAddStartAndEndMarkers"
-          style="word-wrap: break-word; width: 95px; padding: 1px 4px;"/>
+          style="word-wrap: break-word; width: 98px; padding: 1px 4px;"/>
         <div>
-          <input type="button" title="toggle; start a fiew seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="startStopWidth"/>
+          <input type="button" title="toggle; start a fiew seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="buttWidthStandard"/>
           <input type="number" title="set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />
         </div>
 
         <div>
-          <input type="button" title="toggle; stop a fiew seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="startStopWidth"/>
+          <input type="button" title="toggle; stop a fiew seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="buttWidthStandard"/>
           <input type="number" title="set how many seconds after the stop marker to stop (key: shift/alt a)" value="2" min="0"  id="stopAfter" />
         </div>
       </div> <!-- ControlMarker -->
@@ -193,8 +177,8 @@
 
 
     <h1>
-      <input type="button" title="select folders to get songs from" id="configure-button" value="Select folders"/>
-      <input type="button" title="tapp repeatedly to calculate tempo (key: t)" id="buttTappTempo" value="T&#818;empo:" style="margin-left: 15px;"/>
+      <input type="button" title="select folders to get songs from" class="regularButton" id="configure-button" value="Select folders"/>
+      <input type="button" title="tapp repeatedly to calculate tempo (key: t)" class="regularButton" id="buttTappTempo" value="T&#818;empo:" style="margin-left: 15px;"/>
       <span id="tappTempo-value">?</span>
     </h1>
     <div id="mediaInfoBox" class="flexCol">
@@ -212,7 +196,7 @@
     <ul id="gallery" ></ul>
     <div id="songlistsArea" class="flexCol">
       <div id="songListPart">
-        <input type="button" value="New song list" id="buttNewSongList"/>
+        <input type="button" value="New song list" class="regularButton" id="buttNewSongList"/>
         <input type="button" id="songlistAll" class="selected" value="All songs"/>
         <ul id="songListPartTheLists"></ul>
       </div>
@@ -224,9 +208,9 @@
                       id="newSongListName"
                       iSonglistId="0"/></span>
         <div>
-          <input type="button" value="Save" id="saveNewSongList" />
-          <input type="button" value="Remove" id="removeSongList" />
-          <input type="button" value="Cancel" id="cancelSongList" />
+          <input type="button" value="Save" id="saveNewSongList" class="regularButton" />
+          <input type="button" value="Remove" id="removeSongList" class="regularButton" />
+          <input type="button" value="Cancel" id="cancelSongList" class="regularButton" />
         </div>
         <ul id="newSongListPartAllSongs" class="bgEasyRead marginBottom"></ul>
       </div>
@@ -241,7 +225,7 @@
         id="markerInfoArea" 
         placeholder="Marker specific notes here!"
         class="textareaStandard"></textArea>
-    <button id="donate" class="paragraph" title="">
+    <button id="donate" class="paragraph regularButton" title="">
       Do you like Troff?<br />Donate money or vote for new features here!
     </button>
 
@@ -253,6 +237,27 @@
     <div id="loopTimesLeft">1</div>
     <div id="secondsLeft">0</div>
   </section>
+
+
+
+
+<!--
+--------------- POP UP DIALOGS: ----------------
+-->
+
+  <div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
+    <div class="popUpSquare" id="innerImportExportPopUpSquare" >
+      <div>
+        Export your markers, or import new markers, for the current song! <br />
+        Press anywhere outside this box to exit.
+      </div>
+      <div class="flexRow center">
+        <input type="button" id="buttExportMarker" class="regularButton" value="Export Markers" />
+        <input type="button" id="buttImportMarker" class="regularButton" value="Import Markers" />
+      </div>
+      <input id="buttCancelImportExportPopUpSquare" type="button" class="regularButton buttWidthStandard" value="Cancel" />
+    </div>
+  </div>
 
 
   <div style="display: none" id="donateDialog" class="outerDialog">
@@ -307,19 +312,25 @@
         be reloaded.
       </p>
       <span class="flexRow">
-        <input type="number" id="moveMarkersNumber" value=0 class="numberWider"/> seconds
+        <input type="number" id="moveMarkersNumber" class="regularButton" value=0 class="numberWider"/> seconds
       </span>
-      <span class="flexRow">
-        <div class="flex"></div>
-        <input id="okMoveSomeMarkersDialogUp" type="button" value="move markers up" title="Move the markers between the selected markers up"/>
-        <input id="okMoveSomeMarkersDialogDown" type="button" value="move markers down" title="Move the markers between the selected markers down"/>
-      </span>
-      <span class="flexRow">
-        <input id="cancelMoveMarkersDialog" type="button" value="Cancel" />
-        <div class="flex"></div>
-        <input id="okMoveAllMarkersDialogUp" type="button" value="move all markers up" title="Move all the markers up" />
-        <input id="okMoveAllMarkersDialogDown" type="button" value="move all markers down" title="Move the markers down" />
-      </span>
+      <div class="flexRow">
+        <div class="flexCol">
+          <input id="okMoveSomeMarkersDialogUp" type="button" class="regularButton" value="move markers up" title="Move the markers between the selected markers up"/>
+          <input id="okMoveSomeMarkersDialogDown" type="button" class="regularButton" value="move markers down" title="Move the markers between the selected markers down"/>
+        </div>
+        <div class="flexCol">
+          <input id="okMoveAllMarkersDialogUp" type="button" class="regularButton" value="move all markers up" title="Move all the markers up" />
+          <input id="okMoveAllMarkersDialogDown" type="button" class="regularButton" value="move all markers down" title="Move the markers down" />
+        </div>
+        
+      </div>
+      
+
+      <p class="paragraph smallSize">
+        Note: If this functionality does not work as expected; reload the song.
+      </p>
+      <input id="buttCancelMoveMarkersDialog" type="button" class="regularButton buttWidthStandard" value="Cancel" />
     </div>
   </div>
   

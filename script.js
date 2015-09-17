@@ -179,6 +179,7 @@ function setSong(fullPath, galleryId){
           newElem = addImageToContentDiv();
        else if (type == "audio")
           newElem = addAudioToContentDiv();
+      
        else if (type == "video")
           newElem = addVideoToContentDiv();
        if (newElem) {
@@ -1155,7 +1156,8 @@ var TroffClass = function(){
     var buttE = $('<input>')
       .val('E')
       .attr('type', 'button')
-      .addClass('removeButt')
+      .addClass('small')
+      .addClass('regularButton')
       .click(Troff.editSonglist);
 
     var buttL = $('<input>')
@@ -1415,7 +1417,7 @@ var TroffClass = function(){
         buttonE.type = "button";
         buttonE.id = nameId + 'E';
         buttonE.value = 'E';
-        buttonE.className = "removeButt";
+        buttonE.className = "small regularButton";
 
         var p = document.createElement("b");
         p.innerHTML = Troff.secToDisp(time);
@@ -1738,7 +1740,7 @@ man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan s
       
       var value = $('#moveMarkersNumber').val();
       $('#moveMarkersNumber').val( 0 );
-      
+
       var aAllMarkers = Troff.getCurrentMarkers();
     
       var startNumber = 0;
@@ -1997,6 +1999,7 @@ man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan s
 
 
   this.addStartAndEndMarkers = function(){
+    document.getElementById('blur-hack').focus();
 
     var aNewMarkerId = Troff.getNewMarkerIds(2);
     var songLength = Number(document.getElementById('timeBar').max);
@@ -2604,11 +2607,11 @@ var IOClass = function(){
     $('#okMoveAllMarkersDialogDown').click(Troff.moveAllMarkersDown);
     $('#okMoveSomeMarkersDialogUp').click(Troff.moveSomeMarkersUp);
     $('#okMoveSomeMarkersDialogDown').click(Troff.moveSomeMarkersDown);
-    $('#cancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
+    $('#buttCancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
     $('#buttPromptMoveMarkers').click(Troff.showMoveMarkers);
     $('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
-    $('#outerImportExportPopUpSquare').click(Troff.toggleImportExport);
     $('#buttImportExportMarker').click(Troff.toggleImportExport);
+    $('#buttCancelImportExportPopUpSquare').click(Troff.toggleImportExport);
     $('#buttExportMarker').click(Troff.exportMarker);
     $('#buttImportMarker').click(Troff.importMarker);
     $('#buttPauseBefStart').click(Troff.togglePauseBefStart);
@@ -2891,11 +2894,13 @@ var IOClass = function(){
     
     var buttOK = $("<input>", {
       "type":"button",
+      "class":"regularButton",
       "value": "OK"
     }).click(IOEnterFunction);
 
     var buttCancel = $("<input>", {
       "type":"button",
+      "class": "regularButton",
       "value": "Cancel"
     }).click(function(){
       if(funcCancle) funcCancle();
@@ -2905,6 +2910,7 @@ var IOClass = function(){
 
     var buttRemove = $("<input>", {
       "type":"button",
+      "class":"regularButton",
       "value": "Remove"
     }).click(function(){
       $('#'+outerId).remove();
@@ -2970,7 +2976,7 @@ var IOClass = function(){
                    "id": markerNameId,
                    "type":"text",
                    "value": markerName,
-                   "style":"margin-left:7px; "
+                   "style":"margin-left:7px; width:100%; "
                    })
                );
 
@@ -2993,7 +2999,7 @@ var IOClass = function(){
                         "placeholder":"Put extra marker info here",
                         "text": markerInfo,
                         "rows": 6,
-                        "style":"margin-left:13px; padding: 4px;"
+                        "style":"margin-left:13px; padding: 4px; width:100%;"
                     }));
                     
     var row4 = $("<span>", {"class": "oneRow"})
@@ -3094,9 +3100,9 @@ var IOClass = function(){
                "'><p style='"+pStyle+"'>" + textHead +
                "</p><input type='text' id='"+textId+
                "'/> "+strTextareaHTML+
-               "<input type='button' id='"+buttEnterId+
-               "' value='OK'/><input type='button' id='"+buttCancelId+
-               "' value='Cancel'/></div></div>"));
+               "<input type='button' class='regularButton' id='"+ buttEnterId +
+               "' value='OK'/><input type='button' class='regularButton' id='"
+               + buttCancelId + "' value='Cancel'/></div></div>"));
 
     $("#"+textId).val(textBox);
     var quickTimeOut = setTimeout(function(){
@@ -3154,9 +3160,10 @@ var IOClass = function(){
                  "'><div id='"+innerId+"' style='"+innerDivStyle+
                  "'><h2>" + textHead +
                  "</h2><p style='"+pStyle+"'>" + textBox +
-                 "</p><div><input type='button' id='"+buttEnterId+
-                 "' value='OK'/><input type='button' id='"+buttCancelId+
-                 "' value='Cancel'/></div></div></div>"));
+                 "</p><div><input type='button' class='regularButton' id='"
+                 + buttEnterId +
+                 "' value='OK'/><input type='button' class='regularButton' id='"
+                 +buttCancelId + "' value='Cancel'/></div></div></div>"));
 
       IOEnterFunction = function(){
           if(func) func();
@@ -3202,14 +3209,14 @@ var IOClass = function(){
                      "'><h2 style='"+hStyle+"'>" + textHead +
                      "</h2><p style='"+pStyle+"' type='text' id='"+textId+
                      "'>"+textBox+"</p> <input type='button' id='"+buttEnterId+
-                     "' value='OK'/></div></div>"));
+                     "'class='regularButton' value='OK'/></div></div>"));
           $("#"+textId).val(textBox).select();
       } else {
           $("body").append($("<div id='"+outerId+"' style='"+outerDivStyle+
                   "'><div id='"+innerId+"' style='"+innerDivStyle+
                   "'><p style='"+pStyle+"'>" + textHead +
                   "</p><input type='button' id='"+buttEnterId+
-                  "' value='OK'/></div></div>"));
+                  "' class='regularButton' value='OK'/></div></div>"));
       }
       IOEnterFunction = function(){
           if(func) func( $("#"+textId).val() );

@@ -108,6 +108,11 @@ p{
   font-size: 16px;
 }
 
+.smallSize{
+  font-size: 11px; /* This is standard... */
+  margin-top: 6px;
+}
+
 #gallery, #songlistsArea{
   overflow-y: auto;
   overflow-x: hidden;
@@ -223,9 +228,7 @@ nav input, nav button{
   align-items: center;
 }
 
-.small{
-  margin: 1px;
-}
+
 
 .loopClass input{
   margin: 1px;
@@ -489,7 +492,7 @@ input[type=number].numberWider{
     color: gray;
     background-color: lightgray;
 }
-.startStopWidth{
+.buttWidthStandard{
   width: 85px;
 }
 
@@ -541,14 +544,24 @@ input[type="button"]:hover, button:hover, .linkButton:hover{
   border: 0;
 }
 
+.regularButton{
+  background-color: rgb(230,230,230);
+}
+
 .Big{font-size: 18px;}
 .big{font-size: 16px;}
 .normal{font-size: 14px;}
-.small{font-size: 12px;}
+.small{
+  font-size: 12px;
+  margin: 1px;
+}
 .Small{font-size: 10px;}
+
+/*Depricated - remove site */
 .removeButt{
-    font-size: 10px;
-    background-color: lightgray;
+  font-size: 20px !important;
+  margin: 20px !important;
+  background: pink !important;
 }
 
 
@@ -598,6 +611,10 @@ table {
 .flexRow{
   display: flex;
   flex-direction: row;
+}
+
+.center{
+  justify-content: center;
 }
 
 .flexRowWrap{
