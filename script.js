@@ -680,7 +680,7 @@ var TroffClass = function(){
     return $('#buttLoopInf').hasClass('currentLoop');
   };
 
-  // goToStartMarker används när man updaterar startBefore / trycker på StartBefore  / trycker på en marker???
+  // goToStartMarker anvÃ¤nds nÃ¤r man updaterar startBefore / trycker pÃ¥ StartBefore  / trycker pÃ¥ en marker???
   this.goToStartMarker = function(){
     document.querySelector('audio, video').currentTime = Troff.getStartTime();
   }; // end goToStartMarker
@@ -890,7 +890,7 @@ var TroffClass = function(){
   };
 
   /*
-    createMarker, all, tar reda på tiden o namnet,
+    createMarker, all, tar reda pÃ¥ tiden o namnet,
     anropar sedan add- och save- Marker
    */
   this.createMarker = function(){
@@ -1238,7 +1238,7 @@ var TroffClass = function(){
   
   this.addAllSongsFromGallery = function(galleryIdToAdd){
     var allSongs = $('#newSongListPartAllSongs')
-      .children().filter('[isDirectory!=true]'); //slim sim, finns det en funktion för detta?
+      .children().filter('[isDirectory!=true]'); //slim sim, finns det en funktion fÃ¶r detta?
 
     for(i=0; i<allSongs.length; i++){
       if(allSongs.eq(i).attr('galleryid') === galleryIdToAdd )
@@ -1382,11 +1382,11 @@ var TroffClass = function(){
 
       // Slim sim remove!
       /*
-        denna funktion , nedan, används för sista markören om den har tiden "max"
-        det som ska tas bort är alltså denna funktion och anropet till den.
-        det är tämligen självförklarande om man söker efter funktionsnamnet...
-        max-check är redundant när alla låtar (som har db-data sparat) 
-        har öppnats i v0.4 eller senare?
+        denna funktion , nedan, anvÃ¤nds fÃ¶r sista markÃ¶ren om den har tiden "max"
+        det som ska tas bort Ã¤r alltsÃ¥ denna funktion och anropet till den.
+        det Ã¤r tÃ¤mligen sjÃ¤lvfÃ¶rklarande om man sÃ¶ker efter funktionsnamnet...
+        max-check Ã¤r redundant nÃ¤r alla lÃ¥tar (som har db-data sparat) 
+        har Ã¶ppnats i v0.4 eller senare?
       */
       var tmpUpdateMarkerSoonBcMax = function(){
         DB.updateMarker(nameId, name, info, color, Number(time), song);
@@ -1701,7 +1701,7 @@ var TroffClass = function(){
 
 
     /*
-      removeMarker, all, Tar bort en markör från html och DB
+      removeMarker, all, Tar bort en markÃ¶r frÃ¥n html och DB
     */
     this.removeMarker = function(markerId){
       // Remove Marker from HTML
@@ -1714,11 +1714,11 @@ var TroffClass = function(){
 
 
 /*
-OK -- fixa att tangentbordet funkar bättre med denna popup
-OK -- i pup-uppen, större ruta för tidsinput?
-OK -- tiden borde också uppdateras
-OK -- om två markörer hamnar på samma tid så borde dom mergas, återanvända funktionalitet? - finns inte för annan flytt...
-man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan start och stop" (inklusive start o stopp)
+OK -- fixa att tangentbordet funkar bÃ¤ttre med denna popup
+OK -- i pup-uppen, stÃ¶rre ruta fÃ¶r tidsinput?
+OK -- tiden borde ocksÃ¥ uppdateras
+OK -- om tvÃ¥ markÃ¶rer hamnar pÃ¥ samma tid sÃ¥ borde dom mergas, Ã¥teranvÃ¤nda funktionalitet? - finns inte fÃ¶r annan flytt...
+man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan start och stop" (inklusive start o stopp)
 */
 
     this.toggleMoveMarkersMoreInfo = function(){
@@ -1829,7 +1829,7 @@ man skulle kunna ha ett val, "flytta alla markörer" / flytta bara dom "mellan s
     };
 
     /*
-      editMarker, all, Editerar en markör i både html och DB
+      editMarker, all, Editerar en markÃ¶r i bÃ¥de html och DB
     */
     this.editMarker = function(markerId){
       var oldName  = $('#'+markerId).val();
@@ -2114,9 +2114,9 @@ var DBClass = function(){
       chrome.storage.local.remove("strCurrentSongPath");
       /*
       
-      // nu ska denna göras om till strCurrentSongPathAndGalleryId -'typ' 
+      // nu ska denna gÃ¶ras om till strCurrentSongPathAndGalleryId -'typ' 
       // och sen sparas ner till DB'n!
-      och den där nissen ser ut som:
+      och den dÃ¤r nissen ser ut som:
       this.setCurrentSong = function(path, galleryId){
         var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
         chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
@@ -2124,13 +2124,13 @@ var DBClass = function(){
       
 
       
-      så, jag måste hitta vilket iGalleryId som aktiv låt har , och sen spara ner det till DB'n!
+      sÃ¥, jag mÃ¥ste hitta vilket iGalleryId som aktiv lÃ¥t har , och sen spara ner det till DB'n!
       
       
       
       
       chrome storage local set
-      följt av en return!
+      fÃ¶ljt av en return!
       */
       return;
     }
@@ -2146,8 +2146,8 @@ var DBClass = function(){
     // all the way down to XXX-here-XXX
     if(songObject.currentStartMarker == "#Start" || songObject.currentStartMarker == 0 ) songObject.currentStartMarker = "Start";
     if(songObject.currentStopMarker == "#EndS" || songObject.currentStopMarker == 0) songObject.currentStopMarker = "EndS";
-    // bStart o bEnd kollar om start och stopp är tillagda bland de sparade markörerna
-    // om de är det så ska de ju inte läggas till igen...
+    // bStart o bEnd kollar om start och stopp Ã¤r tillagda bland de sparade markÃ¶rerna
+    // om de Ã¤r det sÃ¥ ska de ju inte lÃ¤ggas till igen...
     var bStart = false;
     var bEnd = false;
     for(var j=0; j<songObject.markers.length; j++){
