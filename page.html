@@ -193,14 +193,14 @@
       <input type="button" value="Song i&#818;nfo" id="songinfoTab" />
       <input type="button" value="Marker info&#818;" id="markerinfoTab" />
     </div>
-    <ul id="gallery" ></ul>
+    <ul id="gallery" class="flexScroll" ></ul>
     <div id="songlistsArea" class="flexCol">
       <div id="songListPart">
         <input type="button" value="New song list" class="regularButton" id="buttNewSongList"/>
         <input type="button" id="songlistAll" class="selected" value="All songs"/>
         <ul id="songListPartTheLists"></ul>
       </div>
-      <div id="newSongListPart" style="display:none;" class="flex">
+      <div id="newSongListPart" style="display:none;" class="flexCol flexOne">
         
         <span>Name: <input 
                       type="text" 
@@ -212,10 +212,11 @@
           <input type="button" value="Remove" id="removeSongList" class="regularButton" />
           <input type="button" value="Cancel" id="cancelSongList" class="regularButton" />
         </div>
-        <ul id="newSongListPartAllSongs" class="bgEasyRead marginBottom"></ul>
+        <ul id="newSongListPartAllSongs" 
+          class="bgEasyRead marginBottom scrollableY"></ul>
       </div>
     </div>
-    <textArea  
+    <textArea
         style="display:none;" 
         id="songInfoArea" 
         placeholder="Song specific info here!"

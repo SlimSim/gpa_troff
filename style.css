@@ -114,8 +114,9 @@ p{
 }
 
 #gallery, #songlistsArea{
-  overflow-y: auto;
+/*  overflow-y: auto;
   overflow-x: hidden;
+  */
   width:100%;
   flex: 1;
 }
@@ -291,6 +292,7 @@ nav input, nav button{
 .dataOutput div{
    display: inline-flex;
 }
+
 
 #mediaInfoBox div{
   text-align: center;
@@ -613,6 +615,10 @@ table {
   flex-direction: row;
 }
 
+.flexOne{
+  flex: 1;
+}
+
 .center{
   justify-content: center;
 }
@@ -678,4 +684,9 @@ table {
 
 .colorPickerSelected{
   border: solid 4px purple;
+}
+
+.scrollableY{
+  overflow-y: auto;
+  overflow-x: hidden;
 }

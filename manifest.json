@@ -1,7 +1,7 @@
 {
   "name": "Troff - TEST Training with music",
   "short_name": "Troff TEST",
-  "version": "0.5",
+  "version": "0.5.1",
   "manifest_version": 2,
   "description": "Training with music - A Music player that let you loop a part of a song, slow it down and create markers on the song timeline.",
   "permissions": [

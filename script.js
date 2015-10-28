@@ -227,6 +227,9 @@ function addGallery(name, id) {
   label.appendChild(checkbox);
   label.appendChild(optGrp);
   li.appendChild(label);
+  li.setAttribute("galleryid", id);
+  li.setAttribute("fullPath", name);
+  li.setAttribute("isDirectory", true);
   document.getElementById("newSongListPartAllSongs").appendChild(li);
   return optGrp;
 }
@@ -253,23 +256,28 @@ function addItem(itemEntry) {
     label.appendChild(div);
     li.setAttribute("fullPath", itemEntry.fullPath );
     li.setAttribute("galleryId", mData.galleryId );
+    li.setAttribute("isDirectory", false);
     li.appendChild(label);
     document.getElementById("newSongListPartAllSongs").appendChild(li);
     // Slim sim remove 
     /*
-      This if is only to ease the transition between v0.3 to v0.4
+      This (the following if) is only to ease the transition between 
+      v0.3 to v0.4,
       it is not used a single time after they open the app with v0.4 
     */
     if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
       setSong(itemEntry.fullPath, mData.galleryId);
   } else {
+    //slim sim, is this else ever used?
+    console.info("\n\n\n********* else! This else is used! itemEntry:", itemEntry,"\n\n");
+    IO.alert("The else is used! Search for: code_7954");
     var liHead = document.createElement("li");
     var group = document.createElement("h3");
     gruop.appendChild(document.createTextNode(itemEntry.name));
     liHead.appendChild(group);
     document.getElementById("newSongListPartAllSongs").appendChild(liHead);
-
    }
+   
 }
 
 function scanGallery(entries) {
@@ -794,7 +802,7 @@ var TroffClass = function(){
 
   // Troff. ...
   this.getCurrentSong = function() {
-    console.info("getCurrentSong -> strCurrentSong = " + strCurrentSong);
+//    console.info("getCurrentSong -> strCurrentSong = " + strCurrentSong);
     return strCurrentSong;
   };
 
@@ -1091,12 +1099,12 @@ var TroffClass = function(){
       if(aRows[i].children[0].children[0] && aRows[i].children[0].children[0].checked){
         var dfullpath = aRows[i].getAttribute('fullPath');
         var dfsid = aRows[i].getAttribute('galleryId');
-        if(dfullpath !== null && dfsid !== null){
-          aSonglist.push({'fullPath':dfullpath, 'galleryId':dfsid});
-        }
-        else{
-          aSonglist.push({'header':aRows.eq(i).children(0).children(1).text()});
-        }
+        var isDirectory = aRows[i].getAttribute('isDirectory') === "true";
+        aSonglist.push({
+          'isDirectory' : isDirectory,
+          'fullPath'    : dfullpath,
+          'galleryId'   : dfsid
+        });
       }
     }
 
@@ -1215,6 +1223,8 @@ var TroffClass = function(){
       var fullPath = songElement.attr('fullPath');
       var galleryId = songElement.attr('galleryId');
       if (fullPath === undefined) { 
+        
+        
         var head = document.createElement("h3");
         head.appendChild(document.createTextNode( songElement.text() ));
         document.getElementById("gallery").appendChild(head);
@@ -1223,6 +1233,36 @@ var TroffClass = function(){
       var pap = Troff.getMediaButton(fullPath, galleryId);
       document.getElementById("gallery").appendChild(pap);
     }
+  };
+
+  
+  this.addAllSongsFromGallery = function(galleryIdToAdd){
+    var allSongs = $('#newSongListPartAllSongs')
+      .children().filter('[isDirectory!=true]'); //slim sim, finns det en funktion för detta?
+
+    for(i=0; i<allSongs.length; i++){
+      if(allSongs.eq(i).attr('galleryid') === galleryIdToAdd )
+        Troff.addSongButtonToSongsList(
+          allSongs.eq(i).attr('fullPath'),
+          allSongs.eq(i).attr('galleryid')
+        );
+    }
+  };
+  
+  this.addSongButtonToSongsList = function(fullPath, galleryId){
+    //check if song is already added to the songsList
+    var aAlreadyAddedSongs = $('#gallery').children().filter('button');
+    for(var i=0; i<aAlreadyAddedSongs.length; i++){
+      if(aAlreadyAddedSongs.eq(i).attr('fullpath') === fullPath &&
+         aAlreadyAddedSongs.eq(i).attr('galleryid') === galleryId)
+        return;
+    }
+    
+    if(!checkIfSongExists(fullPath, galleryId)) 
+      return;
+    
+    var pap = Troff.getMediaButton(fullPath, galleryId);
+    document.getElementById("gallery").appendChild(pap);
   };
   
   this.selectSonglist = function(event){
@@ -1238,16 +1278,14 @@ var TroffClass = function(){
     
     var aSongs = oSonglist.songs;
     for(var i=0; i<aSongs.length; i++){
-      if(aSongs[i].header !== undefined){
+      if(aSongs[i].isDirectory){
         var header =  document.createElement("h3");
-        header.appendChild(document.createTextNode(aSongs[i].header));
+        header.appendChild(document.createTextNode(aSongs[i].fullPath));
         document.getElementById("gallery").appendChild(header);
+        Troff.addAllSongsFromGallery(aSongs[i].galleryId);
         continue;
       }
-      if(!checkIfSongExists(aSongs[i].fullPath, aSongs[i].galleryId)) 
-        continue;
-      var pap = Troff.getMediaButton(aSongs[i].fullPath, aSongs[i].galleryId);
-      document.getElementById("gallery").appendChild(pap);
+      Troff.addSongButtonToSongsList(aSongs[i].fullPath, aSongs[i].galleryId);
     }
   };
 
@@ -1443,10 +1481,6 @@ var TroffClass = function(){
             if(child.childNodes[2].info != info){
               updated = true;
               var newMarkerInfo = child.childNodes[2].info + "\n\n" + info;
-              console.log("$('.currentMarker')[0]:");
-              console.log($('.currentMarker')[0]);
-              console.log("child.childNodes[2]:");
-              console.log(child.childNodes[2]);
               $('#'+markerId)[0].info = newMarkerInfo;
               if($('.currentMarker')[0].id == child.childNodes[2].id)
                 $('#markerInfoArea').val(newMarkerInfo);
