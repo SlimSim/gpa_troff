@@ -92,16 +92,34 @@ function addVideoToContentDiv() {
   var video = document.createElement('video');
 
   var fsButton = document.createElement('button');
+  var fsButton2 = document.createElement('button');
+  var fsButton3 = document.createElement('button');
 
   var margin = "4px";
   video.style.marginTop = margin;
   video.style.marginBottom = margin;
   fsButton.style.marginTop = margin;
-
+/*
+  fsButton2.style.marginTop = margin;
+  fsButton2.style.marginRight = margin;
+  fsButton2.style.marginLeft = margin;
+  fsButton3.style.marginTop = margin;
+*/
   fsButton.addEventListener('click', Troff.playInFullscreenChanged);
-
   fsButton.appendChild( document.createTextNode('Play in Fullscreen') );
   fsButton.setAttribute('id', "playInFullscreenButt");
+  /*
+  fsButton2.addEventListener('click', Troff.playInFullscreenChanged);
+  fsButton2.appendChild( document.createTextNode("Use 'F' to toggle Fullscreen") );
+  fsButton2.setAttribute('id', "useFtoToggleFullscreenButt");
+  
+  fsButton3.addEventListener('click', Troff.playInFullscreenChanged);
+  fsButton3.appendChild( document.createTextNode("No Fullscreen") );
+  fsButton3.setAttribute('id', "useFtoToggleFullscreenButt");
+  */
+//  kanske ha bara en knapp, som man inte kan tobbla med 'f', och det f gör är 
+//  att den helt enkelt togglar fullscreen?
+  
   videoBox.setAttribute('id', "videoBox");
 
   video.addEventListener('loadedmetadata', function(e){
@@ -109,6 +127,9 @@ function addVideoToContentDiv() {
   });
 
   content_div.appendChild(fsButton);
+//  content_div.appendChild(fsButton2);
+//  content_div.appendChild(fsButton3);
+  
   videoBox.appendChild(video);
   content_div.appendChild(videoBox);
   return video;
@@ -390,13 +411,14 @@ var TroffClass = function(){
     var nrTapps = 0;
 
   this.setPlayInFullscreen = function(bPlayInFullscreen){
+    console.log("setPlayInFullscreen ->");
     var butt = document.querySelector('#playInFullscreenButt');
     butt.classList.toggle("active", bPlayInFullscreen);
 
   };
 
   this.playInFullscreenChanged = function(){
-
+console.log("playInFullscreenChanged ->");
     var butt = document.querySelector('#playInFullscreenButt');
     butt.classList.toggle("active");
 
@@ -404,7 +426,17 @@ var TroffClass = function(){
     DB.setCurrent(strCurrentSong, 'bPlayInFullscreen', bFullScreen );
 
     document.getElementById('blur-hack').focus();
-
+  };
+  
+  this.forceFullscreenChange = function(){
+    console.log("ForceFullscreenChange ->");
+    var videoBox = document.querySelector('#videoBox');
+    var infoSection = document.querySelector('#infoSection');
+    if(videoBox.classList.contains('fullscreen')){
+      videoBox.classList.remove('fullscreen');
+    } else {
+      videoBox.classList.add('fullscreen');
+    } 
   };
 
   /* this funciton is called when the full song/video is loaded,
@@ -841,7 +873,8 @@ var TroffClass = function(){
     exportMarker, gets current song markers to the clippboard
   */
   this.exportMarker = function(){
-    IO.pressEnter();
+    Troff.toggleImportExport();
+//    IO.pressEnter();
     DB.getMarkers( strCurrentSong, function(aoMarkers){
       
       var aoTmpMarkers = [];
@@ -863,7 +896,8 @@ var TroffClass = function(){
     importMarker, promps for a string with markers
   */
   this.importMarker = function(){
-    IO.pressEnter();
+    Troff.toggleImportExport();
+//    IO.pressEnter();
     IO.prompt("Please paste the text you recieved to import the markers",
               "Paste text here",
               function(sMarkers){
@@ -1012,7 +1046,7 @@ var TroffClass = function(){
   
   this.editSonglist = function(event){
     $('#newSongListPart').show();
-    $('#songListPart').hide();
+    $('#songListPartButtons, #songListPartTheLists').hide();
     var li = this.parentNode;
     var oSonglist = JSON.parse(li.getAttribute('stroSonglist'));
     $('#newSongListName').val(oSonglist.name);
@@ -1038,13 +1072,14 @@ var TroffClass = function(){
           aRows[i].children[0].children[0].checked = true;
         }
       }
+      
     }
   };
   
   this.createNewSonglist = function(){
     Troff.resetNewSongListPartAllSongs();
     $('#newSongListPart').show();
-    $('#songListPart').hide();
+    $('#songListPartButtons, #songListPartTheLists').hide();
     $('#removeSongList').hide();
     $('#newSongListName').focus();
     $('#newSongListName').click();
@@ -1053,7 +1088,7 @@ var TroffClass = function(){
   this.cancelSongList = function(){
     document.getElementById('blur-hack').focus();
     $('#newSongListPart').hide();
-    $('#songListPart').show();
+    $('#songListPartButtons, #songListPartTheLists').show();
     Troff.resetNewSongListPartAllSongs();
   };
   
@@ -1062,7 +1097,7 @@ var TroffClass = function(){
                 'Don you want to permanently remove this songlist?',
                 function(){
       $('#newSongListPart').hide();
-      $('#songListPart').show();
+      $('#songListPartButtons, #songListPartTheLists').show();
       document.getElementById('blur-hack').focus();
       var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
       
@@ -1083,7 +1118,7 @@ var TroffClass = function(){
   
   this.saveNewSongList = function(){
     $('#newSongListPart').hide();
-    $('#songListPart').show();
+    $('#songListPartButtons, #songListPartTheLists').show();
     
     document.getElementById('blur-hack').focus();
     var name = $('#newSongListName').val();
@@ -2761,7 +2796,10 @@ var IOClass = function(){
         var number = event.keyCode - 48;
         Troff.setLoopTo(number);
     }
-
+    
+    var altTime = 0.08333333333; // one frame
+    var regularTime = 0.8333333333; // 10 freames
+    var shiftTime = 8.333333333; // 100 frames
 
     switch(event.keyCode){
     case 32: //space bar
@@ -2779,6 +2817,22 @@ var IOClass = function(){
     case 40: // downArrow
     case 77: // M
       Troff.createMarker();
+      break;
+    case 39: // rightArrow
+      if(event.shiftKey==1)
+      $('audio, video')[0].currentTime += shiftTime;
+      else if(event.altKey==1)
+      $('audio, video')[0].currentTime += altTime;
+      else
+        $('audio, video')[0].currentTime += regularTime;
+      break;
+    case 37: // leftArrow
+      if(event.shiftKey==1)
+      $('audio, video')[0].currentTime -= shiftTime;
+      else if(event.altKey==1)
+      $('audio, video')[0].currentTime -= altTime;
+      else
+        $('audio, video')[0].currentTime -= regularTime;;
       break;
     case 80: // P
       if(event.shiftKey==1)
@@ -2825,7 +2879,8 @@ var IOClass = function(){
       Troff.editCurrentInfo();
       break;
     case 70: // F
-      Troff.playInFullscreenChanged();
+      Troff.forceFullscreenChange()
+      //Troff.playInFullscreenChanged();
       break;
     case 85: // U
       if(event.shiftKey==1)
@@ -2852,7 +2907,7 @@ var IOClass = function(){
         $('#waitBetweenLoops').val(1);
       break;
     default:
-      //console.info("key " + event.keyCode);
+      console.info("key " + event.keyCode);
       //nothing
     }// end switch
 

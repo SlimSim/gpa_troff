@@ -196,13 +196,12 @@
     </div>
     <ul id="gallery" class="flexScroll" ></ul>
     <div id="songlistsArea" class="flexCol">
-      <div id="songListPart">
+      <div id="songListPartButtons">
         <input type="button" value="New song list" class="regularButton" id="buttNewSongList"/>
         <input type="button" id="songlistAll" class="selected" value="All songs"/>
-        <ul id="songListPartTheLists"></ul>
       </div>
+      <ul id="songListPartTheLists" class="flexScroll"></ul>
       <div id="newSongListPart" style="display:none;" class="flexCol flexOne">
-        
         <span>Name: <input 
                       type="text" 
                       placeholder="New song lists name" 
@@ -250,8 +249,7 @@
   <div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
     <div class="popUpSquare" id="innerImportExportPopUpSquare" >
       <div>
-        Export your markers, or import new markers, for the current song! <br />
-        Press anywhere outside this box to exit.
+        Export your markers, or import new markers, for the current song!
       </div>
       <div class="flexRow center">
         <input type="button" id="buttExportMarker" class="regularButton" value="Export Markers" />
