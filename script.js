@@ -1254,12 +1254,10 @@ console.log("playInFullscreenChanged ->");
 
     var aSongs = $('#newSongListPartAllSongs').children();
     for(var i=0; i<aSongs.length; i++){
-      var songElement = $('#newSongListPartAllSongs').children().eq(i);
+      var songElement = aSongs.eq(i);
       var fullPath = songElement.attr('fullPath');
       var galleryId = songElement.attr('galleryId');
-      if (fullPath === undefined) { 
-        
-        
+      if (songElement.attr('isDirectory') === "true"){
         var head = document.createElement("h3");
         head.appendChild(document.createTextNode( songElement.text() ));
         document.getElementById("gallery").appendChild(head);
@@ -1318,6 +1316,13 @@ console.log("playInFullscreenChanged ->");
         header.appendChild(document.createTextNode(aSongs[i].fullPath));
         document.getElementById("gallery").appendChild(header);
         Troff.addAllSongsFromGallery(aSongs[i].galleryId);
+        continue;
+      }
+      else if(aSongs[i].header !== undefined){
+        var oldHeader =  document.createElement("h3");
+        oldHeader.appendChild(document.createTextNode(aSongs[i].header));
+        document.getElementById("gallery").appendChild(oldHeader);
+//        Troff.addAllSongsFromGallery(aSongs[i].galleryId);
         continue;
       }
       Troff.addSongButtonToSongsList(aSongs[i].fullPath, aSongs[i].galleryId);
