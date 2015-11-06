@@ -42,7 +42,17 @@
       id="blur-hack"
       type="text"
       style="position: absolute; opacity: 0; top:-100px;" />
+  <section id="stateSection" style="background-color: #0288D1">
+    <input 
+      type="button" 
+      title="Remember all settings, to be recalled later (key: r)" 
+      value="r&#818;emember state"
+      id="buttRememberState" 
+      class="regularButton" />
 
+    <div id="stateList"></div>
+    
+  </section>
   <section id="timeSection">
 
 
@@ -88,8 +98,28 @@
           <input type="button" title="Move more than one marker" class="regularButton" value="move markers" id="buttPromptMoveMarkers" />
         </div>
         <div>
-          <input type="button" title="unselect both markers (key: u)" class="regularButton" value="play fu&#818;ll song" id="buttUnselectMarkers" />
+          <input 
+            type="button" 
+            title="select first and last markers (key: u)" 
+            class="regularButton" 
+            value="play fu&#818;ll song" 
+            id="buttUnselectMarkers" />
         </div>
+        <div class="flexRow">
+          <input
+            type="button"
+            title="Zoom out to see the whole song" 
+            class="regularButton"
+            value="zoom out"
+            id="buttZoomOut" />
+          <input
+            type="button" 
+            title="Zoom to the selected play region (the purple part of the timeline)" 
+            class="regularButton"
+            value="z&#818;oom"
+            id="buttZoom" />
+          </div>
+            <!--
         <input
           type="button"
           title="add Start and End markers"
@@ -97,6 +127,7 @@
           value="add Start and End markers"
           id="buttAddStartAndEndMarkers"
           style="word-wrap: break-word; width: 98px; padding: 1px 4px;"/>
+          -->
         <div>
           <input type="button" title="toggle; start a fiew seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="buttWidthStandard"/>
           <input type="number" title="set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />

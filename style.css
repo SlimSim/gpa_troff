@@ -372,7 +372,7 @@ nav input, nav button{
     -moz-appearance: slider-vertical;
     appearance: slider-vertical;
     height: 98vh;
-    height: calc(100vh - 20px);
+    height: calc(100% - 20px);
     margin: 10px 0;
     /*
         first margin component needs to be
