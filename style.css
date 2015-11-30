@@ -109,7 +109,7 @@ p{
 }
 
 .normalSize{
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .smallSize{
@@ -508,6 +508,10 @@ input[type=number].numberWider{
   width: 85px;
 }
 
+.buttWidthMedium{
+  width: 107px;
+}
+
 /*
 .flatButton{
     background-color: rgb(230,230,230);
@@ -553,6 +557,11 @@ input, button, .linkButton{
 
 
 
+  
+.importantLeftLine{
+  border-left: 2px solid #e05915; /*accentColor2*/
+  padding-left: 4px;
+}
 
 .important{
 /*  background-color:#ed8223; */
@@ -572,16 +581,6 @@ input, button, .linkButton{
   margin: 1px;
 }
 .Small{font-size: 10px;}
-
-/*Depricated - remove site */
-.removeButt{
-  font-size: 20px !important;
-  margin: 20px !important;
-  background: pink !important;
-}
-
-
-
 
 .outerDialog{
   position: fixed;
@@ -619,6 +618,10 @@ table {
   width: 100vw;
   position: absolute;
   background: pink;
+}
+
+.bulletList{
+  list-style: disc inside;
 }
 
 .paragraph{
@@ -736,6 +739,10 @@ table {
   margin-top: 4px;
 }
 
+.leftTextParent > *{
+  text-align: left;
+}
+
 .margin{
   margin: 4px;
 }
@@ -800,8 +807,11 @@ input[type="button"]:active, button:active, .linkButton:active{
 .currentMarker:active, 
 .currentStopMarker:active{  outline: solid 4px #431c5d;}
 
-.important:hover {  outline: solid 2px #e05915;  ;}
-.important:active{  outline: solid 4px #e05915;  ;}
+.important:hover {  outline: solid 2px #e05915; }
+.important:active{  outline: solid 4px #e05915; }
+
+.special:hover {  outline: solid 2px #e05915; z-index: 1;}
+.special:active{  outline: solid 4px #e05915; z-index: 1;}
 
 .centerRoundButtCommon{
   position: relative;

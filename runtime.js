@@ -20,4 +20,8 @@ chrome.app.runtime.onLaunched.addListener(function(data) {
     'page.html',
     {bounds: {width:900, height:600}, minWidth:470, minHeight:370,  id:"TroffWin"}
   );
+  chrome.app.window.create(
+    'help.html',
+    {bounds: {width:600, height:400}, minWidth:300, minHeight:200,  id:"TroffWin"}
+  );
 });

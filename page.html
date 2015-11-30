@@ -75,7 +75,9 @@
           </span>
         </nav>
       <div id="mediaInfoBox" class="flexCol halfMarginParent">
-        <div id="currentArtist">Please select a song from the songs list</div>
+        <div id="currentArtist">
+          Please select a song or moive from the songs area
+        </div>
         <div id="currentSong"></div>
         <div id="currentAlbum"></div>
         <div class="dataOutput">
@@ -95,11 +97,13 @@
         </button>
       </nav>
     </div> <!-- end headArea -->
-    <div id="areaSelector" class="flexRow secondaryColor">
+    <div id="areaSelector" class="flexRowWrap secondaryColor">
       <input type="button" value="Song lists" id="songlistsTab"  class="onOffButton"/>
       <input type="button" value="Songs" id="songsTab" class="active onOffButton" />
       <input type="button" value="States" id="statesTab"  class="onOffButton"/>
       <input type="button" value="Settings" id="settingsTab"  class="active onOffButton"/>
+      <input type="button" value="Info" id="infoTab"  class="active onOffButton"/>
+      <input type="button" value="Countdown" id="countTab"  class="active onOffButton"/>
 
 <!--
       <input type="button" value="Song i&#818;nfo" id="songinfoTab" />
@@ -175,15 +179,6 @@
 <!--        <div id="div_to_calc_height_of_timeSection"> depricated? -->
           <h1>Settings</h1>
           <div id="ControlTime" class="flexCol end">
-              <div>
-                <input 
-                  type="button" 
-                  title="toggle; wait a fiew seconds before song starts to play (key: p)" 
-                  value="p&#818;ause before" 
-                  id="buttPauseBefStart"
-                  class="onOffButton active" />
-                <input type="number" title="set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
-              </div>
           </div> <!-- ControlTime -->
     
     
@@ -239,20 +234,40 @@
           </div> <!-- ControlMarker -->
     
           <div id="ControlLoop" class="flexCol end">
-              <h2>Loop</h2>
-              <span class="loopSquare" id="loopButtons" >
-                <input type="button" title="play song only 1 time (key: 1)" class="loopButt" value="1" id="buttLoop1" />
-                <input type="button" title="loop song 2 times (key: 2)" class="loopButt" value="2" id="buttLoop2" />
-                <input type="button" title="loop song 3 times (key: 3)" class="loopButt" value="3" id="buttLoop3" />
-                <input type="button" title="loop song 4 times (key: 4)" class="loopButt" value="4" id="buttLoop4" />
-                <input type="button" title="loop song 5 times (key: 5)" class="loopButt" value="5" id="buttLoop5" />
-                <input type="button" title="loop song 6 times (key: 6)" class="loopButt" value="6" id="buttLoop6" />
-                <input type="button" title="loop song 7 times (key: 7)" class="loopButt" value="7" id="buttLoop7" />
-                <input type="button" title="loop song 8 times (key: 8)" class="loopButt" value="8" id="buttLoop8" />
-                <input type="button" title="loop song 9 times (key: 9)" class="loopButt" value="9" id="buttLoop9" />
-                <input type="button" title="loop song &infin; times (key: 0)" class="loopButt" value="&infin;" id="buttLoopInf" />
-              </span>
-              <div id="LoopWait" class="XLoopOff"> <p>Wait</p> <input type="number" title="set how many seconds to wait between each loop"  value="1" id="waitBetweenLoops"  /> </div>
+            <h2>Loop</h2>
+            <div>
+              <input 
+                type="button" 
+                title="toggle; wait a fiew seconds before song starts to play (key: p)" 
+                value="p&#818;ause before" 
+                id="buttPauseBefStart"
+                class="buttWidthMedium onOffButton active" />
+              <input type="number" title="set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
+            </div>
+
+            <div class="XLoopOff">
+              <input type="button" 
+                class="buttWidthMedium onOffButton active" 
+                value="Wait between"
+                id="buttWaitBetweenLoops"/p> 
+              <input type="number" 
+                title="set how many seconds to wait between each loop"  
+                value="1" 
+                id="waitBetweenLoops"  /> 
+            </div>
+            
+            <span class="loopSquare" id="loopButtons" >
+              <input type="button" title="play song only 1 time (key: 1)" class="loopButt" value="1" id="buttLoop1" />
+              <input type="button" title="loop song 2 times (key: 2)" class="loopButt" value="2" id="buttLoop2" />
+              <input type="button" title="loop song 3 times (key: 3)" class="loopButt" value="3" id="buttLoop3" />
+              <input type="button" title="loop song 4 times (key: 4)" class="loopButt" value="4" id="buttLoop4" />
+              <input type="button" title="loop song 5 times (key: 5)" class="loopButt" value="5" id="buttLoop5" />
+              <input type="button" title="loop song 6 times (key: 6)" class="loopButt" value="6" id="buttLoop6" />
+              <input type="button" title="loop song 7 times (key: 7)" class="loopButt" value="7" id="buttLoop7" />
+              <input type="button" title="loop song 8 times (key: 8)" class="loopButt" value="8" id="buttLoop8" />
+              <input type="button" title="loop song 9 times (key: 9)" class="loopButt" value="9" id="buttLoop9" />
+              <input type="button" title="loop song &infin; times (key: 0)" class="loopButt" value="&infin;" id="buttLoopInf" />
+            </span>
           </div> <!-- ControlLoop -->
     
     
@@ -295,8 +310,8 @@
 
     </div>    
     
-    <button id="donate" class="regularButton" title="">
-      Do you like Troff?<br />Donate money or vote for new features here!
+    <button id="donate" class="regularButton special" title="">
+      Do you like Troff?<br />Feel free to contribute here!
     </button>
 
   </section> <!--songsSection -->
@@ -343,8 +358,8 @@
 
 
   <section id="infoSection" class="secondaryColor margin">
-    <div id="loopTimesLeft">1</div>
     <div id="secondsLeft">0</div>
+    <div id="loopTimesLeft">1</div>
   </section> <!-- infoSection -->
 
 
@@ -367,27 +382,45 @@
     </div>
   </div>
 
-
-  <div style="display: none" id="donateDialog" class="outerDialog">
-    <div class="innerDialog flexCol almostFullHeight">
+  <div style="display: none;" id="donateDialog" class="outerDialog">
+    <div class="innerDialog mediumDialog">
       <h2 class="paragraph">Donate to Troff</h2>
       <p class="paragraph normalSize">
         Troff is free and open source and if you like this app,
         feel free to donate as much or little as you want!
         Any contribution is greatly appreciated!
       </p>
-      <p class="paragraph normalSize">
-        You can also vote for features you would like to see in the future!
-        If enough people pay for a certain feature it might become a reality...
-      </p>
-      <div class="flexScroll">
+      <div class="flexScroll flexRow margin">
+        <div id="donateList" class="flexCol leftTextParent">
+<!--
+          <input type="button" value="Donate 5 SEK" class="regularButton" />
+          <input type="button" value="Donate 25 SEK" class="regularButton" />
+          <input type="button" value="Donate 44 SEK" class="regularButton" />
+          <input type="button" value="Donate 92 SEK" class="regularButton" />
+-->
+        </div>
+        <div style="flex: 1;"></div>
+            <!--
         <table class="table table-striped">
-          <tbody>
+          <tbody style="margin: ">
+            <tr><td>Donate</td><td>5.99SEK</td><td><input class='rowBreak' type="button" value="Give a little"/></td></tr>
+            <tr><td>Donate</td><td>25SEK</td><td><input class='rowBreak' type="button" value="Give some"/></td></tr>
+            <tr><td>Donate</td><td>44SEK</td><td><input class='rowBreak' type="button" value="Give a lot"/></td></tr>
+<!- -
+            <tr><td>You like Troff and want to show it. Thank you</td><td>5.99SEK</td><td><input class='rowBreak' type="button" value="Give a little"/></td></tr>
+            <tr><td>You find Troff great and you want to donate. Many thanks!</td><td>25SEK</td><td><input class='rowBreak' type="button" value="Give some"/></td></tr>
+            <tr><td>You think Troff is the best music player and want to contribute. This is greatly appreciated!</td><td>44SEK</td><td><input class='rowBreak' type="button" value="Give a lot"/></td></tr>
+- ->
           </tbody>
         </table>
+        -->
       </div>
+      <p class="paragraph normalSize">
+        When you click on a donate button, a Google Wallet confirmation dialog 
+        will appear. This way the donation is run securely through Google.
+      </p>
       <span class="flexRow">
-        <p class="paragraph normalSize">You can donate and/or vote more than once.</p>
+        <p class="paragraph smallSize">You can donate more than once.</p>
         <div style="flex:1"></div>
         <input id="closeDonateDialog" class="regularButton" type="button" value="Return" />
       </span>
@@ -420,6 +453,73 @@
           class="regularButton important"
           type="button"
           value="Rate now" />
+      </span>
+    </div>
+  </div>
+  
+  <div style="display: none;" id="firstTimeUserDialog" class="outerDialog">
+    <div class="innerDialog mediumDialog marginDialog flexCol">
+      <h2 class="paragraph">Welcome to Troff v1.0!</h2>
+      <div>
+        <p class="paragraph normalSize">
+          With Troff you can:
+        </p>
+        <ul class="bulletList">
+          <li>zoom on the timeline</li>
+          <li>write markers on the timeline</li>
+          <li>loop a part of the timeline</li>
+          <li>adjust the spead of a song or movie</li>
+          <li>frame by frame stepping in movies</li>
+        </ul>
+        <p class="paragraph normalSize">and lots more!</p>
+        <p class="paragraph smallSize" style="display: block;">
+          Click the "Help" button in the upper left corner<br />
+          to learn more about the things Troff can offer you.
+        </p>
+      </div>
+
+      <span class="flexRow">
+        <div style="flex:1"></div>
+        <input 
+          id="firstTimeUserDialogTour" 
+          class="regularButton margin"
+          type="button" 
+          value="Take the tour" />
+        <input 
+          id="firstTimeUserDialogOK"
+          class="regularButton"
+          type="button"
+          value="OK" />
+      </span>
+    </div>
+  </div>
+  
+  <div style="display: none;" id="zoomInstructionDialog" class="outerDialog">
+    <div class="innerDialog mediumDialog marginDialog flexCol">
+      <h2 class="paragraph">How zoom works</h2>
+      <div>
+        <p class="paragraph normalSize">
+          When you press zoom, or 'Z', Troff will zoom to the active 
+          playing region, or the purple part of the timeline.
+        </p>
+        <p class="paragraph normalSize">
+          If the active playing region is the entire song, you can not zoom in,
+          and this instruction will pop up instead.
+        </p>
+      </div>
+
+      <span class="flexRow">
+        <div style="flex:1"></div>
+        <input 
+          id="zoomInstructionDialogDontShowAgain" 
+          class="regularButton margin"
+          type="button" 
+          value="Don't show again" />
+        <input 
+          id="zoomInstructionDialogOK"
+          class="regularButton"
+          type="button"
+          value="OK" />
       </span>
     </div>
   </div>

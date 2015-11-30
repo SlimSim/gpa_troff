@@ -21,6 +21,12 @@
   <title>Tips and help with Troff</title>
   <meta name="Troff help" description="Tips, trix and tutoring for using Troff">
   <meta charset="UTF-8">
+  
+  
+  <link rel="stylesheet" type="text/css" href="assets/reset.css" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  
+  <!--
   <style type="text/css">
     body, td {font-family: Verdana, Arial, sans-serif; font-size: 14px;}
     tr:nth-child(even) {
@@ -61,9 +67,43 @@
         display: inline;
     }
   </style>
-
+-->
+<!-- style 2 -->
+<style>
+  body{
+    display: flex;
+    flex-direction: row;
+  }
+  header{
+    height: 60px;
+    background-color: pink;
+  }
+  nav{
+    background-color: green;
+    display: flex;
+    flex-direction: column;
+  }
+</style>
 </head>
 
+<body class="backgroundColor">
+  <section>
+  <header>header - Trofflogo</header>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Contact</a>
+    <a href="#">About</a>
+    <a href="#" onclick="return addButton()">Add another button →</a>
+  </nav>
+  </section>
+  <section>
+  <article>
+    good content!
+  </article>
+  <footer>footer</footer>
+  </section>
+</body>
+<!--
 <body bgcolor="#ffffff" leftmargin="20" topmargin="20" marginheight="20" marginwidth="20">
   <h2>Tips, trix and tutoring for Troff</h2>
   <table>
@@ -85,8 +125,9 @@
     <tr>  <td>W</td><td>  Set Wait to 1 second</td> </tr>
     <tr>  <td>R</td><td>  Remember current state to recall it later</td> </tr>
     <tr>  <td>Z</td><td>  Zoom in to only see the active playing region (the purple part of the timeline), use shift+Z to zoom out to see the whole timeline</td> </tr>
-    <tr>  <td>Left/Right Arrows</td><td> right and left arrows to step 1 sec forward/backward in song/movie, use shift or ctrl to move 10 seconds / one frame respectively</td> </tr>
+    <tr>  <td>Left/Right Arrows</td><td> right and left arrows to step 1 sec forward/backward in song/movie, use shift or alt to move 10 seconds / one frame respectively</td> </tr>
     <tr>  <td>Up/Down Arrows   </td><td> move the selected marker up or down, 1 sec, 1 frame or 10 seconds with alt/shift/(alt+shift) + Upp/down respectively.</td> </tr>
+    <tr>  <td>N</td><td>  move to next pair of markers (use shift + N to move to previous)</td> </tr>
   </table>
 
   <ul>
@@ -156,4 +197,5 @@
       Chrome Web Store</a>, thanks!
   </p>
 </body>
+-->
 </html>

@@ -25,7 +25,7 @@ purchaseSuccess = function(e){
 }
 
 purchaseFail = function(e){
-  IO.alert("Thanks for the consideration!");
+//  IO.alert("Thanks for the consideration!");
 }
 
 
@@ -33,13 +33,14 @@ purchaseFail = function(e){
 purchase = function(){
 
   var onSkuDetails = function(response){
+    $('#donateList').empty();
     var products = response.response.details.inAppProducts;
     var count = products.length;
     for (var i = 0; i < count; i++) {
       var product = products[i];
       addProductToUI(product);
     }
-
+    $('.outerDialog').hide();
     document.querySelector('#donateDialog').style.display="";
   }
 
@@ -49,19 +50,25 @@ purchase = function(){
 
     var colDesc = $("<td></td>").text(product.localeData[0].description);
     var price = parseInt(product.prices[0].valueMicros, 10) / 1000000;
-    var colPrice = $("<td></td>").text(price);
+    var currency = product.prices[0].currencyCode;
+    console.log("currency", currency);
+    var colPrice = $("<td></td>").text(price + currency);
+//var tittle = product.localeData[0].title    
+    var val = "Donate " + price + " " + currency;
 
-    var butAct = $("<input value='" + product.localeData[0].title +
-                "' type='button' class='rowBreak'></input>")
+    var butAct = $("<input value='" + val +
+                "' type='button' class='rowBreak regularButton'></input>")
       .data("sku", product.sku)
       .attr("id", "prodButPrefix" + product.sku)
       .click(onActionButton);
-    var colBut = $("<td></td>").append(butAct);
+/*    var colBut = $("<td></td>").append(butAct);
     row
       .append(colDesc)
       .append(colPrice)
       .append(colBut);
     $("tbody").append(row);
+*/    
+    $("#donateList").append(butAct);
 
   }
   var onActionButton = function(evt) {
@@ -84,19 +91,23 @@ purchase = function(){
   }
 
   var onSkuDetailsFail = function(a){
+    $('.outerDialog').hide();
     IO.alert("Sorry, can not reach Google-wallet at the moment. "+
               "This feature requires a connection to the internet.")
-    closeDonateDialog();
-    return;  /*
+              
+//    closeDonateDialog();
+//    return;  /*
 
+    $('#donateList').empty();
     var product = {}
     product.localeData = [];
     product.localeData[0] = {};
     product.localeData[0].title = "Donate little"
-    product.localeData[0].description = "You like Petra and want to show it. That is very apreasiated!"
+    product.localeData[0].description = "You like Troff and want to show it. That is very apreasiated!"
     product.prices = []
     product.prices[0] = {};
     product.prices[0].valueMicros = 990000;
+    product.prices[0].currencyCode = "USD";
     product.sku = "petra_suport_0";
 
     console.log("products:")
@@ -108,10 +119,11 @@ purchase = function(){
     product2.localeData = [];
     product2.localeData[0] = {};
     product2.localeData[0].title = "Vote for phone app"
-    product2.localeData[0].description = "Vote for this feature if you think that Petra should also exist as a phone app!"
+    product2.localeData[0].description = "Vote for this feature if you think that Troff should also exist as a phone app!"
     product2.prices = []
     product2.prices[0] = {};
     product2.prices[0].valueMicros = 1990000;
+    product2.prices[0].currencyCode = "USD";
     product2.sku = "petra_suport_1";
 
     addProductToUI(product2);
@@ -119,10 +131,11 @@ purchase = function(){
     addProductToUI(product2);
     addProductToUI(product2);
     addProductToUI(product2);
-    addProductToUI(product2);
-    addProductToUI(product2);
-    addProductToUI(product2);
-    addProductToUI(product2);
+//    addProductToUI(product2);
+//    addProductToUI(product2);
+//    addProductToUI(product2);
+//    addProductToUI(product2);
+
     document.querySelector('#donateDialog').style.display="";
     // */
   }

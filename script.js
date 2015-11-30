@@ -412,8 +412,20 @@ var TroffClass = function(){
     var time = 0;
     var nrTapps = 0;
 
+  //Public variables:
+  this.dontShowZoomInstructions = false;
+
   this.firstTimeUser = function(){
-    IO.alert("Welcome to Troff! take the tour");
+    $('#firstTimeUserDialog').show();
+  };
+  
+  this.firstTimeUserDialogTour = function(){
+    $('#firstTimeUserDialog').hide();
+    IO.openHelpWindow();
+  };
+
+  this.firstTimeUserDialogOK = function(){
+    $('#firstTimeUserDialog').hide();
   };
 
   this.setPlayInFullscreen = function(bPlayInFullscreen){
@@ -459,12 +471,31 @@ var TroffClass = function(){
       +"\n\nUse this area for things regarding this marker.";
   };
 
-  this.setWaitBetweenLoops = function(wait){
-    $('#waitBetweenLoops').val(wait);
+  this.setWaitBetweenLoops = function(bActive, iWait){
+    $('#waitBetweenLoops').val(iWait);
+    if(bActive){
+      $('#buttWaitBetweenLoops').addClass('active');
+      $('#waitBetweenLoops').removeClass('grayOut');
+    } else {
+      $('#buttWaitBetweenLoops').removeClass('active');
+      $('#waitBetweenLoops').addClass('grayOut');
+    }
   };
   this.setCurrentWaitBetweenLoops = function(){
+    console.info("needs fixing, - why?");
     var wait = $('#waitBetweenLoops').val();
-    DB.setCurrent(strCurrentSong, 'wait', wait);
+    var bActive = $('buttWaitBetweenLoops').hasClass('active');
+    DB.setCurrent(strCurrentSong, 'wait', [bActive, wait]);
+  };
+  this.toggleWaitBetweenLoops = function(){
+    $('#buttWaitBetweenLoops').toggleClass('active');
+    $('#waitBetweenLoops').toggleClass('grayOut');
+    Troff.setCurrentWaitBetweenLoops();
+  };
+  this.getWaitBetweenLoops = function(){
+    if($('#waitBetweenLoops').hasClass('grayOut'))
+      return 0;
+    return $('#waitBetweenLoops').val();
   };
 
   this.toggleStopAfter = function(){
@@ -473,7 +504,6 @@ var TroffClass = function(){
     Troff.setCurrentStopAfter();
     Troff.settAppropriateActivePlayRegion();
     document.getElementById('blur-hack').focus();
-
   };
 
   this.setCurrentStopAfter = function() {
@@ -690,11 +720,11 @@ var TroffClass = function(){
 
     if( Troff.isLoopOn() ){
       if(Troff.isLoopInfinite() ) {
-        Troff.playSong( $('#waitBetweenLoops').val()*1000 );
+        Troff.playSong( Troff.getWaitBetweenLoops()*1000 );
       } else {
         if ( IO.loopTimesLeft()>1 ){
           IO.loopTimesLeft( -1 );
-          Troff.playSong( $('#waitBetweenLoops').val()*1000 );
+          Troff.playSong( Troff.getWaitBetweenLoops()*1000 );
         } else {
           IO.loopTimesLeft( $('#loopTimes').val() );
           Troff.pauseSong();
@@ -845,7 +875,7 @@ var TroffClass = function(){
         Troff.clearAllMarkers();
         Troff.clearAllStates();
         Troff.setTempo('?');
-        Troff.setWaitBetweenLoops(1);
+        Troff.setWaitBetweenLoops(true, 1);
         
     }
     strCurrentSong = path;
@@ -877,56 +907,109 @@ var TroffClass = function(){
   };
 
   /*
-    exportMarker, gets current song markers to the clippboard
+    exportStuff, gets current song markers to the clippboard
   */
-  this.exportMarker = function(){
+  this.exportStuff = function(){
     Troff.toggleImportExport();
-//    IO.pressEnter();
     DB.getMarkers( strCurrentSong, function(aoMarkers){
-      
-      var aoTmpMarkers = [];
+      var oExport = {};
+      oExport.aoMarkers = [];
       for (var i=0; i<aoMarkers.length; i++){
         var oTmp = {};
         oTmp.name = aoMarkers[i].name;
         oTmp.time = aoMarkers[i].time;
         oTmp.info = aoMarkers[i].info;
         oTmp.color = aoMarkers[i].color;
-        aoTmpMarkers[i] = oTmp;
+        oExport.aoMarkers[i] = oTmp;
       }
-      var sMarkers = JSON.stringify(aoTmpMarkers);
+      var aState = $('#stateList').children();
+      oExport.aoStates = [];
+      for(i=0; i<aState.length; i++){
+        var oState = JSON.parse(aState.eq(i).attr('strstate'));
+
+        var currMarkerId = "#" + oState.currentMarker;
+        var currStopMarkerId = "#" + oState.currentStopMarker;
+        oState.currentMarkerTime = $( currMarkerId )[0].timeValue;
+        oState.currentStopMarkerTime = $( currStopMarkerId )[0].timeValue;
+        delete oState.currentMarker;
+        delete oState.currentStopMarker;
+        oExport.aoStates[i] = oState;
+      }
+      oExport.strSongInfo = $('#songInfoArea').val();
+      var sExport = JSON.stringify(oExport);
       
-      IO.prompt("Copy the marked text to export your markers", sMarkers);
+      IO.prompt("Copy the marked text to export your markers", sExport);
     });
-  }; // end exportMarker
+  }; // end exportStuff
 
   /*
-    importMarker, promps for a string with markers
+    importStuff, promps for a string with markers
   */
-  this.importMarker = function(){
+  this.importStuff = function(){
     Troff.toggleImportExport();
-//    IO.pressEnter();
     IO.prompt("Please paste the text you recieved to import the markers",
               "Paste text here",
-              function(sMarkers){
-      var aMarkers = JSON.parse(sMarkers);
-
-      var aMarkerId = Troff.getNewMarkerIds(aMarkers.length);
-
-      for(var i=0; i<aMarkers.length; i++){
-        // these 5 lines are here to allow for import of markers
-        //from version 0.3.0 and earlier:
-        var tmpName = Object.keys(aMarkers[i])[0];
-        aMarkers[i].name = aMarkers[i].name || tmpName;
-        aMarkers[i].time = aMarkers[i].time || Number(aMarkers[i][tmpName]) || 0;
-        aMarkers[i].info = aMarkers[i].info || "";
-        aMarkers[i].color = aMarkers[i].color || "None";
-        //:allow for version 0.3.0 end here
-        
-        aMarkers[i].id = aMarkerId[i];
+              function(sImport){
+      var oImport = JSON.parse(sImport);
+      if(oImport.strSongInfo && oImport.aoStates && oImport.aoMarkers){
+        importMarker(oImport.aoMarkers);
+        importSonginfo(oImport.strSongInfo);
+        importStates(oImport.aoStates);
+      } else {
+        //This else is here to allow for imports of 0.5 and erlier
+        var aMarkersTmp = oImport;
+        importMarker(aMarkersTmp);
       }
-      Troff.addMarkers(aMarkers); // adds marker to html
-      DB.saveMarkers(Troff.getCurrentSong());
-
+      function importMarker(aMarkers){
+        var aMarkerId = Troff.getNewMarkerIds(aMarkers.length);
+  
+        for(var i=0; i<aMarkers.length; i++){
+          // these 5 lines are here to allow for import of markers
+          //from version 0.3.0 and earlier:
+          var tmpName = Object.keys(aMarkers[i])[0];
+          aMarkers[i].name = aMarkers[i].name || tmpName;
+          aMarkers[i].time = aMarkers[i].time || Number(aMarkers[i][tmpName]) || 0;
+          aMarkers[i].info = aMarkers[i].info || "";
+          aMarkers[i].color = aMarkers[i].color || "None";
+          //:allow for version 0.3.0 end here
+          
+          aMarkers[i].id = aMarkerId[i];
+        }
+        Troff.addMarkers(aMarkers); // adds marker to html
+        DB.saveMarkers(Troff.getCurrentSong());
+      }
+      function importSonginfo(strSongInfo){
+        $('#songInfoArea').val($('#songInfoArea').val() + strSongInfo);
+        Troff.updateSongInfo();
+      }
+      function importStates(aoStates){
+        for(var i = 0; i < aoStates.length; i++){
+          var strTimeStart = aoStates[i].currentMarkerTime;
+          var strTimeStop = aoStates[i].currentStopMarkerTime;
+          delete aoStates[i].currentMarkerTime;
+          delete aoStates[i].currentStopMarkerTime;
+          aoStates[i].currentMarker = getMarkerFromTime(strTimeStart);
+          aoStates[i].currentStopMarker = getMarkerFromTime(strTimeStop) + 'S';
+        }
+        function getMarkerFromTime(strTime){
+          var aCurrMarkers = $('#markerList').children();
+          for(var i=0; i<aCurrMarkers.length; i++){
+            var currMarker = aCurrMarkers.eq(i).children().eq(2);
+            if(currMarker[0].timeValue == strTime){
+              return currMarker.attr('id');
+            }
+          }
+          
+          console.error("returnerar första markören...");
+          return aCurrMarkers.eq(0).children().eq(2).attr('id');
+          
+        }
+        
+        aoStates.map(function(s){
+          Troff.addButtonsOfStates([JSON.stringify(s)]);
+        });
+        DB.saveStates(Troff.getCurrentSong());
+      }
     });
   };
 
@@ -1493,6 +1576,7 @@ var TroffClass = function(){
       state.stopAfter = $('#stopAfter').val();
       state.currentLoop = $('.currentLoop').attr('id');
       state.waitBetweenLoops = $('#waitBetweenLoops').val();
+      state.buttWaitBetweenLoops= $('#buttWaitBetweenLoops').hasClass('active');
       state.volumeBar = $('#volumeBar').val();
       state.speedBar = $('#speedBar').val();
       state.currentMarker = $('.currentMarker').attr('id');
@@ -1544,7 +1628,10 @@ var TroffClass = function(){
     }
     $('#stopAfter').val(oState.stopAfter);
     $('#' + oState.currentLoop).click();
-    $('#waitBetweenLoops').val(oState.waitBetweenLoops);
+
+    var bActiveWaitBetweenLoops = oState.buttWaitBetweenLoops;
+    var iWaitBetweenLoops = oState.waitBetweenLoops;
+    Troff.setWaitBetweenLoops(bActiveWaitBetweenLoops, iWaitBetweenLoops);
     $('#volumeBar').val(oState.volumeBar);
     $('#speedBar').val(oState.speedBar);
     Troff.speedUpdate();
@@ -2195,7 +2282,6 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
 
       $('#activePlayRegion').height(height);
       $('#activePlayRegion').css("margin-top", top + "px");
-//console.log("height", height, "top", top, "barMarginTop", barMarginTop);
     }; // end setAppropriateActivaePlayRegion
 
     this.settAppropriateMarkerDistance = function () {
@@ -2230,6 +2316,57 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
         Troff.settAppropriateActivePlayRegion();
     }; // end settAppropriateMarkerDistance
     
+    this.selectNext = function(reverse){
+      var markers = $('#markerList').children();
+      
+      var currentMarkerTime = Number($('.currentMarker')[0].timeValue, 10);
+      var currentStopTime = Number($('.currentStopMarker')[0].timeValue, 10);
+      markers.sort(function(a, b){
+        return a.childNodes[2].timeValue - b.childNodes[2].timeValue;
+      });
+
+      var bSelectNext = false;
+      var bSelectNextStop = false;
+      
+      if(reverse){
+        for(var i=markers.length-1; i>-1; i--) {
+          checkOrSelect(i);
+        }
+      } else {
+        for(var j = 0; j < markers.length; j++) {
+          checkOrSelect(j);
+        }
+      }
+      
+      function checkOrSelect(i){
+        if(bSelectNextStop){
+          $(markers[i].childNodes[3]).click();
+          bSelectNextStop = false;
+        }
+        if(markers[i].childNodes[3].timeValue == currentStopTime){
+          bSelectNextStop = true;
+        }
+        if(bSelectNext){
+          $(markers[i].childNodes[2]).click();
+          bSelectNext = false;
+        }
+        if(markers[i].childNodes[2].timeValue == currentMarkerTime){
+          bSelectNext = true;
+        }
+      }
+    };
+
+    
+    this.zoomDontShowAgain = function(){
+      $('#zoomInstructionDialog').hide();
+      Troff.dontShowZoomInstructions = true;
+      DB.setZoomDontShowAgain();
+    };
+    
+    this.zoomDialogOK = function(){
+      $('#zoomInstructionDialog').hide();
+    };
+    
     this.zoomOut = function(){
       document.getElementById('blur-hack').focus();
       Troff.zoom(0, Number(document.getElementById('timeBar').max));
@@ -2237,10 +2374,23 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
     
     this.zoomToMarker = function(){
       document.getElementById('blur-hack').focus();
-      Troff.zoom(Troff.getStartTime(), Troff.getStopTime());
+      var startTime = Troff.getStartTime();
+      var endTime = Troff.getStopTime();
+      if(startTime === 0 && endTime == document.getElementById('timeBar').max){
+        if(!Troff.dontShowZoomInstructions){
+          IO.setEnterFunction(function(){
+            Troff.zoomDialogOK();
+            IO.clearEnterFunction();
+          });
+          $('#zoomInstructionDialog').show();
+        }
+      }
+      Troff.zoom(startTime, endTime);
     };
     
     this.zoom = function(startTime, endTime){
+      
+      
       //NOTE all distances is in vh, unless otherwise specified
       var w = window;
       var d = document;
@@ -2346,6 +2496,7 @@ var RateClass = function(){
       'straLastMonthUsage'
     ], function(oData){
        // Check if it is the first time user starts the App
+
       if(!oData.millisFirstTimeStartingApp){
         Troff.firstTimeUser();
         Rate.firstTimeStartingAppFunc();
@@ -2409,6 +2560,9 @@ var RateClass = function(){
   };
   
   this.showRateDialog = function(){
+    IO.setEnterFunction(function(){
+      Rate.rateDialogRateNow();
+    });
     if(navigator.onLine){
       $('#rateDialog').show();
     }
@@ -2416,16 +2570,19 @@ var RateClass = function(){
   
   this.rateDialogNoThanks = function(){
     document.getElementById('blur-hack').focus();
+    IO.clearEnterFunction();
     $('#rateDialog').hide();
     chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_NO_THANKS});
   };
   this.rateDialogAskLater = function(){
     document.getElementById('blur-hack').focus();
+    IO.clearEnterFunction();
     $('#rateDialog').hide();
     chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_ASK_LATER});
   };
   this.rateDialogRateNow = function(){
     document.getElementById('blur-hack').focus();
+    IO.clearEnterFunction();
     $('#rateDialog').hide();
     chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_ALREADY_RATED});
     
@@ -2601,7 +2758,8 @@ var DBClass = function(){
     if(!songObject.speed) songObject.speed = 100;
     if(!songObject.volume) songObject.volume = 100;
     if(!songObject.loopTimes) songObject.loopTimes = 1;
-    if(!songObject.wait) songObject.wait = 1;
+    if(!songObject.wait) songObject.wait = [true, 1];
+    if(!$.isArray(songObject.wait)) songObject.wait = [true, songObject.wait];
     if(!songObject.info ) songObject.info = "";
     if(!songObject.tempo) songObject.tempo = "?";
 
@@ -2627,6 +2785,10 @@ var DBClass = function(){
       if(allKeys.indexOf("straoSongLists")   === -1 ) DB.saveSonglists();
       if(allKeys.indexOf("iCurrentSonglist") === -1 ) DB.setCurrentSonglist(0);
       if(allKeys.indexOf("abCurrentAreas")   === -1 ) DB.setCurrentAreas();
+      if(allKeys.indexOf("zoomDontShowAgain")=== -1 ) {
+        chrome.storage.local.set({"zoomDontShowAgain" : false});
+      }
+      
 //depricated OK     if(allKeys.indexOf("strCurrentTab")    === -1 ) DB.setCurrentTab("songs");
 
 
@@ -2649,6 +2811,7 @@ var DBClass = function(){
           key === "iCurrentSonglist" ||
 //          key === "strCurrentTab" || // depricated OK... remove?
           key === "abCurrentAreas" ||
+          key === "zoomDontShowAgain" ||
           key === "straoSongLists"
         ) continue;
         DB.cleanSong(key, items[key]);
@@ -2691,6 +2854,16 @@ var DBClass = function(){
   this.setCurrentSong = function(path, galleryId){
     var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
     chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
+  };
+  
+  this.setZoomDontShowAgain = function(){
+    chrome.storage.local.set({"zoomDontShowAgain" : true});
+  };
+  this.getZoomDontShowAgain = function(){
+    chrome.storage.local.get("zoomDontShowAgain", function(ret){
+      var bZoomDontShowAgain = ret["zoomDontShowAgain"] || false;
+      Troff.dontShowZoomInstructions = bZoomDontShowAgain;
+    });
   };
 
   this.getAllSonglists = function(){
@@ -2898,7 +3071,8 @@ var DBClass = function(){
       song.currentStartMarker = oState.currentMarker;
     if($('#'+ oState.currentStopMarker).length)
       song.currentStopMarker = oState.currentStopMarker;
-    song.wait = oState.waitBetweenLoops;
+    song.wait = [oState.buttWaitBetweenLoops, oState.waitBetweenLoops];
+    
     var obj = {};
     obj[songId] = song;
     chrome.storage.local.set(obj);
@@ -2977,9 +3151,6 @@ var DBClass = function(){
   });
   };//end setCurrent
 
-
-
-
   this.getMarkers = function(songId, funk) {
   chrome.storage.local.get(songId, function(ret){
     var song = ret[songId];
@@ -3005,7 +3176,7 @@ var DBClass = function(){
       Troff.setLoopTo(song.loopTimes);
       if(song.bPlayInFullscreen !== undefined)
         Troff.setPlayInFullscreen(song.bPlayInFullscreen);
-      Troff.setWaitBetweenLoops(song.wait);
+      Troff.setWaitBetweenLoops(song.wait[0], song.wait[1]);
       Troff.setInfo(song.info);
 //      Troff.setTab(song.tab);
       Troff.setTempo(song.tempo);
@@ -3101,8 +3272,8 @@ var IOClass = function(){
     $('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
     $('#buttImportExportMarker').click(Troff.toggleImportExport);
     $('#buttCancelImportExportPopUpSquare').click(Troff.toggleImportExport);
-    $('#buttExportMarker').click(Troff.exportMarker);
-    $('#buttImportMarker').click(Troff.importMarker);
+    $('#buttExportMarker').click(Troff.exportStuff);
+    $('#buttImportMarker').click(Troff.importStuff);
     $('#buttPauseBefStart').click(Troff.togglePauseBefStart);
     $('#buttStartBefore').click(Troff.toggleStartBefore);
     // Don't update as the user is typing:
@@ -3139,6 +3310,7 @@ var IOClass = function(){
     $('#stopAfter')[0].addEventListener(
       'input', Troff.settAppropriateActivePlayRegion
     );
+    $('#buttWaitBetweenLoops').click(Troff.toggleWaitBetweenLoops);
     $('#waitBetweenLoops').change(Troff.setCurrentWaitBetweenLoops);
     $('#buttStopAfter').click(Troff.toggleStopAfter);
 
@@ -3160,7 +3332,15 @@ var IOClass = function(){
     $('#rateDialogNoThanks').click(Rate.rateDialogNoThanks);
     $('#rateDialogAskLater').click(Rate.rateDialogAskLater);
     $('#rateDialogRateNow').click(Rate.rateDialogRateNow);
+    
+    $('#firstTimeUserDialogTour').click(Troff.firstTimeUserDialogTour);
+    $('#firstTimeUserDialogOK').click(Troff.firstTimeUserDialogOK);
+    
+    $('#zoomInstructionDialogDontShowAgain').click(Troff.zoomDontShowAgain);
+    $('#zoomInstructionDialogOK').click(Troff.zoomDialogOK);
+    
     $('#donate').click(function(){
+      IO.alert("Waiting for Google Wallet");
       document.getElementById('blur-hack').focus();
     });
     $('.loopButt').click( Troff.setLoop );
@@ -3249,11 +3429,9 @@ var IOClass = function(){
       break;
     case 78: // N
       if(event.shiftKey==1){
-        $('.currentMarker').parent().prev().children().eq(2).click();
-        $('.currentStopMarker').parent().prev().children().eq(3).click();
+        Troff.selectNext(/*reverse = */true);
       } else {
-        $('.currentStopMarker').parent().next().children().eq(3).click();
-        $('.currentMarker').parent().next().children().eq(2).click();
+        Troff.selectNext(/*reverse = */ false);
       }
       break;
     case 82: //R (remember Setting)
@@ -3356,7 +3534,7 @@ var IOClass = function(){
       else if(event.altKey==1)
         Troff.incrementInput('#waitBetweenLoops', -1);
       else
-        $('#waitBetweenLoops').val(1);
+        Troff.toggleWaitBetweenLoops();
       break;
     case 90: // Z
       if(event.shiftKey==1)
@@ -3748,16 +3926,16 @@ var IOClass = function(){
           "font-size: 14px;";
 
       if(textBox){
-          $("body").append($("<div id='"+outerId+"' style='"+outerDivStyle+
-                     "'><div id='"+innerId+"' style='"+innerDivStyle+
+          $("body").append($("<div id='"+outerId+"' class='outerDialog'>"+
+            "<div id='"+innerId+"' style='"+innerDivStyle+
                      "' class='secondaryColor'><h2 style='"+hStyle+"'>" + textHead +
                      "</h2><p style='"+pStyle+"' type='text' id='"+textId+
                      "'>"+textBox+"</p> <input type='button' id='"+buttEnterId+
                      "'class='regularButton' value='OK'/></div></div>"));
           $("#"+textId).val(textBox).select();
       } else {
-          $("body").append($("<div id='"+outerId+"' style='"+outerDivStyle+
-                  "'><div id='"+innerId+"' style='"+innerDivStyle+
+          $("body").append($("<div id='"+outerId+"' class='outerDialog'>"+
+            "<div id='"+innerId+"' style='"+innerDivStyle+
                   "' class='secondaryColor'><p style='"+pStyle+"'>" + textHead +
                   "</p><input type='button' id='"+buttEnterId+
                   "' class='regularButton' value='OK'/></div></div>"));
@@ -3839,6 +4017,7 @@ $(document).ready( function() {
   
   DB.cleanDB();
   DB.getAllSonglists();
+  DB.getZoomDontShowAgain();
 //  DB.getCurrentTab(); // depricated OK
   IO.startFunc();
   //FS.startFunc();
