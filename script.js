@@ -882,12 +882,12 @@ var TroffClass = function(){
     iCurrentGalleryId = iGalleryId;
 
     $('#currentArtist').text("Wait for song to load");
-    $('#infoSection, #currentSong, #currentAlbum').hide();
+    $('#currentSong, #currentAlbum').hide();
   };
 
   this.setCurrentSong = function(){
     DB.setCurrentSong(strCurrentSong, iCurrentGalleryId);
-    $('#infoSection').show();
+//    $('#infoSection').show();
   }; // end SetCurrentSong
 
   this.pathToName = function(filepath){
@@ -1070,7 +1070,13 @@ var TroffClass = function(){
     document.getElementById('blur-hack').focus();
     var iArea = $(event.target).index();
     event.target.classList.toggle('active');
-    $('#areaParent').children().eq(iArea).toggle();
+
+    if(iArea == 4)
+      $('#userNoteSection').toggle();
+    if(iArea == 5)
+      $('#infoSection').toggle();
+    else
+      $('#areaParent').children().eq(iArea).toggle();
     DB.setCurrentAreas();
   };
   
@@ -2888,14 +2894,27 @@ var DBClass = function(){
         It is not used a single time after they open the app with v1.0 
         so the standard is without the ret[] = ret[] || ...
       */
-      ret['abCurrentAreas'] = ret['abCurrentAreas'] || [false,true,false,true];
+      ret['abCurrentAreas'] = ret['abCurrentAreas'] || [false,true,false,true,true,true];
       $(ret['abCurrentAreas']).each(function(index, val){
+        if(index == 4){
+          
+        }
         if(val){
           $('#areaSelector').children().eq(index).addClass('active');
-          $('#areaParent').children().eq(index).show();
+          if(index == 4)
+            $('#userNoteSection').show();
+          if(index == 5)
+            $('#infoSection').show();
+          else
+            $('#areaParent').children().eq(index).show();
         } else {
           $('#areaSelector').children().eq(index).removeClass('active');
-          $('#areaParent').children().eq(index).hide();
+          if(index == 4)
+            $('#userNoteSection').hide();
+          if(index == 5)
+            $('#infoSection').hide();
+          else
+            $('#areaParent').children().eq(index).hide();
         }
       });
     });
