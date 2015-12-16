@@ -84,21 +84,20 @@ body{
 
 h1, h2, h3, h4, h5, h6{
   color: rgb(50, 50, 50);
-  font-weight: bold;
 }
 
 
 h1 {
-  font-weight: 200;
-  color: black;
-  align-self: baseline;
+/*  font-weight: 200;
   margin: 4px;
+  color: black; */
+  align-self: baseline;
   margin-bottom: 0;
 }
 
 h2{
-  font-family: helvetica;
-  font-size: 18px;
+/*  font-family: helvetica;*/
+/*  font-size: 18px; */
   margin-right: 3px;
 }
 
@@ -268,9 +267,8 @@ body section{
 .sliderRange{
     -webkit-appearance: slider-vertical;
     appearance: slider-vertical;
-    height: 40vh;
-    height: calc(100vh - 20px);
     width: 15px;
+    min-height: 42px;
 }
 
 .doubleSliders{
@@ -339,6 +337,7 @@ body section{
   flex: 1; 
   margin: 3px 0;
   outline: none;
+  resize: none;
 /*  width: 300px; */
 
   border: 4px solid lightblue; 
@@ -604,9 +603,6 @@ input, button, .linkButton{
   width: 400px;
 }
 
-.marginDialog * {
-  margin: 4px 0;
-}
 
 table {
   border-collapse: separate;
@@ -679,6 +675,11 @@ table {
   white-space: normal;
 }
 
+.maxMinWidth {
+  max-width: 300px;
+  min-width: 100px;
+}
+
 .maxWidthParent * {
   max-width: 200px;
 }
@@ -700,14 +701,12 @@ table {
   cursor: default;height: 18px;
   line-height: normal;
 }
-*/
+
 .bgEasyRead{
   background: lightblue;
 }
+*/
 
-.marginBottom{
-  margin-bottom: 4px;
-}
 
 
 
@@ -743,9 +742,22 @@ table {
   text-align: left;
 }
 
+.marginDialog * {
+  margin: 4px 0;
+}
+
+.marginBottom{
+  margin-bottom: 4px;
+}
+
 .margin{
   margin: 4px;
 }
+
+.marginLR {
+  margin: 0 4px;
+}
+
 .noVMargin{
   margin-top: 0;
   margin-bottom: 0;
@@ -788,6 +800,10 @@ input[type="button"]:active, button:active, .linkButton:active{
 }
 */
 
+.bold {
+  font-weight: bold;
+}
+
 .onOffButton:focus,   .loopButt:focus{  outline: none;}
 .onOffButton:hover,   .loopButt:hover{  outline: solid 2px lightgray;}
 .onOffButton:active,  .loopButt:active{ outline: solid 4px lightgray;}
@@ -795,8 +811,8 @@ input[type="button"]:active, button:active, .linkButton:active{
 .regularButton:hover{   outline: solid 2px #b0bec5; /*regularButton*/ ;}
 .regularButton:active{  outline: solid 4px #b0bec5; /*regularButton*/ ;}
 
-.active:hover {   outline: solid 2px #cdd422;  ;}
-.active:active{  outline: solid 4px #cdd422;  ;}
+.active:hover {outline: solid 2px #AAAF2B;}
+.active:active{outline: solid 4px #AAAF2B;}
 
 .selected:hover, 
 .currentLoop:hover, 
@@ -858,10 +874,11 @@ input[type="button"]:active, button:active, .linkButton:active{
 .backgroundColor, .extraBorder{
   background-color: #bccbde;
 }
-.primaryColor{
+.primaryColor, .bgEasyRead{
   background-color: #c2dde6;
+  background: #c2dde6;
 }
-.secondaryColor, .areaParent div, .popUpSquare, .innerDialog{
+.secondaryColor, .areaParent > div, .popUpSquare, .innerDialog{
   background-color: #e6e9f0;
 }
 .accentColor1, .selected, .currentLoop, .currentMarker, .currentStopMarker{
@@ -872,6 +889,8 @@ input[type="button"]:active, button:active, .linkButton:active{
 }
 .accentColor3, .active{
   background-color: #cdd422;
+  background-color: #AAAF2B;
+/*  background-color: #BBCC22; */
 }
 
 
@@ -883,6 +902,7 @@ input[type="button"]:active, button:active, .linkButton:active{
     color: orange;  /* accentColor3, active */
     color: #cdd422;
     color: #AAAF2B; /* lite mörkare tolkning av accentColor3  ... jaja...*/
+/*    color: #BBCC22; */
 }
 .play{
     color: green; /*  accentColor1, selected... */
@@ -891,6 +911,5 @@ input[type="button"]:active, button:active, .linkButton:active{
 
 
 /* end "Anton & Irene" color scheeme */
-
 
 
