@@ -26,110 +26,664 @@
   <link rel="stylesheet" type="text/css" href="assets/reset.css" />
   <link rel="stylesheet" type="text/css" href="style.css" />
   
-  <!--
-  <style type="text/css">
-    body, td {font-family: Verdana, Arial, sans-serif; font-size: 14px;}
-    tr:nth-child(even) {
-    background-color: #aabbcc;
+  <script src="common.js"></script>
+  <style>
+    body{
+      display: flex;
+      flex-direction: row;
     }
-    tr:nth-child(odd) {
-    background-color: #a4c5de;
+    nav{
+      background-color: green;
+      display: flex;
+      flex-direction: column;
     }
-    li:nth-child(even) {
-    background-color: #aabbcc;
+    article, nav, footer, header {
+      background-color: #e6e9f0;
+      margin: 8px;
+      padding: 16px;
+      margin-bottom: 0;
     }
-    li:nth-child(odd) {
-    background-color: #a4c5de;
+    header {
+      display: flex;
+      font-size: 20px;
+      padding: 0px;
     }
-    table, ul, ol {
-    width: 90vw;
+    nav, header {
+      margin-right: 0;
     }
-    ul, table, th, td {
-    list-style: none inside none;
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
-    padding: 2px 0px;
+    h1 {
+      align-self: center;
+      margin-left: 24px;
     }
-    td, tr{
-    margin: 0px;
-    padding: 0px;
-    border: 0px;
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #003366;
     }
-    li, tr {
-    padding: 2px 0px;
-    margin-top: 2px;
+    h3 {
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 12px;
+      margin-bottom: 4px;
     }
-    li, td{
-    padding: 2px 4px;
+    h1::first-letter, h2::first-letter, h3::first-letter, nav a::first-letter {
+      text-transform: uppercase;
     }
-    a{
-        display: inline;
+    p, ul, li, table {
+      font-size: 14px;
+      margin-bottom: 8px;
+      margin-top: 0;
+    }
+    section {
+      margin: 0px !important;
+      padding: 0px !important;
+    }
+    
+    header, footer {
+      background-color: #003366;
+      color: white;
+    }
+    header h1, footer p {
+      color: white;
+    }
+    .note {
+      background-color: #c2dde6;
+      margin: 4px 0;
+      margin-bottom: 8px;
+      padding: 12px;
+    }
+    a {
+      margin: 6px 0;
+      color: #003366;
+    }
+    .subLink {
+      color: black;
+      margin: 2px;
+      margin-left: 8px;
+      font-size: 14px;
+    }
+    .selfMaxWidth {
+      max-width: 213px;
+    }
+    .white {
+      color: white;
+    }
+    .textCenter {
+      text-align: center;
     }
   </style>
--->
-<!-- style 2 -->
-<style>
-  body{
-    display: flex;
-    flex-direction: row;
-  }
-  header{
-    height: 60px;
-    background-color: pink;
-  }
-  nav{
-    background-color: green;
-    display: flex;
-    flex-direction: column;
-  }
-</style>
 </head>
 
 <body class="backgroundColor">
-  <section>
-  <header>header - Trofflogo</header>
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">Contact</a>
-    <a href="#">About</a>
-    <a href="#" onclick="return addButton()">Add another button →</a>
+  <input id="blur-hack" type="text"
+    style="position: absolute; opacity: 0; top:-100px;" />
+    
+  <section class="flexCol flexScroll selfMaxWidth">
+  <header>
+    <img src="assets/trofflogo48.png" alt="logo"></img>
+    <h1>Troff - Help</h1>
+  </header>
+  <nav class="flexCol flexScroll">
+    <a href="#whatIsTroff">What is Troff</a>
+      <a href="#about" class="subLink">About this guide</a>
+    <a href="#howToAddMedia">Add and play music or movies</a>
+    <a href="#settings">The settings area</a>
+      <a href="#markers" class="subLink">Markers, what are those?</a>
+      <a href="#playPartOfSong" class="subLink">Play only part of a song</a>
+      <a href="#playFullSong" class="subLink">Play entire song</a>
+      <a href="#moveMarkers" class="subLink">move markers</a>
+      <a href="#exportImport" class="subLink">Export and import settings</a>
+      <a href="#zoomOnTheTimeline" class="subLink">Zoom in the timeline</a>
+      <a href="#startBeforeStopAfter" class="subLink">start before and stop after</a>
+      <a href="#loop" class="subLink">Play more than once</a>
+      <a href="#pauses" class="subLink">Pause and wait</a>
+      <a href="#volumeAndSpeed" class="subLink">Volume and speed</a>
+    <a href="#infoArea">The info area</a>
+      <a href="#tapTempo"   class="subLink">Tap tempo</a>
+      <a href="#songInfo"   class="subLink">Song info</a>
+      <a href="#markerInfo" class="subLink">Marker info</a>
+    <a href="#countdown">The countdown area</a>
+    <a href="#songsArea">The songs area</a>
+    <a href="#songLists">The song lists area</a>
+      <a href="#addFolders" class="subLink">Add folders</a>
+    <a href="#states">The states area</a>
+      <a href="#whatIsStates" class="subLink">What is states</a>
+      <a href="#howToUseStates" class="subLink">How to use states</a>
+    <a href="#toggleAreas">Toggle areas</a> 
+    <a href="#howToPlayMovies">Play movies</a>
+      <a href="#fullscreen"   class="subLink">Fullscreen</a>
+      <a href="#frameByFrame" class="subLink">Frame by frame stepping</a>
+    <a href="#share">Tell your freinds about Troff</a>
+    <a href="#contribute">Donate, like us and more</a>
+    <a href="#keyboardShortcuts">Keyboard shortcuts</a>
+    <a href="#footer">Contact a human</a>
   </nav>
   </section>
-  <section>
-  <article>
-    good content!
-  </article>
-  <footer>footer</footer>
+  <section class="flexCol flexScroll">
+    
+  <article id="whatIsTroff">
+    <h2>What is Troff</h2>
+    <p>
+      Troff is a media player that let you loop a part of a song, 
+      slow it down and create markers on the song timeline.
+    </p>
+    <p>
+      It is designed for practicing with music, it is perfect for dancers working
+      on a choreography or for musicians learning to play a song.
+    </p>
+    <h3 id="about">About this guide</h3>
+    <p>
+      This guide often uses the word "song" instead of "song or movie".
+    </p>
+    <p>
+      Keyboard shortcuts will be written inside of "()".
+    </p>
+    <p>
+      Troff is layed out in different sections or areas. 
+      They will be refered to as areas in this guide.
+    </p>      
+      
+    <!--
+Troff helps you with this by adding markers to the song timeline, making it easy to find the parts of the song you need to work on! 
+
+Adding a marker before and after a certain part of a song let you loop that part of the song automatically. This way you get the maximum amount of practice time.
+
+Troff lets you easily change the tempo of the song, to let you work on harder parts slowly before you are ready for 100% or even faster!
+
+Need to learn a routine from a movie? No problem; now Troff supports movies!
+You can still use markers, change tempo and loop sequences with the film clip.
+
+Troff is not connected to Drive, it plays your songs from your local hard-drive. This way it will work as well offline as online!
+
+Follow Troff on facebook.com/troffmusic to get the latest information!
+-->
+  </article> <!-- What is Troff -->
+  <article id="howToAddMedia">
+    <h2>How to add and play music or movies</h2>
+    <p>
+      When you start Troff, if you don't have any songs in the Songs area,
+      you must add a folder on your computer with songs in it. 
+      Do this by clicking the "Select folders" button in the Songs area, 
+      select one of the suggestion-folders or add a new folder by clicking 
+      "Add Location...". When you are done, click "Apply" and you will se all
+      the songs from those folders in the songs area. 
+    </p>
+    <p>
+      When you have songs in the songs area, 
+      click a song and it will be selected. This is indicated by it becoming
+      purple. When the song is loaded, the text "Wait for song to load" written
+      in the top section, will be replaced by the song name, artist and album.
+    </p>
+    <p class="note">
+      Note: If the text "Wait for song to load" does not disapear, 
+      then Troff might not be able to play that particular song.
+      Try to convert the song to mp3 (or movies to mp4) and try again.
+    </p>
+    <p>
+      To play the song, press the round play-button in the top area or (Space), 
+      the song will then wait 3 seconds before start. If you don't want
+      to wait 3 seconds, either press the Enter-key, 
+      or continue to read this guide.
+    </p>
+  </article> <!-- add and play music -->
+  <article id="settings">
+    <h2>The settings area</h2>
+      <p>
+        The settings area is where you configure Troff to play the current
+        song the way you like it. Here you decide how fast the song will 
+        be played, how many times, which part of the song that will be played
+        and more.
+      </p>
+    <h3 id="markers">Markers - what are those?</h3>
+    <p>
+      Markers are labels that you can add to the timeline.
+      The timeline in Troff is vertical and streaches the full heigth of the
+      player. 
+      The markers contains text, and can be colorized so that you easy can
+      find specific parts of the song later.
+    </p>
+    <p>
+      To add a marker, press "Add marker!" or (M), then the "create new marker"
+      dialog appears, here you can write the marker name (will be visible 
+      on the timeline).
+    </p>
+    <p>
+      The marker will be added to the timeline where the cursor was when you 
+      pressed the button, but the location of the marker can be adjusted in the 
+      "create new marker" dialog.
+    </p>
+    <p>
+      In the info-area you can add more info to the marker. 
+      This will not take up space on the timeline but will be easily 
+      accessible, more on the info at the 
+      <a href="#infoArea">info part</a>.
+      This dialog also lets you decide the color of the marker.
+    </p>
+    <p>
+      You can always press the "E" button next to a marker to bring up 
+      the same dialog to edit the marker.
+    </p>
+    <h3 id="playPartOfSong">Play only part of a song</h3>
+    <p>
+      If you want to play only a part of a song, click the marker where you 
+      want to start and the marker will be selected (indicated by the purple 
+      color). Then click the "stop" tab next to the marker where you want Troff
+      to stop playing, the purple color indicates that the "stop" tab is
+      selected.
+      When you press "play" only the selected part of the song will be played, 
+      the selected part is shown in purple on the timeline.
+  
+    <p>
+      This is a great way to focus on tricky parts of the song.
+    </p>
+    <p class="note">
+      Note: You might have noticed that the purple color of the timeline 
+      changed when 
+      you select start and stop-markers. The purple part is the 
+      "active playing region" and indicates simply where Troff will 
+      start and end.
+    </p>
+    <h3 id="playFullSong">play full song</h3>
+      <p>
+        If you have a small part selected and want to play the whole song
+        you can either press the name of the first marker, and then the 
+        stop-button of the last marker, or you can press "play full song" or (U)
+        to select the first and last marker.
+      </p>
+    <h3 id="moveMarkers">move markers</h3>
+    <p>
+      There are a number of ways in which you can change the time of, or
+      move, a marker.
+    </p>
+    <p>
+      If you press (Shift + Up/Down), (Alt + Up/Down) or (Shift + Alt + Up/Down)
+      the selected marker will move Up/Down by 1, 0.08 or 8 seconds 
+      respectively.
+    </p>
+    <p>
+      You can also click the edit button of the marker, 
+      and change the time there.
+    </p>
+    <p>
+      If you click "move markers" you can move all markers at the same time,
+      or just the markers between the two selected ones 
+      (including the selected markers).
+    </p>
+    <h3 id="exportImport">Export and import</h3>
+      <p>
+        If you want to share your markers to someone, 
+        the members of you show-team or band for instance, press "I/E" and 
+        the import export dialog appears.
+      </p>
+      <p class="note">
+        Note: When you export, not only will your markers, marker-info,
+        marker-color
+        be exported, but the <a href="#states">states</a>,
+        settings and <a href="#songInfo">song-info</a> as well. <br />
+        More on that later. 
+      </p>
+      <p>
+        When you are exporting you will get a long text-string. 
+        Copy the text and share it with your friends that want to import 
+        your settings.
+      </p>
+      <p>
+        To import settings, click on "I/E" and then "import", paste the 
+        the text-string in the text-box and click ok.
+      </p>
+      <p class="note">
+        Note: If you miss a single sign or character when copying or pasting, 
+        the import will not work. Then, just try again.
+      </p>
+    <h3 id="zoomOnTheTimeline">Zoom on the timeline</h3>
+    <p>
+      In Troff, you can zoom in on the timeline which makes it easier to for 
+      example focus on a 3 minute song in an 1 hour movie, 
+      or just to focus on a few bars in a song.
+    </p>
+    <p>
+      You zoom by pressing "Zoom" or (Z), this will zoom the timeline to the 
+      active playing region, hence select a marker before and after the area you
+      want to zoom to and press (Z).
+    </p>
+    <p>
+      To zoom out, either select the first and last marker 
+      (by "play full song" or (U) ) or press "zoom out" (shift + Z)
+    </p>
+    
+    
+    <h3 id="startBeforeStopAfter">Start before and stop after</h3>
+    <p>
+      One way to work with markers is to set a marker at the start of every bar.
+      Then have good short names for the markers and maybe colorize them in a 
+      way so that they are easy to understand.
+      This way, it is easy to find the particular part you want to practice. 
+      However, you might not want Troff to start playing from the first beat, 
+      but rather 3 seconds or so before, so that you can prepare.
+    </p>
+    <p>
+      Troff lets you do exactly this with the "start before" functionality.
+      If you toggle "start before" or (B) you will se that the 
+      "active playing region" will change. If "start before" is active, 
+      Troff will start to play the song a few seconds before the selected 
+      marker.
+    </p>
+    <p>
+      The number of seconds can be changed in the start before-number box, 
+      or can be increased or decreased by (shift + B) and (alt + B) 
+      respectively.
+    </p>
+    <p>
+      "stop after" works in the same way but for the stop-selected marker.
+    </p>
+    <h3 id="loop">Play more than once</h3>
+    <p>
+      You can loop the selected playing region a number of times 
+      by pressing the number of times you want it to play. 
+    </p>
+    <p>
+      If you press "&infin;", Troff will loop the selected part of the song
+      until you pause it.
+    </p>
+    <h3 id="pauses">Pause and wait</h3>
+      <p>
+        As default, Troff waits 3 seconds before starting to play a song. 
+        This way you can hit play, and then have time to get in position
+        before the song starts.
+      </p>
+      <p>
+        You can change the number of seconds Troff pauses before starting to
+        play by changing the number in the "pause before"-number box 
+        or by (shift + P) and (alt + P).
+      </p>
+      <p>
+        You can also quickly toggle if Troff should pause or not by pressing
+        "pause before" (P).
+      </p>
+      <p>
+        "Wait between" works in the same way as "pause before" but it changes
+        the time Troff will wait between loops. It lets you catch your breath
+        before doing it again!
+      </p>
+    <h3 id="volumeAndSpeed">Volume and speed</h3>
+    <p>
+      Troff let you control the volume and speed of the song with a slider, 
+      or by using the "+" and "-" buttons.
+    </p>
+    <p>
+      If you press "Volume" (V) or "Speed" (S) you will reset the values to 
+      100%.
+    </p>
+    <p>
+      You can also increase or decrease the volume or speed by 
+      (shift/alt + V) or (shift/alt + S) respectively. 
+    </p>
+  </article> <!-- Settings -->
+  <article id="infoArea">
+    <h2>The info area</h2>
+    <p>
+      The info area is an area where you can take and read notes regarding 
+      the current song or marker and check the tempo of a song.
+      If you play a movie in Troff, this will be displayed in the info area.
+    </p>
+    <h3 id="tapTempo">Tap tempo</h3>
+    <p>
+      If you repeatedly tap "Tempo" (T) to the tempo of the song, 
+      Troff will calculate the tempo and display it. This tempo will be saved
+      for the particular song. 
+    </p>
+    <p class="note">
+      Note: Troff will wait 3 seconds before saving the value, 
+      so don't change song during that time!
+    </p>
+    <h3 id="songInfo">Song info</h3>
+    <p>
+      In the song info, you can write notes with and information regarding 
+      the current song. These nots will be saved per song and are
+      easily accessable by selecting the song.
+    </p>
+    <h3 id="markerInfo">Marker info</h3>
+    <p>
+      The marker info works like the song info, but the text written there
+      will be saved per marker. Hence, when another marker is selected, 
+      the text will change.
+    </p>
+    <p>
+      This is a great way to write things that you want to remember for 
+      a specific part of the song.
+    </p>
+  </article> <!-- the info area -->
+  <article id="countdown">
+    <h2>The countdown area</h2>
+    <p>
+      The countdown area shows two things: <br />
+      The top-number shows the number of seconds until the song will start. 
+        It will count down during the "pause before" and the "wait between".
+      <br />
+      The bottom-number shows the number of loops that are left.
+        It will count down for each time one loop is finished.
+    </p>
+    <p class="note">
+      Note: The order of the two numbers match the order that you control
+      these values in the Settings-area.
+    </p>
+  </article> <!-- countdown -->
+  <article id="songsArea">
+    <h2>The songs area</h2>
+    <p>
+      The song area is where you can select which song to play.
+      The selected song is purple. If you can't find the song you want,
+      it might be in another song list, or have been removed from the computer.
+    </p>
+  </article> <!-- songs Area -->
+  <article id="songLists">
+    <h2>The song lists area</h2>
+    <p>
+      You can create song lists to only show a few songs in the songs area.
+      Click "New song list", give it a name and select which songs / folders
+      to be added.
+    </p>
+    <h3 id="addFolders">Add folders</h3>
+    <p>
+      If you only add songs, only those songs will be in the song list, 
+      but if you add a folder, all the songs in that folder will be 
+      in the song list. If new songs are added to the folder,
+      they will appear in the song list the next time you start Troff!
+    </p>
+  </article> <!-- songLists -->
+  <article id="states">
+    <h2>The states area</h2>
+    <h3 id="whatIsStates">What is states</h3>
+    <p>
+      A "state" is something that saves all the values in the settings-area
+      as well as what markers are selected.
+    </p>
+    <p>
+      To understand when this is usefull, imagine the following senario
+    </p>
+    <p>
+      Lets say you usualy practice the guitarr solo of the song. 
+      The you always set the same markers, always set start before to 
+      10 seconds and pause before set to off.
+    </p>  
+    <p>
+      Lets say you also practise the ending of the song. 
+      Then you have a diffrent set of markers and start before is set to
+      3 seconds, and pause befor is set to 3 seconds.
+    </p>
+    <p>
+      States lets you quickly switch between these.
+    </p>
+    <h3 id="howToUseStates">How to use a states</h3>
+    <p>
+      Select the markers and settings you want to save then click 
+      "remember state". Name the state and press "OK". 
+    </p>
+    <p>
+      The state will appear as a button in the states list. 
+      When you have another marker selected, you can simply press this state
+      to recall the state. 
+    </p>
+    <p>
+      Remove a state by pressing the "R"-button next to it.
+    </p>
+  </article> <!-- states -->
+  <article id="toggleAreas">
+    <h2>Toggle areas</h2>
+    <p>
+      The areas explained in this guide can be toggled on and off. 
+      Press the buttons in the top section of the area you want to toggle.
+    </p>
+    <p class="note">
+      Note: If an areas is visible or not is remembered per song. 
+      If you use states on one song, but not Countdown, and the opposite
+      for another song, you don't have to toggle the areas every time.
+    </p>
+  </article> <!-- toggle areas -->
+  <article id="howToPlayMovies">
+    <h2>Play movies</h2>
+    <p>
+      If you select a movie in the song list that Troff is able to show, 
+      the movie will be shown in the info area.
+    </p>
+    <h3 id="fullscreen">Fullscreen</h3>
+    <p>
+      You can at any time toggle fullscreen by the (F)-key.
+    </p>
+    <p>
+      The "Play in Fullscreen"-button does not toggle fullscreen, 
+      but toggles whether or not Troff should enter fullscreen on play
+      and exit fullscreen on pause.
+    </p>
+    <p class="note">
+      Note: If you pause Troff and Troff exits fullscreen 
+      (because "play in fillscreen" is active), simply press (F) to enter 
+      fullscreen again.
+    </p>
+    <h3 id="frameByFrame">Frame by frame stepping</h3>
+    <p>
+      Troff lets you examine in detail what is happening in the moveie by
+      allowing frame by frame stepping:
+      <ul>
+        <li>
+          Use (alt + left / right arrow) to step one frame forward or backward.
+        </li>
+        <li>
+          Use (left / right arrow) to step one second forward or backward.
+        </li>
+        <li>
+          Use (shift + left / right arrow) to step 10 seconds forward or backward.
+        </li>
+      </ul>
+    </p>
+  </article> <!-- howToPlayMovies -->
+  <article id="share">
+    <h2>Tell your freinds about Troff</h2>
+    <p>
+      I would be very gratefull if you could tell all your freinds about Troff.
+      The more people using Troff the merrier! 
+    </p>
+    <p>
+      Use the following button to send an email about Troff:
+    </p>
+    <button class="svgButt shareClass regularButton" title="Share the link to this app with your freinds via email">
+      <svg version="1.1" style="height=26px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
+        <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
+        <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
+      </svg>
+    </button>
+    <p>
+      ... or share this link via your social networks:
+      <a target=_blank 
+        href="https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl">
+        https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl
+      </a>
+    </p>
+    <p>
+      Thank you!
+    </p>
+  </article> <!-- tell your freinds about Troff -->
+  <article id="contribute">
+    <h2>Donate, like us and more</h2>
+    <p>
+      If you like Troff, please take a moment to rate it at the
+      <a target=_blank 
+        href="https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews">
+        Chrome web store
+      </a>. 
+    </p>
+    <p>
+      If you want to contribute to the development of Troff, 
+      feel free to donate here by clicking the donate button in the lower
+      left corner of Troff. 
+    </p>
+    <p>
+      All donations are handeled via google wallet.
+    </p>
+    <p>
+      If you have questions, sugestions or feadback, 
+      please don't hessitate to send an email to 
+      <a target=_blank href="mailto:slimsimapps@gmail.com">
+        slimsimapps@gmail.com</a>
+      </p>
+  </article> <!-- contribute, donate like and more -->
+  <article id="keyboardShortcuts">
+    <h2>Keyboard shortcuts</h2>
+    <table>
+      <tr>  <td>Space</td><td>Play/pause (with countdown, from marker)</td></tr>
+      <tr>  <td>Return</td><td>Play/pause (without countdown, from where the cursor is)</td></tr>
+      <tr>  <td>Esc</td><td>Stop song</td></tr>
+      <tr>  <td>M</td><td>  Set Marker</td> </tr>
+      <tr>  <td>E</td><td>  Edit the marker info text</td> </tr>
+      <tr>  <td>1-9</td><td>Set number of times to loop song</td> </tr>
+      <tr>  <td>0</td><td>  Loop ''Infinit'' (&infin;) many times</td> </tr>
+      <tr>  <td>P</td><td>  Toggle ''Pause bef start''</td> </tr>
+      <tr>  <td>B</td><td>  Toggle ''Start Before''</td> </tr>
+      <tr>  <td>A</td><td>  Toggle ''Stopp After''</td> </tr>
+      <tr>  <td>F</td><td>  Toggle fullscreen</td> </tr>
+      <tr>  <td>U</td><td>  Play the entire (full) song</td> </tr>
+      <tr>  <td>T</td><td>  Tapp repeatedly to calculate tempo of song</td> </tr>
+      <tr>  <td>V</td><td>  Set Volume to 100%</td> </tr>
+      <tr>  <td>S</td><td>  Set Speed to 100%</td> </tr>
+      <tr>  <td>W</td><td>  Set Wait to 1 second</td> </tr>
+      <tr>  <td>R</td><td>  Remember current state to recall it later</td> </tr>
+      <tr>  <td>Z</td><td>  Zoom in to only see the active playing region (the purple part of the timeline), use shift+Z to zoom out to see the whole timeline</td> </tr>
+      <tr>  <td>Left/Right Arrows</td><td> Use right and left arrows to step 1 sec forward/backward in song/movie, use shift or alt to move 10 seconds / one frame respectively</td> </tr>
+      <tr>  <td>Up/Down Arrows   </td><td> Move the selected marker up or down, 1 sec, 1 frame or 10 seconds with alt/shift/(alt+shift) + Upp/down respectively.</td> </tr>
+      <tr>  <td>N</td><td>  Move to next pair of markers (use shift + N to move to previous)</td> </tr>
+    </table>
+  </article> <!-- Keyboard shortcuts -->
+  <footer id="footer" class="white flexRow">
+    <div class="flexCol">
+      <p>
+        Contact a human: 
+        <a class="white" target=_blank href="mailto:slimsimapps@gmail.com">
+          slimsimapps@gmail.com</a>.
+      </p>
+      <p>
+        Rate us at the 
+        <a class="white" target=_blank 
+          href="https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews">
+          Chrome web store</a>.
+      </p>
+      <p>
+        Like us on 
+        <a class="white" target=_blank 
+          href="https://www.facebook.com/troffmusic">facebook</a>.
+      </p>
+      <p>
+        Happy training!
+      </p>
+    </div>
+    <div class="flexCol white center flexOne">
+      <p class="white Big">Troff</p>
+      <p class="white Big textCenter">Training with music</p>
+    </div>
+  </footer>
   </section>
 </body>
 <!--
-<body bgcolor="#ffffff" leftmargin="20" topmargin="20" marginheight="20" marginwidth="20">
-  <h2>Tips, trix and tutoring for Troff</h2>
-  <table>
-    <tr>  <td>Space</td><td>Play/pause (with countdown, from marker)</td></tr>
-    <tr>  <td>Return</td><td>Play/pause (without countdown)</td></tr>
-    <tr>  <td>Esc</td><td>Stop song</td></tr>
-    <tr>  <td>M</td><td>  Set Marker</td> </tr>
-    <tr>  <td>E</td><td>  Edit the current info text (either marker or song)</td> </tr>
-    <tr>  <td>1-9</td><td>Set number of times to loop song</td> </tr>
-    <tr>  <td>0</td><td>  Loop ''Infinit'' (&infin;) many times</td> </tr>
-    <tr>  <td>P</td><td>  Toggle ''Pause bef start''</td> </tr>
-    <tr>  <td>B</td><td>  Toggle ''Start Before''</td> </tr>
-    <tr>  <td>A</td><td>  Toggle ''Stopp After''</td> </tr>
-    <tr>  <td>F</td><td>  Toggle fullscreen</td> </tr>
-    <tr>  <td>U</td><td>  Play the entire (full) song</td> </tr>
-    <tr>  <td>T</td><td>  Tapp repeatedly to calculate tempo of song</td> </tr>
-    <tr>  <td>V</td><td>  Set Volume to 100%</td> </tr>
-    <tr>  <td>S</td><td>  Set Speed to 100%</td> </tr>
-    <tr>  <td>W</td><td>  Set Wait to 1 second</td> </tr>
-    <tr>  <td>R</td><td>  Remember current state to recall it later</td> </tr>
-    <tr>  <td>Z</td><td>  Zoom in to only see the active playing region (the purple part of the timeline), use shift+Z to zoom out to see the whole timeline</td> </tr>
-    <tr>  <td>Left/Right Arrows</td><td> right and left arrows to step 1 sec forward/backward in song/movie, use shift or alt to move 10 seconds / one frame respectively</td> </tr>
-    <tr>  <td>Up/Down Arrows   </td><td> move the selected marker up or down, 1 sec, 1 frame or 10 seconds with alt/shift/(alt+shift) + Upp/down respectively.</td> </tr>
-    <tr>  <td>N</td><td>  move to next pair of markers (use shift + N to move to previous)</td> </tr>
-  </table>
-
   <ul>
     <li>Use space or enter, as primary button.</li>
     <li>Select the name of a marker and "Stop" of another marker to only play a part of the song.</li>
@@ -197,5 +751,33 @@
       Chrome Web Store</a>, thanks!
   </p>
 </body>
+-->
+
+<!--
+<body bgcolor="#ffffff" leftmargin="20" topmargin="20" marginheight="20" marginwidth="20">
+  <h2>Tips, trix and tutoring for Troff</h2>
+  <table>
+    <tr>  <td>Space</td><td>Play/pause (with countdown, from marker)</td></tr>
+    <tr>  <td>Return</td><td>Play/pause (without countdown)</td></tr>
+    <tr>  <td>Esc</td><td>Stop song</td></tr>
+    <tr>  <td>M</td><td>  Set Marker</td> </tr>
+    <tr>  <td>E</td><td>  Edit the current info text (either marker or song)</td> </tr>
+    <tr>  <td>1-9</td><td>Set number of times to loop song</td> </tr>
+    <tr>  <td>0</td><td>  Loop ''Infinit'' (&infin;) many times</td> </tr>
+    <tr>  <td>P</td><td>  Toggle ''Pause bef start''</td> </tr>
+    <tr>  <td>B</td><td>  Toggle ''Start Before''</td> </tr>
+    <tr>  <td>A</td><td>  Toggle ''Stopp After''</td> </tr>
+    <tr>  <td>F</td><td>  Toggle fullscreen</td> </tr>
+    <tr>  <td>U</td><td>  Play the entire (full) song</td> </tr>
+    <tr>  <td>T</td><td>  Tapp repeatedly to calculate tempo of song</td> </tr>
+    <tr>  <td>V</td><td>  Set Volume to 100%</td> </tr>
+    <tr>  <td>S</td><td>  Set Speed to 100%</td> </tr>
+    <tr>  <td>W</td><td>  Set Wait to 1 second</td> </tr>
+    <tr>  <td>R</td><td>  Remember current state to recall it later</td> </tr>
+    <tr>  <td>Z</td><td>  Zoom in to only see the active playing region (the purple part of the timeline), use shift+Z to zoom out to see the whole timeline</td> </tr>
+    <tr>  <td>Left/Right Arrows</td><td> right and left arrows to step 1 sec forward/backward in song/movie, use shift or alt to move 10 seconds / one frame respectively</td> </tr>
+    <tr>  <td>Up/Down Arrows   </td><td> move the selected marker up or down, 1 sec, 1 frame or 10 seconds with alt/shift/(alt+shift) + Upp/down respectively.</td> </tr>
+    <tr>  <td>N</td><td>  move to next pair of markers (use shift + N to move to previous)</td> </tr>
+  </table>
 -->
 </html>
