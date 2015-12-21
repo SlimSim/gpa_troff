@@ -961,13 +961,11 @@ var TroffClass = function(){
     importStuff, promps for a string with markers
   */
   this.importStuff = function(){
-    console.log("importStuff")
     Troff.toggleImportExport();
     IO.prompt("Please paste the text you recieved to import the markers",
               "Paste text here",
               function(sImport){
       var oImport = JSON.parse(sImport);
-      console.log("oImport", oImport)
       if( oImport.strSongInfo !== undefined && 
           oImport.aoStates !== undefined && 
           oImport.aoMarkers !== undefined ){
