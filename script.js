@@ -961,12 +961,16 @@ var TroffClass = function(){
     importStuff, promps for a string with markers
   */
   this.importStuff = function(){
+    console.log("importStuff")
     Troff.toggleImportExport();
     IO.prompt("Please paste the text you recieved to import the markers",
               "Paste text here",
               function(sImport){
       var oImport = JSON.parse(sImport);
-      if(oImport.strSongInfo && oImport.aoStates && oImport.aoMarkers){
+      console.log("oImport", oImport)
+      if( oImport.strSongInfo !== undefined && 
+          oImport.aoStates !== undefined && 
+          oImport.aoMarkers !== undefined ){
         importMarker(oImport.aoMarkers);
         importSonginfo(oImport.strSongInfo);
         importStates(oImport.aoStates);
@@ -2631,23 +2635,6 @@ var RateClass = function(){
 var DBClass = function(){
   
   this.cleanSong = function(songId, songObject){
-    function countObjectLength(foo){
-      var count = 0;
-      for (var k in foo) {
-          if (foo.hasOwnProperty(k)) {
-             ++count;
-          }
-      }
-      return count;
-    }
-    function markerNameToId(name){
-        var ret = name.replace(/\s+/g, '_'); //removes blanks (if needed)
-        ret = ret.replace(/[^A-Za-z0-9 ]/g, '');
-        return ret;
-    }
-
-
-
 
 
     if(songId === "strCurrentSongPath"){
@@ -2664,11 +2651,27 @@ var DBClass = function(){
 
 
 
-
+/*
     // this if-thing is only here to ease the transition from v 0.2.0.1 to next step.
     // at 2015-02-19, and a later patch at 2015-04-sometime... 
     // this should be removed an around 2015-04??? is 2 months enough? no! not nearly enouth...
     // all the way down to XXX-here-XXX
+    
+    function countObjectLength(foo){
+      var count = 0;
+      for (var k in foo) {
+          if (foo.hasOwnProperty(k)) {
+             ++count;
+          }
+      }
+      return count;
+    }
+    function markerNameToId(name){
+      console.log("is this used?");
+        var ret = name.replace(/\s+/g, '_'); //removes blanks (if needed)
+        ret = ret.replace(/[^A-Za-z0-9 ]/g, '');
+        return ret;
+    }
     if(songObject.currentStartMarker == "#Start" || songObject.currentStartMarker == 0 ) songObject.currentStartMarker = "Start";
     if(songObject.currentStopMarker == "#EndS" || songObject.currentStopMarker == 0) songObject.currentStopMarker = "EndS";
     // bStart o bEnd kollar om start och stopp Ã¤r tillagda bland de sparade markÃ¶rerna
@@ -2698,7 +2701,7 @@ var DBClass = function(){
 
     var iMarkers = songObject.markers.length;
     for(var i=0; i<iMarkers; i++){
-      if(countObjectLength(songObject.markers[i]) == 1){
+       if(countObjectLength(songObject.markers[i]) == 1){
         var name = Object.keys(songObject.markers[i])[0];
         var time = songObject.markers[i][name];
         if(time !== "max") 
@@ -2755,7 +2758,7 @@ var DBClass = function(){
       }
     }
     
-    // remove from up there to here XXX-here-XXX
+    // remove from up there to here XXX-here-XXX */
     
     
     
