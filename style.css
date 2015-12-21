@@ -535,6 +535,7 @@ rect.svg_rect_btn {
 input, button, .linkButton{
   border-width: 0;
   padding: 1px 6px;
+  font-family: sans-serif;
 }
 
 
