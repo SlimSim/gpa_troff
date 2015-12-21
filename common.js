@@ -38,23 +38,20 @@ document.addEventListener("DOMContentLoaded", function(event){
     var link = "mailto:?&subject="+subject+"&body=" + escape(body);
     window.open(link);
   }
-  /*
-  $('.shareClass').click(function(){
-    document.getElementById('blur-hack').focus();
-    var subject = "Troff is a great music player for practicing";
-    var body = "Hello\n\n"
-      + "I found this great app that is perfect for practicing dancing or "
-      + "instruments to songs. "
-      + "It let you loop a part of a song, slow it down "
-      + "and create markers on the song timeline.\n"
-      + "It even supports movies!\n\n"
-      + "It is free to download here:\n"
-      + "https://chrome.google.com/webstore/detail/"
-      + "troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl\n\n"
-      + "Best regards!";
-    var link = "mailto:?&subject="+subject+"&body=" + escape(body);
-    window.open(link);
-  });
-  */
+  
+  var license = document.querySelector("#licenseLink");
+  if(license){
+    license.addEventListener('click', function(){
+      chrome.app.window.create(
+        'LICENSE.html',
+        {
+          bounds: {width:600, height:700}, 
+          minWidth:300, 
+          minHeight:200,  
+          id:"LicenseWin"
+        }
+      );
+    });
+  }
 });
 })();
