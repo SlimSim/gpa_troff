@@ -429,11 +429,13 @@ var TroffClass = function(){
     $('#firstTimeUserDialog').hide();
   };
 
+  // this is regarding the "play in fullscreen" - button
   this.setPlayInFullscreen = function(bPlayInFullscreen){
     var butt = document.querySelector('#playInFullscreenButt');
     butt.classList.toggle("active", bPlayInFullscreen);
   };
 
+  // this is regarding the "play in fullscreen" - button
   this.playInFullscreenChanged = function(){
     var butt = document.querySelector('#playInFullscreenButt');
     butt.classList.toggle("active");
@@ -444,14 +446,23 @@ var TroffClass = function(){
     document.getElementById('blur-hack').focus();
   };
   
+  // this is regarding the f-key, IE- the actual fullscreen
   this.forceFullscreenChange = function(){
     var videoBox = document.querySelector('#videoBox');
-    var infoSection = document.querySelector('#infoSection');
+    if(!videoBox) return;
+//    var infoSection = document.querySelector('#infoSection');
     if(videoBox.classList.contains('fullscreen')){
       videoBox.classList.remove('fullscreen');
     } else {
       videoBox.classList.add('fullscreen');
-    } 
+    }
+  };
+  
+  // this is regarding the f/esc-key, IE- the actual fullscreen
+  this.forceNoFullscreen = function(){
+    var videoBox = document.querySelector('#videoBox');
+    if(!videoBox) return;
+    videoBox.classList.remove('fullscreen');
   };
 
   /* this funciton is called when the full song/video is loaded,
@@ -1576,7 +1587,7 @@ var TroffClass = function(){
   this.exitSongInfo = function(){
     $('#songInfoArea').removeClass('textareaEdit');
     IO.clearEnterFunction();
-    document.getElementById('blur-hack').focus();
+//    document.getElementById('blur-hack').focus();
   };
 
   this.updateSongInfo = function(){
@@ -1691,7 +1702,7 @@ var TroffClass = function(){
   this.exitMarkerInfo = function(){
     $('#markerInfoArea').removeClass('textareaEdit');
     IO.clearEnterFunction();
-    document.getElementById('blur-hack').focus();
+//    document.getElementById('blur-hack').focus();
   };
 
     this.updateMarkerInfo = function(){
@@ -2381,10 +2392,12 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
       $('#zoomInstructionDialog').hide();
       Troff.dontShowZoomInstructions = true;
       DB.setZoomDontShowAgain();
+      IO.clearEnterFunction();
     };
     
     this.zoomDialogOK = function(){
       $('#zoomInstructionDialog').hide();
+      IO.clearEnterFunction();
     };
     
     this.zoomOut = function(){
@@ -2398,10 +2411,7 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
       var endTime = Troff.getStopTime();
       if(startTime === 0 && endTime == document.getElementById('timeBar').max){
         if(!Troff.dontShowZoomInstructions){
-          IO.setEnterFunction(function(){
-            Troff.zoomDialogOK();
-            IO.clearEnterFunction();
-          });
+          IO.setEnterFunction(Troff.zoomDialogOK);
           $('#zoomInstructionDialog').show();
         }
       }
@@ -2409,8 +2419,7 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
     };
     
     this.zoom = function(startTime, endTime){
-      
-      
+
       //NOTE all distances is in vh, unless otherwise specified
 /*
       var w = window;
@@ -3499,6 +3508,7 @@ var IOClass = function(){
       break;
     case 27: // esc
       Troff.pauseSong();
+      Troff.forceNoFullscreen();
       break;
     case 77: // M
       Troff.createMarker();
@@ -4033,7 +4043,7 @@ var IOClass = function(){
     
     chrome.app.window.create(
       'help.html',
-      {bounds: {width:642, height:400}, minWidth:300, minHeight:200,  id:"HelpWin"}
+      {bounds: {width:742, height:600}, minWidth:300, minHeight:200,  id:"HelpWin"}
     );
     document.getElementById('blur-hack').focus();
   };
