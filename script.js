@@ -1774,9 +1774,10 @@ var TroffClass = function(){
           return -1;
         }
         
+        var maxTime = Number(document.getElementById('timeBar').max);
         
-        if(time == "max"){
-          time = Number(document.getElementById('timeBar').max);
+        if(time == "max" || time > maxTime){
+          time = maxTime;
           var song = Troff.getCurrentSong();
           var quickTimeOut = setTimeout(tmpUpdateMarkerSoonBcMax, 42);
         }
