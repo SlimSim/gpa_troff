@@ -408,10 +408,13 @@ function FSstartFunc(){
 var TroffClass = function(){
     var strCurrentSong = "";
     var iCurrentGalleryId = 0;
-    var startTime = 0;
-    var previousTime = 0;
-    var time = 0;
+    var startTime = 0; // unused?
+    var previousTime = 0; // unused?
+    var time = 0; // unused?
     var nrTapps = 0;
+    var m_zoomStartTime = 0;
+    var m_zoomEndTime = null;
+
 
   //Public variables:
   this.dontShowZoomInstructions = false;
@@ -891,8 +894,8 @@ var TroffClass = function(){
         Troff.clearAllStates();
         Troff.setTempo('?');
         Troff.setWaitBetweenLoops(true, 1);
-        Troff.setAreas([false, true, false, false, false, false]);
     }
+    Troff.setAreas([false, true, false, false, false, false]);
     strCurrentSong = path;
     iCurrentGalleryId = iGalleryId;
 
@@ -1774,9 +1777,10 @@ var TroffClass = function(){
           return -1;
         }
         
+        var maxTime = Number(document.getElementById('timeBar').max);
         
-        if(time == "max"){
-          time = Number(document.getElementById('timeBar').max);
+        if(time == "max" || time > maxTime){
+          time = maxTime;
           var song = Troff.getCurrentSong();
           var quickTimeOut = setTimeout(tmpUpdateMarkerSoonBcMax, 42);
         }
@@ -2406,12 +2410,17 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
       document.getElementById('blur-hack').focus();
       Troff.zoom(0, Number(document.getElementById('timeBar').max));
     };
-    
+    /*
+    this.setZoomTimes = function(startTime, endTime){
+      m_zoomStartTime = startTime;
+      m_zoomEndTime = endTime;
+    };
+    */
     this.zoomToMarker = function(){
       document.getElementById('blur-hack').focus();
       var startTime = Troff.getStartTime();
       var endTime = Troff.getStopTime();
-      if(startTime === 0 && endTime == document.getElementById('timeBar').max){
+      if(startTime === m_zoomStartTime && endTime == m_zoomEndTime){
         if(!Troff.dontShowZoomInstructions){
           IO.setEnterFunction(Troff.zoomDialogOK);
           $('#zoomInstructionDialog').show();
@@ -2431,6 +2440,12 @@ man skulle kunna ha ett val, "flytta alla markÃ¶rer" / flytta bara dom "mellan
       //var winWidth = w.innerWidth || e.clientWidth || g.clientWidth,
 //      var winHeightPX = w.innerHeight|| e.clientHeight || g.clientHeight;
 */
+
+      m_zoomStartTime = startTime;
+      m_zoomEndTime = endTime;
+      
+      DB.saveZoomTimes(strCurrentSong, startTime, endTime);
+      
       var winHeightPX = window.innerHeight;
       
       var mPX = parseInt($('#timeBar').css('marginTop'));
@@ -2758,13 +2773,37 @@ var DBClass = function(){
     
     // remove from up there to here XXX-here-XXX */
     
+    console.log("cleanSong ->");
+    songObject = DB.fixSongObject(songObject);
     
     
+    
+    var obj = {};
+    obj[songId] = songObject;
+    chrome.storage.local.set(obj);
+  }; // end cleanSong
+  
+  this.fixSongObject = function(songObject, maxTime){
+    if (songObject === undefined) songObject = {};
+    if (maxTime === undefined) maxTime = "max";
     
     if(songObject.hasOwnProperty('iWaitBetweenLoops')){
       songObject.wait = songObject.iWaitBetweenLoops;
       delete songObject.iWaitBetweenLoops;
     } 
+  
+    var oMarkerStart = {};
+    oMarkerStart.name = "Start";
+    oMarkerStart.time = 0;
+    oMarkerStart.info = Troff.getStandardMarkerInfo();
+    oMarkerStart.color = "None";
+    oMarkerStart.id = "markerNr0";
+    var oMarkerEnd = {};
+    oMarkerEnd.name  = "End";
+    oMarkerEnd.time  = maxTime;
+    oMarkerEnd.info  = "";
+    oMarkerEnd.color = "None";
+    oMarkerEnd.id = "markerNr1";
   
     if(!songObject.startBefore) songObject.startBefore = [false, 4];
     if(!songObject.stopAfter) songObject.stopAfter = [false, 2];
@@ -2779,13 +2818,20 @@ var DBClass = function(){
     if(songObject.tempo == "NaN") songObject.tempo = "?";
     if(songObject.loopTimes > 9) songObject.loopTimes = "inf";
     if(songObject.aStates === undefined) songObject.aStates = [];
+    if(!songObject.zoomStartTime) songObject.zoomStartTime = 0;
+    if(!songObject.zoomEndTime) songObject.zoomEndTime = maxTime;
+    else if(songObject.zoomEndTime == "max") songObject.zoomEndTime = maxTime;
+    if(!songObject.markers) songObject.markers = [oMarkerStart, oMarkerEnd];
     if(!songObject.abAreas) 
       songObject.abAreas = [false, true, false, true, true, true];
+    if(!songObject.currentStartMarker) 
+      songObject.currentStartMarker = oMarkerStart.id;
+    if(!songObject.currentStopMarker)
+      songObject.currentStopMarker = (oMarkerEnd.id + 'S');
     
-    var obj = {};
-    obj[songId] = songObject;
-    chrome.storage.local.set(obj);
-  }; // end cleanSong
+    return songObject;
+  };
+  
 
 
   this.cleanDB = function(){
@@ -3120,6 +3166,51 @@ var DBClass = function(){
     chrome.storage.local.set(obj);
   });
   };
+  
+  this.saveZoomTimes = function(songId, startTime, endTime) {
+  chrome.storage.local.get(songId, function(ret){
+    var song = ret[songId];
+    if(!song){
+      console.error('Error "saveZoomTimes, noSong" occurred, songId=' + songId);
+      song = DB.getStandardSong();
+    }
+    
+    song.zoomStartTime = startTime;
+    song.zoomEndTime = endTime;
+    
+    var obj = {};
+    obj[songId] = song;
+    chrome.storage.local.set(obj);
+    
+    
+/*
+    var aMarkers = [];
+    for(var i=0; i<aAllMarkers.length; i++){
+      var oMarker = {};
+      oMarker.name  = aAllMarkers[i].value;
+      oMarker.time  = aAllMarkers[i].timeValue;
+      oMarker.info  = aAllMarkers[i].info;
+      oMarker.color = aAllMarkers[i].color;
+      oMarker.id    = aAllMarkers[i].id;
+      aMarkers[i] = oMarker;
+    }
+    var song = ret[songId];
+    if(!song){
+      console.error('Error "saveMarker, noSong" occurred, songId=' + songId);
+      song = {};
+      song.markers = [];
+    }
+
+
+    song.currentStartMarker = $('.currentMarker')[0].id;
+    song.currentStopMarker = $('.currentStopMarker')[0].id;
+    song.markers = aMarkers;
+    var obj = {};
+    obj[songId] = song;
+    chrome.storage.local.set(obj);
+    */
+  });
+  };
 
   this.saveMarkers = function(songId) {
   chrome.storage.local.get(songId, function(ret){
@@ -3266,8 +3357,20 @@ var DBClass = function(){
   };
 
   this.getSongMetaDataOf = function(songId) {
-    var loadSongMetadata = function(song, songId){
+    chrome.storage.local.get(songId, function(ret){
 
+      var song = ret[songId];
+      
+      if(!song || song.zoomEndTime == "max"){ // new song or song needs fixing:
+        var maxTime = Number(document.getElementById('timeBar').max);
+        song = DB.fixSongObject(song, maxTime);
+
+        var obj1 = {};
+        obj1[songId] = song;
+        chrome.storage.local.set(obj1);
+      }
+
+      
       Troff.selectStartBefore(song.startBefore[0], song.startBefore[1]);
       Troff.selectStopAfter(song.stopAfter[0], song.stopAfter[1]);
       Troff.addMarkers(song.markers);
@@ -3283,60 +3386,13 @@ var DBClass = function(){
       Troff.setWaitBetweenLoops(song.wait[0], song.wait[1]);
       
       Troff.setInfo(song.info);
-//      Troff.setTab(song.tab);
       Troff.setTempo(song.tempo);
       Troff.addButtonsOfStates(song.aStates);
       Troff.setAreas(song.abAreas);
+      Troff.zoom(song.zoomStartTime, song.zoomEndTime);
 
       Troff.setCurrentSong();
-
-    };// end loadSongMetadata
-
-    chrome.storage.local.get(songId, function(ret){
-
-      var song = ret[songId];
       
-      if(!song){ // new song:
-        var songLength = Number(document.getElementById('timeBar').max);
-
-        var oMarkerStart = {};
-        oMarkerStart.name = "Start";
-        oMarkerStart.time = 0;
-        oMarkerStart.info = Troff.getStandardMarkerInfo();
-        oMarkerStart.color = "None";
-        oMarkerStart.id = "markerNr0";
-        var oMarkerEnd = {};
-        oMarkerEnd.name  = "End";
-        oMarkerEnd.time  = songLength;
-        oMarkerEnd.info  = "";
-        oMarkerEnd.color = "None";
-        oMarkerEnd.id = "markerNr1";
-        
-        song = {
-          "markers": [oMarkerStart, oMarkerEnd],
-          "volume": 100,
-          "speed": 100,
-          "tempo": "?",
-          "info": "",
-          "pauseBefStart": [true, 3],
-          "startBefore": [false, 4],
-          "stopAfter": [false, 2],
-          "loopTimes": 1,
-          "wait": [true, 1],
-          "aStates": [],
-          "abAreas": [false, true, false, true, true, true],
-          "currentStartMarker": oMarkerStart.id,
-          "currentStopMarker": (oMarkerEnd.id + 'S')
-        };
-
-        var obj = {};
-        obj[songId] = song;
-        chrome.storage.local.set(obj);
-        
-        loadSongMetadata(song, songId);
-      } else {
-        loadSongMetadata(song, songId);
-      }
     });
   }; // end getSongMetadata
 
