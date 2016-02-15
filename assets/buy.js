@@ -41,6 +41,7 @@ purchase = function(){
       addProductToUI(product);
     }
     $('.outerDialog').hide();
+    IO.clearEnterFunction();
     document.querySelector('#donateDialog').style.display="";
   }
 
@@ -51,9 +52,8 @@ purchase = function(){
     var colDesc = $("<td></td>").text(product.localeData[0].description);
     var price = parseInt(product.prices[0].valueMicros, 10) / 1000000;
     var currency = product.prices[0].currencyCode;
-    console.log("currency", currency);
     var colPrice = $("<td></td>").text(price + currency);
-//var tittle = product.localeData[0].title    
+    //var tittle = product.localeData[0].title    
     var val = "Donate " + price + " " + currency;
 
     var butAct = $("<input value='" + val +
@@ -92,51 +92,48 @@ purchase = function(){
 
   var onSkuDetailsFail = function(a){
     $('.outerDialog').hide();
+    closeDonateDialog();
     IO.alert("Sorry, can not reach Google-wallet at the moment. "+
               "This feature requires a connection to the internet.")
-              
-//    closeDonateDialog();
-//    return;  /*
+    return;   /* uncomment above here  
 
-    $('#donateList').empty();
+    var aProducts = [];
+    
     var product = {}
     product.localeData = [];
     product.localeData[0] = {};
     product.localeData[0].title = "Donate little"
-    product.localeData[0].description = "You like Troff and want to show it. That is very apreasiated!"
-    product.prices = []
+    product.localeData[0].description = "You like Troff!"
+    product.prices = [];
     product.prices[0] = {};
     product.prices[0].valueMicros = 990000;
     product.prices[0].currencyCode = "USD";
     product.sku = "petra_suport_0";
-
-    console.log("products:")
-    console.log(product);
-    addProductToUI(product);
-
+    aProducts.push(product);
+    aProducts.push(product);
 
     var product2 = {}
     product2.localeData = [];
     product2.localeData[0] = {};
     product2.localeData[0].title = "Vote for phone app"
-    product2.localeData[0].description = "Vote for this feature if you think that Troff should also exist as a phone app!"
-    product2.prices = []
+    product2.localeData[0].description = "Vote for this feature!"
+    product2.prices = [];
     product2.prices[0] = {};
     product2.prices[0].valueMicros = 1990000;
     product2.prices[0].currencyCode = "USD";
     product2.sku = "petra_suport_1";
+    aProducts.push(product2);
+    aProducts.push(product2);
+    aProducts.push(product2);
+    aProducts.push(product2);
+//    aProducts.push(product2);
+//    aProducts.push(product2);
+//    aProducts.push(product2);
+//    aProducts.push(product2);
 
-    addProductToUI(product2);
-    addProductToUI(product2);
-    addProductToUI(product2);
-    addProductToUI(product2);
-    addProductToUI(product2);
-//    addProductToUI(product2);
-//    addProductToUI(product2);
-//    addProductToUI(product2);
-//    addProductToUI(product2);
+    var fakeResponse = {response : {details : {inAppProducts : aProducts}}};
+    onSkuDetails(fakeResponse)
 
-    document.querySelector('#donateDialog').style.display="";
     // */
   }
 
@@ -151,8 +148,8 @@ purchase = function(){
 closeDonateDialog = function(){
   document.querySelector('#donateDialog').style.display="none";
   $("tbody tr").remove();
+  IO.clearEnterFunction();
 }
-
 
 document.getElementById('donate').addEventListener('click', purchase);
 document.getElementById('closeDonateDialog').addEventListener('click', closeDonateDialog);

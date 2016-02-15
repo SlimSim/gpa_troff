@@ -143,7 +143,7 @@
             <input type="button" value="Cancel" id="cancelSongList" class="regularButton" />
           </div>
           <ul id="newSongListPartAllSongs" 
-            class="bgEasyRead marginBottom scrollableY"></ul>
+            class="bgEasyRead marginBottom scrollableY flexOne"></ul>
         </div>
       </div> <!-- songListsArea -->
       
@@ -164,7 +164,7 @@
         </ul>
       </div><!-- songsArea -->
 
-      <div id="stateSection" class="vScroll flexCol">
+      <div id="stateSection" class="flexCol">
         <h1>State</h1>
         <input
           type="button"
@@ -177,7 +177,7 @@
             A "state" is something that saves the selected markers and settings
             so that they can be recalled later.
           </p>
-        <div id="stateList">
+        <div class="flexScroll" id="stateList">
         </div>
         
       </div> <!-- stateArea -->
@@ -514,8 +514,9 @@
           playing region, or the purple part of the timeline.
         </p>
         <p class="paragraph normalSize">
-          If the active playing region is the entire song, you can not zoom in,
-          and this instruction will pop up instead.
+          If Troff is zoomed to the active playing region, 
+          then it is not pocible to zoome in or out. 
+          Change the active playing region and you will be able to zoom.
         </p>
       </div>
 
