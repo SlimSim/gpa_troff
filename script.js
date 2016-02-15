@@ -928,8 +928,10 @@ var TroffClass = function(){
     exportStuff, gets current song markers to the clippboard
   */
   this.exportStuff = function(){
+    console.log("exportStuff ->");
     Troff.toggleImportExport();
-    DB.getMarkers( strCurrentSong, function(aoMarkers){
+    DB.getMarkers( strCurrentSong, function(aoMarkers) {
+      console.log("getMarkers response -> aoMarkers",aoMarkers);
       var oExport = {};
       oExport.aoMarkers = [];
       for (var i=0; i<aoMarkers.length; i++){
