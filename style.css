@@ -940,7 +940,7 @@ input[type="button"]:active, button:active, .linkButton:active{
 /*                                                                            */
 /******************************************************************************/
 
-/* The Settings fix! */
+/* The Settings fix! * /
 #ControlTime {
   margin-top: 14px;
   background-color: pink;
@@ -972,7 +972,7 @@ input[type="button"]:active, button:active, .linkButton:active{
 }
 
 
-/* the 2px thick button fix! */
+/* the 2px thick button fix! * /
 #buttNewSongList, #songlistAll, #configure-button, #buttRememberState{
   min-height: 17px;
 }
@@ -981,7 +981,7 @@ input[type="button"]:active, button:active, .linkButton:active{
 }
 
 
-/* fixing song lists stuff */
+/* fixing song lists stuff * /
 #songListPartButtons {
   height: 42px;
 }
@@ -990,3 +990,5 @@ input[type="button"]:active, button:active, .linkButton:active{
 #gallery, #stateList {
   overflow-x: hidden;
 }
+
+/* end */
