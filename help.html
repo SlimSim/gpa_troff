@@ -47,8 +47,10 @@
       display: flex;
       font-size: 20px;
       padding: 0px;
-      height: 48px;
       min-height: 48px;
+    }
+    footer {
+      min-height: 100px;
     }
     nav, header {
       margin-right: 0;
@@ -258,8 +260,7 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
     <p>
       In the info-area you can add more info to the marker. 
       This will not take up space on the timeline but will be easily 
-      accessible, more on the info at the 
-      <a href="#infoArea">info part</a>.
+      accessible at the <a href="#infoArea">info part</a>.
       This dialog also lets you decide the color of the marker.
     </p>
     <p>
@@ -642,6 +643,7 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
       <tr>  <td>B</td><td>  Toggle ''Start Before''</td> </tr>
       <tr>  <td>A</td><td>  Toggle ''Stop After''</td> </tr>
       <tr>  <td>F</td><td>  Toggle fullscreen</td> </tr>
+      <tr>  <td>Ctrl + F</td><td>  Find song (use arrow-keys + enter to quickly select song)</td> </tr>
       <tr>  <td>U</td><td>  Play the entire (full) song</td> </tr>
       <tr>  <td>T</td><td>  Tap repeatedly to calculate the tempo of song</td> </tr>
       <tr>  <td>V</td><td>  Set Volume to 100%</td> </tr>
@@ -686,101 +688,4 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
   </footer>
   </section>
 </body>
-<!--
-  <ul>
-    <li>Use space or enter, as primary button.</li>
-    <li>Select the name of a marker and "Stop" of another marker to only play a part of the song.</li>
-    <li>Use Loop "&infin;" (or 0) to loop that part of a song,<br />
-      press a number in the Loop square to loop that that many times (or use the numbers on the keyboard) .</li>
-    <li>Use "pause bef start" (or P) to control how long the countdown is before music starts to play.<br />
-      use "wait" to control countdown between loops</li>
-    <li>Use "start before" or "stop after" (B and A) to start play the music before or after a marker.</li>
-    <li>Use 'Shift/Alt'+ P/B/A/W to increase or decrease their respective value</li>
-    <li>Every square is a button; try to press them and see what happens!</li>
-    <li>Press "Volume:" (or V) to set volume to 100%.<br />
-      Press "Speed:" (or S) to set speed to 100%.</li>
-    <li>Use 'Shift/Alt'+ V/S to increase or decrease Volume/Speed</li>
-    <li>Use 'Shift/Alt'+ U to select the first marker or last marker respectively</li>
-    <li>Songs and markers are automatically saved untill next time you enter Troff.</li>
-    <li>
-      Troff supports movies, simply add a folder containing a movie and you're good to go.
-      If you toggle ''Play in Fullscreen'' on, the video will enter fullscreen as soon as you
-      starts playing, and exit automatically when the video is paused.
-      You can also toggle fullscreen by pressing F whenever you want.
-    </li>
-    <li>
-      You can export your markers, including the markerinfo, to let other people use your markers and comments.
-      Simply press "I/E" and then "Export Markers".
-      You will then get a text-string that represents the markers for the current song
-      - copy this text-string and give it to the persons that needs the markers.
-    </li>
-    <li>
-      You can also import markers from some one else's Troff. Press "I/E" and then "Import Markers".
-      Paste the exact string you've received and all the markers will be added to the current song.
-    </li>
-    <li>
-      The marker can be colorised, this is great for distinguish different kinds of markers.
-      Simply edit a marker and select a color. 
-    </li>
-    <li>
-      Create song lists with the songs you are currently practicing on.
-      This helps organizing your songs if you have selected a lot of folders 
-      or manny songs.
-    </li>
-    <li>
-      The Song info-text area is an area for longer notes specific to each song.
-      It allowes for rowbreaks and is perfect for detailed explanation of how
-      the song should be preformed, for future reference. 
-      Click the text or press I followed by E to start edit the song info area, 
-      and press Ctrl + Enter or click outside the marker info area to stop edditing.
-    </li>
-    <li>
-      The Marker info-text area is an area for longer notes, which will be saved per marker.
-      It allowes for rowbreaks and is perfect for detailed explanation of what to do
-      at that specific marker, for future reference. 
-      Click the text or press O followed by E to edit the marker info area, 
-      and press Ctrl + Enter or click outside the marker info area to stop edditing.
-    </li>
-    <li>
-      You can move all, or some, of the markers at once. Simply press 
-      "move markers", there you can move the markers, as well as get more info
-      about how to move them.
-    </li>
-  </ul>
-  <p>For more info, visit: <a href="https://www.facebook.com/troffmusic" target="_blank">facebook.com/troffmusic</a></p>
-  <p>
-    If you like Troff, please rate it at the
-    <a href="https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews" target="_blank">
-      Chrome Web Store</a>, thanks!
-  </p>
-</body>
--->
-
-<!--
-<body bgcolor="#ffffff" leftmargin="20" topmargin="20" marginheight="20" marginwidth="20">
-  <h2>Tips, trix and tutoring for Troff</h2>
-  <table>
-    <tr>  <td>Space</td><td>Play/pause (with countdown, from marker)</td></tr>
-    <tr>  <td>Return</td><td>Play/pause (without countdown)</td></tr>
-    <tr>  <td>Esc</td><td>Stop song</td></tr>
-    <tr>  <td>M</td><td>  Set Marker</td> </tr>
-    <tr>  <td>E</td><td>  Edit the current info text (either marker or song)</td> </tr>
-    <tr>  <td>1-9</td><td>Set number of times to loop song</td> </tr>
-    <tr>  <td>0</td><td>  Loop ''Infinit'' (&infin;) many times</td> </tr>
-    <tr>  <td>P</td><td>  Toggle ''Pause bef start''</td> </tr>
-    <tr>  <td>B</td><td>  Toggle ''Start Before''</td> </tr>
-    <tr>  <td>A</td><td>  Toggle ''Stop After''</td> </tr>
-    <tr>  <td>F</td><td>  Toggle fullscreen</td> </tr>
-    <tr>  <td>U</td><td>  Play the entire (full) song</td> </tr>
-    <tr>  <td>T</td><td>  Tapp repeatedly to calculate tempo of song</td> </tr>
-    <tr>  <td>V</td><td>  Set Volume to 100%</td> </tr>
-    <tr>  <td>S</td><td>  Set Speed to 100%</td> </tr>
-    <tr>  <td>W</td><td>  Set Wait to 1 second</td> </tr>
-    <tr>  <td>R</td><td>  Remember current state to recall it later</td> </tr>
-    <tr>  <td>Z</td><td>  Zoom in to only see the active playing region (the purple part of the timeline), use shift+Z to zoom out to see the whole timeline</td> </tr>
-    <tr>  <td>Left/Right Arrows</td><td> right and left arrows to step 1 sec forward/backward in song/movie, use shift or alt to move 10 seconds / one frame respectively</td> </tr>
-    <tr>  <td>Up/Down Arrows   </td><td> move the selected marker up or down, 1 sec, 1 frame or 10 seconds with alt/shift/(alt+shift) + Upp/down respectively.</td> </tr>
-    <tr>  <td>N</td><td>  move to next pair of markers (use shift + N to move to previous)</td> </tr>
-  </table>
--->
 </html>
