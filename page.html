@@ -143,13 +143,19 @@
             <input type="button" value="Cancel" id="cancelSongList" class="regularButton" />
           </div>
           <ul id="newSongListPartAllSongs" 
-            class="bgEasyRead marginBottom scrollableY flexOne"></ul>
+            class="bgEasyRead marginBottom scrollableY"></ul>
         </div>
       </div> <!-- songListsArea -->
       
       <div id="songsArea" class="flexCol start">
         <h1>Songs</h1>
         <input type="button" title="select folders to get songs from" class="regularButton" id="configure-button" value="Select folders"/>
+        
+        <input 
+            type="text"
+            id="searchSong"
+            class="editText maxWidthChild"
+            placeholder="Search (Crtl + F)" />
         
         <p id="SongsHelpTextEmptySonglist" class="helpText">
           This song list is empty; select another song list in the 
@@ -177,7 +183,7 @@
             A "state" is something that saves the selected markers and settings
             so that they can be recalled later.
           </p>
-        <div class="flexScroll" id="stateList">
+        <div class="vScroll" id="stateList">
         </div>
         
       </div> <!-- stateArea -->
@@ -584,8 +590,6 @@
     </div>
   </div>
   
-  
-
 
 </body>
 </html>
