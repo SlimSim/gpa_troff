@@ -681,7 +681,7 @@ table {
   min-width: 100px;
 }
 
-.maxWidthParent * {
+.maxWidthParent *, .maxWidthChild {
   max-width: 200px;
 }
 
@@ -888,6 +888,13 @@ input[type="button"]:active, button:active, .linkButton:active{
 .accentColor2, .important {
   background-color: #e05915;
 }
+
+.selected.important {
+  background-color: #431c5d; /* accentColor1 */
+  border: 4px solid #e05915; /* accentColor2 */ 
+  padding: 0;
+}
+
 .accentColor3, .active{
   background-color: #cdd422;
   background-color: #AAAF2B;
@@ -914,81 +921,6 @@ input[type="button"]:active, button:active, .linkButton:active{
 /* end "Anton & Irene" color scheeme */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/******************************************************************************/
-/*                                                                            */
-/*                        Chrome wierd style fix                              */
-/*                                                                            */
-/*                                                                            */
-/******************************************************************************/
-
-/* The Settings fix! * /
-#ControlTime {
-  margin-top: 14px;
-  background-color: pink;
+.hidden {
+  display: none !important;
 }
-#ControlMarker h2 {
-  margin-top: -10px;
-  margin-bottom: -8px;
-}
-#ControlMarker div {
-  margin-top: 22px;
-}
-#ControlLoop{
-  margin-top: 15px;
-}
-#ControlLoop > h2 {
-  margin-bottom: 13px;
-}
-.XLoopOff {
-  margin-top: 22px;
-}
-#loopButtons{
-  margin-top: 5px;
-}
-.doubleSliders.flexOne{
-  margin-top: 85px;
-}
-.sliderInfo .dataOutput {
-  margin-top: 20px;
-}
-
-
-/* the 2px thick button fix! * /
-#buttNewSongList, #songlistAll, #configure-button, #buttRememberState{
-  min-height: 17px;
-}
-#buttResetVolume, #buttResetSpeed, .plussMinusButton input {
-  min-height: 14px;
-}
-
-
-/* fixing song lists stuff * /
-#songListPartButtons {
-  height: 42px;
-}
-
-/* fixing flickering buttons in songlist */
-#gallery, #stateList {
-  overflow-x: hidden;
-}
-
-/* end */
