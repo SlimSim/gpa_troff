@@ -1630,11 +1630,13 @@ var TroffClass = function(){
     
     IO.setEnterFunction(function(event){
       if(event.ctrlKey==1){//Ctrl+Enter will exit
+        $('#searchSong').val('').trigger('click');
         document.getElementById('blur-hack').focus();
         return false;
       }
       
       $('#gallery .important').trigger('click');
+      $('#searchSong').val('').trigger('click');
       return true;
     }, function(event){
       var next,
