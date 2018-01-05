@@ -542,6 +542,16 @@ input, button, .linkButton{
   font-family: sans-serif;
 }
 
+li[isdirectory="true"] {
+  padding-top: 4px;
+  font-size: 22px;
+}
+li[isdirectory="true"]:not(:first-child) {
+  padding-top: 10px;
+  border-top: solid #e6e9f0 5px; /* secondaryColor */
+  margin-top: 10px;
+  margin-bottom: 2px;
+}
 
 
 /*
