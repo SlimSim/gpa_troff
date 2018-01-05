@@ -47,62 +47,79 @@
 
 
   <section id="songsSection" class="flexCol">
-    <div id="headArea" class="primaryColor" style="
-/*        background-color: blue; */
+    <div id="headArea" class="primaryColor flexCol" style="
+/*        background-color: blue; 
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: stretch;
+        margin-bottom: 0px;
+        */
+        padding: 4px;
+        justify-content: space-between;">
+      <!--    <h1>Troff - music player for traning</h1> -->
+  <!--    <h1> -->
+  <div style="display: flex; align-items: center; flex-direction: column;">
+<!--    <p style="height: 20px;">
+      Troff will move to Android and will no longer be updated on Chrome.
+    </p>-->
+    <a href="#" id="readMoreAndroidTroff" style="height: 20px;">
+      Get Troff for Android
+    </a>
+  </div>
+        <div class="primaryColor" style="
         display: flex;
         flex-direction: row-reverse;
         align-items: stretch;
         margin-bottom: 0px;
         padding: 4px;
         justify-content: space-between;">
-      <!--    <h1>Troff - music player for traning</h1> -->
-  <!--    <h1> -->
+          <nav class="flexCol center">
+            <span 
+              class = "buttSpace margin roundButt">
+              <input
+                type="button"
+                value="▶"
+                title="move to selected marker (or start of song) and play song (key: space)" 
+                class="important centerRoundButtCommon centerRoundButt1"
+                id="buttSpacePlay" >
+              <input
+                type="button" 
+                value="II"
+                style="display: none;"
+                title="pause song (key: space or enter)" 
+                class="important centerRoundButtCommon centerRoundButt2"
+                id="buttSpacePause">
+            </span>
+          </nav>
+        <div id="mediaInfoBox" class="flexCol halfMarginParent">
+          <div id="currentArtist">
+            Please select a song or moive from the songs area
+          </div>
+          <div id="currentSong"></div>
+          <div id="currentAlbum"></div>
+          <div class="dataOutput center flexRow">
+            <div class="flexRow marginLR moodColorizedText bold">
+              <div class="secondsLeft marginLR">0</div>
+              <div class="loopTimesLeft marginLR">1</div>
+            </div>
+            <div class="marginLR">
+              <div id="time"><p>0:00</p></div>/<div id="maxTime">0:00</div>
+            </div>
+          </div>
+  
+        </div>
         <nav class="flexCol center">
-          <span 
-            class = "buttSpace margin roundButt">
-            <input
-              type="button"
-              value="▶"
-              title="move to selected marker (or start of song) and play song (key: space)" 
-              class="important centerRoundButtCommon centerRoundButt1"
-              id="buttSpacePlay" >
-            <input
-              type="button" 
-              value="II"
-              style="display: none;"
-              title="pause song (key: space or enter)" 
-              class="important centerRoundButtCommon centerRoundButt2"
-              id="buttSpacePause">
-          </span>
+          <input class="svgButt regularButton" style="display: block;" type="button"
+              title="get tips on how to best use Troff"
+              class="small regularButton" id="buttTip" value="Help" />
+          <button class="svgButt shareClass regularButton" title="Share the link to this app with your freinds via email">
+            <svg version="1.1" style="height=26px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
+              <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
+              <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
+            </svg>
+          </button>
         </nav>
-      <div id="mediaInfoBox" class="flexCol halfMarginParent">
-        <div id="currentArtist">
-          Please select a song or moive from the songs area
-        </div>
-        <div id="currentSong"></div>
-        <div id="currentAlbum"></div>
-        <div class="dataOutput center flexRow">
-          <div class="flexRow marginLR moodColorizedText bold">
-            <div class="secondsLeft marginLR">0</div>
-            <div class="loopTimesLeft marginLR">1</div>
-          </div>
-          <div class="marginLR">
-            <div id="time"><p>0:00</p></div>/<div id="maxTime">0:00</div>
-          </div>
-        </div>
-
       </div>
-      <nav class="flexCol center">
-        <input class="svgButt regularButton" style="display: block;" type="button"
-            title="get tips on how to best use Troff"
-            class="small regularButton" id="buttTip" value="Help" />
-        <button class="svgButt shareClass regularButton" title="Share the link to this app with your freinds via email">
-          <svg version="1.1" style="height=26px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
-            <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
-            <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
-          </svg>
-        </button>
-      </nav>
     </div> <!-- end headArea -->
     <div id="areaSelector" class="flexRowWrap secondaryColor">
       <input type="button" value="Song lists" id="songlistsTab"  class="onOffButton"/>
@@ -323,6 +340,11 @@
 
     </div>    
     
+    <div style="display: flex; align-items: center; flex-direction: column;">
+      <a href="https://goo.gl/forms/dNLBdinwcnBxOlRu2" target="_blank" style="height: 20px;">
+        Please take the user servay to help make Troff better.
+      </a>
+    </div>
     <button id="donate" class="regularButton special" title="">
       Do you like Troff?<br />Feel free to contribute here!
     </button>
@@ -385,6 +407,39 @@
 --------------- POP UP DIALOGS: ----------------
 -->
 
+  <div id="outerInfoAndroidPopUpSquare" class="outerDialog" style="display: none;">
+    <div class="popUpSquare" id="innerInfoAndroidPopUpSquare" >
+      <div class="flexCol">
+        <p>Troff is now avalable as a very early beta app for Android.</p>
+        <p>
+          As of mars 2017, only markers is implemented, but if you want to get
+          it for Android and follow the development, become a beta tester here:
+        </p>
+        <a target="_blank" href="https://play.google.com/apps/testing/slimsimapps.troff">
+          Become beta tester of Troff for Android!
+        </a>
+        <p>
+          Please note that there may be bugs (if you encouter any, please 
+          submit them to slimsimapps@gmail.com).
+        </p>
+        <p>
+          New features will be implemented quite slowly since there is only 
+          one spare time developer. 
+        </p>
+        <p>Have patience.</p>
+        <p>
+          If you want to support the development, 
+          please donate <a href="#" id="infoAndroidDonate">here</a>, 
+          like Troff on <a target="_blank" href="https://www.facebook.com/troffmusic/">Facebook</a> and
+          rate on <a target="_blank" href="https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews">Chome Web Store</a> and 
+          <a target="_blank" href="https://play.google.com/store/apps/details?id=slimsimapps.troff&ah=XovIcdxEAyEJCMvQHpPKkKHLdqU&hl=sv#details-reviews">Google Play</a>. 
+        </p>
+      </div>
+      <input id="buttCancelInfoAndroidPopUpSquare" type="button" class="regularButton buttWidthStandard" value="Cancel" />
+    </div>
+  </div>
+
+
   <div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
     <div class="popUpSquare" id="innerImportExportPopUpSquare" >
       <div>
@@ -409,12 +464,6 @@
       </p>
       <div class="flexScroll flexRow margin">
         <div id="donateList" class="flexCol leftTextParent">
-<!--
-          <input type="button" value="Donate 5 SEK" class="regularButton" />
-          <input type="button" value="Donate 25 SEK" class="regularButton" />
-          <input type="button" value="Donate 44 SEK" class="regularButton" />
-          <input type="button" value="Donate 92 SEK" class="regularButton" />
--->
         </div>
         <div style="flex: 1;"></div>
             <!--

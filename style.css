@@ -293,6 +293,10 @@ body section{
     margin: 5px;
 }
 
+.popUpSquare p a{
+    margin: 0px;
+}
+
 #ImportExportPopUpSquare{
     display: none;
 }

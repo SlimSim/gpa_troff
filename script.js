@@ -975,6 +975,13 @@ var TroffClass = function(){
         importMarker(oImport.aoMarkers);
         importSonginfo(oImport.strSongInfo);
         importStates(oImport.aoStates);
+
+        DB.saveMarkers( Troff.getCurrentSong(), function() {
+          DB.saveStates( Troff.getCurrentSong(), function() {
+            Troff.updateSongInfo();
+          } );
+        } );
+
       } else {
         //This else is here to allow for imports of 0.5 and erlier
         var aMarkersTmp = oImport;
@@ -982,7 +989,7 @@ var TroffClass = function(){
       }
       function importMarker(aMarkers){
         var aMarkerId = Troff.getNewMarkerIds(aMarkers.length);
-  
+
         for(var i=0; i<aMarkers.length; i++){
           // these 5 lines are here to allow for import of markers
           //from version 0.3.0 and earlier:
@@ -996,11 +1003,9 @@ var TroffClass = function(){
           aMarkers[i].id = aMarkerId[i];
         }
         Troff.addMarkers(aMarkers); // adds marker to html
-        DB.saveMarkers(Troff.getCurrentSong());
       }
       function importSonginfo(strSongInfo){
         $('#songInfoArea').val($('#songInfoArea').val() + strSongInfo);
-        Troff.updateSongInfo();
       }
       function importStates(aoStates){
         for(var i = 0; i < aoStates.length; i++){
@@ -1028,7 +1033,7 @@ var TroffClass = function(){
         aoStates.map(function(s){
           Troff.addButtonsOfStates([JSON.stringify(s)]);
         });
-        DB.saveStates(Troff.getCurrentSong());
+//        DB.saveStates(Troff.getCurrentSong()); -- xxx
       }
     });
   };
@@ -1072,6 +1077,12 @@ var TroffClass = function(){
 
   this.toggleImportExport = function(){
     $('#outerImportExportPopUpSquare').toggle();
+    document.getElementById('blur-hack').focus();
+  };
+  
+  
+  this.toggleInfoAndroid = function(){
+    $('#outerInfoAndroidPopUpSquare').toggle();
     document.getElementById('blur-hack').focus();
   };
   
@@ -2903,7 +2914,7 @@ var DBClass = function(){
   });
   };// end updateMarker
 
-  this.saveStates = function(songId){
+  this.saveStates = function(songId, callback){
   chrome.storage.local.get(songId, function(ret){
     var aAllStates = Troff.getCurrentStates();
     var aStates = [];
@@ -2921,6 +2932,9 @@ var DBClass = function(){
     var obj = {};
     obj[songId] = song;
     chrome.storage.local.set(obj);
+    if( callback ) {
+      callback();
+    }
   });
   };
   
@@ -2947,7 +2961,7 @@ var DBClass = function(){
   });
   };
 
-  this.saveMarkers = function(songId) {
+  this.saveMarkers = function(songId, callback) {
   chrome.storage.local.get(songId, function(ret){
     var aAllMarkers = Troff.getCurrentMarkers();
 
@@ -2976,6 +2990,9 @@ var DBClass = function(){
     obj[songId] = song;
     chrome.storage.local.set(obj);
     
+    if( callback ) {
+      callback();
+    }
   });
   };// end saveMarkers
 
@@ -3140,6 +3157,7 @@ var IOClass = function(){
   /* this is used to know if button-presses should be in "pop-up"-mode
     or in regular mode */
   var IOEnterFunction = false;
+  var IOArrowFunction = false;
 
   this.startFunc = function() {
 
@@ -3162,6 +3180,8 @@ var IOClass = function(){
     $('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
     $('#buttImportExportMarker').click(Troff.toggleImportExport);
     $('#buttCancelImportExportPopUpSquare').click(Troff.toggleImportExport);
+    $('#readMoreAndroidTroff').click(Troff.toggleInfoAndroid);
+    $('#buttCancelInfoAndroidPopUpSquare').click(Troff.toggleInfoAndroid);
     $('#buttExportMarker').click(Troff.exportStuff);
     $('#buttImportMarker').click(Troff.importStuff);
     $('#buttPauseBefStart').click(Troff.togglePauseBefStart);
@@ -3225,6 +3245,10 @@ var IOClass = function(){
     $('#zoomInstructionDialogDontShowAgain').click(Troff.zoomDontShowAgain);
     $('#zoomInstructionDialogOK').click(Troff.zoomDialogOK);
     
+    $('#infoAndroidDonate').click(function() {
+      $('#donate').click();
+    });
+
     $('#donate').click(function(){
       IO.alert("Waiting for Google Wallet");
       document.getElementById('blur-hack').focus();
