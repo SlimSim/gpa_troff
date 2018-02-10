@@ -1,0 +1,209 @@
+/******************************************************************************)
+(*                        col scheem 2                                        */
+/* The "Anton & Irene" color scheem */
+
+
+/* standard color... */
+.col2 ::-webkit-input-placeholder {
+  color: dimgray;
+}
+
+.col2 h1,
+.col2 h2,
+.col2 h3,
+.col2 h4,
+.col2 h5,
+.col2 h6,
+.col2 p{
+  color: rgb(50, 50, 50);
+}
+
+.col2 .centerRoundButtCommon{
+  background-color: transparent;
+}
+.col2 .onOffButton,
+.col2 .loopButt{
+  outline-color: lightgray;
+}
+.col2 .onOffButton,
+.col2 .loopButt{
+  background-color: lightgray;
+}
+
+.col2 .grayOut{
+  color: gray;
+  background-color: lightgray;
+}
+
+
+/* oddballs */
+.col2 .textareaStandard{
+  background: lightblue;
+  border-color: lightblue;
+}
+
+.col2 .textareaEdit{
+  background: white;
+}
+
+.col2 .fullscreen{
+  background-color: black;
+}
+
+.col2 .likeLink{
+  background-color: transparent;
+  color: blue;
+}
+
+.col2 .outerDialog{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.col2 .helpText{
+    color: gray;
+}
+
+.col2 .colorPickerSelected{
+  border-color: purple;
+}
+.col2 .colorPicker{
+  border-color: black;
+}
+
+
+
+
+
+
+/* the background */
+.col2 .backgroundColor,
+.col2 .extraBorder{
+  background-color: white;
+}
+
+
+
+/* regularButton */
+.col2 .regularButton:focus,
+.col2 .regularButton:hover,
+.col2 .regularButton:active{
+  outline-color: #b0bec5; /*regularButton*/
+}
+.col2 .regularButton{
+  background-color: #b0bec5; /*regularButton*/
+}
+
+
+
+
+
+
+/* primaryColor */
+.col2 .primaryColor,
+.col2 .bgEasyRead {
+  background-color: #61e68d;
+  background: #61e68d;
+}
+
+
+
+
+/* secondaryColor */
+.col2 .secondaryColor,
+.col2 .areaParent > div,
+.col2 .popUpSquare,
+.col2 .innerDialog {
+  background-color: #b2f5e1;
+}
+
+
+
+
+
+/* accentColor1 */
+.col2 .selected:hover, 
+.col2 .currentLoop:hover, 
+.col2 .currentMarker:hover, 
+.col2 .currentStopMarker:hover,
+.col2 .selected:active,
+.col2 .currentLoop:active, 
+.col2 .currentMarker:active, 
+.col2 .currentStopMarker:active {  outline-color: #28a745;}  /* accentColor1 */
+
+.col2 .accentColor1,
+.col2 .selected,
+.col2 .currentLoop,
+.col2 .currentMarker,
+.col2 .currentStopMarker,
+.col2 .selected.important {
+  background-color: #28a745; /* accentColor1 */
+  color: white;
+}
+.col2 .play{
+    color: #28a745; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+}
+
+
+
+
+
+/* accentColor2 */ 
+
+.col2 .important:hover,
+.col2 .important:active,
+.col2 .special:hover,
+.col2 .special:active{
+  outline-color: #dc3545;
+
+}
+
+.col2 .roundButt,
+.col2 .roundButt:hover,
+.col2 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
+.col2 .selected.important {
+  border-color: #dc3545; /* accentColor2 */
+}
+.importantLeftLine {
+  border-left-color: #dc3545; /*accentColor2*/
+}
+
+.col2 .accentColor2,
+.col2 .important {
+  background-color: #dc3545; /* accentColor2 */
+}
+.col2 .pause{
+    color: #dc3545; /* accentColor2 - IF RED ISH... */ 
+}
+
+
+.important{
+  color:#fff;
+  text-shadow:#C17C3A 0 -1px 0; /* NOTISE: not the same color... */
+}
+
+
+
+
+
+
+
+
+/* accentColor3 */
+.col2 .active:hover,
+.col2 .active:active{
+  outline-color: #ffc107; /* accentColor3 */
+}
+
+.col2 .accentColor3,
+.col2 .active{
+  background-color: #ffc107; /* accentColor3 */
+  color: white;
+}
+.col2 .wait{
+  color: #ffc107; /* accentColor3 - IF YELLOW ISH... */ 
+}
+
+
+/* end "Anton & Irene" color scheeme */
+
+

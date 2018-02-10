@@ -3259,8 +3259,15 @@ var IOClass = function(){
     window.addEventListener('resize', function(){
       Troff.settAppropriateMarkerDistance();
     });
+    
+    IO.setColor( "col2" );
 
   };//end startFunc
+
+  this.setColor = function( colClass ) {
+    $('html').removeClass();
+    $('html').addClass( colClass );
+  };
 
   this.keyboardKeydown  = function(event) {
     if(IOEnterFunction){
