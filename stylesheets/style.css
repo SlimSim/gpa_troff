@@ -21,13 +21,6 @@
    https://developer.mozilla.org/en-US/docs/Web/CSS/flex
 */
 
-.selected{
-/*  background-color: purple; moved to bottom */
-  color: white;
-}
-
-
-
 
 video{
   width: 100%;
@@ -39,7 +32,6 @@ video{
   position: absolute;
   right: 0;
   top: 0;
-  background-color: black;
 /*  z-index: 99; */
   display: flex;
 }
@@ -73,24 +65,19 @@ video{
 
 body{
   display: flex;
-/*  background-color: black; */
   font-family: Arial, "Open Sans", sans-serif;
-  color: black;
   height: 100vh;
 }
 
 
 
 
-h1, h2, h3, h4, h5, h6{
-  color: rgb(50, 50, 50);
-}
 
 
 h1 {
 /*  font-weight: 200;
   margin: 4px;
-  color: black; */
+*/
   align-self: baseline;
   margin-bottom: 0;
 }
@@ -103,7 +90,6 @@ h2{
 
 p{
   display: inline-block;
-  color: rgb(50, 50, 50);
   font-size: 11px;
 }
 
@@ -127,8 +113,6 @@ p{
 
 
 .likeLink{
-  background-color: transparent;
-  color: blue;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -148,98 +132,23 @@ input, .linkButton{
 
 nav{
   display: flex;
-/*  background-color: #aabbcc; * /
-  width: 100%;
-  flex-direction: row-reverse;
-  flex-grow: initial;
-  flex-wrap: inherit;
-  justify-content: space-between;
-  */
 }
-nav input, nav button{
-/*  margin: 0;
-  flex-basis: 31%;
-  justify-content: space-between;
-  height: 27px;
-  */
-}
-
 
 body section{
   padding: 5px;
 }
 
-#songsSection{
-/*
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  float: flex-right;
-  background-color: #4f6b8a;
-  padding: 0 5px 0 5; */
-/*  max-width: 400px;  */           /* site change this! - Why? */
-/*  height: 100vh;*/
-}
 
 #markerSection{
-/*    background-color: #7792ad; */
     display: flex;
     padding: 0 5px 0 0;
 }
-#timeSection{
-/*  background-color: #aabbcc; */
 
-  /*
-    this is nessessary to prevent the "I/E"-button
-    (the "import/export"-button) from dissapering
-    when the marker-width is to big:
-  */
-/*  min-width: 112px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  */
-}
 
 .dataOutput h2{
   display: inline-flex;
 }
-/*
-#ControlTime{
-    padding-top: 5px;
-    padding-bottom: 5px;
-/*
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    background-color: #a4c5de;
-    width: 100%;
-    * /
-}
-#ControlMarker{
-    padding-top: 5px;
-    padding-bottom: 5px;
-  /*
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    background-color: #7792ad; #4f6b8a;
-    width: 100%;
-    * /
-}
-#ControlLoop{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    /*
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    background-color: #a4c5de;
-    width: 100%;
-    * /
-}
-*/
+
 #ControlLoop div p, #ControlLoop div div{
     margin-right: 5px;
 }
@@ -286,7 +195,6 @@ body section{
     flex-direction: column;
 /*    position: absolute; */
     z-index: 2;
-/*    background-color: cornflowerblue; */
 }
 
 .popUpSquare *{
@@ -311,7 +219,6 @@ body section{
 }
 
 .sliderInfo input{
-/*background-color: rgb(230,230,230);  depricated, use "regularButton" instead*/
   border: 0;
 }
 
@@ -328,7 +235,6 @@ body section{
 #currentSong{
   font-size: 18px;
   font-weight: bold;
-  color: rgb(36, 36, 36);
 }
 #currentArtist{
   font-size: 14px;
@@ -344,33 +250,6 @@ body section{
   resize: none;
 /*  width: 300px; */
 
-  border: 4px solid lightblue; 
-  background: lightblue;
-}
-
-.textareaEdit{
-  background: white;
-}
-
-/*
-.currentSong { /* is this depricated ? * /
-  color: white;
-/*  background-color: purple; moved to bottom * /
-}
-*/
-.currentMarker{
-  color: white;
-/*  background-color: purple; moved to bottom */
-}
-
-.currentStopMarker{
-  color: white;
-/*  background-color: purple; moved to bottom */
-}
-
-.currentLoop{
-  color: white;
-/*  background-color: purple; moved to bottom */
 }
 
 
@@ -379,7 +258,6 @@ body section{
 /* the style for the time ***************************************/
 #activePlayRegion{
     width: 21px;
-/*    background-color: purple; */
     position: absolute;
     margin-top: 16px;
     height: calc(100vh - 32px);
@@ -411,9 +289,6 @@ body section{
 
 
 
-::-webkit-input-placeholder {
-  color: dimgray;
-}
 
 /* removes the upp/down arrows in number input boxes */
 input[type=number]::-webkit-outer-spin-button,
@@ -438,23 +313,7 @@ input[type=number].numberWider{
   padding-right: 3px;
 }
 
-/* the style for the loop *************************************** /
 
-.XLoopOn p, .XLoopOn div div{
-/*    margin-right: 5px;* /
-}
-.XLoopOff p, .XLoopOff div{
-/*    margin-right: 5px; * /
-    color: gray;
-}
-
-
-.XLoopOff input[type=number]{
-    color: gray;
-    background-color: lightgray;
-}
-
-*/
 #infoSection div{
 	font-size: 48vh;
 }
@@ -472,7 +331,6 @@ input[type=number].numberWider{
     padding-bottom: 5px;
     display: flex;
     align-items: flex-end;
- /*   background-color: #a4c5de; */
 }
 
 #loopButtons input[type="button"]{
@@ -502,10 +360,6 @@ input[type=number].numberWider{
 
 
 /* the style for the IO ***************************************/
-.active{
-  color: white;
-/*  background-color: green; moved to bottom */
-}
 
 .buttWidthStandard{
   width: 85px;
@@ -515,14 +369,7 @@ input[type=number].numberWider{
   width: 107px;
 }
 
-/*
-.flatButton{
-    background-color: rgb(230,230,230);
-    border: 0px;
-    background-color: pink;
-    border: 40px;
-}
-*/
+
 .svgButt{
   height: 31px;
   width: 42px;
@@ -544,34 +391,12 @@ input, button, .linkButton{
 
 
 
-/*
-.poccibleColorsOfMarkers{
-  background: yellowgreen;
-  background: aqua;
-  background: bisque;
-  background: brown;
-  background: burlywood;
-  background: chartreuse;
-  background: chocolate;
-  background: coral;
-  background: cyan;
-  background: darkcyan;
-}
-*/
-
-
-
-  
 .importantLeftLine{
-  border-left: 2px solid #e05915; /*accentColor2*/
   padding-left: 4px;
 }
 
 .important{
-/*  background-color:#ed8223; */
-  color:#fff;
   font-family:'Helvetica Neue',sans-serif;
-  text-shadow:#C17C3A 0 -1px 0;
   padding: 4px;
   border: 0;
 }
@@ -592,7 +417,6 @@ input, button, .linkButton{
   left: 0px;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -601,7 +425,6 @@ input, button, .linkButton{
 .innerDialog{
   width: 600px;
   padding: 10 15px;
-/*  background-color: cornflowerblue; moved to bottom */
 }
 
 .mediumDialog{
@@ -694,23 +517,11 @@ table {
     align-self: center;
     margin: 10px;
     margin-top: 40px;
-    color: gray;
     font-size: 14px;
     max-width: 140px;
     min-width: 100px;
 }
-/*
-.linkButton{
-  background-color: rgb(221, 221, 221);
-  color: rgb(0, 0, 0);
-  cursor: default;height: 18px;
-  line-height: normal;
-}
 
-.bgEasyRead{
-  background: lightblue;
-}
-*/
 
 
 
@@ -723,12 +534,8 @@ table {
   width: 18px;
   height: 18px;
   padding: 0px;
-  border: solid 3px black;
 }
 
-.colorPickerSelected{
-  border: solid 4px purple;
-}
 
 .scrollableY{
   overflow-y: auto;
@@ -768,75 +575,85 @@ table {
   margin-bottom: 0;
 }
 
-/* needed extra colors */
-.grayOut{
-    color: gray;
-    background-color: lightgray;
-}
 
 
 
-
-/*
-input[type="button"]:focus, button:focus, .linkButton:focus{  outline: none}
-input[type="button"]:hover, button:hover, .linkButton:hover{
-/*
-  -ms-transform: scale(1.1);
-  -webkit-transform: scale(20px);
-  -moz-transform: scale(1.1);
-  transform: scale(20px);
-* /
-  outline-style: solid;
-
-/*eeee, hallå, det är ju bara att använda classerna -> alla knappar ska ju ha en klass! * /
-
-  outline-color: initial;
-/*  outline-color: inherit; * /
-/*  outline-color: pink; * /
-  outline-style: solid;
-  outline-width: 2px;
-}
-input[type="button"]:active, button:active, .linkButton:active{
-  outline-color: initial;
-/*  outline-color: inherit; * /
-/*  outline-color: pink; * /
-  outline-style: solid;
-  outline-width: 4px;
-}
-*/
 
 .bold {
   font-weight: bold;
 }
 
-.onOffButton:focus,   .loopButt:focus{  outline: none;}
-.onOffButton:hover,   .loopButt:hover{  outline: solid 2px lightgray;}
-.onOffButton:active,  .loopButt:active{ outline: solid 4px lightgray;}
-.regularButton:focus{   outline: none; /*regularButton*/ ;}
-.regularButton:hover{   outline: solid 2px #b0bec5; /*regularButton*/ ;}
-.regularButton:active{  outline: solid 4px #b0bec5; /*regularButton*/ ;}
 
-.active:hover {outline: solid 2px #AAAF2B;}
-.active:active{outline: solid 4px #AAAF2B;}
+/* new color things, without the color*/
+
+.selected.important {
+  padding: 0;
+}
 
 .selected:hover, 
 .currentLoop:hover, 
 .currentMarker:hover, 
-.currentStopMarker:hover{   outline: solid 2px #431c5d;}
+.currentStopMarker:hover {
+  outline-style: solid;
+  outline-width: 2px;
+  
+}
 .selected:active,
 .currentLoop:active, 
 .currentMarker:active, 
-.currentStopMarker:active{  outline: solid 4px #431c5d;}
+.currentStopMarker:active {
+  outline-style: solid;
+  outline-width: 4px;  
+}
 
-.important:hover {  outline: solid 2px #e05915; }
-.important:active{  outline: solid 4px #e05915; }
 
-.special:hover {  outline: solid 2px #e05915; z-index: 1;}
-.special:active{  outline: solid 4px #e05915; z-index: 1;}
+.selected.important {
+  border-width: 4px;
+  border-style: solid;
+}
+
+.roundButt{
+  border-width: 21px;
+  border-style: solid;
+  border-radius: 21px; 
+  width: 0; 
+  height: 0;
+}
+.roundButt:hover{
+  border-width: 23px;
+  border-style: solid;
+  border-radius: 23px;
+  margin: 2px;
+}
+.roundButt:active{
+  border-width: 25px;
+  border-style: solid;
+  border-radius: 25px; 
+  margin: 0;
+}
+.important:hover {
+  outline-style: solid;
+  outline-width: 2px;
+}
+.important:active{
+  outline-style: solid;
+  outline-width: 4px;
+}
+
+.special:hover {
+  outline-style: solid;
+  outline-width: 2px;
+  z-index: 1;
+}
+.special:active{
+  outline-style: solid;
+  outline-width: 4px;
+  z-index: 1;
+}
+
 
 .centerRoundButtCommon{
   position: relative;
-  background-color: transparent;
 }
 .centerRoundButt1{
   right: 11px;
@@ -847,84 +664,92 @@ input[type="button"]:active, button:active, .linkButton:active{
   bottom: 14.5px;
 }
 
-.roundButt{
-  border: 21px solid #e05915; 
-  border-radius: 21px; 
-  width: 0; 
-  height: 0;
+.onOffButton:focus,
+.loopButt:focus{
+  outline: none;
 }
-.roundButt:hover{
-  border: 23px solid #e05915; 
-  border-radius: 23px;
-  margin: 2px;
+.onOffButton:hover,
+.loopButt:hover{
+  outline-style: solid;
+  outline-width: 2px;;
 }
-.roundButt:active{
-  border: 25px solid #e05915; 
-  border-radius: 25px; 
-  margin: 0;
+.onOffButton:active,
+.loopButt:active{
+  outline-style: solid;
+  outline-width: 4px;;
 }
-
-.onOffButton, .loopButt{
-  background-color: lightgray;}
-
-.regularButton{
-  background-color: rgb(230,230,230);
-  background-color: #c2dde6;
-  background-color: #cfd8dc; /*lightbluegray*/
-  background-color: #b0bec5; /*little darker lightbluegray*/ 
-  /*någonstanns mellan dessa?*/
+.regularButton:focus{
+  outline: none; /*regularButton*/
 }
-
-/* The "Anton & Irene" color scheem */
-.backgroundColor, .extraBorder{
-  background-color: #bccbde;
+.regularButton:hover{
+  outline-style: solid;
+  outline-width: 2px;
 }
-.primaryColor, .bgEasyRead{
-  background-color: #c2dde6;
-  background: #c2dde6;
-}
-.secondaryColor, .areaParent > div, .popUpSquare, .innerDialog{
-  background-color: #e6e9f0;
-}
-.accentColor1, .selected, .currentLoop, .currentMarker, .currentStopMarker{
-  background-color: #431c5d;
-}
-.accentColor2, .important {
-  background-color: #e05915;
-}
-
-.selected.important {
-  background-color: #431c5d; /* accentColor1 */
-  border: 4px solid #e05915; /* accentColor2 */ 
-  padding: 0;
-}
-
-.accentColor3, .active{
-  background-color: #cdd422;
-  background-color: #AAAF2B;
-/*  background-color: #BBCC22; */
+.regularButton:active{
+  outline-style: solid;
+  outline-width: 4px;
 }
 
 
-.pause{
-    color: red; /*accentColor2, important */
-    color: #e05915; /**/
+.active:hover {
+  outline-style: solid;
+  outline-width: 2px;
 }
-.wait{
-    color: orange;  /* accentColor3, active */
-    color: #cdd422;
-    color: #AAAF2B; /* lite mörkare tolkning av accentColor3  ... jaja...*/
-/*    color: #BBCC22; */
-}
-.play{
-    color: green; /*  accentColor1, selected... */
-    color: #431c5d;
+.active:active{
+  outline-style: solid;
+  outline-width: 4px;
 }
 
 
-/* end "Anton & Irene" color scheeme */
+
+.textareaStandard{
+  border-style: solid;
+  border-width: 4px;
+}
 
 
+
+
+.importantLeftLine {
+  border-left-width: 2px;
+  border-left-style: solid;
+}
+
+
+.colorPickerSelected{
+  border-style: solid;
+  border-width: 4px;
+}
+
+.colorPicker{
+  border-style: solid;
+  border-width: 3px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*------------------------------*/
 .hidden {
   display: none !important;
 }
+
+
+
+
+
+
+
+
+
