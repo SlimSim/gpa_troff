@@ -1200,6 +1200,8 @@ var TroffClass = function(){
   this.cancelSongList = function(){
     document.getElementById('blur-hack').focus();
     $('#newSongListPart').hide();
+    $( "#searchCreateSongList" ).val( "" ).trigger( "click" );
+    IO.clearEnterFunction();
     $('#songListPartButtons, #songListPartTheLists').show();
     Troff.resetNewSongListPartAllSongs();
   };
@@ -1209,6 +1211,8 @@ var TroffClass = function(){
                 'Don you want to permanently remove this songlist?',
                 function(){
       $('#newSongListPart').hide();
+      $( "#searchCreateSongList" ).val( "" ).trigger( "click" );
+      IO.clearEnterFunction();
       $('#songListPartButtons, #songListPartTheLists').show();
       document.getElementById('blur-hack').focus();
       var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
@@ -1233,6 +1237,10 @@ var TroffClass = function(){
   
   this.saveNewSongList = function(){
     $('#newSongListPart').hide();
+    $( "#searchCreateSongList" ).val( "" ).trigger( "click" );
+    IO.clearEnterFunction();
+
+
     $('#songListPartButtons, #songListPartTheLists').show();
     
     document.getElementById('blur-hack').focus();
@@ -1599,9 +1607,18 @@ var TroffClass = function(){
 
     DB.saveSongDataFromState(Troff.getCurrentSong(), oState);
   };
-  
-  this.searchSong = function( event ) {
-    
+
+
+  this.searchCreateSongList = function( event ) {
+    Troff.searchSongTot(
+      event,
+      "#newSongListPartAllSongs",
+      function( el ){ return el.attr( "isDirectory" ) == "false"; },
+      function( el ){ return el.find( "div" ).text(); }
+    );
+  };
+
+  this.searchSongTot = function( event, selector, test, getText ) {
     function normalizeText( text ) {
       return text
         .toLowerCase()
@@ -1609,20 +1626,27 @@ var TroffClass = function(){
         .replace(/[öø]/g, "o")
         .replace(/[\W_]/g, "");
     }
-    
     var addedSelected = false;
-    
-    $('#gallery').children().each(function( i, element ){
+    $( selector ).children().each(function( i, element ){
       var el = $( element );
-      if( el.is('button') ) {
-  
-        if( normalizeText(el.text()).includes( normalizeText($(event.target).val()) ) ){
-          el.removeClass( 'hidden' );
+      if( test( el ) ) {
+        if( normalizeText( getText( el ) ).includes( normalizeText( $( event.target ).val() ) ) ){
+          el.removeClass( "hidden" );
         } else {
-          el.addClass( 'hidden' );
+          el.addClass( "hidden" );
         }
       }
-    });
+    } );
+  }
+
+  this.searchSong = function( event ) {
+    Troff.searchSongTot(
+      event,
+      "#gallery",
+      function( el ){ return el.is( "button" ); },
+      function( el ){ return el.text(); }
+    );
+
     var importantEl = $('#gallery .important');
     if( importantEl.length === 0 || importantEl.hasClass('hidden') ){
       importantEl.removeClass('important');
@@ -1630,6 +1654,26 @@ var TroffClass = function(){
     }
   };
   
+  this.enterSearchCreateSongList = function( event ){
+
+    $input = $( event.target );
+    $input.addClass('textareaEdit');
+
+    if( !$input.is(':focus') ) {
+      $input.focus()
+    }
+    Troff.searchCreateSongList( event );
+
+    IO.setEnterFunction(function(event){
+      if(event.ctrlKey==1){//Ctrl+Enter will exit
+        $('#searchCreateSongList').val('').trigger('click');
+        document.getElementById('blur-hack').focus();
+        return false;
+      }
+      return true;
+    });
+
+  };
   
   this.enterSearch = function( event ){
     if( $('#songsArea').is(':hidden') ) {
@@ -1668,9 +1712,16 @@ var TroffClass = function(){
       }
     });
   };
+  this.exitSearchCreateSongList = function( event ){
+    Troff.exitSearchTot( event, "#newSongListPartAllSongs .important" );
+  };
   this.exitSearch = function( event ){
+    Troff.exitSearchTot( event, "#gallery .important" );
+  };
+
+  this.exitSearchTot = function( event, selector ) {
     $( event.target ).removeClass('textareaEdit');
-    $('#gallery .important').removeClass('important');
+    $( selector ).removeClass('important');
     IO.clearEnterFunction();
   };
   
@@ -3190,6 +3241,7 @@ var IOClass = function(){
     //$('#startBefore').change(Troff.updateStartBefore);
     $('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
     $('#searchSong')[0].addEventListener('input', Troff.searchSong);
+    $('#searchCreateSongList')[0].addEventListener('input', Troff.searchCreateSongList);
     
     $('#buttZoom').click(Troff.zoomToMarker);
     $('#buttZoomOut').click(Troff.zoomOut);
@@ -3199,8 +3251,12 @@ var IOClass = function(){
     $('#markerInfoArea').change(Troff.updateMarkerInfo);
     $('#markerInfoArea').blur(Troff.exitMarkerInfo);
     $('#markerInfoArea').click(Troff.enterMarkerInfo);
+    $( '#searchCreateSongList' ).click( Troff.enterSearchCreateSongList );
+    $( '#searchCreateSongList' ).blur( Troff.exitSearchCreateSongList );
     $('.editText').click(Troff.enterSearch);
     $('.editText').blur(Troff.exitSearch);
+
+
 
     $('#songInfoArea').change(Troff.updateSongInfo);
     $('#songInfoArea').blur(Troff.exitSongInfo);
@@ -3260,7 +3316,7 @@ var IOClass = function(){
       Troff.settAppropriateMarkerDistance();
     });
     
-    IO.setColor( "col2" );
+    IO.setColor( "col1" );
 
   };//end startFunc
 
