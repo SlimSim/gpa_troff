@@ -3316,7 +3316,7 @@ var IOClass = function(){
       Troff.settAppropriateMarkerDistance();
     });
     
-    IO.setColor( "col3" );
+    IO.setColor( "col1" );
 
   };//end startFunc
 
