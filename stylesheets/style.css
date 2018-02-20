@@ -395,7 +395,8 @@ li[isdirectory="true"] {
 }
 li[isdirectory="true"]:not(:first-child) {
   padding-top: 10px;
-  border-top: solid #e6e9f0 5px; /* secondaryColor */
+  border-top-style: solid;
+  border-top-width: 5px;
   margin-top: 10px;
   margin-bottom: 2px;
 }
@@ -664,6 +665,9 @@ table {
 
 .centerRoundButtCommon{
   position: relative;
+}
+.centerRoundButtCommon:hover {
+  outline-width: 0;
 }
 .centerRoundButt1{
   right: 11px;

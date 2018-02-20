@@ -37,9 +37,9 @@
 
 
 /* oddballs */
-.col2 .textareaStandard{
-  background: lightblue;
-  border-color: lightblue;
+.col2 .textareaStandard {
+  background: #DFEDD8;
+  border-color: #DFEDD8;
 }
 
 .col2 .textareaEdit{
@@ -63,11 +63,11 @@
     color: gray;
 }
 
-.col2 .colorPickerSelected{
-  border-color: purple;
-}
 .col2 .colorPicker{
   border-color: black;
+}
+.col2 .colorPickerSelected{
+  border-color: purple;
 }
 
 
@@ -78,7 +78,7 @@
 /* the background */
 .col2 .backgroundColor,
 .col2 .extraBorder{
-  background-color: white;
+  background-color: #F2F8EF;
 }
 
 
@@ -98,29 +98,29 @@
 
 
 
-/* primaryColor */
+/* primaryColor 500 */
 .col2 .primaryColor,
 .col2 .bgEasyRead {
-  background-color: #61e68d;
-  background: #61e68d;
+  background-color: #93C47D;
+  background: #93C47D;
 }
 
 
 
 
-/* secondaryColor */
+/* secondaryColor 200 */
 .col2 .secondaryColor,
 .col2 .areaParent > div,
 .col2 .popUpSquare,
 .col2 .innerDialog {
-  background-color: #b2f5e1;
+  background-color: #C9E2BE;
 }
 
 
 
 
 
-/* accentColor1 */
+/* accentColor1 A700 (men kanske ännu mörkare) */
 .col2 .selected:hover, 
 .col2 .currentLoop:hover, 
 .col2 .currentMarker:hover, 
@@ -128,7 +128,7 @@
 .col2 .selected:active,
 .col2 .currentLoop:active, 
 .col2 .currentMarker:active, 
-.col2 .currentStopMarker:active {  outline-color: #28a745;}  /* accentColor1 */
+.col2 .currentStopMarker:active {  outline-color: #2DFC00;}  /* accentColor1 */
 
 .col2 .accentColor1,
 .col2 .selected,
@@ -136,24 +136,24 @@
 .col2 .currentMarker,
 .col2 .currentStopMarker,
 .col2 .selected.important {
-  background-color: #28a745; /* accentColor1 */
-  color: white;
+  background-color: #2DFC00; /* accentColor1 */
+  color: black;
 }
 .col2 .play{
-    color: #28a745; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+    color: #2DFC00; /* accentColor1 - IF GREEN ISH (or works for that... */ 
 }
 
 
 
 
 
-/* accentColor2 */ 
+/* accentColor2, 400 */ 
 
 .col2 .important:hover,
 .col2 .important:active,
 .col2 .special:hover,
 .col2 .special:active{
-  outline-color: #dc3545;
+  outline-color: #D42626;
 
 }
 
@@ -161,18 +161,18 @@
 .col2 .roundButt:hover,
 .col2 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
 .col2 .selected.important {
-  border-color: #dc3545; /* accentColor2 */
+  border-color: #D42626; /* accentColor2 */
 }
 .importantLeftLine {
-  border-left-color: #dc3545; /*accentColor2*/
+  border-left-color: #D42626; /*accentColor2*/
 }
 
 .col2 .accentColor2,
 .col2 .important {
-  background-color: #dc3545; /* accentColor2 */
+  background-color: #D42626; /* accentColor2 */
 }
 .col2 .pause{
-    color: #dc3545; /* accentColor2 - IF RED ISH... */ 
+    color: #D42626; /* accentColor2 - IF RED ISH... */ 
 }
 
 
@@ -188,19 +188,19 @@
 
 
 
-/* accentColor3 */
+/* accentColor3 700 */
 .col2 .active:hover,
 .col2 .active:active{
-  outline-color: #ffc107; /* accentColor3 */
+  outline-color: #FFCF53; /* accentColor3 */
 }
 
 .col2 .accentColor3,
 .col2 .active{
-  background-color: #ffc107; /* accentColor3 */
-  color: white;
+  background-color: #FFCF53; /* accentColor3 */
+  color: black;
 }
 .col2 .wait{
-  color: #ffc107; /* accentColor3 - IF YELLOW ISH... */ 
+  color: #FFCF53; /* accentColor3 - IF YELLOW ISH... */ 
 }
 
 

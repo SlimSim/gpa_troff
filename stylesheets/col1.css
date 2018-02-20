@@ -63,11 +63,11 @@
     color: gray;
 }
 
-.col1 .colorPickerSelected{
-  border-color: purple;
-}
 .col1 .colorPicker{
   border-color: black;
+}
+.col1 .colorPickerSelected{
+  border-color: purple;
 }
 
 
@@ -139,7 +139,8 @@
   background-color: #431c5d; /* accentColor1 */
   color: white;
 }
-.col1 .play{
+.col1 .play .secondsLeft,
+.col1 .play .loopTimesLeft{
     color: #431c5d; /* accentColor1 - IF GREEN ISH (or works for that... */ 
 }
 
@@ -170,7 +171,8 @@
 .col1 .important {
   background-color: #e05915; /* accentColor2 */
 }
-.col1 .pause{
+.col1 .pause .secondsLeft,
+.col1 .pause .loopTimesLeft{
     color: #e05915; /* accentColor2 - IF RED ISH... */ 
 }
 
@@ -198,7 +200,8 @@
   background-color: #AAAF2B; /* accentColor3 */
   color: white;
 }
-.col1 .wait{
+.col1 .wait .secondsLeft,
+.col1 .wait .loopTimesLeft{
   color: #AAAF2B; /* accentColor3 - IF YELLOW ISH... */ 
 }
 

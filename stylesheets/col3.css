@@ -1,0 +1,235 @@
+/******************************************************************************)
+(*                        col scheem 2                                        */
+/* The "Anton & Irene" color scheem */
+
+
+/* standard color... */
+.col3 ::-webkit-input-placeholder {
+  color: dimgray;
+}
+
+
+.col3 h1,
+.col3 h2,
+.col3 h3,
+.col3 h4,
+.col3 h5,
+.col3 h6,
+.col3 p{
+  color: inherit;
+}
+
+.col3 .centerRoundButtCommon{
+  background-color: transparent;
+}
+.col3 .onOffButton,
+.col3 .loopButt{
+  outline-color: #BDBDBD;
+}
+.col3 .onOffButton,
+.col3 .loopButt{
+  background-color: #BDBDBD;
+}
+
+.col3 .grayOut{
+    color: gray;
+    background-color: lightgray;
+}
+
+
+/* oddballs */
+.col3 .textareaStandard{
+  background: #FFFDE7;
+  border-color: #FFFDE7;
+}
+
+.col3 .textareaEdit{
+  background: white;
+}
+
+.col3 .fullscreen{
+  background-color: black;
+}
+
+.col3 .likeLink{
+  background-color: transparent;
+  color: blue;
+}
+
+.col3 .outerDialog{
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.col3 .helpText{
+    color: gray;
+}
+
+.col3 .colorPicker{
+  border-color: black;
+}
+.col3 .colorPickerSelected{
+  border-color: #FFEB3B;
+}
+
+
+
+
+
+
+/* the background */
+.col3 .backgroundColor,
+.col3 .extraBorder{
+  background-color: #000;
+  color: white;
+}
+.col3 .backgroundColor a {
+  color: lightgray;
+}
+
+
+
+
+/* regularButton */
+.col3 .regularButton:focus,
+.col3 .regularButton:hover,
+.col3 .regularButton:active{
+  outline-color: #E0E0E0; /*regularButton*/
+}
+.col3 .regularButton{
+  background-color: #E0E0E0; /*regularButton*/
+}
+
+
+
+
+
+
+/* primaryColor */
+.col3 .primaryColor,
+.col3 .bgEasyRead {
+  background-color: #9E9E9E;
+  background: #9E9E9E;
+  color: black;
+}
+.col3 .primaryColor a {
+  color: white;
+}
+
+
+
+
+/* secondaryColor */
+.col3 .secondaryColor,
+.col3 .areaParent > div,
+.col3 .popUpSquare,
+.col3 #donate, /* only for this one */
+.col3 .innerDialog {
+  background-color: #616161;
+  color: white;
+}
+li[isdirectory="true"]:not(:first-child) {
+  border-top-color: #616161; /* secondaryColor */
+}
+
+
+
+
+/* accentColor1 */
+.col3 .selected:hover, 
+.col3 .currentLoop:hover, 
+.col3 .currentMarker:hover, 
+.col3 .currentStopMarker:hover,
+.col3 .selected:active,
+.col3 .currentLoop:active, 
+.col3 .currentMarker:active, 
+.col3 .currentStopMarker:active {  outline-color: #FFEB3B;}  /* accentColor1 */
+
+.col3 .accentColor1,
+.col3 .selected,
+.col3 .currentLoop,
+.col3 .currentMarker,
+.col3 .currentStopMarker,
+.col3 .selected.important {
+  background-color: #FFEB3B; /* accentColor1 */
+  color: black;
+}
+.col3 .play .secondsLeft,
+.col3 .play .loopTimesLeft{
+    color: #FFEB3B; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+}
+
+
+.col3 #donate:hover,
+.col3 #donate:active [
+  outline-color: #fff;
+]
+
+/* accentColor2 */ 
+.col3 .important:hover,
+.col3 .important:active,
+.col3 .special:hover,
+.col3 .special:active{
+  outline-color: #000;
+}
+
+
+.col3 .roundButt,
+.col3 .roundButt:hover,
+.col3 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
+.col3 .selected.important {
+  border-color: #000; /* accentColor2 */
+}
+.importantLeftLine {
+  border-left-color: #000; /*accentColor2*/
+}
+
+.col3 .accentColor2,
+.col3 .important {
+  background-color: #000; /* accentColor2 */
+}
+.col3 .pause .secondsLeft,
+.col3 .pause .loopTimesLeft{
+    color: #000; /* accentColor2 - IF RED ISH... */ 
+}
+
+
+.important{
+  color:#fff;
+  text-shadow:#C17C3A 0 -1px 0; /* NOTISE: not the same color... */
+}
+
+
+
+.col3 #activePlayRegion{ /* note, overwriding...*/
+  background-color: black;
+}
+
+
+
+
+/* accentColor3 */
+.col3 .active:hover,
+.col3 .active:active{
+  outline-color: #F5F5F5; /* accentColor3 */
+}
+
+.col3 .accentColor3,
+.col3 .active{
+  background-color: #F5F5F5; /* accentColor3 */
+  color: black;
+}
+
+.col3 .wait .secondsLeft,
+.col3 .wait .loopTimesLeft{
+  color: #F5F5F5; /* accentColor3 - IF YELLOW ISH... */ 
+}
+
+
+/* end "Anton & Irene" color scheeme */
+
+
+/* only for this one */ 
+#markerSection {
+  padding-left: 4px; 	
+}
+
