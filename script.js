@@ -27,6 +27,9 @@ var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jp
 var audFormats = ['wav', 'mp3'];
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'ogg', 'webm', 'wmv'];
 
+
+var MARKER_COLOR_PREFIX = "markerColor";
+
 function errorPrintFactory(custom) {
    return function(e) {
       var msg = '';
@@ -1864,7 +1867,7 @@ var TroffClass = function(){
         listElement.appendChild(p);
         listElement.appendChild(button);
         listElement.appendChild(buttonS);
-        listElement.style.background = color;
+        $( listElement ).addClass( MARKER_COLOR_PREFIX + color );
 
 
         var child = $('#markerList li:first-child')[0];
@@ -1881,11 +1884,6 @@ var TroffClass = function(){
               $('#'+markerId)[0].info = newMarkerInfo;
               if($('.currentMarker')[0].id == child.childNodes[2].id)
                 $('#markerInfoArea').val(newMarkerInfo);
-            }
-            if(child.style.background == "none"){
-              updated = true;
-              $('#'+markerId)[0].color = color;
-              child.style.background = color;
             }
             if(child.childNodes[2].value != name){
               var newMarkerName = child.childNodes[2].value + ", " + name;
@@ -2245,6 +2243,7 @@ var TroffClass = function(){
       var oldTime = Number($('#'+markerId)[0].timeValue);
       var oldMarkerInfo = $('#'+markerId)[0].info;
       var oldMarkerColor = $('#'+markerId)[0].color;
+      var oldMarkerClass = MARKER_COLOR_PREFIX + oldMarkerColor;
 
       var text = "Please enter new marker name here";
       IO.promptEditMarker(markerId, function(newMarkerName, newMarkerInfo, newMarkerColor, newTime){
@@ -2281,7 +2280,9 @@ var TroffClass = function(){
       if(newMarkerColor != oldMarkerColor){
         updated = true;
         $('#'+markerId)[0].color = newMarkerColor;
-        $('#'+markerId)[0].parentNode.style.background = newMarkerColor;
+				$( "#markerNr7").closest( 'li' )
+        $('#'+markerId).parent().removeClass( oldMarkerClass );
+        $('#'+markerId).parent().addClass( MARKER_COLOR_PREFIX + newMarkerColor );
       }
 
       // update HTML Time

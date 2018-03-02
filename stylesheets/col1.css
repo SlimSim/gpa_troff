@@ -1,5 +1,5 @@
 /******************************************************************************)
-(*                        col scheem 2                                        */
+(*                        col scheem 1                                        */
 /* The "Anton & Irene" color scheem */
 
 
@@ -207,5 +207,18 @@
 
 
 /* end "Anton & Irene" color scheeme */
+
+
+/* Marker color section */
+.col1 .markerColorAqua {	background-color: Aqua;	color: black; }
+.col1 .markerColorBisque {	background-color: Bisque;	color: black; }
+.col1 .markerColorChartreuse {	background-color: Chartreuse;	color: black; }
+.col1 .markerColorCoral {	background-color: Coral;	color: black; }
+.col1 .markerColorPink {	background-color: Pink;	color: black; }
+.col1 .markerColorBurlywood {	background-color: Burlywood;	color: black; }
+.col1 .markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
+.col1 .markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
+.col1 .markerColorPeru {	background-color: Peru;	color: black; }
+.col1 .markerColorViolet {	background-color: Violet;	color: black; }
 
 

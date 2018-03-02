@@ -1,6 +1,6 @@
 /******************************************************************************)
-(*                        col scheem 2                                        */
-/* The "Anton & Irene" color scheem */
+(*                        col scheem 3                                        */
+/* The "WinAmp-inspired" color scheem                                         */
 
 
 /* standard color... */
@@ -226,6 +226,19 @@ li[isdirectory="true"]:not(:first-child) {
 
 
 /* end "Anton & Irene" color scheeme */
+
+
+/* Marker color section */
+.col3 .markerColorAqua {	background-color: Aqua;	color: black; }
+.col3 .markerColorBisque {	background-color: Bisque;	color: black; }
+.col3 .markerColorChartreuse {	background-color: Chartreuse;	color: black; }
+.col3 .markerColorCoral {	background-color: Coral;	color: black; }
+.col3 .markerColorPink {	background-color: Pink;	color: black; }
+.col3 .markerColorBurlywood {	background-color: Burlywood;	color: black; }
+.col3 .markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
+.col3 .markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
+.col3 .markerColorPeru {	background-color: Peru;	color: black; }
+.col3 .markerColorViolet {	background-color: Violet;	color: black; }
 
 
 /* only for this one */ 
