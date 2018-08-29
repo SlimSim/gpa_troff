@@ -83,21 +83,21 @@
               <input
                 type="button"
                 value="▶"
-                title="move to selected marker (or start of song) and play song (key: space)" 
+                title="Move to selected marker (or start of song) and play song (key: space)" 
                 class="important centerRoundButtCommon centerRoundButt1"
                 id="buttSpacePlay" >
               <input
                 type="button" 
                 value="II"
                 style="display: none;"
-                title="pause song (key: space or enter)" 
+                title="Pause song (key: space or enter)" 
                 class="important centerRoundButtCommon centerRoundButt2"
                 id="buttSpacePause">
             </span>
           </nav>
         <div id="mediaInfoBox" class="flexCol halfMarginParent">
           <div id="currentArtist">
-            Please select a song or moive from the songs area
+            Please select a song or movie from the songs area
           </div>
           <div id="currentSong"></div>
           <div id="currentAlbum"></div>
@@ -114,10 +114,10 @@
         </div>
         <nav class="flexCol center">
           <input class="svgButt regularButton" style="display: block;" type="button"
-              title="get tips on how to best use Troff"
+              title="Get tips on how to get the most out of Troff"
               class="small regularButton" id="buttTip" value="Help" />
-          <button class="svgButt shareClass regularButton" title="Share the link to this app with your freinds via email">
-            <svg version="1.1" style="height=26px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
+          <button class="svgButt shareClass regularButton" title="Share this app with your friends via email">
+            <svg version="1.1" style="height:26px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
               <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
               <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
             </svg>
@@ -145,7 +145,7 @@
           <input type="button" value="New song list" class="regularButton" id="buttNewSongList"/>
           <input type="button" id="songlistAll" class="selected onOffButton" value="All songs"/>
           <p id="songlistHelpText" class="helpText" style="margin-top: 15px;">
-            A songlist lets you only show a fiew songs.<br />
+            A songlist lets you only show a few songs.<br />
             If you add a folder in the songlist, all songs and videos in that
             folder will automatically be added. 
           </p>
@@ -178,13 +178,13 @@
       
       <div id="songsArea" class="flexCol start">
         <h1>Songs</h1>
-        <input type="button" title="select folders to get songs from" class="regularButton" id="configure-button" value="Select folders"/>
+        <input type="button" title="Select folders to get songs from" class="regularButton" id="configure-button" value="Select folders"/>
         
         <input 
             type="text"
             id="searchSong"
             class="editText maxWidthChild"
-            placeholder="Search (Crtl + F)" />
+            placeholder="Search (Ctrl + F)" />
         
         <p id="SongsHelpTextEmptySonglist" class="helpText">
           This song list is empty; select another song list in the 
@@ -227,8 +227,8 @@
           <div id="ControlMarker" class="flexCol end">
             <h2>Marker</h2>
             <div>
-              <input type="button" class="regularButton" title="import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
-              <input type="button" title="add a marker to the sogn timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
+              <input type="button" class="regularButton" title="Import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
+              <input type="button" title="Add a marker to the song timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
             </div>
             <div>
               <input type="button" title="Move more than one marker" class="regularButton" value="move markers" id="buttPromptMoveMarkers" />
@@ -236,7 +236,7 @@
             <div>
               <input 
                 type="button" 
-                title="select first and last markers (key: u)" 
+                title="Select first and last markers (key: u)" 
                 class="regularButton" 
                 value="play fu&#818;ll song" 
                 id="buttUnselectMarkers" />
@@ -265,13 +265,13 @@
               style="word-wrap: break-word; width: 98px; padding: 1px 4px;"/>
               -->
             <div>
-              <input type="button" title="toggle; start a fiew seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="buttWidthStandard onOffButton"/>
-              <input type="number" title="set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />
+              <input type="button" title="Toggle; start a few seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="buttWidthStandard onOffButton"/>
+              <input type="number" title="Set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />
             </div>
     
             <div>
-              <input type="button" title="toggle; stop a fiew seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="buttWidthStandard onOffButton"/>
-              <input type="number" title="set how many seconds after the stop marker to stop (key: shift/alt a)" value="2" min="0"  id="stopAfter" />
+              <input type="button" title="Toggle; stop a few seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="buttWidthStandard onOffButton"/>
+              <input type="number" title="Set how many seconds after the stop marker to stop (key: shift/alt a)" value="2" min="0"  id="stopAfter" />
             </div>
           </div> <!-- ControlMarker -->
     
@@ -280,35 +280,35 @@
             <div>
               <input 
                 type="button" 
-                title="toggle; wait a fiew seconds before song starts to play (key: p)" 
+                title="Toggle; wait a few seconds before song starts to play (key: p)" 
                 value="p&#818;ause before" 
                 id="buttPauseBefStart"
                 class="buttWidthMedium onOffButton active" />
-              <input type="number" title="set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
+              <input type="number" title="Set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
             </div>
 
             <div class="XLoopOff">
               <input type="button" 
                 class="buttWidthMedium onOffButton active" 
                 value="wait between"
-                id="buttWaitBetweenLoops"/p> 
+                id="buttWaitBetweenLoops"/> 
               <input type="number" 
-                title="set how many seconds to wait between each loop"  
+                title="Set how many seconds to wait between each loop"  
                 value="1" 
                 id="waitBetweenLoops"  /> 
             </div>
             
             <span class="loopSquare" id="loopButtons" >
-              <input type="button" title="play song only 1 time (key: 1)" class="loopButt" value="1" id="buttLoop1" />
-              <input type="button" title="loop song 2 times (key: 2)" class="loopButt" value="2" id="buttLoop2" />
-              <input type="button" title="loop song 3 times (key: 3)" class="loopButt" value="3" id="buttLoop3" />
-              <input type="button" title="loop song 4 times (key: 4)" class="loopButt" value="4" id="buttLoop4" />
-              <input type="button" title="loop song 5 times (key: 5)" class="loopButt" value="5" id="buttLoop5" />
-              <input type="button" title="loop song 6 times (key: 6)" class="loopButt" value="6" id="buttLoop6" />
-              <input type="button" title="loop song 7 times (key: 7)" class="loopButt" value="7" id="buttLoop7" />
-              <input type="button" title="loop song 8 times (key: 8)" class="loopButt" value="8" id="buttLoop8" />
-              <input type="button" title="loop song 9 times (key: 9)" class="loopButt" value="9" id="buttLoop9" />
-              <input type="button" title="loop song &infin; times (key: 0)" class="loopButt" value="&infin;" id="buttLoopInf" />
+              <input type="button" title="Play song only 1 time (key: 1)" class="loopButt" value="1" id="buttLoop1" />
+              <input type="button" title="Loop song 2 times (key: 2)" class="loopButt" value="2" id="buttLoop2" />
+              <input type="button" title="Loop song 3 times (key: 3)" class="loopButt" value="3" id="buttLoop3" />
+              <input type="button" title="Loop song 4 times (key: 4)" class="loopButt" value="4" id="buttLoop4" />
+              <input type="button" title="Loop song 5 times (key: 5)" class="loopButt" value="5" id="buttLoop5" />
+              <input type="button" title="Loop song 6 times (key: 6)" class="loopButt" value="6" id="buttLoop6" />
+              <input type="button" title="Loop song 7 times (key: 7)" class="loopButt" value="7" id="buttLoop7" />
+              <input type="button" title="Loop song 8 times (key: 8)" class="loopButt" value="8" id="buttLoop8" />
+              <input type="button" title="Loop song 9 times (key: 9)" class="loopButt" value="9" id="buttLoop9" />
+              <input type="button" title="Loop song &infin; times (key: 0)" class="loopButt" value="&infin;" id="buttLoopInf" />
             </span>
           </div> <!-- ControlLoop -->
     
@@ -323,10 +323,10 @@
     
         <div class="doubleSliders flexOne">
           <div class="sliderInfo">
-            <input class="button small regularButton" type="button" title="set volume to 100% (key: v)" value="V&#818;olume:" id="buttResetVolume" />
+            <input class="button small regularButton" type="button" title="Set volume to 100% (key: v)" value="V&#818;olume:" id="buttResetVolume" />
             <div class="plussMinusButton" id="plussMinusButtons">
-              <input class="button small regularButton" type="button" title="decrease volume (key: alt v)" value="-" id="volumeMinus" />
-              <input class="button small regularButton" type="button" title="increase volume (key: shift v)" value="+" id="volumePlus" />
+              <input class="button small regularButton" type="button" title="Decrease volume (key: alt v)" value="-" id="volumeMinus" />
+              <input class="button small regularButton" type="button" title="Increase volume (key: shift v)" value="+" id="volumePlus" />
             </div>
             <div class="dataOutput" id="volumeDataOutput">
               <div id="volume">100</div><p>%</p>
@@ -335,10 +335,10 @@
           </div> <!-- sliderInfo -->
     
           <div class="sliderInfo">
-            <input class="button small regularButton" type="button" title="set speed to 100% (key: s)" value="S&#x332;peed:" id="buttResetSpeed" />
+            <input class="button small regularButton" type="button" title="Set speed to 100% (key: s)" value="S&#x332;peed:" id="buttResetSpeed" />
             <div class="plussMinusButton">
-              <input class="button small regularButton" type="button" title="decrease speed (key: alt s)" value="-" id="speedMinus" />
-              <input class="button small regularButton" type="button" title="increase speed (key: shift s)" value="+" id="speedPlus" />
+              <input class="button small regularButton" type="button" title="Decrease speed (key: alt s)" value="-" id="speedMinus" />
+              <input class="button small regularButton" type="button" title="Increase speed (key: shift s)" value="+" id="speedPlus" />
             </div>
             <div class="dataOutput">
               <div id="speed">100</div><p>%</p>
@@ -354,7 +354,7 @@
     
     <div style="display: flex; align-items: center; flex-direction: column;">
       <a href="https://goo.gl/forms/dNLBdinwcnBxOlRu2" target="_blank" style="height: 20px;">
-        Please take the user servay to help make Troff better.
+        Please take the user survey to help make Troff better.
       </a>
     </div>
     <button id="donate" class="regularButton special" title="">
@@ -383,7 +383,7 @@
     <div id="content"></div>
     <div>
       <input type="button" 
-        title="tapp repeatedly to calculate tempo (key: t)" 
+        title="Tap repeatedly to calculate tempo (key: t)" 
         class="regularButton" 
         id="buttTappTempo" 
         value="T&#818;empo:"/>
@@ -582,7 +582,7 @@
         </p>
         <p class="paragraph normalSize">
           If Troff is zoomed to the active playing region, 
-          then it is not pocible to zoome in or out. 
+          then it is not pocible to zoom in or out. 
           Change the active playing region and you will be able to zoom.
         </p>
       </div>
