@@ -4,69 +4,69 @@
 
 
 /* standard color... */
-.col2 ::-webkit-input-placeholder {
+::-webkit-input-placeholder {
   color: dimgray;
 }
 
-.col2 h1,
-.col2 h2,
-.col2 h3,
-.col2 h4,
-.col2 h5,
-.col2 h6,
-.col2 p{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p{
   color: rgb(50, 50, 50);
 }
 
-.col2 .centerRoundButtCommon{
+.centerRoundButtCommon{
   background-color: transparent;
 }
-.col2 .onOffButton,
-.col2 .loopButt{
+.onOffButton,
+.loopButt{
   outline-color: lightgray;
 }
-.col2 .onOffButton,
-.col2 .loopButt{
+.onOffButton,
+.loopButt{
   background-color: lightgray;
 }
 
-.col2 .grayOut{
+.grayOut{
   color: gray;
   background-color: lightgray;
 }
 
 
 /* oddballs */
-.col2 .textareaStandard {
+.textareaStandard {
   background: #DFEDD8;
   border-color: #DFEDD8;
 }
 
-.col2 .textareaEdit{
+.textareaEdit{
   background: white;
 }
 
-.col2 .fullscreen{
+.fullscreen{
   background-color: black;
 }
 
-.col2 .likeLink{
+.likeLink{
   background-color: transparent;
   color: blue;
 }
 
-.col2 .outerDialog{
+.outerDialog{
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.col2 .helpText{
+.helpText{
     color: gray;
 }
 
-.col2 .colorPicker{
+.colorPicker{
   border-color: black;
 }
-.col2 .colorPickerSelected{
+.colorPickerSelected{
   border-color: purple;
 }
 
@@ -76,20 +76,20 @@
 
 
 /* the background */
-.col2 .backgroundColor,
-.col2 .extraBorder{
+.backgroundColor,
+.extraBorder{
   background-color: #F2F8EF;
 }
 
 
 
 /* regularButton */
-.col2 .regularButton:focus,
-.col2 .regularButton:hover,
-.col2 .regularButton:active{
+.regularButton:focus,
+.regularButton:hover,
+.regularButton:active{
   outline-color: #b0bec5; /*regularButton*/
 }
-.col2 .regularButton{
+.regularButton{
   background-color: #b0bec5; /*regularButton*/
 }
 
@@ -99,8 +99,8 @@
 
 
 /* primaryColor 500 */
-.col2 .primaryColor,
-.col2 .bgEasyRead {
+.primaryColor,
+.bgEasyRead {
   background-color: #93C47D;
   background: #93C47D;
 }
@@ -109,38 +109,48 @@
 
 
 /* secondaryColor 200 */
-.col2 .secondaryColor,
-.col2 .areaParent > div,
-.col2 .popUpSquare,
-.col2 .innerDialog {
+.secondaryColor,
+.areaParent > div,
+.popUpSquare,
+.innerDialog {
   background-color: #C9E2BE;
 }
+
+.marker-parent li {
+  border-top-color: #C9E2BE;
+}
+
 
 
 
 
 
 /* accentColor1 A700 (men kanske ännu mörkare) */
-.col2 .selected:hover, 
-.col2 .currentLoop:hover, 
-.col2 .currentMarker:hover, 
-.col2 .currentStopMarker:hover,
-.col2 .selected:active,
-.col2 .currentLoop:active, 
-.col2 .currentMarker:active, 
-.col2 .currentStopMarker:active {  outline-color: #2DFC00;}  /* accentColor1 */
+.selected:hover, 
+.currentLoop:hover, 
+.currentMarker:hover, 
+.currentStopMarker:hover,
+.selected:active,
+.currentLoop:active, 
+.currentMarker:active, 
+.currentStopMarker:active {
+  outline-color: #2DFC00;
+  outline-color: #25d200;
+}  /* accentColor1 */
 
-.col2 .accentColor1,
-.col2 .selected,
-.col2 .currentLoop,
-.col2 .currentMarker,
-.col2 .currentStopMarker,
-.col2 .selected.important {
+.accentColor1,
+.selected,
+.currentLoop,
+.currentMarker,
+.currentStopMarker,
+.selected.important {
   background-color: #2DFC00; /* accentColor1 */
+  background-color: #25d200; /* accentColor1 */
   color: black;
 }
-.col2 .play{
-    color: #2DFC00; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+.play{
+    color: #2DFC00;
+    color: #25d200; /* accentColor1 - IF GREEN ISH (or works for that... */ 
 }
 
 
@@ -149,29 +159,29 @@
 
 /* accentColor2, 400 */ 
 
-.col2 .important:hover,
-.col2 .important:active,
-.col2 .special:hover,
-.col2 .special:active{
+.important:hover,
+.important:active,
+.special:hover,
+.special:active{
   outline-color: #D42626;
 
 }
 
-.col2 .roundButt,
-.col2 .roundButt:hover,
-.col2 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
-.col2 .selected.important {
+.roundButt,
+.roundButt:hover,
+.roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
+.selected.important {
   border-color: #D42626; /* accentColor2 */
 }
 .importantLeftLine {
   border-left-color: #D42626; /*accentColor2*/
 }
 
-.col2 .accentColor2,
-.col2 .important {
+.accentColor2,
+.important {
   background-color: #D42626; /* accentColor2 */
 }
-.col2 .pause{
+.pause{
     color: #D42626; /* accentColor2 - IF RED ISH... */ 
 }
 
@@ -189,17 +199,17 @@
 
 
 /* accentColor3 700 */
-.col2 .active:hover,
-.col2 .active:active{
+.active:hover,
+.active:active{
   outline-color: #FFCF53; /* accentColor3 */
 }
 
-.col2 .accentColor3,
-.col2 .active{
+.accentColor3,
+.active{
   background-color: #FFCF53; /* accentColor3 */
   color: black;
 }
-.col2 .wait{
+.wait{
   color: #FFCF53; /* accentColor3 - IF YELLOW ISH... */ 
 }
 
@@ -208,15 +218,15 @@
 
 
 /* Marker color section */
-.col2 .markerColorAqua {	background-color: Aqua;	color: black; }
-.col2 .markerColorBisque {	background-color: Bisque;	color: black; }
-.col2 .markerColorChartreuse {	background-color: Chartreuse;	color: black; }
-.col2 .markerColorCoral {	background-color: Coral;	color: black; }
-.col2 .markerColorPink {	background-color: Pink;	color: black; }
-.col2 .markerColorBurlywood {	background-color: Burlywood;	color: black; }
-.col2 .markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
-.col2 .markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
-.col2 .markerColorPeru {	background-color: Peru;	color: black; }
-.col2 .markerColorViolet {	background-color: Violet;	color: black; }
+.markerColorAqua {	background-color: Aqua;	color: black; }
+.markerColorBisque {	background-color: Bisque;	color: black; }
+.markerColorChartreuse {	background-color: Chartreuse;	color: black; }
+.markerColorCoral {	background-color: Coral;	color: black; }
+.markerColorPink {	background-color: Pink;	color: black; }
+.markerColorBurlywood {	background-color: Burlywood;	color: black; }
+.markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
+.markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
+.markerColorPeru {	background-color: Peru;	color: black; }
+.markerColorViolet {	background-color: Violet;	color: black; }
 
 

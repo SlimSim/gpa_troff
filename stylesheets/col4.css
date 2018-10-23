@@ -4,98 +4,103 @@
 
 
 /* standard color... */
-.col4 ::-webkit-input-placeholder {
+::-webkit-input-placeholder {
   color: dimgray;
 }
 
 
-.col4 h1,
-.col4 h2,
-.col4 h3,
-.col4 h4,
-.col4 h5,
-.col4 h6,
-.col4 p{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p{
   color: inherit;
 }
 
-.col4 .centerRoundButtCommon{
+.centerRoundButtCommon{
   background-color: transparent;
 }
-.col4 .onOffButton,
-.col4 .loopButt{
+.onOffButton,
+.loopButt{
   outline-color: #BDBDBD;
 }
-.col4 .onOffButton,
-.col4 .loopButt{
+.onOffButton,
+.loopButt{
   background-color: #BDBDBD;
 }
 
-.col4 .grayOut{
+.grayOut{
     color: gray;
     background-color: lightgray;
 }
 
 
+
 /* oddballs */
-.col4 .textareaStandard{
+.textareaStandard{
   background: #FFFDE7;
   border-color: #FFFDE7;
+  background: #FFFEEA;
+  border-color: #FFFEEA;
+  background: #f6f4ed;
+  border-color: #f6f4ed;
+
 }
 
-.col4 .textareaEdit{
+.textareaEdit{
   background: white;
 }
 
-.col4 .fullscreen{
+.fullscreen{
   background-color: black;
 }
 
-.col4 .likeLink{
+.likeLink{
   background-color: transparent;
   color: blue;
 }
 
-.col4 .outerDialog{
+.outerDialog{
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.col4 .helpText{
+.helpText{
     color: gray;
 }
 
-.col4 .colorPicker{
+.colorPicker{
   border-color: black;
 }
-.col4 .colorPickerSelected{
-  border-color: #FFEB3B;
+.colorPickerSelected{
+  border-color: #AD974F;
 }
-
 
 
 
 
 
 /* the background */
-.col4 .backgroundColor,
-.col4 .extraBorder{
-  background-color: #ecebe8;
+.backgroundColor,
+.extraBorder{
+  background-color: #EAEAEA; /* lightgray */
   color: #545454;
 }
-.col4 .backgroundColor a {
-  color: lightgray;
+.backgroundColor a {
+  color: blue;
 }
 
 
 
 
 /* regularButton */
-.col4 .regularButton:focus,
-.col4 .regularButton:hover,
-.col4 .regularButton:active{
+.regularButton:focus,
+.regularButton:hover,
+.regularButton:active{
   outline-color: #E0E0E0; /*regularButton*/
 }
-.col4 .regularButton{
+.regularButton{
   background-color: #E0E0E0; /*regularButton*/
 }
 
@@ -105,13 +110,13 @@
 
 
 /* primaryColor */
-.col4 .primaryColor,
-.col4 .bgEasyRead {
-  background-color: #ffffff;
-  background: #ffffff;
+.primaryColor,
+.bgEasyRead {
+  background-color: #fcfcfc;
+  background: #f0f0f0;
   color: #545454;
 }
-.col4 .primaryColor a {
+.primaryColor a {
 /*  color: white; */
 }
 
@@ -119,109 +124,112 @@
 
 
 /* secondaryColor */
-.col4 .secondaryColor,
-.col4 .areaParent > div,
-.col4 .popUpSquare,
-/*.col4 #donate,  only for this one */
-.col4 .innerDialog {
-  background-color: #ffffff;
+.secondaryColor,
+.areaParent > div,
+.popUpSquare,
+/*#donate,  only for this one */
+.innerDialog {
+  background-color: #fcfcfc;
   color: #545454;
 }
 li[isdirectory="true"]:not(:first-child) {
-  border-top-color: #ffffff; /* secondaryColor */
+  border-top-color: #fcfcfc; /* secondaryColor */
 }
+
+.marker-parent li {
+  border-top-color: #fcfcfc;
+}
+
 
 
 
 
 /* accentColor1 */
-.col4 .selected:hover, 
-.col4 .currentLoop:hover, 
-.col4 .currentMarker:hover, 
-.col4 .currentStopMarker:hover,
-.col4 .selected:active,
-.col4 .currentLoop:active, 
-.col4 .currentMarker:active, 
-.col4 .currentStopMarker:active {  outline-color: #93b874;}  /* accentColor1 */
+.selected:hover, 
+.currentLoop:hover, 
+.currentMarker:hover, 
+.currentStopMarker:hover,
+.selected:active,
+.currentLoop:active, 
+.currentMarker:active, 
+.currentStopMarker:active {  outline-color: #AD974F;}  /* accentColor1 */
 
-.col4 .accentColor1,
-.col4 .selected,
-.col4 .currentLoop,
-.col4 .currentMarker,
-.col4 .currentStopMarker,
-.col4 .selected.important {
-  background-color: #93b874; /* accentColor1 */
+.accentColor1,
+.selected,
+.currentLoop,
+.currentMarker,
+.currentStopMarker,
+.selected.important {
+  background-color: #AD974F; /* accentColor1 */
   color: white;
 }
-.col4 .play .secondsLeft,
-.col4 .play .loopTimesLeft{
-    color: #93b874; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+.play .secondsLeft,
+.play .loopTimesLeft{
+    color: #AD974F; /* accentColor1 - IF GREEN ISH (or works for that... */ 
 }
 
 
-.col4 #donate:hover,
-.col4 #donate:active {
-  outline-color: #93b874;
+#donate:hover,
+#donate:active {
+  outline-color: #AD974F;
 }
+
+
+
 
 /* accentColor2 */ 
-.col4 .important:hover,
-.col4 .important:active,
-.col4 .special:hover,
-.col4 .special:active{
-  outline-color: #000;
+.important:hover,
+.important:active,
+.special:hover,
+.special:active{
+  outline-color: #231F20;
 }
 
 
-.col4 .roundButt,
-.col4 .roundButt:hover,
-.col4 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
-.col4 .selected.important {
-  border-color: #000; /* accentColor2 */
+.roundButt,
+.roundButt:hover,
+.roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
+.selected.important {
+  border-color: #231F20; /* accentColor2 */
 }
 .importantLeftLine {
-  border-left-color: #000; /*accentColor2*/
+  border-left-color: #231F20; /*accentColor2*/
 }
 
-.col4 .accentColor2,
-.col4 .important {
-  background-color: #000; /* accentColor2 */
+.accentColor2,
+.important {
+  background-color: #231F20; /* accentColor2 */
 }
-.col4 .pause .secondsLeft,
-.col4 .pause .loopTimesLeft{
-    color: #000; /* accentColor2 - IF RED ISH... */ 
+.pause .secondsLeft,
+.pause .loopTimesLeft{
+    color: #231F20; /* accentColor2 - IF RED ISH... */ 
 }
 
 
 .important{
   color:#fff;
-  text-shadow:#C17C3A 0 -1px 0; /* NOTISE: not the same color... */
+  text-shadow:#fafafa 0 -1px 0; /* NOTISE: not the same color... */
 }
 
-
-
-.col4 #activePlayRegion{ /* note, overwriding...*/
-  background-color: black;
-}
 
 
 
 
 /* accentColor3 */
-.col4 .active:hover,
-.col4 .active:active{
-  outline-color: #F5F5F5; /* accentColor3 */
+.active:hover,
+.active:active{
+  outline-color: #8E793E; /* accentColor3 */
 }
 
-.col4 .accentColor3,
-.col4 .active{
-  background-color: #F5F5F5; /* accentColor3 */
+.accentColor3,
+.active{
+  background-color: #8E793E; /* accentColor3 */
   color: black;
 }
 
-.col4 .wait .secondsLeft,
-.col4 .wait .loopTimesLeft{
-  color: #F5F5F5; /* accentColor3 - IF YELLOW ISH... */ 
+.wait .secondsLeft,
+.wait .loopTimesLeft{
+  color: #8E793E; /* accentColor3 - IF YELLOW ISH... */ 
 }
 
 
@@ -229,16 +237,16 @@ li[isdirectory="true"]:not(:first-child) {
 
 
 /* Marker color section */
-.col4 .markerColorAqua {	background-color: Aqua;	color: black; }
-.col4 .markerColorBisque {	background-color: Bisque;	color: black; }
-.col4 .markerColorChartreuse {	background-color: Chartreuse;	color: black; }
-.col4 .markerColorCoral {	background-color: Coral;	color: black; }
-.col4 .markerColorPink {	background-color: Pink;	color: black; }
-.col4 .markerColorBurlywood {	background-color: Burlywood;	color: black; }
-.col4 .markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
-.col4 .markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
-.col4 .markerColorPeru {	background-color: Peru;	color: black; }
-.col4 .markerColorViolet {	background-color: Violet;	color: black; }
+.markerColorAqua {	background-color: Aqua;	color: black; }
+.markerColorBisque {	background-color: Bisque;	color: black; }
+.markerColorChartreuse {	background-color: Chartreuse;	color: black; }
+.markerColorCoral {	background-color: Coral;	color: black; }
+.markerColorPink {	background-color: Pink;	color: black; }
+.markerColorBurlywood {	background-color: Burlywood;	color: black; }
+.markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
+.markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
+.markerColorPeru {	background-color: Peru;	color: black; }
+.markerColorViolet {	background-color: Violet;	color: black; }
 
 /* only for this one */ 
 #markerSection {

@@ -27,6 +27,23 @@ var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jp
 var audFormats = ['wav', 'mp3'];
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'ogg', 'webm', 'wmv'];
 
+var TROFF_SETTING_SET_THEME = "TROFF_SETTING_SET_THEME";
+var TROFF_SETTING_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTENDED_MARKER_COLOR";
+
+var TROFF_SETTING_KEYS = [
+  "stroCurrentSongPathAndGalleryId",
+  "iCurrentSonglist",
+  "zoomDontShowAgain",
+  "abGeneralAreas",
+  "straoSongLists",
+  TROFF_SETTING_SET_THEME,
+  TROFF_SETTING_EXTENDED_MARKER_COLOR,
+];
+
+
+
+
+
 
 var MARKER_COLOR_PREFIX = "markerColor";
 
@@ -418,6 +435,90 @@ var TroffClass = function(){
     var m_zoomStartTime = 0;
     var m_zoomEndTime = null;
 
+
+  this.toggleExtendedMarkerColor = function( event ) {
+    if( $( "#markerList").hasClass( "extended-color" ) ) {
+      $( "#markerList").removeClass( "extended-color" );
+      $( "#toggleExtendedMarkerColor").removeClass( "active" );
+      DB.saveVal( TROFF_SETTING_EXTENDED_MARKER_COLOR, false );
+    } else {
+      $( "#markerList").addClass( "extended-color" );
+      $( "#toggleExtendedMarkerColor").addClass( "active" );
+      DB.saveVal( TROFF_SETTING_EXTENDED_MARKER_COLOR, true );
+    }
+    
+    
+  };
+  
+  this.recallExtendedMarkerColor = function() {
+    DB.getVal( TROFF_SETTING_EXTENDED_MARKER_COLOR, function( extend ) {
+      if( extend ) {
+        $( "#markerList").addClass( "extended-color" );
+        $( "#toggleExtendedMarkerColor").addClass( "active" );
+      }
+    } );
+  };
+  
+  this.setTheme = function( event ) {
+    var $target = $( event.target ),
+      theme = $target.data( "theme" );
+    $target.parent().find( ".selected" ).removeClass( "selected" );
+    $target.addClass( "selected" );
+    $( "#colorScheme" ).attr( "href", "stylesheets/" + theme + ".css" );
+
+
+//slim sim here
+
+// testa att använda chrome.runtime.getManifest().short_name 
+// för att kolla test eller prod :)
+
+/*
+    var o = {};
+    o[ TROFF_SETTING_SET_THEME ] = theme;
+    chrome.storage.local.set( o );
+    */
+    DB.saveVal( TROFF_SETTING_SET_THEME, theme);
+
+    
+  };
+
+  this.recallTheme = function() {
+    DB.getVal( TROFF_SETTING_SET_THEME, function( theme ) {
+      theme = theme || "col1";
+      $( "#themePickerParent" )
+        .find( "[data-theme=\"" + theme + "\"]" )
+        .addClass( "selected" );
+      $( "#colorScheme" ).attr( "href", "stylesheets/" + theme + ".css" );
+    } );
+    /*
+    chrome.storage.local.get( TROFF_SETTING_SET_THEME, function( item ) {
+      var theme = item[ TROFF_SETTING_SET_THEME ];
+      $( "#themePickerParent" ).find( "[data-theme=\"" + theme + "\"]" ).addClass( "selected" );
+      $( "html" ).removeClass().addClass( theme );
+    } );
+    */
+    
+    /*
+    chrome.storage.local.get("abGeneralAreas", function(ret) {
+      var abGeneralAreas;
+      try {
+        abGeneralAreas = JSON.parse(ret["abGeneralAreas"]);
+      } catch (e) {
+    
+    */
+    
+  };
+  
+  
+  this.closeSettingsDialog = function( event ) {
+    $( "#outerSettingPopUpSquare" ).addClass( "hidden" );
+  };
+  this.openSettingsDialog = function( event ) {
+    $( "#outerSettingPopUpSquare" ).removeClass( "hidden" );
+    
+  };
+  
+  
 
   //Public variables:
   this.dontShowZoomInstructions = false;
@@ -1322,12 +1423,16 @@ var TroffClass = function(){
   };
   
   this.addSonglistToHTML = function(oSonglist){
-    var buttE = $('<input>')
-      .val('E')
+    var buttE = $('<button>')
       .attr('type', 'button')
       .addClass('small')
       .addClass('regularButton')
-      .click(Troff.editSonglist);
+      .click(Troff.editSonglist)
+      .append(
+        $( "<i>" )
+        .addClass( "fa")
+        .addClass( "fa-pencil-alt")
+      );
 
     var buttL = $('<input>')
       .val(oSonglist.name)
@@ -1640,7 +1745,7 @@ var TroffClass = function(){
         }
       }
     } );
-  }
+  };
 
   this.searchSong = function( event ) {
     Troff.searchSongTot(
@@ -1663,7 +1768,7 @@ var TroffClass = function(){
     $input.addClass('textareaEdit');
 
     if( !$input.is(':focus') ) {
-      $input.focus()
+      $input.focus();
     }
     Troff.searchCreateSongList( event );
 
@@ -1851,11 +1956,15 @@ var TroffClass = function(){
         buttonS.classList.add('onOffButton');
         buttonS.timeValue = time;
 
-        var buttonE = document.createElement("input");
-        buttonE.type = "button";
-        buttonE.id = nameId + 'E';
-        buttonE.value = 'E';
-        buttonE.className = "small regularButton";
+        var buttonE = $( "<button>" )
+          .addClass( "small" )
+          .addClass( "regularButton" )
+          .attr( "id", nameId + 'E')
+          .append(
+            $( "<i>" )
+            .addClass( "fa")
+            .addClass( "fa-pencil-alt")
+          );
 
         var p = document.createElement("b");
         p.innerHTML = Troff.secToDisp(time);
@@ -1863,7 +1972,7 @@ var TroffClass = function(){
         var docMarkerList = document.getElementById('markerList');
         var listElement = document.createElement("li");
 
-        listElement.appendChild(buttonE);
+        listElement.appendChild( buttonE[0] );
         listElement.appendChild(p);
         listElement.appendChild(button);
         listElement.appendChild(buttonS);
@@ -2239,6 +2348,9 @@ var TroffClass = function(){
       editMarker, all, Editerar en markÃ¶r i bÃ¥de html och DB
     */
     this.editMarker = function(markerId){
+      console.log( "markerId", markerId );
+      console.log( "editMarker", this );
+      console.log( "editMarker", this.target );
       var oldName  = $('#'+markerId).val();
       var oldTime = Number($('#'+markerId)[0].timeValue);
       var oldMarkerInfo = $('#'+markerId)[0].info;
@@ -2280,7 +2392,6 @@ var TroffClass = function(){
       if(newMarkerColor != oldMarkerColor){
         updated = true;
         $('#'+markerId)[0].color = newMarkerColor;
-				$( "#markerNr7").closest( 'li' )
         $('#'+markerId).parent().removeClass( oldMarkerClass );
         $('#'+markerId).parent().addClass( MARKER_COLOR_PREFIX + newMarkerColor );
       }
@@ -2387,7 +2498,15 @@ var TroffClass = function(){
             var marginTop = freeDistanceToTop - totalDistanceTop + barMarginTop;
             totalDistanceTop = freeDistanceToTop + myRowHeight + barMarginTop;
 
-            child.style.marginTop = marginTop + "px";
+            if( marginTop > 0 ){
+              $( child ).css( "border-top-width", marginTop + "px" );
+              $( child ).css( "border-top-style", "solid" );
+              $( child ).css( "margin-top", "" );
+            } else {
+              $( child ).css( "border-top-width", "" );
+              $( child ).css( "border-top-style", "" );
+              $( child ).css( "margin-top", marginTop + "px" );
+            }
             child = child.nextSibling;
         }
         Troff.settAppropriateActivePlayRegion();
@@ -2677,6 +2796,18 @@ var RateClass = function(){
 
 var DBClass = function(){
   
+  this.saveVal = function( key, value) {
+    var o = {};
+    o[ key ] = value;
+    chrome.storage.local.set( o );
+  };
+
+  this.getVal = function( key, returnFunction ) {
+    chrome.storage.local.get( key, function( item ) {
+      returnFunction( item[ key ] );
+    } );
+  };
+  
   this.cleanSong = function(songId, songObject){
 
     if(songId === "strCurrentSongPath"){
@@ -2697,6 +2828,7 @@ var DBClass = function(){
   }; // end cleanSong
   
   this.fixSongObject = function(songObject){
+
     if (songObject === undefined) songObject = {};
     
     if(songObject.hasOwnProperty('iWaitBetweenLoops')){
@@ -2819,15 +2951,10 @@ var DBClass = function(){
         delete items.strCurrentTab;
       }
 
-
       for(var key in items){
-        if( // skipping all non-songs from DB:
-          key === "stroCurrentSongPathAndGalleryId" ||
-          key === "iCurrentSonglist" ||
-          key === "zoomDontShowAgain" ||
-          key === "abGeneralAreas" ||
-          key === "straoSongLists"
-        ) continue;
+        if( TROFF_SETTING_KEYS.indexOf( key ) != -1 ) {
+          continue;
+        }
         DB.cleanSong(key, items[key]);
       }
     });//end get all keys
@@ -3214,6 +3341,14 @@ var IOClass = function(){
   this.startFunc = function() {
 
     document.addEventListener('keydown', IO.keyboardKeydown);
+    
+    $( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
+    $( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
+    $( "#toggleExtendedMarkerColor" ).click ( Troff.toggleExtendedMarkerColor );
+    
+    $( "#themePickerParent" ).children().click ( Troff.setTheme );
+    
+    
     $('.buttSpace').click( Troff.space );
     $('#buttTip').click(IO.openHelpWindow);
 
@@ -3317,7 +3452,8 @@ var IOClass = function(){
       Troff.settAppropriateMarkerDistance();
     });
     
-    IO.setColor( "col1" );
+    Troff.recallTheme();
+    Troff.recallExtendedMarkerColor();
 
   };//end startFunc
 

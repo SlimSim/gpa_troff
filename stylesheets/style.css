@@ -144,6 +144,26 @@ body section{
     padding: 0 5px 0 0;
 }
 
+#userNoteSection{
+  flex-basis: 50%;
+}
+
+#songsSection{
+  flex-baiss: 0%;
+}
+
+.buttonSection{
+  width: 12px;
+  padding-left: 13px;
+  padding-right: 0;
+}
+
+.flexSection {
+  display: flex;
+  flex: 1;
+  padding: 0;
+  margin: 0;
+}
 
 .dataOutput h2{
   display: inline-flex;
@@ -195,6 +215,7 @@ body section{
     flex-direction: column;
 /*    position: absolute; */
     z-index: 2;
+    margin: 5px;
 }
 
 .popUpSquare *{
@@ -373,6 +394,8 @@ input[type=number].numberWider{
 .svgButt{
   height: 31px;
   width: 42px;
+  margin: 2px 0;
+  font-size: 18px;
 }
 rect.svg_rect_btn {
   stroke:#fff;
@@ -743,8 +766,11 @@ table {
 
 
 
+/* checkbox switch widget : */
 
-
+.switch_checkbox:not(:checked) + .switch_child {
+  display: none;
+}
 
 
 
@@ -761,9 +787,43 @@ table {
 
 
 
+/* Marker styles :) */
+
+#markerList li {
+  border-top-style: solid;
+}
 
 
 
+/* Marker color section */
+#markerList .markerColorAqua {	background-color: Aqua;	color: black; }
+#markerList.extended-color .markerColorAqua+li {	border-top-color: Aqua; }
 
+#markerList .markerColorBisque {	background-color: Bisque;	color: black; }
+#markerList.extended-color .markerColorBisque+li {	border-top-color: Bisque; }
+
+#markerList .markerColorChartreuse {	background-color: Chartreuse;	color: black; }
+#markerList.extended-color .markerColorChartreuse+li {	border-top-color: Chartreuse; }
+
+#markerList .markerColorCoral {	background-color: Coral;	color: black; }
+#markerList.extended-color .markerColorCoral+li {	border-top-color: Coral; }
+
+#markerList .markerColorPink {	background-color: Pink;	color: black; }
+#markerList.extended-color .markerColorPink+li {	border-top-color: Pink; }
+
+#markerList .markerColorBurlywood {	background-color: Burlywood;	color: black; }
+#markerList.extended-color .markerColorBurlywood+li {	border-top-color: Burlywood; }
+
+#markerList .markerColorDarkcyan {	background-color: Darkcyan;	color: black; }
+#markerList.extended-color .markerColorDarkcyan+li {	border-top-color: Darkcyan; }
+
+#markerList .markerColorYellowgreen {	background-color: Yellowgreen;	color: black; }
+#markerList.extended-color .markerColorYellowgreen+li {	border-top-color: Yellowgreen; }
+
+#markerList .markerColorPeru {	background-color: Peru;	color: black; }
+#markerList.extended-color .markerColorPeru+li {	border-top-color: Peru; }
+
+#markerList .markerColorViolet {	background-color: Violet;	color: black; }
+#markerList.extended-color .markerColorViolet+li {	border-top-color: Violet; }
 
 

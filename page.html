@@ -28,15 +28,16 @@
 
   <link rel="stylesheet" type="text/css" href="assets/reset.css" />
   <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
-  <link rel="stylesheet" type="text/css" href="stylesheets/col1.css" />
-  <link rel="stylesheet" type="text/css" href="stylesheets/col2.css" />
-  <link rel="stylesheet" type="text/css" href="stylesheets/col3.css" />
-  <link rel="stylesheet" type="text/css" href="stylesheets/col4.css" />
+  <link id="colorScheme"
+    rel="stylesheet"
+    type="text/css" 
+    href="stylesheets/col1.css" />
 
   <script src="assets/jquery-2.1.3.min.js"></script>
   <script src="assets/buy.js"></script>
   <script src="script.js"></script>
   <script src="common.js"></script>
+  <script src="assets/svg-with-js/js/fontawesome-all.min.js"></script>
 </head>
 
 
@@ -113,15 +114,22 @@
   
         </div>
         <nav class="flexCol center">
-          <input class="svgButt regularButton" style="display: block;" type="button"
-              title="Get tips on how to get the most out of Troff"
-              class="small regularButton" id="buttTip" value="Help" />
-          <button class="svgButt shareClass regularButton" title="Share this app with your friends via email">
-            <svg version="1.1" style="height:26px;" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="21.783px" height="21.971px" viewBox="0 0 21.783 21.971" enable-background="new 0 0 21.783 21.971" xml:space="preserve">
-              <path d="M17.778,13.964c-1.272,0-2.394,0.606-3.127,1.534l-6.799-3.477c0.089-0.332,0.153-0.675,0.153-1.036    	c0-0.393-0.076-0.763-0.182-1.123l6.769-3.461c0.729,0.97,1.88,1.604,3.187,1.604c2.214,0,4.005-1.791,4.005-4.003    	c0-2.21-1.791-4.002-4.005-4.002c-2.209,0-4.002,1.792-4.002,4.002c0,0.362,0.064,0.706,0.154,1.039L7.134,8.518    	C6.4,7.589,5.276,6.981,4.002,6.981C1.79,6.981,0,8.774,0,10.985s1.79,4.003,4.002,4.003c1.309,0,2.459-0.636,3.191-1.607    	l6.766,3.461c-0.106,0.359-0.183,0.732-0.183,1.126c0,2.211,1.793,4.003,4.002,4.003c2.214,0,4.005-1.792,4.005-4.003    	C21.783,15.755,19.992,13.964,17.778,13.964z"/>
-              <rect class="svg_rect_btn" x="0" y="0" width="21.783px" height="21.971px" />
-            </svg>
+
+          <button class="svgButt regularButton" style="display: block;" type="button"
+              title="open the global settings dialoug"
+              id="buttSettingsDialog" >
+            <i class="fa fa-cog"></i>
           </button>
+          <button class="svgButt regularButton" style="display: block;" type="button"
+              title="Get tips on how to get the most out of Troff"
+              id="buttTip" >
+            <i class="fa fa-question"></i>
+          </button>
+          <button class="svgButt shareClass regularButton" style="display: block;" type="button"
+              title="Share the link to this app with your freinds via email">
+            <i class="fa fa-share-alt"></i>
+          </button>
+          
         </nav>
       </div>
     </div> <!-- end headArea -->
@@ -372,7 +380,7 @@
     <div id="timeBarDiv">
       <input id="timeBar" type="range" min="0" max="42" value="0"/>
     </div>
-    <ul id="markerList" class="onOffParent" />
+    <ul id="markerList" class="onOffParent marker-parent" />
   </section> <!-- markerSection -->
 
 
@@ -389,12 +397,15 @@
         value="T&#818;empo:"/>
       <span id="tappTempo-value">?</span>
     </div>
-    <h2>Song info</h2>
+    
+    
+    <h2><label class="switch" for="songInfoSwitch">Song info</label></h2>
+    <input id="songInfoSwitch" class="switch_checkbox hidden" type="checkbox" checked="true" />
     <textArea
       style="width: inheret"
       id="songInfoArea" 
       placeholder="Song specific info here!"
-      class="textareaStandard"></textArea>
+      class="textareaStandard switch_child"></textArea>
     <h2>Current marker info</h2>
     <textArea  
       id="markerInfoArea" 
@@ -407,10 +418,40 @@
 
 
   <section id="infoSection" class="secondaryColor margin">
-    <h1>Countdown</h1>
+    <input type="button" value="Countdown" id="countTabOn" class="onOffButton active">
     <div id="secondsLeft" class="secondsLeft">0</div>
     <div id="loopTimesLeft" class="loopTimesLeft">1</div>
   </section> <!-- infoSection -->
+
+
+
+
+  <section class="flexSection">
+  </section>
+
+
+  <section
+    id="rightButtonSection"
+    class="buttonSection secondaryColor secondaryColor margin"
+    >
+    <div 
+      style="width: 100vh; transform: rotate(90deg); margin-left: -50vh;margin-top: 50vh;"
+      >
+      <button class="onOffButton">Song List</button>
+      <button class="onOffButton">Songs</button>
+      <button class="onOffButton">States</button>
+      <button class="onOffButton">Settings</button>
+      <button class="onOffButton">Info</button>
+      <button class="onOffButton">Countdown</button>
+    </div>
+  </section>
+
+
+
+
+
+
+
 
 
 
@@ -652,6 +693,81 @@
   </div>
   
   
+
+
+  <div id="outerSettingPopUpSquare" class="outerDialog hidden">
+    <div class="popUpSquare" id="innerSettingPopUpSquare" >
+      <div class="flexCol">
+        <h3>Extended marker color</h3>
+          <p>When checked, the collors of the markers will extend down to the next marker </p>
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="extend the marker-colors down to the next marker"
+              id="toggleExtendedMarkerColor" value="fill markers" />
+              
+              
+              
+        <h3>Behaviour of space key</h3>
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="extend the marker-colors down to the next marker"
+              value="toggle" />
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="extend the marker-colors down to the next marker"
+              value="toggle" />
+        <h3>Behaviour of Enter key</h3>
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="extend the marker-colors down to the next marker"
+              value="toggle" />
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="extend the marker-colors down to the next marker"
+              value="toggle" />
+        <h3>Coach or participant</h3>
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="if couch, troff will behave differently"
+              value="toggle" />
+        <h3>Song list - overlay of sticky to side</h3>
+          <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              title="if couch, troff will behave differently"
+              value="toggle" />
+              
+              
+              
+
+        <h3>Theme picker</h3>
+          <div id="themePickerParent">
+            <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              data-theme="col1"
+              title="Blue and purple"
+              value="standard" />
+            <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              data-theme="col2"
+                title="Green and red"
+                value="forest" />
+            <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              data-theme="col3"
+                title="Black and yellow"
+                value="sunset" />
+            <input class="buttWidthStandard onOffButton" style="display: block;" type="button"
+              data-theme="col4"
+                title="Gold and white"
+                value="winning" />
+          </div>
+      </div>
+      <input id="buttCloseSettingPopUpSquare" type="button" class="regularButton buttWidthStandard" value="Close" />
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 </body>
