@@ -273,7 +273,9 @@ body section{
 
 }
 
-
+.inlineBlock {
+	display: inline-block;
+}
 
 
 /* the style for the time ***************************************/
