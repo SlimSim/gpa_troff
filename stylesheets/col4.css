@@ -248,8 +248,4 @@ li[isdirectory="true"]:not(:first-child) {
 .markerColorPeru {	background-color: Peru;	color: black; }
 .markerColorViolet {	background-color: Violet;	color: black; }
 
-/* only for this one */ 
-#markerSection {
-  padding-left: 4px; 	
-}
 
