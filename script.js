@@ -1026,8 +1026,8 @@ var TroffClass = function(){
 				document.querySelector('#videoBox').classList.remove('fullscreen');
 				document.querySelector('#infoSection').classList.remove('overFilm');
 			}
-			$('#buttPlayUiButtonPlay').css('display', 'block');
-			$('#buttPlayUiButtonPause').css('display', 'none');
+			$('#buttPlayUiButtonPlay').removeClass("hidden");
+			$('#buttPlayUiButtonPause').addClass("hidden");
 		}
 		if(mood == 'wait'){
 			$('#infoSection, .moodColorizedText').removeClass('play pause').addClass('wait');
@@ -1035,8 +1035,8 @@ var TroffClass = function(){
 				document.querySelector('#videoBox').classList.add('fullscreen');
 				document.querySelector('#infoSection').classList.add('overFilm');
 			}
-			$('#buttPlayUiButtonPlay').css('display', 'none');
-			$('#buttPlayUiButtonPause').css('display', 'block');
+			$('#buttPlayUiButtonPlay').addClass("hidden");
+			$('#buttPlayUiButtonPause').removeClass("hidden");
 		}
 		if(mood == 'play'){
 			$('#infoSection, .moodColorizedText').removeClass('wait pause').addClass('play');
@@ -1044,11 +1044,10 @@ var TroffClass = function(){
 				document.querySelector('#videoBox').classList.add('fullscreen');
 				document.querySelector('#infoSection').classList.remove('overFilm');
 			}
-			$('#buttPlayUiButtonPause').css('display', 'block');
-			$('#buttPlayUiButtonPlay').css('display', 'none');
+			$('#buttPlayUiButtonPause').removeClass("hidden");
+			$('#buttPlayUiButtonPlay').addClass("hidden");
 		}
 	};
-
 	// Troff. ...
 	this.getCurrentSong = function() {
 		return strCurrentSong;

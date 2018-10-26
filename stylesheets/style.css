@@ -138,6 +138,11 @@ body section{
   padding: 5px;
 }
 
+#blur-hack {
+	position: absolute;
+	opacity: 0;
+	top:-100px;
+}
 
 #markerSection{
     display: flex;
@@ -480,6 +485,10 @@ table {
   background: pink;
 }
 
+.bottom-zero {
+	bottom: 0;
+}
+
 .bulletList{
   list-style: disc inside;
 }
@@ -505,6 +514,10 @@ table {
   display: flex;
   flex-direction: row;
 }
+.flexRow-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
 
 .flexOne{
   flex: 1;
@@ -513,6 +526,7 @@ table {
 .center{
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .start{
@@ -592,6 +606,14 @@ table {
 
 .marginDialog * {
   margin: 4px 0;
+}
+
+.padding-small {
+	padding: 4px;
+}
+
+.padding-bottom{
+  padding-bottom: 4px;
 }
 
 .marginBottom{
@@ -777,7 +799,9 @@ table {
 
 
 
-
+#headArea {
+	justify-content: space-between;
+}
 
 
 

@@ -44,95 +44,63 @@
 
 <body class="backgroundColor">
 	<div class="extraBorder"></div>
-	<div class="extraBorder" style="bottom: 0;"></div>
-	<input
-			id="blur-hack"
-			type="text"
-			style="position: absolute; opacity: 0; top:-100px;" />
-
+	<div class="extraBorder bottom-zero"></div>
+	<input id="blur-hack" type="text" />
 
 	<section id="songsSection" class="flexCol">
-		<div id="headArea" class="primaryColor flexCol" style="
-/*        background-color: blue; 
-				display: flex;
-				flex-direction: row-reverse;
-				align-items: stretch;
-				margin-bottom: 0px;
-				*/
-				padding: 4px;
-				justify-content: space-between;">
-			<!--    <h1>Troff - music player for traning</h1> -->
-	<!--    <h1> -->
-	<div style="display: flex; align-items: center; flex-direction: column;">
-<!--    <p style="height: 20px;">
-			Troff will move to Android and will no longer be updated on Chrome.
-		</p>-->
-		<a href="#" id="readMoreAndroidTroff" style="height: 20px;">
-			Get Troff for Android
-		</a>
-	</div>
-				<div class="primaryColor" style="
-				display: flex;
-				flex-direction: row-reverse;
-				align-items: stretch;
-				margin-bottom: 0px;
-				padding: 4px;
-				justify-content: space-between;">
-					<nav class="flexCol center">
-						<span 
-							id="buttPlayUiButtonParent"
-							class = "margin roundButt">
-							<input
-								type="button"
-								value="▶"
-								title="Move to selected marker (or start of song) and play song (key: space)" 
-								class="important centerRoundButtCommon centerRoundButt1"
-								id="buttPlayUiButtonPlay" >
-							<input
-								type="button" 
-								value="II"
-								style="display: none;"
-								title="Pause song (key: space or enter)" 
-								class="important centerRoundButtCommon centerRoundButt2"
-								id="buttPlayUiButtonPause">
-						</span>
-					</nav>
-				<div id="mediaInfoBox" class="flexCol halfMarginParent">
-					<div id="currentArtist">
-						Please select a song or movie from the songs area
-					</div>
-					<div id="currentSong"></div>
-					<div id="currentAlbum"></div>
-					<div class="dataOutput center flexRow">
-						<div class="flexRow marginLR moodColorizedText bold">
-							<div class="secondsLeft marginLR">0</div>
-							<div class="loopTimesLeft marginLR">1</div>
-						</div>
-						<div class="marginLR">
-							<div id="time"><p>0:00</p></div>/<div id="maxTime">0:00</div>
-						</div>
-					</div>
-	
+		<div id="headArea" class="primaryColor flexRow-reverse padding-small">
+			<nav class="flexCol center">
+				<span id="buttPlayUiButtonParent" class = "margin roundButt">
+					<input
+						type="button"
+						value="▶"
+						title="Move to selected marker (or start of song) and play song (key: space)"
+						class="important centerRoundButtCommon centerRoundButt1"
+						id="buttPlayUiButtonPlay" />
+					<input
+						type="button"
+						value="II"
+						title="Pause song (key: space or enter)"
+						class="hidden important centerRoundButtCommon centerRoundButt2"
+						id="buttPlayUiButtonPause" />
+				</span>
+			</nav>
+			<div id="mediaInfoBox" class="flexCol halfMarginParent">
+				<a href="#" id="readMoreAndroidTroff" class="center padding-bottom">Get Troff for Android</a>
+				<div id="currentArtist">
+					Please select a song or movie from the songs area
 				</div>
-				<nav class="flexCol center">
-
-					<button class="svgButt regularButton" style="display: block;" type="button"
-							title="open the global settings dialoug"
-							id="buttSettingsDialog" >
-						<i class="fa fa-cog"></i>
-					</button>
-					<button class="svgButt regularButton" style="display: block;" type="button"
-							title="Get tips on how to get the most out of Troff"
-							id="buttTip" >
-						<i class="fa fa-question"></i>
-					</button>
-					<button class="svgButt shareClass regularButton" style="display: block;" type="button"
-							title="Share the link to this app with your freinds via email">
-						<i class="fa fa-share-alt"></i>
-					</button>
-					
-				</nav>
+				<div id="currentSong"></div>
+				<div id="currentAlbum"></div>
+				<div class="dataOutput center flexRow">
+					<div class="flexRow marginLR moodColorizedText bold">
+						<div class="secondsLeft marginLR">0</div>
+						<div class="loopTimesLeft marginLR">1</div>
+					</div>
+					<div class="marginLR">
+						<div id="time"><p>0:00</p></div>/<div id="maxTime">0:00</div>
+					</div>
+				</div>
 			</div>
+			<nav class="flexCol center">
+				<button class="svgButt regularButton"
+					type="button"
+					title="open the global settings dialoug"
+					id="buttSettingsDialog" >
+					<i class="fa fa-cog"></i>
+				</button>
+				<button class="svgButt regularButton"
+					type="button"
+					title="Get tips on how to get the most out of Troff"
+					id="buttTip" >
+					<i class="fa fa-question"></i>
+				</button>
+				<button class="svgButt shareClass regularButton"
+					type="button"
+					title="Share the link to this app with your freinds via email">
+					<i class="fa fa-share-alt"></i>
+				</button>
+			</nav>
 		</div> <!-- end headArea -->
 		<div id="areaSelector" class="flexRowWrap secondaryColor">
 			<input type="button" value="Song lists" id="songlistsTab"  class="onOffButton"/>
@@ -141,11 +109,6 @@
 			<input type="button" value="Settings" id="settingsTab"  class="active onOffButton"/>
 			<input type="button" value="Info" id="infoTab"  class="active onOffButton"/>
 			<input type="button" value="Countdown" id="countTab"  class="active onOffButton"/>
-
-<!--
-			<input type="button" value="Song i&#818;nfo" id="songinfoTab" />
-			<input type="button" value="Marker info&#818;" id="markerinfoTab" />
--->
 		</div>
 		<div id="areaParent" class="flexRow AreaParent" style="flex: 1; margin: 0 -4px">
 			<div id="songlistsArea" class="flexCol start">
