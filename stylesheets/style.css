@@ -1,72 +1,72 @@
 /*
-  This file is part of Troff.
+	This file is part of Troff.
 
-  Troff is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License,
-  or (at your option) any later version.
+	Troff is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License,
+	or (at your option) any later version.
 
-  Troff is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
+	Troff is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with Troff. If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with Troff. If not, see <http://www.gnu.org/licenses/>.
 */
 
 
 /*
-   http://css-tricks.com/snippets/css/a-guide-to-flexbox/
-   https://developer.mozilla.org/en-US/docs/Web/CSS/flex
+	 http://css-tricks.com/snippets/css/a-guide-to-flexbox/
+	 https://developer.mozilla.org/en-US/docs/Web/CSS/flex
 */
 
 
 video{
-  width: 100%;
+	width: 100%;
 }
 
 .fullscreen{
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  right: 0;
-  top: 0;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	right: 0;
+	top: 0;
 /*  z-index: 99; */
-  display: flex;
+	display: flex;
 }
 
 .overFilm{
-  z-index: 10;
+	z-index: 10;
 }
 
 .onTop{
-  z-index: 99;
+	z-index: 99;
 }
 
 .mediaButton{
 /*  width: 97%; */
-  padding: 1px 6px;
-  margin: 2;
-  text-align: left;
-  display: block;
+	padding: 1px 6px;
+	margin: 2;
+	text-align: left;
+	display: block;
 }
 
 /*
 #gallery{
-  display: flex;
-  flex-direction: column;
-  /* height: 400px; * /
-  background: pink;
-  overflow-y: auto;
-  align-items: flex-start;
+	display: flex;
+	flex-direction: column;
+	/* height: 400px; * /
+	background: pink;
+	overflow-y: auto;
+	align-items: flex-start;
 }
 */
 
 body{
-  display: flex;
-  font-family: Arial, "Open Sans", sans-serif;
-  height: 100vh;
+	display: flex;
+	font-family: Arial, "Open Sans", sans-serif;
+	height: 100vh;
 }
 
 
@@ -76,66 +76,66 @@ body{
 
 h1 {
 /*  font-weight: 200;
-  margin: 4px;
+	margin: 4px;
 */
-  align-self: baseline;
-  margin-bottom: 0;
+	align-self: baseline;
+	margin-bottom: 0;
 }
 
 h2{
 /*  font-family: helvetica;*/
 /*  font-size: 18px; */
-  margin-right: 3px;
+	margin-right: 3px;
 }
 
 p{
-  display: inline-block;
-  font-size: 11px;
+	display: inline-block;
+	font-size: 11px;
 }
 
 .normalSize{
-  font-size: 14px;
+	font-size: 14px;
 }
 
 .smallSize{
-  font-size: 11px; /* This is standard... */
-  margin-top: 6px;
+	font-size: 11px; /* This is standard... */
+	margin-top: 6px;
 }
 
 #gallery, #songlistsArea{
 /*  overflow-y: auto;
-  overflow-x: hidden;
-  width:100%;
-    */
+	overflow-x: hidden;
+	width:100%;
+		*/
 
-  flex: 1;
+	flex: 1;
 }
 
 
 .likeLink{
-  text-decoration: underline;
-  cursor: pointer;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 input, .linkButton{
-  font-size: 14px;
-  margin: 2px;
+	font-size: 14px;
+	margin: 2px;
 }
 
 .oneRow{
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
 }
 
 
 
 nav{
-  display: flex;
+	display: flex;
 }
 
 body section{
-  padding: 5px;
+	padding: 5px;
 }
 
 #blur-hack {
@@ -145,37 +145,37 @@ body section{
 }
 
 #markerSection{
-    display: flex;
-    padding: 0 5px 0 0;
+		display: flex;
+		padding: 0 5px 0 0;
 }
 
 #userNoteSection{
-  flex-basis: 50%;
+	flex-basis: 50%;
 }
 
 #songsSection{
-  flex-baiss: 0%;
+	flex-baiss: 0%;
 }
 
 .buttonSection{
-  width: 12px;
-  padding-left: 13px;
-  padding-right: 0;
+	width: 12px;
+	padding-left: 13px;
+	padding-right: 0;
 }
 
 .flexSection {
-  display: flex;
-  flex: 1;
-  padding: 0;
-  margin: 0;
+	display: flex;
+	flex: 1;
+	padding: 0;
+	margin: 0;
 }
 
 .dataOutput h2{
-  display: inline-flex;
+	display: inline-flex;
 }
 
 #ControlLoop div p, #ControlLoop div div{
-    margin-right: 5px;
+		margin-right: 5px;
 }
 
 
@@ -184,98 +184,98 @@ body section{
 #ControlMarker div,
 #ControlTime div,
 #ControlLoop div{
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 
 
 .loopClass input{
-  margin: 1px;
-  border: 0;
-  padding: 0;
-  padding-right: 1px;
+	margin: 1px;
+	border: 0;
+	padding: 0;
+	padding-right: 1px;
 }
 
 
 .sliderRange{
-    -webkit-appearance: slider-vertical;
-    appearance: slider-vertical;
-    width: 15px;
-    min-height: 42px;
+		-webkit-appearance: slider-vertical;
+		appearance: slider-vertical;
+		width: 15px;
+		min-height: 42px;
 }
 
 .doubleSliders{
-    display: flex;
+		display: flex;
 }
 
 .sliderInfo{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+		align-items: center;
+		display: flex;
+		flex-direction: column;
 }
 
 .popUpSquare{
-    display: flex;
-    flex-direction: column;
+		display: flex;
+		flex-direction: column;
 /*    position: absolute; */
-    z-index: 2;
-    margin: 5px;
-    max-width: 90vw;
-    max-height: 90vh;
+		z-index: 2;
+		margin: 5px;
+		max-width: 90vw;
+		max-height: 90vh;
 }
 
 .popUpSquare *{
-    margin: 5px;
+		margin: 5px;
 }
 
 .popUpSquare p a{
-    margin: 0px;
+		margin: 0px;
 }
 
 #ImportExportPopUpSquare{
-    display: none;
+		display: none;
 }
 
 
 .plussMinusButton{
-    display: flex;
+		display: flex;
 }
 
 .sliderInfo p{
-    display: inline-block;
+		display: inline-block;
 }
 
 .sliderInfo input{
-  border: 0;
+	border: 0;
 }
 
 
 /* button style mm */
 .dataOutput div{
-   display: inline-flex;
+	 display: inline-flex;
 }
 
 
 #mediaInfoBox div{
-  text-align: center;
+	text-align: center;
 }
 #currentSong{
-  font-size: 18px;
-  font-weight: bold;
+	font-size: 18px;
+	font-weight: bold;
 }
 #currentArtist{
-  font-size: 14px;
+	font-size: 14px;
 }
 #currentAlbum{
-  font-size: 12px;
+	font-size: 12px;
 }
 
 .textareaStandard{
-  flex: 1; 
-  margin: 3px 0;
-  outline: none;
-  resize: none;
+	flex: 1; 
+	margin: 3px 0;
+	outline: none;
+	resize: none;
 /*  width: 300px; */
 
 }
@@ -287,32 +287,32 @@ body section{
 
 /* the style for the time ***************************************/
 #activePlayRegion{
-    width: 21px;
-    position: absolute;
-    margin-top: 16px;
-    height: calc(100vh - 32px);
+		width: 21px;
+		position: absolute;
+		margin-top: 16px;
+		height: calc(100vh - 32px);
 }
 
 
 #timeBar{
-    -webkit-appearance: slider-vertical;
-    -moz-appearance: slider-vertical;
-    appearance: slider-vertical;
-    height: 98vh;
-    height: calc(100% - 20px);
-    margin: 10px 0;
-    /*
-        first margin component needs to be
-        half of second height component.
-    */
-    width: 15px;
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
+		-webkit-appearance: slider-vertical;
+		-moz-appearance: slider-vertical;
+		appearance: slider-vertical;
+		height: 98vh;
+		height: calc(100% - 20px);
+		margin: 10px 0;
+		/*
+				first margin component needs to be
+				half of second height component.
+		*/
+		width: 15px;
+		-webkit-transform: rotate(180deg);
+		transform: rotate(180deg);
 }
 #timeBarDiv{
-    width: 20px;
-    margin-right: 4px;
-    margin-left: 3px;
+		width: 20px;
+		margin-right: 4px;
+		margin-left: 3px;
 }
 
 
@@ -323,24 +323,24 @@ body section{
 /* removes the upp/down arrows in number input boxes */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    margin: 0;
-    height: 0;
-    width: 0;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		margin: 0;
+		height: 0;
+		width: 0;
 }
 
 input[type=number]{
-    width: 20px;
-    margin-right: 3px;
-    padding: 0;
-    text-align: center;
+		width: 20px;
+		margin-right: 3px;
+		padding: 0;
+		text-align: center;
 }
 
 input[type=number].numberWider{
-  width: 36px; /*enough for typing in "3600" = 1h */
-  text-align: right;
-  padding-right: 3px;
+	width: 36px; /*enough for typing in "3600" = 1h */
+	text-align: right;
+	padding-right: 3px;
 }
 
 
@@ -357,31 +357,31 @@ input[type=number].numberWider{
 
 
 .loopSquare{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    display: flex;
-    align-items: flex-end;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		display: flex;
+		align-items: flex-end;
 }
 
 #loopButtons input[type="button"]{
-    width: 28px;
-   /* padding: 1px 10px; */
+		width: 28px;
+	 /* padding: 1px 10px; */
 
 }
 
 /*
 #loopOld{
-    width: 100%;
-    flex-direction: column;
+		width: 100%;
+		flex-direction: column;
 }
 */
 
 #loopButtons{
-    flex-direction: row;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100px;
-    justify-content: space-around;
+		flex-direction: row;
+		display: flex;
+		flex-wrap: wrap;
+		width: 100px;
+		justify-content: space-around;
 }
 
 
@@ -392,56 +392,56 @@ input[type=number].numberWider{
 /* the style for the IO ***************************************/
 
 .buttWidthStandard{
-  width: 85px;
+	width: 85px;
 }
 
 .buttWidthMedium{
-  width: 107px;
+	width: 107px;
 }
 
 
 .svgButt{
-  height: 31px;
-  width: 42px;
-  margin: 2px 0;
-  font-size: 18px;
+	height: 31px;
+	width: 42px;
+	margin: 2px 0;
+	font-size: 18px;
 }
 rect.svg_rect_btn {
-  stroke:#fff;
-  fill:#fff;
-  fill-opacity:0;
-  stroke-opacity:0;
+	stroke:#fff;
+	fill:#fff;
+	fill-opacity:0;
+	stroke-opacity:0;
 }
 
 
 
 input, button, .linkButton{
-  border-width: 0;
-  padding: 1px 6px;
-  font-family: sans-serif;
+	border-width: 0;
+	padding: 1px 6px;
+	font-family: sans-serif;
 }
 
 li[isdirectory="true"] {
-  padding-top: 4px;
-  font-size: 22px;
+	padding-top: 4px;
+	font-size: 22px;
 }
 li[isdirectory="true"]:not(:first-child) {
-  padding-top: 10px;
-  border-top-style: solid;
-  border-top-width: 5px;
-  margin-top: 10px;
-  margin-bottom: 2px;
+	padding-top: 10px;
+	border-top-style: solid;
+	border-top-width: 5px;
+	margin-top: 10px;
+	margin-bottom: 2px;
 }
 
 
 .importantLeftLine{
-  padding-left: 4px;
+	padding-left: 4px;
 }
 
 .important{
-  font-family:'Helvetica Neue',sans-serif;
-  padding: 4px;
-  border: 0;
+	font-family:'Helvetica Neue',sans-serif;
+	padding: 4px;
+	border: 0;
 }
 
 
@@ -449,42 +449,42 @@ li[isdirectory="true"]:not(:first-child) {
 .big{font-size: 16px;}
 .normal{font-size: 14px;}
 .small{
-  font-size: 12px;
-  margin: 1px;
+	font-size: 12px;
+	margin: 1px;
 }
 .Small{font-size: 10px;}
 
 .outerDialog{
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .innerDialog{
-  width: 600px;
-  padding: 10 15px;
+	width: 600px;
+	padding: 10 15px;
 }
 
 .mediumDialog{
-  width: 400px;
+	width: 400px;
 }
 
 
 table {
-  border-collapse: separate;
-  border-spacing: 8px;
+	border-collapse: separate;
+	border-spacing: 8px;
 }
 
 .extraBorder{
-  height: 4px;
-  width: 100vw;
-  position: absolute;
-  background: pink;
+	height: 4px;
+	width: 100vw;
+	position: absolute;
+	background: pink;
 }
 
 .bottom-zero {
@@ -492,33 +492,33 @@ table {
 }
 
 .bulletList{
-  list-style: disc inside;
+	list-style: disc inside;
 }
 
 .paragraph{
-  margin-bottom: 4px;
+	margin-bottom: 4px;
 }
 
 .flexScroll{
-  flex: 1;
-  overflow-y: auto;
+	flex: 1;
+	overflow-y: auto;
 }
 .vScroll{
-  overflow-y: auto;
+	overflow-y: auto;
 }
 
 .flexCol{
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .flexRow{
-  display: flex;
-  flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 .flexRow-reverse {
-  display: flex;
-  flex-direction: row-reverse;
+	display: flex;
+	flex-direction: row-reverse;
 }
 
 .flexNone, .flex-none {
@@ -526,56 +526,56 @@ table {
 }
 
 .flexOne, .flex-one {
-  flex: 1;
+	flex: 1;
 }
 
 .center{
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
 
 .start{
-  align-items: flex-start;
+	align-items: flex-start;
 }
 .end{
-  align-items: flex-end;
+	align-items: flex-end;
 }
 
 .flexRowWrap{
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 }
 .flex{
-  flex: 1;
+	flex: 1;
 }
 
 .almostFullHeight{
-  height: 90vh;
+	height: 90vh;
 }
 
 .rowBreak{
-  white-space: normal;
+	white-space: normal;
 }
 
 .maxMinWidth {
-  max-width: 300px;
-  min-width: 100px;
+	max-width: 300px;
+	min-width: 100px;
 }
 
 .maxWidthParent *, .maxWidthChild {
-  max-width: 200px;
+	max-width: 200px;
 }
 
 .helpText{
-    text-align: center;
-    align-self: center;
-    margin: 10px;
-    margin-top: 40px;
-    font-size: 14px;
-    max-width: 140px;
-    min-width: 100px;
+		text-align: center;
+		align-self: center;
+		margin: 10px;
+		margin-top: 40px;
+		font-size: 14px;
+		max-width: 140px;
+		min-width: 100px;
 }
 
 
@@ -583,35 +583,35 @@ table {
 
 
 .colorPickerWidth{
-  width: 110px;
+	width: 110px;
 }
 
 .colorPicker{
-  width: 18px;
-  height: 18px;
-  padding: 0px;
+	width: 18px;
+	height: 18px;
+	padding: 0px;
 }
 
 
 .scrollableY{
-  overflow-y: auto;
-  overflow-x: hidden;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .areaParent > div{
-  margin: 4px;
+	margin: 4px;
 }
 
 .halfMarginParent > div{
-  margin-top: 4px;
+	margin-top: 4px;
 }
 
 .leftTextParent > *{
-  text-align: left;
+	text-align: left;
 }
 
 .marginDialog * {
-  margin: 4px 0;
+	margin: 4px 0;
 }
 
 .padding-small {
@@ -619,24 +619,24 @@ table {
 }
 
 .padding-bottom{
-  padding-bottom: 4px;
+	padding-bottom: 4px;
 }
 
 .marginBottom{
-  margin-bottom: 4px;
+	margin-bottom: 4px;
 }
 
 .margin{
-  margin: 4px;
+	margin: 4px;
 }
 
 .marginLR {
-  margin: 0 4px;
+	margin: 0 4px;
 }
 
 .noVMargin{
-  margin-top: 0;
-  margin-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 
 
@@ -644,153 +644,153 @@ table {
 
 
 .bold {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 
 /* new color things, without the color*/
 
 .selected.important {
-  padding: 0;
+	padding: 0;
 }
 
 .selected:hover, 
 .currentLoop:hover, 
 .currentMarker:hover, 
 .currentStopMarker:hover {
-  outline-style: solid;
-  outline-width: 2px;
-  
+	outline-style: solid;
+	outline-width: 2px;
+	
 }
 .selected:active,
 .currentLoop:active, 
 .currentMarker:active, 
 .currentStopMarker:active {
-  outline-style: solid;
-  outline-width: 4px;  
+	outline-style: solid;
+	outline-width: 4px;  
 }
 
 
 .selected.important {
-  border-width: 4px;
-  border-style: solid;
+	border-width: 4px;
+	border-style: solid;
 }
 
 .roundButt{
-  border-width: 21px;
-  border-style: solid;
-  border-radius: 21px; 
-  width: 0; 
-  height: 0;
+	border-width: 21px;
+	border-style: solid;
+	border-radius: 21px; 
+	width: 0; 
+	height: 0;
 }
 .roundButt:hover{
-  border-width: 23px;
-  border-style: solid;
-  border-radius: 23px;
-  margin: 2px;
+	border-width: 23px;
+	border-style: solid;
+	border-radius: 23px;
+	margin: 2px;
 }
 .roundButt:active{
-  border-width: 25px;
-  border-style: solid;
-  border-radius: 25px; 
-  margin: 0;
+	border-width: 25px;
+	border-style: solid;
+	border-radius: 25px; 
+	margin: 0;
 }
 .important:hover {
-  outline-style: solid;
-  outline-width: 2px;
+	outline-style: solid;
+	outline-width: 2px;
 }
 .important:active{
-  outline-style: solid;
-  outline-width: 4px;
+	outline-style: solid;
+	outline-width: 4px;
 }
 
 .special:hover {
-  outline-style: solid;
-  outline-width: 2px;
-  z-index: 1;
+	outline-style: solid;
+	outline-width: 2px;
+	z-index: 1;
 }
 .special:active{
-  outline-style: solid;
-  outline-width: 4px;
-  z-index: 1;
+	outline-style: solid;
+	outline-width: 4px;
+	z-index: 1;
 }
 
 
 .centerRoundButtCommon{
-  position: relative;
+	position: relative;
 }
 .centerRoundButtCommon:hover {
-  outline-width: 0;
+	outline-width: 0;
 }
 .centerRoundButt1{
-  right: 11px;
-  bottom: 14px;
+	right: 11px;
+	bottom: 14px;
 }
 .centerRoundButt2{
-  right: 9.5px;
-  bottom: 14.5px;
+	right: 9.5px;
+	bottom: 14.5px;
 }
 
 .onOffButton:focus,
 .loopButt:focus{
-  outline: none;
+	outline: none;
 }
 .onOffButton:hover,
 .loopButt:hover{
-  outline-style: solid;
-  outline-width: 2px;;
+	outline-style: solid;
+	outline-width: 2px;;
 }
 .onOffButton:active,
 .loopButt:active{
-  outline-style: solid;
-  outline-width: 4px;;
+	outline-style: solid;
+	outline-width: 4px;;
 }
 .regularButton:focus{
-  outline: none; /*regularButton*/
+	outline: none; /*regularButton*/
 }
 .regularButton:hover{
-  outline-style: solid;
-  outline-width: 2px;
+	outline-style: solid;
+	outline-width: 2px;
 }
 .regularButton:active{
-  outline-style: solid;
-  outline-width: 4px;
+	outline-style: solid;
+	outline-width: 4px;
 }
 
 
 .active:hover {
-  outline-style: solid;
-  outline-width: 2px;
+	outline-style: solid;
+	outline-width: 2px;
 }
 .active:active{
-  outline-style: solid;
-  outline-width: 4px;
+	outline-style: solid;
+	outline-width: 4px;
 }
 
 
 
 .textareaStandard{
-  border-style: solid;
-  border-width: 4px;
+	border-style: solid;
+	border-width: 4px;
 }
 
 
 
 
 .importantLeftLine {
-  border-left-width: 2px;
-  border-left-style: solid;
+	border-left-width: 2px;
+	border-left-style: solid;
 }
 
 
 .colorPickerSelected{
-  border-style: solid;
-  border-width: 4px;
+	border-style: solid;
+	border-width: 4px;
 }
 
 .colorPicker{
-  border-style: solid;
-  border-width: 3px;
+	border-style: solid;
+	border-width: 3px;
 }
 
 
@@ -799,7 +799,7 @@ table {
 /* checkbox switch widget : */
 
 .switch_checkbox:not(:checked) + .switch_child {
-  display: none;
+	display: none;
 }
 
 
@@ -814,7 +814,7 @@ table {
 
 /*------------------------------*/
 .hidden {
-  display: none !important;
+	display: none !important;
 }
 
 
@@ -822,7 +822,7 @@ table {
 /* Marker styles :) */
 
 #markerList li {
-  border-top-style: solid;
+	border-top-style: solid;
 }
 
 

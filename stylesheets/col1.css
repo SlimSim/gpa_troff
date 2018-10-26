@@ -5,7 +5,7 @@
 
 /* standard color... */
 ::-webkit-input-placeholder {
-  color: dimgray;
+	color: dimgray;
 }
 
 h1,
@@ -15,59 +15,59 @@ h4,
 h5,
 h6,
 p{
-  color: rgb(50, 50, 50);
+	color: rgb(50, 50, 50);
 }
 
 .centerRoundButtCommon{
-  background-color: transparent;
+	background-color: transparent;
 }
 .onOffButton,
 .loopButt{
-  outline-color: lightgray;
+	outline-color: lightgray;
 }
 .onOffButton,
 .loopButt{
-  background-color: lightgray;
+	background-color: lightgray;
 }
 
 .grayOut{
-    color: gray;
-    background-color: lightgray;
+		color: gray;
+		background-color: lightgray;
 }
 
 
 /* oddballs */
 .textareaStandard{
-  background: lightblue;
-  border-color: lightblue;
+	background: lightblue;
+	border-color: lightblue;
 }
 
 .textareaEdit{
-  background: white;
+	background: white;
 }
 
 .fullscreen{
-  background-color: black;
+	background-color: black;
 }
 
 .likeLink{
-  background-color: transparent;
-  color: blue;
+	background-color: transparent;
+	color: blue;
 }
 
 .outerDialog{
-  background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .helpText{
-    color: gray;
+		color: gray;
 }
 
 .colorPicker{
-  border-color: black;
+	border-color: black;
 }
 .colorPickerSelected{
-  border-color: purple;
+	border-color: purple;
 }
 
 
@@ -78,7 +78,7 @@ p{
 /* the background */
 .backgroundColor,
 .extraBorder{
-  background-color: #bccbde;
+	background-color: #bccbde;
 }
 
 
@@ -87,10 +87,10 @@ p{
 .regularButton:focus,
 .regularButton:hover,
 .regularButton:active{
-  outline-color: #b0bec5; /*regularButton*/
+	outline-color: #b0bec5; /*regularButton*/
 }
 .regularButton{
-  background-color: #b0bec5; /*regularButton*/
+	background-color: #b0bec5; /*regularButton*/
 }
 
 
@@ -101,8 +101,8 @@ p{
 /* primaryColor */
 .primaryColor,
 .bgEasyRead {
-  background-color: #c2dde6;
-  background: #c2dde6;
+	background-color: #c2dde6;
+	background: #c2dde6;
 }
 
 
@@ -113,11 +113,11 @@ p{
 .areaParent > div,
 .popUpSquare,
 .innerDialog {
-  background-color: #e6e9f0;
+	background-color: #e6e9f0;
 }
 
 .marker-parent li {
-  border-top-color: #e6e9f0;
+	border-top-color: #e6e9f0;
 }
 
 
@@ -139,12 +139,12 @@ p{
 .currentMarker,
 .currentStopMarker,
 .selected.important {
-  background-color: #431c5d; /* accentColor1 */
-  color: white;
+	background-color: #431c5d; /* accentColor1 */
+	color: white;
 }
 .play .secondsLeft,
 .play .loopTimesLeft{
-    color: #431c5d; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+		color: #431c5d; /* accentColor1 - IF GREEN ISH (or works for that... */ 
 }
 
 
@@ -157,32 +157,32 @@ p{
 .important:active,
 .special:hover,
 .special:active{
-  outline-color: #e05915;
+	outline-color: #e05915;
 }
 
 .roundButt,
 .roundButt:hover,
 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
 .selected.important {
-  border-color: #e05915; /* accentColor2 */
+	border-color: #e05915; /* accentColor2 */
 }
 .importantLeftLine {
-  border-left-color: #e05915; /*accentColor2*/
+	border-left-color: #e05915; /*accentColor2*/
 }
 
 .accentColor2,
 .important {
-  background-color: #e05915; /* accentColor2 */
+	background-color: #e05915; /* accentColor2 */
 }
 .pause .secondsLeft,
 .pause .loopTimesLeft{
-    color: #e05915; /* accentColor2 - IF RED ISH... */ 
+		color: #e05915; /* accentColor2 - IF RED ISH... */ 
 }
 
 
 .important{
-  color:#fff;
-  text-shadow:#C17C3A 0 -1px 0; /* NOTISE: not the same color... */
+	color:#fff;
+	text-shadow:#C17C3A 0 -1px 0; /* NOTISE: not the same color... */
 }
 
 
@@ -195,17 +195,17 @@ p{
 /* accentColor3 */
 .active:hover,
 .active:active{
-  outline-color: #AAAF2B; /* accentColor3 */
+	outline-color: #AAAF2B; /* accentColor3 */
 }
 
 .accentColor3,
 .active{
-  background-color: #AAAF2B; /* accentColor3 */
-  color: white;
+	background-color: #AAAF2B; /* accentColor3 */
+	color: white;
 }
 .wait .secondsLeft,
 .wait .loopTimesLeft{
-  color: #AAAF2B; /* accentColor3 - IF YELLOW ISH... */ 
+	color: #AAAF2B; /* accentColor3 - IF YELLOW ISH... */ 
 }
 
 

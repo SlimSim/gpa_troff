@@ -5,7 +5,7 @@
 
 /* standard color... */
 ::-webkit-input-placeholder {
-  color: dimgray;
+	color: dimgray;
 }
 
 
@@ -16,65 +16,65 @@ h4,
 h5,
 h6,
 p{
-  color: inherit;
+	color: inherit;
 }
 
 .centerRoundButtCommon{
-  background-color: transparent;
+	background-color: transparent;
 }
 .onOffButton,
 .loopButt{
-  outline-color: #BDBDBD;
+	outline-color: #BDBDBD;
 }
 .onOffButton,
 .loopButt{
-  background-color: #BDBDBD;
+	background-color: #BDBDBD;
 }
 
 .grayOut{
-    color: gray;
-    background-color: lightgray;
+	color: gray;
+	background-color: lightgray;
 }
 
 
 
 /* oddballs */
 .textareaStandard{
-  background: #FFFDE7;
-  border-color: #FFFDE7;
-  background: #FFFEEA;
-  border-color: #FFFEEA;
-  background: #f6f4ed;
-  border-color: #f6f4ed;
+	background: #FFFDE7;
+	border-color: #FFFDE7;
+	background: #FFFEEA;
+	border-color: #FFFEEA;
+	background: #f6f4ed;
+	border-color: #f6f4ed;
 
 }
 
 .textareaEdit{
-  background: white;
+	background: white;
 }
 
 .fullscreen{
-  background-color: black;
+	background-color: black;
 }
 
 .likeLink{
-  background-color: transparent;
-  color: blue;
+	background-color: transparent;
+	color: blue;
 }
 
 .outerDialog{
-  background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.5);
 }
 
 .helpText{
-    color: gray;
+		color: gray;
 }
 
 .colorPicker{
-  border-color: black;
+	border-color: black;
 }
 .colorPickerSelected{
-  border-color: #AD974F;
+	border-color: #AD974F;
 }
 
 
@@ -84,11 +84,11 @@ p{
 /* the background */
 .backgroundColor,
 .extraBorder{
-  background-color: #EAEAEA; /* lightgray */
-  color: #545454;
+	background-color: #EAEAEA; /* lightgray */
+	color: #545454;
 }
 .backgroundColor a {
-  color: blue;
+	color: blue;
 }
 
 
@@ -98,10 +98,10 @@ p{
 .regularButton:focus,
 .regularButton:hover,
 .regularButton:active{
-  outline-color: #E0E0E0; /*regularButton*/
+	outline-color: #E0E0E0; /*regularButton*/
 }
 .regularButton{
-  background-color: #E0E0E0; /*regularButton*/
+	background-color: #E0E0E0; /*regularButton*/
 }
 
 
@@ -112,9 +112,9 @@ p{
 /* primaryColor */
 .primaryColor,
 .bgEasyRead {
-  background-color: #fcfcfc;
-  background: #f0f0f0;
-  color: #545454;
+	background-color: #fcfcfc;
+	background: #f0f0f0;
+	color: #545454;
 }
 .primaryColor a {
 /*  color: white; */
@@ -129,15 +129,15 @@ p{
 .popUpSquare,
 /*#donate,  only for this one */
 .innerDialog {
-  background-color: #fcfcfc;
-  color: #545454;
+	background-color: #fcfcfc;
+	color: #545454;
 }
 li[isdirectory="true"]:not(:first-child) {
-  border-top-color: #fcfcfc; /* secondaryColor */
+	border-top-color: #fcfcfc; /* secondaryColor */
 }
 
 .marker-parent li {
-  border-top-color: #fcfcfc;
+	border-top-color: #fcfcfc;
 }
 
 
@@ -152,7 +152,7 @@ li[isdirectory="true"]:not(:first-child) {
 .selected:active,
 .currentLoop:active, 
 .currentMarker:active, 
-.currentStopMarker:active {  outline-color: #AD974F;}  /* accentColor1 */
+.currentStopMarker:active {  outline-color: #AD974F; }  /* accentColor1 */
 
 .accentColor1,
 .selected,
@@ -160,18 +160,18 @@ li[isdirectory="true"]:not(:first-child) {
 .currentMarker,
 .currentStopMarker,
 .selected.important {
-  background-color: #AD974F; /* accentColor1 */
-  color: white;
+	background-color: #AD974F; /* accentColor1 */
+	color: white;
 }
 .play .secondsLeft,
 .play .loopTimesLeft{
-    color: #AD974F; /* accentColor1 - IF GREEN ISH (or works for that... */ 
+		color: #AD974F; /* accentColor1 - IF GREEN ISH (or works for that... */ 
 }
 
 
 #donate:hover,
 #donate:active {
-  outline-color: #AD974F;
+	outline-color: #AD974F;
 }
 
 
@@ -182,7 +182,7 @@ li[isdirectory="true"]:not(:first-child) {
 .important:active,
 .special:hover,
 .special:active{
-  outline-color: #231F20;
+	outline-color: #231F20;
 }
 
 
@@ -190,25 +190,25 @@ li[isdirectory="true"]:not(:first-child) {
 .roundButt:hover,
 .roundButt:active, /* slå ihop dessa tre ovan, är itne dom onödiga? */
 .selected.important {
-  border-color: #231F20; /* accentColor2 */
+	border-color: #231F20; /* accentColor2 */
 }
 .importantLeftLine {
-  border-left-color: #231F20; /*accentColor2*/
+	border-left-color: #231F20; /*accentColor2*/
 }
 
 .accentColor2,
 .important {
-  background-color: #231F20; /* accentColor2 */
+	background-color: #231F20; /* accentColor2 */
 }
 .pause .secondsLeft,
 .pause .loopTimesLeft{
-    color: #231F20; /* accentColor2 - IF RED ISH... */ 
+		color: #231F20; /* accentColor2 - IF RED ISH... */ 
 }
 
 
 .important{
-  color:#fff;
-  text-shadow:#fafafa 0 -1px 0; /* NOTISE: not the same color... */
+	color:#fff;
+	text-shadow:#fafafa 0 -1px 0; /* NOTISE: not the same color... */
 }
 
 
@@ -218,18 +218,18 @@ li[isdirectory="true"]:not(:first-child) {
 /* accentColor3 */
 .active:hover,
 .active:active{
-  outline-color: #8E793E; /* accentColor3 */
+	outline-color: #8E793E; /* accentColor3 */
 }
 
 .accentColor3,
 .active{
-  background-color: #8E793E; /* accentColor3 */
-  color: black;
+	background-color: #8E793E; /* accentColor3 */
+	color: black;
 }
 
 .wait .secondsLeft,
 .wait .loopTimesLeft{
-  color: #8E793E; /* accentColor3 - IF YELLOW ISH... */ 
+	color: #8E793E; /* accentColor3 - IF YELLOW ISH... */ 
 }
 
 
