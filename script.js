@@ -35,6 +35,7 @@ var TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_SPACE_GO_TO_MARK
 var TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR";
 var TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR";
+var TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON = "TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON";
 var TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER = "TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER";
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -51,6 +52,7 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER,
 	TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR,
+	TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON,
 ];
 
 
@@ -471,6 +473,26 @@ var TroffClass = function(){
 			}
 		} );
 	};
+
+	this.togglePlayUiButtonHide = function() {
+		var $settingButt = $( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ),
+			$playPauseButt = $( "#buttPlayUiButtonParent" );
+		if( $settingButt.hasClass( "active" ) ) {
+			$playPauseButt.addClass( "hidden" );
+		} else {
+			$playPauseButt.removeClass( "hidden" );
+		}
+
+	}
+
+	this.recallPlayUiButtonHide = function() {
+		DB.getVal( TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON, function( hide ) {
+			if( hide ) {
+				$( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ).addClass( "active" );
+				$( "#buttPlayUiButtonParent" ).addClass( "hidden" );
+			}
+		} );
+	};
 	
 	this.setTheme = function( event ) {
 		var $target = $( event.target ),
@@ -515,6 +537,7 @@ var TroffClass = function(){
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR);
+		Troff.recallPlayUiButtonHide(TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON);
 	};
 
 	this.recallTheme = function() {
@@ -589,7 +612,7 @@ var TroffClass = function(){
 	this.forceFullscreenChange = function(){
 		var videoBox = document.querySelector('#videoBox');
 		if(!videoBox) return;
-//    var infoSection = document.querySelector('#infoSection');
+//		var infoSection = document.querySelector('#infoSection');
 		if(videoBox.classList.contains('fullscreen')){
 			videoBox.classList.remove('fullscreen');
 		} else {
@@ -3415,9 +3438,10 @@ var IOClass = function(){
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
 		$( "#spaceAndEnterParent" ).find("input").click ( Troff.setButtonActiveValue );
+		$( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ).click ( Troff.togglePlayUiButtonHide );
 		
 		
-		$('.buttPlayUiButton').click( Troff.playUiButton );
+		$('#buttPlayUiButtonParent').click( Troff.playUiButton );
 		$('#buttTip').click(IO.openHelpWindow);
 
 		$('#timeBar')[0].addEventListener('change', Troff.timeUpdate );
