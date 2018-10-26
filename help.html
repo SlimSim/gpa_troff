@@ -27,98 +27,12 @@
   <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
   <link rel="stylesheet" type="text/css" href="stylesheets/col1.css" />
   <link rel="stylesheet" type="text/css" href="stylesheets/col2.css" />
+  <link rel="stylesheet" type="text/css" href="stylesheets/help-style.css" />
   
   <script src="common.js"></script>
-  <style>
-    body{
-      display: flex;
-      flex-direction: row;
-    }
-    nav{
-      background-color: green;
-      display: flex;
-      flex-direction: column;
-    }
-    article, nav, footer, header {
-      background-color: #e6e9f0;
-      margin: 8px;
-      padding: 16px;
-      margin-bottom: 0;
-    }
-    header {
-      display: flex;
-      font-size: 20px;
-      padding: 0px;
-      min-height: 48px;
-    }
-    footer {
-      min-height: 100px;
-    }
-    nav, header {
-      margin-right: 0;
-    }
-    h1 {
-      align-self: center;
-      margin-left: 24px;
-    }
-    h2 {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 4px;
-      color: #003366;
-    }
-    h3 {
-      font-size: 16px;
-      font-weight: bold;
-      margin-top: 12px;
-      margin-bottom: 4px;
-    }
-    h1::first-letter, h2::first-letter, h3::first-letter, nav a::first-letter {
-      text-transform: uppercase;
-    }
-    p, ul, li, table {
-      font-size: 14px;
-      margin-bottom: 8px;
-      margin-top: 0;
-    }
-    section {
-      margin: 0px !important;
-      padding: 0px !important;
-    }
-    
-    header, footer {
-      background-color: #003366;
-      color: white;
-    }
-    header h1, footer p {
-      color: white;
-    }
-    .note {
-      background-color: #c2dde6;
-      margin: 4px 0;
-      margin-bottom: 8px;
-      padding: 12px;
-    }
-    a {
-      margin: 6px 0;
-      color: #003366;
-    }
-    .subLink {
-      color: black;
-      margin: 2px;
-      margin-left: 8px;
-      font-size: 14px;
-    }
-    .selfMaxWidth {
-      max-width: 213px;
-    }
-    .white {
-      color: white;
-    }
-    .textCenter {
-      text-align: center;
-    }
-  </style>
+
+	<script src="assets/svg-with-js/js/fontawesome-all.min.js"></script>
+
 </head>
 
 <body class="backgroundColor">
@@ -266,8 +180,8 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
       This dialog also lets you decide the color of the marker.
     </p>
     <p>
-      You can always press the "E" button next to a marker to bring up 
-      the same dialog to edit the marker.
+      You can always press the edit button (<i class="fa fa-pencil-alt"></i>) next 
+      to a marker to bring up the same dialog to edit the marker.
     </p>
     <h3 id="playPartOfSong">Play only part of a song</h3>
     <p>
@@ -289,6 +203,14 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
       "active playing region" and indicates simply where Troff will 
       start and end.
     </p>
+		<p>
+			If Troff should start playing at the beginning of the active playing region,
+			when pressing space, enter or the play pause button,
+			can be edited in the Global Settings.<br />
+			But you can always more the cursor to the beguining by pressing "G", 
+			as in "Go to marker".
+		</p>
+
     <h3 id="playFullSong">play full song</h3>
       <p>
         If you have a small part selected and want to play the whole song
@@ -637,7 +559,8 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
       <tr>  <td>Space</td><td>Play/pause (with countdown, from marker)</td></tr>
       <tr>  <td>Return</td><td>Play/pause (without countdown, from where the cursor is)</td></tr>
       <tr>  <td>Esc</td><td>Stop song</td></tr>
-      <tr>  <td>M</td><td>  Set Marker</td> </tr>
+      <tr>  <td>M</td><td>  Set marker</td> </tr>
+      <tr>  <td>G</td><td>  Go to marker</td> </tr>
       <tr>  <td>E</td><td>  Edit the marker info text</td> </tr>
       <tr>  <td>1-9</td><td>Set number of times to loop song</td> </tr>
       <tr>  <td>0</td><td>  Loop ''Infinit'' (&infin;) many times</td> </tr>

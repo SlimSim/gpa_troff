@@ -37,6 +37,8 @@ var TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI
 var TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON = "TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON";
 var TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER = "TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER";
+var TROFF_SETTING_CONFIRM_DELETE_MARKER = "TROFF_SETTING_CONFIRM_DELETE_MARKER";
+
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
 	"iCurrentSonglist",
@@ -49,10 +51,11 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR,
-	TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER,
 	TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON,
+	TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER,
+	TROFF_SETTING_CONFIRM_DELETE_MARKER,
 ];
 
 
@@ -531,13 +534,15 @@ var TroffClass = function(){
 	this.recallGlobalSettings = function(){
 		Troff.recallTheme();
 		Troff.recallExtendedMarkerColor();
+		Troff.recallPlayUiButtonHide();
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR);
-		Troff.recallPlayUiButtonHide(TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON);
+		Troff.recallButtonActiveValue(TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER);
+		Troff.recallButtonActiveValue(TROFF_SETTING_CONFIRM_DELETE_MARKER);
 	};
 
 	this.recallTheme = function() {
@@ -2190,7 +2195,9 @@ var TroffClass = function(){
 			$('#'+markerId).addClass('currentMarker');
 			$('#markerInfoArea').val($('#'+markerId)[0].info);
 			
-			Troff.goToStartMarker();
+			if( $("#" + TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER ).hasClass( "active" ) ) {
+				Troff.goToStartMarker();
+			}
 			
 			Troff.settAppropriateActivePlayRegion();
 
@@ -2968,7 +2975,14 @@ var DBClass = function(){
 		return songObject;
 	};
 	
-
+	this.fixDefaultValue = function( allKeys, key, valIsTrue ) {
+		if(allKeys.indexOf( key )=== -1 ) {
+			chrome.storage.local.set( { key : valIsTrue } );
+			if( valIsTrue ) {
+				$("#" + key ).addClass("active");
+			}
+		}
+	}
 
 	this.cleanDB = function(){
 		chrome.storage.local.get(null, function(items) {
@@ -2990,30 +3004,15 @@ var DBClass = function(){
 			}
 
 
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_CONFIRM_DELETE_MARKER, true );
 
-
-			if(allKeys.indexOf(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR)=== -1 ) {
-				chrome.storage.local.set({TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR : false});
-			}
-			if(allKeys.indexOf(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR)=== -1 ) {
-				chrome.storage.local.set({TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR : false});
-			}
-			if(allKeys.indexOf(TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR)=== -1 ) {
-				chrome.storage.local.set({TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR : true});
-				$("#" + TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR ).addClass("active");
-			}
-			if(allKeys.indexOf(TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR)=== -1 ) {
-				chrome.storage.local.set({TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR : true});
-				$("#" + TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR ).addClass("active");
-			}
-			if(allKeys.indexOf(TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR)=== -1 ) {
-				chrome.storage.local.set({TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR : true});
-				$("#" + TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR ).addClass("active");
-			}
-			if(allKeys.indexOf(TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR)=== -1 ) {
-				chrome.storage.local.set({TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR : true});
-				$("#" + TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR ).addClass("active");
-			}
 
 			// Slim sim remove 
 			/*
@@ -3702,6 +3701,9 @@ var IOClass = function(){
 			else
 				Troff.forceFullscreenChange();
 			break;
+		case 71: // G
+			Troff.goToStartMarker();
+			break;
 		case 85: // U
 			if(event.shiftKey==1)
 				Troff.unselectStartMarker();
@@ -3830,6 +3832,8 @@ var IOClass = function(){
 			"class":"regularButton",
 			"value": "Remove"
 		}).click(function(){
+
+			var confirmDelete = $( "#" + TROFF_SETTING_CONFIRM_DELETE_MARKER ).hasClass( "active" );
 			$('#'+outerId).remove();
 			IOEnterFunction = false;
 
@@ -3842,10 +3846,14 @@ var IOClass = function(){
 				return;
 			}
 
-			if(markerId){
-				IO.confirm("Remove marker", "Are you sure?", function(){
-					Troff.removeMarker(markerId);
-				});
+			if( markerId ) {
+				if( confirmDelete ) {
+					IO.confirm( "Remove marker", "Are you sure?", function() {
+						Troff.removeMarker( markerId );
+					} );
+				} else {
+					Troff.removeMarker( markerId );
+				}
 			}
 		});
 		

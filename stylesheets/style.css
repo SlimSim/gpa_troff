@@ -221,6 +221,8 @@ body section{
 /*    position: absolute; */
     z-index: 2;
     margin: 5px;
+    max-width: 90vw;
+    max-height: 90vh;
 }
 
 .popUpSquare *{
@@ -519,7 +521,11 @@ table {
   flex-direction: row-reverse;
 }
 
-.flexOne{
+.flexNone, .flex-none {
+	flex: none;
+}
+
+.flexOne, .flex-one {
   flex: 1;
 }
 

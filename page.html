@@ -662,8 +662,8 @@
 
 	<div id="outerSettingPopUpSquare" class="outerDialog hidden">
 		<div class="popUpSquare" id="innerSettingPopUpSquare" >
-			<div class="flexCol">
-				<h1>Global settings</h1>
+			<h1>Global settings</h1>
+			<div class="flexCol vScroll">
 				<p>These settings are not unique to a song</p>
 				<div>
 					<h3>Extended marker color</h3>
@@ -751,6 +751,28 @@
 									title="Hide the round play/pause button next to the song name"
 									value="Hide" />
 							</div>
+
+
+
+
+							<div>
+								<h4 class="buttWidthStandard inlineBlock">Select marker</h4>
+								<input class="buttWidthMedium onOffButton active" 
+									type="button"
+									id="TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER"
+									title="Jump to the start of the Active playing region on clicking on a marker, deselect this option if you want to be able to click markers without affect the current playback"
+									value="Go to marker" />
+							</div>
+
+							<div>
+								<h4 class="buttWidthStandard inlineBlock">Deleting marker</h4>
+								<input class="buttWidthMedium onOffButton active" 
+									type="button"
+									id="TROFF_SETTING_CONFIRM_DELETE_MARKER"
+									title="When deleting marker, a pup-up question will ask you to confirm the delete"
+									value="Confirm delete" />
+							</div>
+
 						</div>
 						
 						
@@ -791,7 +813,7 @@
 					<h3>Use file-name or artist/songname as song-names</h3>    
 				</div>
 			</div>
-			<input id="buttCloseSettingPopUpSquare" type="button" class="regularButton buttWidthStandard" value="Close" />
+			<input id="buttCloseSettingPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none" value="Close" />
 		</div>
 	</div>
 
