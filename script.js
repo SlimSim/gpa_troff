@@ -38,6 +38,10 @@ var TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI_BU
 var TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON = "TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON";
 var TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER = "TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER";
 var TROFF_SETTING_CONFIRM_DELETE_MARKER = "TROFF_SETTING_CONFIRM_DELETE_MARKER";
+var TROFF_SETTING_UI_ARTIST_HIDE = "TROFF_SETTING_UI_ARTIST_HIDE";
+var TROFF_SETTING_UI_TITLE_HIDE = "TROFF_SETTING_UI_TITLE_HIDE";
+var TROFF_SETTING_UI_ALBUM_HIDE = "TROFF_SETTING_UI_ALBUM_HIDE"; 
+var TROFF_SETTING_UI_PATH_HIDE = "TROFF_SETTING_UI_PATH_HIDE"; 
 
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -56,6 +60,10 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON,
 	TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER,
 	TROFF_SETTING_CONFIRM_DELETE_MARKER,
+	TROFF_SETTING_UI_ARTIST_HIDE,
+	TROFF_SETTING_UI_TITLE_HIDE,
+	TROFF_SETTING_UI_ALBUM_HIDE,
+	TROFF_SETTING_UI_PATH_HIDE,
 ];
 
 
@@ -250,15 +258,16 @@ function setSong(fullPath, galleryId){
 						
 						fileEntry.file(function(file) {
 							chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
+								$( "#currentPath" ).text( Troff.pathToName( path ) );
 								if(metadata.title){
 									$('#currentSong').text( metadata.title ).show();
-									if(metadata.artist)
-										$('#currentArtist').text( metadata.artist );
-									if(metadata.album)
-										$('#currentAlbum').text ( metadata.album ).show();
 								} else {
 									$('#currentArtist').text(Troff.pathToName(path));
 								}
+								if(metadata.artist)
+									$('#currentArtist').text( metadata.artist );
+								if(metadata.album)
+									$('#currentAlbum').text ( metadata.album ).show();
 /*                if (metadata.attachedImages.length) {
 									var blob = metadata.attachedImages[0];
 									var posterBlobURL = URL.createObjectURL(blob);
@@ -477,25 +486,6 @@ var TroffClass = function(){
 		} );
 	};
 
-	this.togglePlayUiButtonHide = function() {
-		var $settingButt = $( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ),
-			$playPauseButt = $( "#buttPlayUiButtonParent" );
-		if( $settingButt.hasClass( "active" ) ) {
-			$playPauseButt.addClass( "hidden" );
-		} else {
-			$playPauseButt.removeClass( "hidden" );
-		}
-
-	}
-
-	this.recallPlayUiButtonHide = function() {
-		DB.getVal( TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON, function( hide ) {
-			if( hide ) {
-				$( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ).addClass( "active" );
-				$( "#buttPlayUiButtonParent" ).addClass( "hidden" );
-			}
-		} );
-	};
 	
 	this.setTheme = function( event ) {
 		var $target = $( event.target ),
@@ -522,9 +512,19 @@ var TroffClass = function(){
 
 	this.setButtonActiveValue = function( event ) {
 		var $target = $( event.target ),
-			id = $target.attr( "id" );
+			id = $target.attr( "id" ),
+			idToHide = $target.data( "id-to-hide" );
 
 		$target.toggleClass( "active" );
+
+
+		if( idToHide ) {
+			if( $target.hasClass( "active" ) ){
+				$( "#" + idToHide ).addClass( "hidden" );
+			} else {
+				$( "#" + idToHide ).removeClass( "hidden" );
+			}
+		}
 
 		DB.saveVal( id, $target.hasClass( "active" ) );
 	}
@@ -534,7 +534,6 @@ var TroffClass = function(){
 	this.recallGlobalSettings = function(){
 		Troff.recallTheme();
 		Troff.recallExtendedMarkerColor();
-		Troff.recallPlayUiButtonHide();
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR);
@@ -543,7 +542,29 @@ var TroffClass = function(){
 		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER);
 		Troff.recallButtonActiveValue(TROFF_SETTING_CONFIRM_DELETE_MARKER);
+		Troff.reacllUiValueHide(TROFF_SETTING_UI_ARTIST_HIDE);
+		Troff.reacllUiValueHide(TROFF_SETTING_UI_TITLE_HIDE);
+		Troff.reacllUiValueHide(TROFF_SETTING_UI_ALBUM_HIDE);
+		Troff.reacllUiValueHide(TROFF_SETTING_UI_PATH_HIDE);
+		Troff.reacllUiValueHide(TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON);
 	};
+
+	this.reacllUiValueHide = function( databaseKey ) {
+		DB.getVal( databaseKey, function( value ) {
+			if( value === undefined ) {
+				return;
+			}
+			var $button = $( "#" + databaseKey ),
+				idToHide = $("#" + databaseKey ).data( "id-to-hide" );
+			if( value ) {
+				$button.addClass( "active" );
+				$("#" + idToHide ).addClass("hidden");
+			} else {
+				$button.removeClass( "active" );
+				$("#" + idToHide ).removeClass("hidden");
+			}
+		} );
+	}
 
 	this.recallTheme = function() {
 		DB.getVal( TROFF_SETTING_SET_THEME, function( theme ) {
@@ -720,8 +741,9 @@ var TroffClass = function(){
 	};
 
 	this.updateStartBefore = function() {
-		if( $('audio, video')[0].paused )
-			$('audio, video')[0].currentTime = Troff.getStartTime();
+		var goToMarker = $("#" + TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER ).hasClass( "active" );
+		if( $('audio, video')[0].paused && goToMarker )
+			Troff.goToStartMarker();
 		Troff.settAppropriateActivePlayRegion();
 	};
 
@@ -2424,9 +2446,6 @@ var TroffClass = function(){
 			editMarker, all, Editerar en markÃ¶r i bÃ¥de html och DB
 		*/
 		this.editMarker = function(markerId){
-			console.log( "markerId", markerId );
-			console.log( "editMarker", this );
-			console.log( "editMarker", this.target );
 			var oldName  = $('#'+markerId).val();
 			var oldTime = Number($('#'+markerId)[0].timeValue);
 			var oldMarkerInfo = $('#'+markerId)[0].info;
@@ -2976,10 +2995,15 @@ var DBClass = function(){
 	};
 	
 	this.fixDefaultValue = function( allKeys, key, valIsTrue ) {
-		if(allKeys.indexOf( key )=== -1 ) {
-			chrome.storage.local.set( { key : valIsTrue } );
+		if(allKeys.indexOf( key ) === -1 ) {
+			var obj = {};
+			obj[ key ] = valIsTrue;
+			chrome.storage.local.set( obj );
+
 			if( valIsTrue ) {
 				$("#" + key ).addClass("active");
+			} else {
+				$("#" + key ).removeClass("active");
 			}
 		}
 	}
@@ -3010,8 +3034,14 @@ var DBClass = function(){
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON, false );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_CONFIRM_DELETE_MARKER, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ARTIST_HIDE, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_TITLE_HIDE, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ALBUM_HIDE, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PATH_HIDE, true );
+
 
 
 			// Slim sim remove 
@@ -3436,7 +3466,7 @@ var IOClass = function(){
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
 		$( "#spaceAndEnterParent" ).find("input").click ( Troff.setButtonActiveValue );
-		$( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ).click ( Troff.togglePlayUiButtonHide );
+		//		$( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ).click ( Troff.togglePlayUiButtonHide );
 		
 		
 		$('#buttPlayUiButtonParent').click( Troff.playUiButton );
@@ -4154,7 +4184,7 @@ var IOClass = function(){
 	};
 
 	this.openHelpWindow = function() {
-//    chrome.app.window.create('help.html');
+		//    chrome.app.window.create('help.html');
 		
 		chrome.app.window.create(
 			'help.html',

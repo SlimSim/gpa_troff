@@ -72,6 +72,7 @@
 				</div>
 				<div id="currentSong"></div>
 				<div id="currentAlbum"></div>
+				<div id="currentPath" class="hidden"></div>
 				<div class="dataOutput center flexRow">
 					<div class="flexRow marginLR moodColorizedText bold">
 						<div class="secondsLeft marginLR">0</div>
@@ -747,6 +748,7 @@
 									value="Use timer" />
 								<input class="buttWidthMedium onOffButton" 
 									type="button"
+									data-id-to-hide="buttPlayUiButtonParent"
 									id="TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON"
 									title="Hide the round play/pause button next to the song name"
 									value="Hide" />
@@ -773,16 +775,39 @@
 									value="Confirm delete" />
 							</div>
 
+							<div>
+								<h4 class="buttWidthStandard inlineBlock">Title area</h4>
+								<!-- Show different things in the square at the top left -->
+								<input class="buttWidthMedium onOffButton" 
+									type="button"
+									data-id-to-hide="currentArtist"
+									id="TROFF_SETTING_UI_ARTIST_HIDE"
+									title="Hide the artist name in the Title area"
+									value="Hide Artist" />
+								<input class="buttWidthMedium onOffButton" 
+									type="button"
+									data-id-to-hide="currentSong"
+									id="TROFF_SETTING_UI_TITLE_HIDE"
+									title="Hide the title name in the Title area"
+									value="Hide Title" />
+								<input class="buttWidthMedium onOffButton" 
+									type="button"
+									data-id-to-hide="currentAlbum"
+									id="TROFF_SETTING_UI_ALBUM_HIDE"
+									title="Hide the album name in the Title area"
+									value="Hide Album" />
+								<input class="buttWidthMedium onOffButton active" 
+									type="button"
+									data-id-to-hide="currentPath"
+									id="TROFF_SETTING_UI_PATH_HIDE"
+									title="Hide the path to the song in the Title area"
+									value="Hide Path" />
+							</div>
 						</div>
 						
 						
 
 					<h1>---------------- Not yet implemented ----------------</h1>
-													
-
-<p> lägga in en knapp "go to marker" - g (då skulle man kunna ställa in att den aldrig ska hoppa till markern auromatiskt :) ) </p>
-<p> så får man ha intällningar för om den ska go to marker vid "klick on marker" OCH vid "N" (och Shift+N), så man kan markera olika markörer utan att den hoppar dit :)</p>
-<p> (men den borde ju alltid hoppa till starten när den slutar spela, så "aldrig", är ju lite att ta i...) </p>
 
 
 					<h3>Song list - overlay or sticky to side</h3>
@@ -790,25 +815,11 @@
 								title="if couch, troff will behave differently"
 								value="toggle" />
 
-					<h3>Coach or participant</h3>
-	<!-- för en coach så ska man kunna markera markörer utan att tiden hoppar dit
-		medan tiden ska hoppa tid för en participant.
-
-		bättre fråga är ju "on click on marker, set time to marker or not?"
-		så får man välja själv :)
-	 -->
-						<input class="buttWidthStandard onOffButton" style="display: block;" type="button"
-								title="if couch, troff will behave differently"
-								value="toggle" />
 
 
-					<h3>Show different things in the square at the top left</h3>
 
-					<h3>ask before deleting markers?</h3>
 								
 					<h3>standard-values for new songs</h3>
-
-					<h3>Show different things in the square at the top left</h3>
 
 					<h3>Use file-name or artist/songname as song-names</h3>    
 				</div>
