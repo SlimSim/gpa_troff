@@ -507,6 +507,10 @@ table {
 	overflow-y: auto;
 }
 
+.scroll{
+	overflow: auto;
+}
+
 .flexCol{
 	display: flex;
 	flex-direction: column;

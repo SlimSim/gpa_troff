@@ -238,6 +238,7 @@ function setSong(fullPath, galleryId){
 		DB.setCurrentSong(path, galleryId);
 
 		Troff.setWaitForLoad(path, galleryId);
+		console.log("fs.root.getFile ->")
 		fs.root.getFile(path, {create: false}, function(fileEntry) {
 			 var newElem = null;
 			 // show the file data
@@ -255,8 +256,14 @@ function setSong(fullPath, galleryId){
 						//console.info("I'm in the if, so no metadata...");
 						newElem.setAttribute('src', fileEntry.toURL());
 					} else {
+
+
+
+// simon häre
+						console.log("chrome.mediaGalleries.getMetadata fileEntry:", fileEntry );
 						
 						fileEntry.file(function(file) {
+							console.log("chrome.mediaGalleries.getMetadata file:", file );
 							chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
 								$( "#currentPath" ).text( Troff.pathToName( path ) );
 								if(metadata.title){
@@ -304,38 +311,118 @@ function addGallery(name, id) {
 }
 
 function addItem(itemEntry) {
+	console.log("addItem -> itemEntry:", itemEntry);
 	if (itemEntry.isFile) {
+		/*
 		itemEntry.getMetadata(function(metadata){
+			console.log("metadata", metadata);
 			if(metadata.title || metadata.titel || metadata.artist){
 				console.info("Haleluja! The metadata is accessable from here!!!!");
 				console.info('artist = ' + metadata.artist);
 				console.info('title = ' + metadata.title);
 			}
 		});
-		var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
-		var li = document.createElement("li");
-		var label = document.createElement("label");
-		var checkbox = document.createElement("input");
-		var div = document.createElement("div");
-		div.setAttribute("class", "flex");
-		div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
-		checkbox.setAttribute("type", "checkbox");
-		label.setAttribute("class", "flexrow");
-		label.appendChild(checkbox);
-		label.appendChild(div);
-		li.setAttribute("fullPath", itemEntry.fullPath );
-		li.setAttribute("galleryId", mData.galleryId );
-		li.setAttribute("isDirectory", false);
-		li.appendChild(label);
-		document.getElementById("newSongListPartAllSongs").appendChild(li);
-		// Slim sim remove 
-		/*
-			This (the following if) is only to ease the transition between 
-			v0.3 to v0.4,
-			it is not used a single time after they open the app with v0.4 
 		*/
-		if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
-			setSong(itemEntry.fullPath, mData.galleryId);
+		 
+
+		// simon häre
+
+		itemEntry.file(function(file) {
+			chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
+				console.log("XXX metadata: ", metadata);
+
+
+
+				
+				var x = $( "#songTemplate" ).find("tr").clone();
+				x.find(".songListTitle").text( metadata.title );
+				x.find(".songListArtist").text( metadata.artist );
+				x.find(".songListAlbum").text( metadata.album );
+				x.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
+				x.find(".songListTempo").text( "?" );
+				x.find(".songListInfo").text( "lite info om låten :)" );
+				$("#superSongTable").find("tbody").append( x );
+
+
+				/*
+				$( "#currentPath" ).text( Troff.pathToName( path ) );
+				if(metadata.title){
+					$('#currentSong').text( metadata.title ).show();
+				} else {
+					$('#currentArtist').text(Troff.pathToName(path));
+				}
+				if(metadata.artist)
+					$('#currentArtist').text( metadata.artist );
+				if(metadata.album)
+					$('#currentAlbum').text ( metadata.album ).show();
+				*/
+/*                if (metadata.attachedImages.length) {
+					var blob = metadata.attachedImages[0];
+					var posterBlobURL = URL.createObjectURL(blob);
+					newElem.setAttribute('poster', posterBlobURL);
+				} //end if
+				newElem.setAttribute('src', fileEntry.toURL());*/
+
+
+				var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
+				var li = document.createElement("li");
+				var label = document.createElement("label");
+				var checkbox = document.createElement("input");
+				var div = document.createElement("div");
+				div.setAttribute("class", "flex");
+
+				console.log( "YYY full path = " + itemEntry.fullPath);
+
+// så, detta är ju för create-song-list - listan :)
+// jag behöver ju göra detta för själva sång-listorna också
+
+// -----> men: jag fixar en sju dundrande lista här, med fina rader, o massa värden o sånt!
+// ------ och sen tar jag bara en jQyery-copy och koppierar över raden till sång-listan
+// ------ och dunkar på en on-click på den :)
+// ------ fast, raden i create-song-list är ju en check-box... hur hantera det???
+
+
+				var x = $( "#songTemplate" ).children().clone();
+				console.log("x.length", x.length);
+				console.log("x.children().length", x.children().length);
+
+				x.find(".songListTitle").text( metadata.title );
+				x.find(".songListArtist").text(metadata.artist);
+				x.find(".songListAlbum").text(metadata.album);
+				x.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
+				//x.appendTo( "#songListPartButtons" );
+console.log("x", x);
+
+//				div.appendChild(x[0 ] /*document.createTextNode( metadata.artist + ", " + metadata.title)*/);
+				div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
+				checkbox.setAttribute("type", "checkbox");
+				label.setAttribute("class", "flexrow");
+				label.appendChild(checkbox);
+				label.appendChild(div);
+				li.setAttribute("fullPath", itemEntry.fullPath );
+				li.setAttribute("galleryId", mData.galleryId );
+				li.setAttribute("isDirectory", false);
+				li.appendChild(label);
+				document.getElementById("newSongListPartAllSongs").appendChild(li);
+				// Slim sim remove 
+				/*
+					This (the following if) is only to ease the transition between 
+					v0.3 to v0.4,
+					it is not used a single time after they open the app with v0.4 
+				*/
+				if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong ) {
+					setSong(itemEntry.fullPath, mData.galleryId);
+				}
+
+
+
+
+			}); // end chrome.mediaGalleries.getMetadata-function
+		});//end fileEntry.file-function
+
+
+
+
 		
 	} else {
 		//slim sim, is this else ever used?
@@ -351,6 +438,7 @@ function addItem(itemEntry) {
 }
 
 function scanGallery(entries) {
+	console.log("scanGallery -> ");
 	
 	// when the size of the entries array is 0,
 	// we've processed all the directory contents
@@ -1579,6 +1667,7 @@ var TroffClass = function(){
 	};
 	
 	this.selectAllSongsSonglist = function(event){
+		console.log("selectAllSongsSonglist -> ");
 		document.getElementById('blur-hack').focus();
 		$('#songListPartTheLists li input').removeClass('selected');
 		$('#songlistAll').addClass('selected');
@@ -1623,6 +1712,7 @@ var TroffClass = function(){
 	};
 	
 	this.addSongButtonToSongsList = function(fullPath, galleryId){
+		console.log("addSongButtonToSongsList -> ");
 		//check if song is already added to the songsList
 		var aAlreadyAddedSongs = $('#gallery').children().filter('button');
 		for(var i=0; i<aAlreadyAddedSongs.length; i++){
@@ -1679,6 +1769,7 @@ var TroffClass = function(){
 	};
 
 	this.getMediaButton = function(fullPath, galleryId){
+		console.log("getMediaButton -> ");
 		var pap = document.createElement("button");
 		pap.setAttribute("class", "mediaButton onOffButton");
 		var currGalleryId = Troff.getCurrentGalleryId();

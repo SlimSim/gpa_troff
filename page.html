@@ -28,6 +28,7 @@
 
 	<link rel="stylesheet" type="text/css" href="assets/reset.css" />
 	<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/test-style.css" />
 	<link id="colorScheme"
 		rel="stylesheet"
 		type="text/css" 
@@ -657,8 +658,7 @@
 			<input id="buttCancelMoveMarkersDialog" type="button" class="regularButton buttWidthStandard" value="Cancel" />
 		</div>
 	</div>
-	
-	
+
 
 
 	<div id="outerSettingPopUpSquare" class="outerDialog hidden">
@@ -829,10 +829,44 @@
 	</div>
 
 
+	
+	<div id="outerSongListPopUpSquare" class="outerDialog">
+		<div id="innerSongListPopUpSquare" class="popUpSquare" >
+			<h1> Songs </h1>
+			<div id="superSonglistArea" class="flexCol start scroll">
+				<table id="superSongTable">
+					<thead>
+						<tr>
+							<th>tempo</th>
+							<th>title</th>
+							<th>Artist</th>
+							<th>Album</th>
+							<th>File name</th>
+							<th>Song info</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
 
 
 
+<!-- Templates :) -->
+
+
+<table id="songTemplate" class="hidden">
+	<tr>
+		<td class="songListTempo" ></td>
+		<td class="songListTitle" ></td>
+		<td class="songListArtist" ></td>
+		<td class="songListAlbum" ></td>
+		<td class="songListFileName" ></td>
+		<td class="songListInfo" ></td>
+	</tr>
+</div>
 
 
 
