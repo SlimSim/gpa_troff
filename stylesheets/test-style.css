@@ -1,6 +1,7 @@
 #superSongTable{
 	border-collapse: collapse;
 	text-align: left;
+	margin: 0;
 }
 
 #superSongTable tr{
@@ -21,3 +22,9 @@
 ​table tr {
     border-bottom: 1px solid black;
 }​*/
+
+#superSongTable th{
+	background: white;
+	position: sticky;
+	top: 0;
+}
