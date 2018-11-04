@@ -849,17 +849,17 @@
 
 			</p>
 			<div id="superSonglistArea" class="flexCol start scroll">
-				<table id="superSongTable">
+				<table id="superSongTable" class="sticky-table-head">
 					<thead>
 						<tr>
-							<th>Play</th>
-							<th>Menu</th>
-							<th>Tempo</th>
-							<th>Title</th>
-							<th>Artist</th>
-							<th>Album</th>
-							<th>File name</th>
-							<th>Song info</th>
+							<th class="primaryColor">Play</th>
+							<th class="primaryColor">Menu</th>
+							<th class="primaryColor">Tempo</th>
+							<th class="primaryColor">Title</th>
+							<th class="primaryColor">Artist</th>
+							<th class="primaryColor">Album</th>
+							<th class="primaryColor">File name</th>
+							<th class="primaryColor">Song info</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -877,7 +877,9 @@
 
 <table id="songTemplate" class="hidden">
 	<tr>
-		<td class="songListPlay" ><button class="svgButt regularButton"><i class="fa fa-play-circle"></i></button></td>
+		<td class="songListPlay secondaryColor" >
+			<button class="svgButt regularButton"><i class="fa fa-play-circle"></i></button>
+		</td>
 		<td class="songListMenu" ><i class="fa fa-ellipsis-v"></i></td>
 		<td class="songListTempo" ></td>
 		<td class="songListTitle" ></td>
