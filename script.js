@@ -238,7 +238,6 @@ function setSong(fullPath, galleryId){
 		DB.setCurrentSong(path, galleryId);
 
 		Troff.setWaitForLoad(path, galleryId);
-		console.log("fs.root.getFile ->")
 		fs.root.getFile(path, {create: false}, function(fileEntry) {
 			 var newElem = null;
 			 // show the file data
@@ -257,13 +256,8 @@ function setSong(fullPath, galleryId){
 						newElem.setAttribute('src', fileEntry.toURL());
 					} else {
 
-
-
-// simon häre
-						console.log("chrome.mediaGalleries.getMetadata fileEntry:", fileEntry );
-						
+					
 						fileEntry.file(function(file) {
-							console.log("chrome.mediaGalleries.getMetadata file:", file );
 							chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
 								$( "#currentPath" ).text( Troff.pathToName( path ) );
 								if(metadata.title){
@@ -311,111 +305,67 @@ function addGallery(name, id) {
 }
 
 function addItem(itemEntry) {
-	console.log("addItem -> itemEntry:", itemEntry);
 	if (itemEntry.isFile) {
-		/*
-		itemEntry.getMetadata(function(metadata){
-			console.log("metadata", metadata);
-			if(metadata.title || metadata.titel || metadata.artist){
-				console.info("Haleluja! The metadata is accessable from here!!!!");
-				console.info('artist = ' + metadata.artist);
-				console.info('title = ' + metadata.title);
-			}
-		});
-		*/
-		 
 
 		// simon häre
 
 		itemEntry.file(function(file) {
 			chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
-				console.log("XXX metadata: ", metadata);
-
-
-
-				
-				var x = $( "#songTemplate" ).find("tr").clone();
-				x.find(".songListTitle").text( metadata.title );
-				x.find(".songListArtist").text( metadata.artist );
-				x.find(".songListAlbum").text( metadata.album );
-				x.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
-				x.find(".songListTempo").text( "?" );
-				x.find(".songListInfo").text( "lite info om låten :)" );
-				$("#superSongTable").find("tbody").append( x );
-
-
-				/*
-				$( "#currentPath" ).text( Troff.pathToName( path ) );
-				if(metadata.title){
-					$('#currentSong').text( metadata.title ).show();
-				} else {
-					$('#currentArtist').text(Troff.pathToName(path));
-				}
-				if(metadata.artist)
-					$('#currentArtist').text( metadata.artist );
-				if(metadata.album)
-					$('#currentAlbum').text ( metadata.album ).show();
-				*/
-/*                if (metadata.attachedImages.length) {
-					var blob = metadata.attachedImages[0];
-					var posterBlobURL = URL.createObjectURL(blob);
-					newElem.setAttribute('poster', posterBlobURL);
-				} //end if
-				newElem.setAttribute('src', fileEntry.toURL());*/
-
-
 				var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
-				var li = document.createElement("li");
-				var label = document.createElement("label");
-				var checkbox = document.createElement("input");
-				var div = document.createElement("div");
-				div.setAttribute("class", "flex");
-
-				console.log( "YYY full path = " + itemEntry.fullPath);
-
-// så, detta är ju för create-song-list - listan :)
-// jag behöver ju göra detta för själva sång-listorna också
-
-// -----> men: jag fixar en sju dundrande lista här, med fina rader, o massa värden o sånt!
-// ------ och sen tar jag bara en jQyery-copy och koppierar över raden till sång-listan
-// ------ och dunkar på en on-click på den :)
-// ------ fast, raden i create-song-list är ju en check-box... hur hantera det???
+				var fullPath = itemEntry.fullPath;
+				var galleryId = mData.galleryId;;
+				DB.getVal( fullPath, function( song ) {
+					console.log( "Nya låtListan: song:", song, "  metadata:", metadata);
 
 
-				var x = $( "#songTemplate" ).children().clone();
-				console.log("x.length", x.length);
-				console.log("x.children().length", x.children().length);
+					// Detta är NYA låtlistan! :)
 
-				x.find(".songListTitle").text( metadata.title );
-				x.find(".songListArtist").text(metadata.artist);
-				x.find(".songListAlbum").text(metadata.album);
-				x.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
-				//x.appendTo( "#songListPartButtons" );
-console.log("x", x);
+					var tableRow = $( "#songTemplate" ).find("tr").clone();
+					tableRow.find(".songListPlay").click( function() {
+						setSong(fullPath, galleryId);
+					} );
 
-//				div.appendChild(x[0 ] /*document.createTextNode( metadata.artist + ", " + metadata.title)*/);
-				div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
-				checkbox.setAttribute("type", "checkbox");
-				label.setAttribute("class", "flexrow");
-				label.appendChild(checkbox);
-				label.appendChild(div);
-				li.setAttribute("fullPath", itemEntry.fullPath );
-				li.setAttribute("galleryId", mData.galleryId );
-				li.setAttribute("isDirectory", false);
-				li.appendChild(label);
-				document.getElementById("newSongListPartAllSongs").appendChild(li);
-				// Slim sim remove 
-				/*
-					This (the following if) is only to ease the transition between 
-					v0.3 to v0.4,
-					it is not used a single time after they open the app with v0.4 
-				*/
-				if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong ) {
-					setSong(itemEntry.fullPath, mData.galleryId);
-				}
+					tableRow.find(".songListTitle").text( metadata.title );
+					tableRow.find(".songListArtist").text( metadata.artist );
+					tableRow.find(".songListAlbum").text( metadata.album );
+					tableRow.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
+					tableRow.find(".songListTempo").text( song.tempo );
+					tableRow.find(".songListInfo").text( song.info );
+					$("#superSongTable").find("tbody").append( tableRow );
 
 
 
+
+					// detta är till för gamla låtlistan:
+
+					var li = document.createElement("li");
+					var label = document.createElement("label");
+					var checkbox = document.createElement("input");
+					var div = document.createElement("div");
+					div.setAttribute("class", "flex");
+
+					//div.appendChild(x[0 ] /*document.createTextNode( metadata.artist + ", " + metadata.title)*/);
+					div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
+					checkbox.setAttribute("type", "checkbox");
+					label.setAttribute("class", "flexrow");
+					label.appendChild(checkbox);
+					label.appendChild(div);
+					li.setAttribute("fullPath", itemEntry.fullPath );
+					li.setAttribute("galleryId", mData.galleryId );
+					li.setAttribute("isDirectory", false);
+					li.appendChild(label);
+					document.getElementById("newSongListPartAllSongs").appendChild(li);
+					// Slim sim remove 
+					/*
+						This (the following if) is only to ease the transition between 
+						v0.3 to v0.4,
+						it is not used a single time after they open the app with v0.4 
+					*/
+					if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong ) {
+						setSong(itemEntry.fullPath, mData.galleryId);
+					}
+
+				} ); // end DB.getSong
 
 			}); // end chrome.mediaGalleries.getMetadata-function
 		});//end fileEntry.file-function
@@ -438,7 +388,6 @@ console.log("x", x);
 }
 
 function scanGallery(entries) {
-	console.log("scanGallery -> ");
 	
 	// when the size of the entries array is 0,
 	// we've processed all the directory contents
@@ -684,7 +633,13 @@ var TroffClass = function(){
 	};
 	this.openSettingsDialog = function( event ) {
 		$( "#outerSettingPopUpSquare" ).removeClass( "hidden" );
-		
+	};
+	
+	this.openSongDialog = function( event ) {
+		$( "#outerSongListPopUpSquare" ).removeClass( "hidden" );
+	};
+	this.closeSongDialog = function( event ) {
+		$( "#outerSongListPopUpSquare" ).addClass( "hidden" );
 	};
 	
 	
@@ -693,16 +648,16 @@ var TroffClass = function(){
 	this.dontShowZoomInstructions = false;
 
 	this.firstTimeUser = function(){
-		$('#firstTimeUserDialog').show();
+		$('#firstTimeUserDialog').removeClass( "hidden" );
 	};
 	
 	this.firstTimeUserDialogTour = function(){
-		$('#firstTimeUserDialog').hide();
+		$('#firstTimeUserDialog').addClass("hidden");
 		IO.openHelpWindow();
 	};
 
 	this.firstTimeUserDialogOK = function(){
-		$('#firstTimeUserDialog').hide();
+		$('#firstTimeUserDialog').addClass( "hidden");
 	};
 
 	// this is regarding the "play in fullscreen" - button
@@ -1360,13 +1315,13 @@ var TroffClass = function(){
 	}; // end createMarker   ********/
 
 	this.toggleImportExport = function(){
-		$('#outerImportExportPopUpSquare').toggle();
+		IO.jQueryToggle( '#outerImportExportPopUpSquare');
+		//$('#outerImportExportPopUpSquare').toggle();
 		document.getElementById('blur-hack').focus();
 	};
-	
-	
+
 	this.toggleInfoAndroid = function(){
-		$('#outerInfoAndroidPopUpSquare').toggle();
+		IO.jQueryToggle('#outerInfoAndroidPopUpSquare');
 		document.getElementById('blur-hack').focus();
 	};
 	
@@ -1667,7 +1622,6 @@ var TroffClass = function(){
 	};
 	
 	this.selectAllSongsSonglist = function(event){
-		console.log("selectAllSongsSonglist -> ");
 		document.getElementById('blur-hack').focus();
 		$('#songListPartTheLists li input').removeClass('selected');
 		$('#songlistAll').addClass('selected');
@@ -1712,7 +1666,6 @@ var TroffClass = function(){
 	};
 	
 	this.addSongButtonToSongsList = function(fullPath, galleryId){
-		console.log("addSongButtonToSongsList -> ");
 		//check if song is already added to the songsList
 		var aAlreadyAddedSongs = $('#gallery').children().filter('button');
 		for(var i=0; i<aAlreadyAddedSongs.length; i++){
@@ -1769,7 +1722,6 @@ var TroffClass = function(){
 	};
 
 	this.getMediaButton = function(fullPath, galleryId){
-		console.log("getMediaButton -> ");
 		var pap = document.createElement("button");
 		pap.setAttribute("class", "mediaButton onOffButton");
 		var currGalleryId = Troff.getCurrentGalleryId();
@@ -2214,7 +2166,6 @@ var TroffClass = function(){
 		this.getFirstAndLastMarkers = function(){
 			var aOMarkers = $('#markerList > li > :nth-child(3)');
 			if(aOMarkers.length == 0 ) {
-				console.log( "$('#markerList > li > :nth-child(3)') is returning no children :(");
 				return null;
 			}
 			var max = parseFloat(aOMarkers[0].timeValue);
@@ -2417,7 +2368,8 @@ var TroffClass = function(){
 
 
 		this.toggleMoveMarkersMoreInfo = function(){
-			$('#moveMarkersMoreInfoDialog').toggle();
+			//$('#moveMarkersMoreInfoDialog').toggle();
+			IO.jQueryToggle( "#moveMarkersMoreInfoDialog" );
 			document.getElementById('blur-hack').focus();
 		};
 
@@ -2428,7 +2380,7 @@ var TroffClass = function(){
 			IO.setEnterFunction(function(){
 				Troff.moveMarkers();
 			});
-			$('#moveMarkersDialog').show();
+			$('#moveMarkersDialog').removeClass( "hidden" );
 			$('#moveMarkersNumber').select();
 		};
 
@@ -2436,8 +2388,9 @@ var TroffClass = function(){
 			hide the move markers pop up dialog. 
 		*/
 		this.hideMoveMarkers = function(){
-			$('#moveMarkersDialog').hide();
-			$('#moveMarkersMoreInfoDialog').hide();
+			$('#moveMarkersDialog').addClass( "hidden" );
+			$('#moveMarkersMoreInfoDialog').addClass( "hidden" );
+			//$('#moveMarkersMoreInfoDialog').hide();
 			$('#moveMarkersNumber').val(0);
 			IO.clearEnterFunction();
 		};
@@ -2469,7 +2422,7 @@ var TroffClass = function(){
 			move all markers. 
 		*/
 		this.moveMarkers = function(bMoveSelected, bOneMarker){
-			$('#moveMarkersDialog').hide();
+			$('#moveMarkersDialog').addClass( "hidden" );
 			IO.clearEnterFunction();
 			
 			var value = $('#moveMarkersNumber').val();
@@ -2745,14 +2698,14 @@ var TroffClass = function(){
 
 		
 		this.zoomDontShowAgain = function(){
-			$('#zoomInstructionDialog').hide();
+			$('#zoomInstructionDialog').addClass( "hidden" );
 			Troff.dontShowZoomInstructions = true;
 			DB.setZoomDontShowAgain();
 			IO.clearEnterFunction();
 		};
 		
 		this.zoomDialogOK = function(){
-			$('#zoomInstructionDialog').hide();
+			$('#zoomInstructionDialog').addClass( "hidden" );
 			IO.clearEnterFunction();
 		};
 		
@@ -2773,7 +2726,7 @@ var TroffClass = function(){
 			if(startTime === m_zoomStartTime && endTime == m_zoomEndTime){
 				if(!Troff.dontShowZoomInstructions){
 					IO.setEnterFunction(Troff.zoomDialogOK);
-					$('#zoomInstructionDialog').show();
+					$('#zoomInstructionDialog').removeClass( "hidden" );
 				}
 			}
 			Troff.zoom(startTime, endTime);
@@ -2954,26 +2907,26 @@ var RateClass = function(){
 			Rate.rateDialogRateNow();
 		});
 		if(navigator.onLine){
-			$('#rateDialog').show();
+			$('#rateDialog').removeClass( "hidden" );
 		}
 	};
 	
 	this.rateDialogNoThanks = function(){
 		document.getElementById('blur-hack').focus();
 		IO.clearEnterFunction();
-		$('#rateDialog').hide();
+		$('#rateDialog').addClass( "hidden" );
 		chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_NO_THANKS});
 	};
 	this.rateDialogAskLater = function(){
 		document.getElementById('blur-hack').focus();
 		IO.clearEnterFunction();
-		$('#rateDialog').hide();
+		$('#rateDialog').addClass("hidden");
 		chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_ASK_LATER});
 	};
 	this.rateDialogRateNow = function(){
 		document.getElementById('blur-hack').focus();
 		IO.clearEnterFunction();
-		$('#rateDialog').hide();
+		$('#rateDialog').addClass("hidden");
 		chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_ALREADY_RATED});
 		
 		var strChromeWebStore = 'https://chrome.google.com/webstore/detail/';
@@ -3551,8 +3504,19 @@ var IOClass = function(){
 
 		document.addEventListener('keydown', IO.keyboardKeydown);
 		
+		$( ".outerDialog" ).click( function( event ) { 
+			//if( $(event.delegateTarget).attr( "id") == $(event.target).attr( "id") ) {
+			if( $(event.target ).hasClass( "outerDialog" ) ) {
+				$( event.target ).addClass( "hidden" );
+			}
+		} );
+
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
+
+		$( "#buttSongsDialog" ).click ( Troff.openSongDialog );
+		$( "#buttCloseSongsPopUpSquare" ).click ( Troff.closeSongDialog );
+
 		$( "#toggleExtendedMarkerColor" ).click ( Troff.toggleExtendedMarkerColor );
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
@@ -3666,6 +3630,15 @@ var IOClass = function(){
 		Troff.recallGlobalSettings();
 
 	};//end startFunc
+
+
+	this.jQueryToggle = function( idString ){
+		if( $(idString).hasClass("hidden") ) {
+			$(idString).removeClass("hidden");
+		} else {
+			$(idString).addClass("hidden");
+		}
+	}
 
 	this.setColor = function( colClass ) {
 		$('html').removeClass();

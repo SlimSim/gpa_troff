@@ -42,7 +42,8 @@ purchase = function(){
     }
     $('.outerDialog').hide();
     IO.clearEnterFunction();
-    document.querySelector('#donateDialog').style.display="";
+    document.querySelector('#donateDialog').classList.remove( "hidden" );
+    //document.querySelector('#donateDialog').style.display="";
   }
 
 
@@ -146,7 +147,8 @@ purchase = function(){
 }
 
 closeDonateDialog = function(){
-  document.querySelector('#donateDialog').style.display="none";
+  //document.querySelector('#donateDialog').style.display="none";
+  document.querySelector('#donateDialog').classList.add( "hidden" );
   $("tbody tr").remove();
   IO.clearEnterFunction();
 }

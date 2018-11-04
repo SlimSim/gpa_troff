@@ -1,3 +1,23 @@
-#superSongTable td{
-	white-space: nowrap;
+#superSongTable{
+	border-collapse: collapse;
+	text-align: left;
 }
+
+#superSongTable tr{
+	border-bottom: solid 1px lightgray;
+}
+
+#superSongTable td, #superSongTable th{
+	white-space: nowrap;
+	padding: 10px 5px;
+}
+
+#superSongTable th {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/*
+​table tr {
+    border-bottom: 1px solid black;
+}​*/

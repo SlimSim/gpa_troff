@@ -102,6 +102,13 @@
 					title="Share the link to this app with your freinds via email">
 					<i class="fa fa-share-alt"></i>
 				</button>
+
+				<button class="svgButt regularButton"
+					type="button"
+					title="open the songs dialoug"
+					id="buttSongsDialog" >
+					<i class="fa fa-list"></i>
+				</button>
 			</nav>
 		</div> <!-- end headArea -->
 		<div id="areaSelector" class="flexRowWrap secondaryColor">
@@ -427,7 +434,7 @@
 --------------- POP UP DIALOGS: ----------------
 -->
 
-	<div id="outerInfoAndroidPopUpSquare" class="outerDialog" style="display: none;">
+	<div id="outerInfoAndroidPopUpSquare" class="outerDialog hidden" >
 		<div class="popUpSquare" id="innerInfoAndroidPopUpSquare" >
 			<div class="flexCol">
 				<p>Troff is now avalable as a very early beta app for Android.</p>
@@ -460,7 +467,7 @@
 	</div>
 
 
-	<div id="outerImportExportPopUpSquare" class="outerDialog" style="display: none;">
+	<div id="outerImportExportPopUpSquare" class="outerDialog hidden">
 		<div class="popUpSquare" id="innerImportExportPopUpSquare" >
 			<div>
 				Export your markers, states, settings and info, or import new ones, 
@@ -474,7 +481,7 @@
 		</div>
 	</div>
 
-	<div style="display: none;" id="donateDialog" class="outerDialog">
+	<div id="donateDialog" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog">
 			<h2 class="paragraph">Donate to Troff</h2>
 			<p class="paragraph normalSize">
@@ -515,7 +522,7 @@
 	
 	
 
-	<div style="display: none;" id="rateDialog" class="outerDialog">
+	<div id="rateDialog" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog marginDialog flexCol">
 			<h2 class="paragraph">Do you like using Troff?</h2>
 			
@@ -543,7 +550,7 @@
 		</div>
 	</div>
 	
-	<div style="display: none;" id="firstTimeUserDialog" class="outerDialog">
+	<div id="firstTimeUserDialog" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog marginDialog flexCol">
 			<h2 class="paragraph">Welcome to Troff v1.0!</h2>
 			<div>
@@ -580,7 +587,7 @@
 		</div>
 	</div>
 	
-	<div style="display: none;" id="zoomInstructionDialog" class="outerDialog">
+	<div id="zoomInstructionDialog" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog marginDialog flexCol">
 			<h2 class="paragraph">How zoom works</h2>
 			<div>
@@ -613,7 +620,7 @@
 	
 	
 	
-	<div style="display: none" id="moveMarkersDialog" class="outerDialog">
+	<div id="moveMarkersDialog" class="outerDialog hidden">
 		<div class="innerDialog flexCol mediumDialog">
 			<h2 class="paragraph">Move markers</h2>
 			<p class="paragraph normalSize">
@@ -621,7 +628,7 @@
 				between the selected markers (including the selected markers).
 				<input type="button" id="buttPromptMoveMarkersMoreInfo" class="likeLink" value="More info" />
 			</p>
-			<p class="paragraph normalSize" style="display: none" id="moveMarkersMoreInfoDialog" >
+			<p class="paragraph normalSize hidden" id="moveMarkersMoreInfoDialog" >
 				Say you have 4 markers; A, B, C and D, in that order. 
 				If you select A as start-marker and C as stop-marker and move them down
 				by entering 20 seconds and hitting "Move markers down". Only marker
@@ -815,7 +822,7 @@
 								title="if couch, troff will behave differently"
 								value="toggle" />
 
-
+						<p>Use file name or songName in songList :) </p>
 
 
 								
@@ -830,15 +837,25 @@
 
 
 	
-	<div id="outerSongListPopUpSquare" class="outerDialog">
+	<div id="outerSongListPopUpSquare" class="outerDialog hidden">
 		<div id="innerSongListPopUpSquare" class="popUpSquare" >
 			<h1> Songs </h1>
+			<p>
+				ha en song-lista här till vänster (som en egen kolumn / egen sektion) 
+				så kan man klicka och dra på låtarna till sång-listorna för att lägga till dom.
+				och sen ha meny-klicken på varje låt där man kan lägga till låten i en sång-list.
+
+				Klicka på en sång-list ska ju filtrera listan till den sång-listan :)
+
+			</p>
 			<div id="superSonglistArea" class="flexCol start scroll">
 				<table id="superSongTable">
 					<thead>
 						<tr>
-							<th>tempo</th>
-							<th>title</th>
+							<th>Play</th>
+							<th>Menu</th>
+							<th>Tempo</th>
+							<th>Title</th>
 							<th>Artist</th>
 							<th>Album</th>
 							<th>File name</th>
@@ -848,6 +865,7 @@
 					<tbody></tbody>
 				</table>
 			</div>
+			<input id="buttCloseSongsPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none" value="Close" />
 		</div>
 	</div>
 
@@ -859,6 +877,8 @@
 
 <table id="songTemplate" class="hidden">
 	<tr>
+		<td class="songListPlay" ><button class="svgButt regularButton"><i class="fa fa-play-circle"></i></button></td>
+		<td class="songListMenu" ><i class="fa fa-ellipsis-v"></i></td>
 		<td class="songListTempo" ></td>
 		<td class="songListTitle" ></td>
 		<td class="songListArtist" ></td>
