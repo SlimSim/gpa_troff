@@ -2046,7 +2046,7 @@ var TroffClass = function(){
 			for(var i=0; i<aMarkers.length; i++) {
 				var oMarker = aMarkers[i];
 				var name = oMarker.name;
-				var time = oMarker.time;
+				var time = Number(oMarker.time);
 				var info = oMarker.info;
 				var color = oMarker.color || "None";
 				var nameId = oMarker.id;
@@ -2118,7 +2118,7 @@ var TroffClass = function(){
 				var bInserted = false;
 				var bContinue = false;
 				while(child) {
-					var childTime = child.childNodes[2].timeValue;
+					var childTime = parseFloat(child.childNodes[2].timeValue);
 					if(childTime !== undefined && Math.abs(time - childTime) < 0.001){
 						var markerId = child.childNodes[2].id;
 						
@@ -2460,7 +2460,7 @@ var TroffClass = function(){
 				var newTime = Math.max(0, Math.min(maxTime, markerTime) );
 				
 				for(var j=0; j<i; j++){
-					if(aAllMarkers[j].timeValue == newTime){
+					if(Number(aAllMarkers[j].timeValue) == newTime){
 						var newMarkerName = $('#'+markerId).val();
 						if(newMarkerName != aAllMarkers.eq(j).val())
 							newMarkerName += ", " + aAllMarkers.eq(j).val();
@@ -2634,7 +2634,7 @@ var TroffClass = function(){
 							return;
 						}
 						var songTime = audioVideo.duration;
-						var markerTime = child.childNodes[2].timeValue;
+						var markerTime = Number(child.childNodes[2].timeValue);
 						var myRowHeight = child.clientHeight;
 
 						var freeDistanceToTop = timeBarHeight * markerTime / songTime;
@@ -2662,7 +2662,7 @@ var TroffClass = function(){
 			var currentMarkerTime = Number($('.currentMarker')[0].timeValue, 10);
 			var currentStopTime = Number($('.currentStopMarker')[0].timeValue, 10);
 			markers.sort(function(a, b){
-				return a.childNodes[2].timeValue - b.childNodes[2].timeValue;
+				return Number(a.childNodes[2].timeValue) - Number(b.childNodes[2].timeValue);
 			});
 
 			var bSelectNext = false;
@@ -2683,14 +2683,14 @@ var TroffClass = function(){
 					$(markers[i].childNodes[3]).click();
 					bSelectNextStop = false;
 				}
-				if(markers[i].childNodes[3].timeValue == currentStopTime){
+				if(Number(markers[i].childNodes[3].timeValue) == currentStopTime){
 					bSelectNextStop = true;
 				}
 				if(bSelectNext){
 					$(markers[i].childNodes[2]).click();
 					bSelectNext = false;
 				}
-				if(markers[i].childNodes[2].timeValue == currentMarkerTime){
+				if(Number(markers[i].childNodes[2].timeValue) == currentMarkerTime){
 					bSelectNext = true;
 				}
 			}
@@ -3310,7 +3310,7 @@ var DBClass = function(){
 		for(var i=0; i<aAllMarkers.length; i++){
 			var oMarker = {};
 			oMarker.name  = aAllMarkers[i].value;
-			oMarker.time  = aAllMarkers[i].timeValue;
+			oMarker.time  = Number(aAllMarkers[i].timeValue);
 			oMarker.info  = aAllMarkers[i].info;
 			oMarker.color = aAllMarkers[i].color;
 			oMarker.id    = aAllMarkers[i].id;
