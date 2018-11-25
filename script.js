@@ -256,7 +256,6 @@ function setSong(fullPath, galleryId){
 						newElem.setAttribute('src', fileEntry.toURL());
 					} else {
 
-					
 						fileEntry.file(function(file) {
 							chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
 								$( "#currentPath" ).text( Troff.pathToName( path ) );
@@ -306,73 +305,37 @@ function addGallery(name, id) {
 
 function addItem(itemEntry) {
 	if (itemEntry.isFile) {
-
-		// simon häre
-
-		itemEntry.file(function(file) {
-			chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
-				var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
-				var fullPath = itemEntry.fullPath;
-				var galleryId = mData.galleryId;;
-				DB.getVal( fullPath, function( song ) {
-					console.log( "Nya låtListan: song:", song, "  metadata:", metadata);
-
-
-					// Detta är NYA låtlistan! :)
-
-					var tableRow = $( "#songTemplate" ).find("tr").clone();
-					tableRow.find(".songListPlay").click( function() {
-						setSong(fullPath, galleryId);
-					} );
-
-					tableRow.find(".songListTitle").text( metadata.title );
-					tableRow.find(".songListArtist").text( metadata.artist );
-					tableRow.find(".songListAlbum").text( metadata.album );
-					tableRow.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
-					tableRow.find(".songListTempo").text( song.tempo );
-					tableRow.find(".songListInfo").text( song.info );
-					$("#superSongTable").find("tbody").append( tableRow );
-
-
-
-
-					// detta är till för gamla låtlistan:
-
-					var li = document.createElement("li");
-					var label = document.createElement("label");
-					var checkbox = document.createElement("input");
-					var div = document.createElement("div");
-					div.setAttribute("class", "flex");
-
-					//div.appendChild(x[0 ] /*document.createTextNode( metadata.artist + ", " + metadata.title)*/);
-					div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
-					checkbox.setAttribute("type", "checkbox");
-					label.setAttribute("class", "flexrow");
-					label.appendChild(checkbox);
-					label.appendChild(div);
-					li.setAttribute("fullPath", itemEntry.fullPath );
-					li.setAttribute("galleryId", mData.galleryId );
-					li.setAttribute("isDirectory", false);
-					li.appendChild(label);
-					document.getElementById("newSongListPartAllSongs").appendChild(li);
-					// Slim sim remove 
-					/*
-						This (the following if) is only to ease the transition between 
-						v0.3 to v0.4,
-						it is not used a single time after they open the app with v0.4 
-					*/
-					if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong ) {
-						setSong(itemEntry.fullPath, mData.galleryId);
-					}
-
-				} ); // end DB.getSong
-
-			}); // end chrome.mediaGalleries.getMetadata-function
-		});//end fileEntry.file-function
-
-
-
-
+		itemEntry.getMetadata(function(metadata){
+			if(metadata.title || metadata.titel || metadata.artist){
+				console.info("Haleluja! The metadata is accessable from here!!!!");
+				console.info('artist = ' + metadata.artist);
+				console.info('title = ' + metadata.title);
+			}
+		});
+		var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
+		var li = document.createElement("li");
+		var label = document.createElement("label");
+		var checkbox = document.createElement("input");
+		var div = document.createElement("div");
+		div.setAttribute("class", "flex");
+		div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
+		checkbox.setAttribute("type", "checkbox");
+		label.setAttribute("class", "flexrow");
+		label.appendChild(checkbox);
+		label.appendChild(div);
+		li.setAttribute("fullPath", itemEntry.fullPath );
+		li.setAttribute("galleryId", mData.galleryId );
+		li.setAttribute("isDirectory", false);
+		li.appendChild(label);
+		document.getElementById("newSongListPartAllSongs").appendChild(li);
+		// Slim sim remove 
+		/*
+			This (the following if) is only to ease the transition between 
+			v0.3 to v0.4,
+			it is not used a single time after they open the app with v0.4 
+		*/
+		if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
+			setSong(itemEntry.fullPath, mData.galleryId);
 		
 	} else {
 		//slim sim, is this else ever used?
@@ -386,6 +349,52 @@ function addItem(itemEntry) {
 	 }
 	 
 }
+
+function addItem_NEW(itemEntry) {
+	if (!itemEntry.isFile) {
+		//slim sim, is this else ever used?
+		console.info("\n\n\n*********  addItem_NEW: else! This else is used! itemEntry:", itemEntry,"\n\n");
+		//IO.alert("The else is used! Search for: code_7954");
+		var liHead = document.createElement("li");
+		var group = document.createElement("h3");
+		gruop.appendChild(document.createTextNode(itemEntry.name));
+		liHead.appendChild(group);
+		document.getElementById("newSongListPartAllSongs").appendChild(liHead);
+		return;
+	}
+
+	// simon häre 2 NY
+
+	itemEntry.file(function(file) {
+		chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
+
+
+			var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
+			var fullPath = itemEntry.fullPath;
+			var galleryId = mData.galleryId;;
+			DB.getVal( fullPath, function( song ) {
+				console.log( "addItem_NEW: Nya låtListan: song:", song, "  metadata:", metadata);
+
+				// Detta är NYA låtlistan! :)
+
+				var tableRow = $( "#songTemplate" ).find( "tr" ).clone();
+				tableRow.find(".songListPlay").click( function() {
+					setSong( fullPath, galleryId );
+				} );
+
+				tableRow.find( ".songListTitle" ).text( metadata.title );
+				tableRow.find( ".songListArtist" ).text( metadata.artist );
+				tableRow.find( ".songListAlbum" ).text( metadata.album );
+				tableRow.find( ".songListFileName" ).text( Troff.pathToName( itemEntry.fullPath ) );
+				tableRow.find( ".songListTempo" ).text( song.tempo );
+				tableRow.find( ".songListInfo" ).text( song.info );
+				$( "#superSongTable" ).find("tbody").append( tableRow );
+
+			} ); // end DB.getVal
+		} ); // end chrome.mediaGalleries.getMetadata-function
+	} );//end fileEntry.file-function
+}
+
 
 function scanGallery(entries) {
 	
@@ -415,6 +424,7 @@ function scanGallery(entries) {
 	for (var i = 0; i < entries.length; i++) {
 		if (entries[i].isFile) {
 			addItem(entries[i]);
+			addItem_NEW( entries[i] );
 			gGalleryData[gGalleryIndex].numFiles++;
 			loopFunktion(entries, gGalleryData[gGalleryIndex], i);
 		}
@@ -634,7 +644,7 @@ var TroffClass = function(){
 	this.openSettingsDialog = function( event ) {
 		$( "#outerSettingPopUpSquare" ).removeClass( "hidden" );
 	};
-	
+
 	this.openSongDialog = function( event ) {
 		$( "#outerSongListPopUpSquare" ).removeClass( "hidden" );
 	};
@@ -3504,7 +3514,7 @@ var IOClass = function(){
 
 		document.addEventListener('keydown', IO.keyboardKeydown);
 		
-		$( ".outerDialog" ).click( function( event ) { 
+		$( ".outerDialog" ).click( function( event ) {
 			//if( $(event.delegateTarget).attr( "id") == $(event.target).attr( "id") ) {
 			if( $(event.target ).hasClass( "outerDialog" ) ) {
 				$( event.target ).addClass( "hidden" );
