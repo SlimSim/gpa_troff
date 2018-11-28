@@ -315,11 +315,46 @@ function addItem(itemEntry) {
 				var fullPath = itemEntry.fullPath;
 				var galleryId = mData.galleryId;;
 				DB.getVal( fullPath, function( song ) {
-					console.log( "Nya låtListan: song:", song, "  metadata:", metadata);
+					//console.log( "Nya låtListan: song:", song, "  metadata:", metadata);
+
+
+
+					// Detta är NYA dataTable låtlistan! :)
+					/*
+					var playButt = $( "#songTemplate" ).find(".songListPlay");
+					var menuButt = $( "#songTemplate" ).find(".songListMenu");
+
+					playButt.click( function() {
+						console.log("clicked :) ");
+						setSong(fullPath, galleryId);
+					} )*/
+
+											$('#dataSongTable').DataTable().row.add( [
+													galleryId,
+													fullPath,
+														null,
+														null,
+														metadata.title,
+														metadata.artist,
+														metadata.album,
+														Troff.pathToName(itemEntry.fullPath),
+														song.tempo,
+														song.info
+													] )
+											.draw( false );
+											 /*   
+ $('#example tbody').on( 'click', 'button', function () {
+        var data = table.row( $(this).parents('tr') ).data();
+        alert( data[0] +"'s salary is: "+ data[ 5 ] );
+    } );
+    */
+
+
+											    
 
 
 					// Detta är NYA låtlistan! :)
-
+					/*
 					var tableRow = $( "#songTemplate" ).find("tr").clone();
 					tableRow.find(".songListPlay").click( function() {
 						setSong(fullPath, galleryId);
@@ -333,7 +368,7 @@ function addItem(itemEntry) {
 					tableRow.find(".songListInfo").text( song.info );
 					$("#superSongTable").find("tbody").append( tableRow );
 
-
+					*/
 
 
 					// detta är till för gamla låtlistan:
@@ -1895,6 +1930,33 @@ var TroffClass = function(){
 			importantEl.removeClass('important');
 			$('#gallery :visible:button').eq(0).addClass('important');
 		}
+	};
+
+	this.enterSerachDataTableSongList = function( event ) {
+		console.log( "enterSerachDataTableSongList -> " );
+
+		$input = $( event.target );
+		$input.addClass('textareaEdit');
+
+		if( !$input.is(':focus') ) {
+			$input.focus();
+		}
+
+		IO.setEnterFunction(function(event){
+			/*
+			if(event.ctrlKey==1){//Ctrl+Enter will exit
+				$input.val('').trigger('click');
+				document.getElementById('blur-hack').focus();
+				return false;
+			}
+			*/
+			return true;
+		});
+
+	};
+	this.exitSerachDataTableSongList = function( event ) {
+		console.log( "exitSerachDataTableSongList -> " );
+		IO.clearEnterFunction();
 	};
 	
 	this.enterSearchCreateSongList = function( event ){
@@ -3564,6 +3626,9 @@ var IOClass = function(){
 		$('#markerInfoArea').click(Troff.enterMarkerInfo);
 		$( '#searchCreateSongList' ).click( Troff.enterSearchCreateSongList );
 		$( '#searchCreateSongList' ).blur( Troff.exitSearchCreateSongList );
+		$(" [type=\"search\"] " ).click( Troff.enterSerachDataTableSongList );
+		$(" [type=\"search\"] " ).blur( Troff.exitSerachDataTableSongList );
+
 		$('.editText').click(Troff.enterSearch);
 		$('.editText').blur(Troff.exitSearch);
 
@@ -4275,6 +4340,33 @@ var Rate = new RateClass();
 
 $(document).ready( function() {
 	
+	var dataSongTable = $("#dataSongTable").DataTable({
+
+		"paging": false,
+		"columnDefs": [
+			{
+				"targets": [ 0, 1 ],
+				"visible": false,
+				"searchable": false
+			}, {
+				"targets": 2,
+				"data": null,
+				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
+			}, {
+				"targets": 3,
+				"data": null,
+				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
+			}
+		]
+	} )
+	.on( 'click', 'button.loadSong', function () {
+		var data = dataSongTable.row( $(this).parents('tr') ).data();
+		setSong(
+			data[1], //fullPath
+			data[0] //galleryId
+		);
+	} );
+
 	DB.cleanDB();
 	DB.getAllSonglists();
 	DB.getZoomDontShowAgain();

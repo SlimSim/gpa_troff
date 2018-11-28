@@ -1,3 +1,28 @@
+
+#dataSongTable{
+	border-collapse: collapse;
+	text-align: left;
+	margin: 0;
+}
+
+#dataSongTable tr{
+	border-bottom: solid 1px lightgray;
+}
+
+#dataSongTable td, #dataSongTable th{
+	white-space: nowrap;
+	padding: 10px 5px;
+}
+
+#dataSongTable th {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+
+/* --- */
+
+
 #superSongTable{
 	border-collapse: collapse;
 	text-align: left;
@@ -31,7 +56,8 @@
 
 #superSongTable td:first-child, #superSongTable th:first-child {
 	z-index: 1;
-	color: pink;
 	position: sticky;
 	left: 0;
 }
+
+
