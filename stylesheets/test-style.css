@@ -65,7 +65,6 @@
 }
 
 
-
 table.dataTable thead .sorting:after, 
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after, 
@@ -75,9 +74,4 @@ table.dataTable thead .sorting_desc_disabled:after{
 	display: inline-block;
 	position: static;
 	padding-left: 10px;
-}
-
-
-table.dataTable thead tr th:nth-child(-n+2){
-	background-image: none;
 }

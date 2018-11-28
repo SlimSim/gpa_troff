@@ -4348,10 +4348,12 @@ $(document).ready( function() {
 			}, {
 				"targets": 2,
 				"data": null,
+				"orderable": false,
 				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
 			}, {
 				"targets": 3,
 				"data": null,
+				"orderable": false,
 				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
 			},
 			{
