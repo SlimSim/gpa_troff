@@ -4353,6 +4353,10 @@ $(document).ready( function() {
 				"targets": 3,
 				"data": null,
 				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
+			},
+			{
+				"targets": [ "_all" ],
+				"className": "secondaryColor",
 			}
 		]
 	} )
@@ -4363,6 +4367,8 @@ $(document).ready( function() {
 			data[0] //galleryId
 		);
 	} );
+
+	$("#dataSongTable thead th").removeClass("secondaryColor")
 
 	DB.cleanDB();
 	DB.getAllSonglists();
