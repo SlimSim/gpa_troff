@@ -223,6 +223,12 @@ function checkIfSongExists(fullPath, galleryId){
 function setSong(fullPath, galleryId){
 	Troff.pauseSong();
 
+	$("#gallery")
+		.children()
+		.removeClass( "selected" )
+		.filter( 'button[fullpath="' + fullPath + '"][galleryid="' + galleryId + '"]' )
+		.addClass( "selected" )
+
 	var fsId = galleryId;
 	var fs = null;
 	// get the filesystem that the selected file belongs to
@@ -1609,12 +1615,6 @@ var TroffClass = function(){
 	};
 	
 	this.selectSong = function(){
-		var selectedSong = document.querySelector('#gallery .selected');
-		if(selectedSong)
-			selectedSong.classList.remove("selected");
-
-		this.classList.add("selected");
-
 		var fullPath = this.getAttribute('fullPath');
 		var galleryId = this.getAttribute('galleryId');
 		setSong(fullPath, galleryId);

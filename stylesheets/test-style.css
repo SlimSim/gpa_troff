@@ -31,7 +31,9 @@
 
 #superSongTable td:first-child, #superSongTable th:first-child {
 	z-index: 1;
-	color: pink;
 	position: sticky;
 	left: 0;
+}
+#superSongTable th:first-child {
+	z-index: 2;
 }
