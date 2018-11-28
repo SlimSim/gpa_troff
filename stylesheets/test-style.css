@@ -23,22 +23,22 @@
 /* --- */
 
 
-#superSongTable{
+#dataSongTable{
 	border-collapse: collapse;
 	text-align: left;
 	margin: 0;
 }
 
-#superSongTable tr{
+#dataSongTable tr{
 	border-bottom: solid 1px lightgray;
 }
 
-#superSongTable td, #superSongTable th{
+#dataSongTable td, #dataSongTable th{
 	white-space: nowrap;
 	padding: 10px 5px;
 }
 
-#superSongTable th {
+#dataSongTable th {
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -48,16 +48,18 @@
     border-bottom: 1px solid black;
 }​*/
 
-.sticky-table-head th{
+#dataSongTable th {
 	position: sticky;
 	top: 0;
 }
 
 
-#superSongTable td:first-child, #superSongTable th:first-child {
+#dataSongTable td:first-child, #dataSongTable th:first-child {
 	z-index: 1;
 	position: sticky;
 	left: 0;
 }
 
-
+#dataSongTable th:first-child {
+	z-index: 2;
+}

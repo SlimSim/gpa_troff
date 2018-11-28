@@ -223,6 +223,12 @@ function checkIfSongExists(fullPath, galleryId){
 function setSong(fullPath, galleryId){
 	Troff.pauseSong();
 
+	$("#gallery")
+		.children()
+		.removeClass( "selected" )
+		.filter( 'button[fullpath="' + fullPath + '"][galleryid="' + galleryId + '"]' )
+		.addClass( "selected" )
+
 	var fsId = galleryId;
 	var fs = null;
 	// get the filesystem that the selected file belongs to
@@ -256,7 +262,6 @@ function setSong(fullPath, galleryId){
 						newElem.setAttribute('src', fileEntry.toURL());
 					} else {
 
-					
 						fileEntry.file(function(file) {
 							chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
 								$( "#currentPath" ).text( Troff.pathToName( path ) );
@@ -306,108 +311,37 @@ function addGallery(name, id) {
 
 function addItem(itemEntry) {
 	if (itemEntry.isFile) {
-
-		// simon häre
-
-		itemEntry.file(function(file) {
-			chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
-				var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
-				var fullPath = itemEntry.fullPath;
-				var galleryId = mData.galleryId;;
-				DB.getVal( fullPath, function( song ) {
-					//console.log( "Nya låtListan: song:", song, "  metadata:", metadata);
-
-
-
-					// Detta är NYA dataTable låtlistan! :)
-					/*
-					var playButt = $( "#songTemplate" ).find(".songListPlay");
-					var menuButt = $( "#songTemplate" ).find(".songListMenu");
-
-					playButt.click( function() {
-						console.log("clicked :) ");
-						setSong(fullPath, galleryId);
-					} )*/
-
-											$('#dataSongTable').DataTable().row.add( [
-													galleryId,
-													fullPath,
-														null,
-														null,
-														metadata.title,
-														metadata.artist,
-														metadata.album,
-														Troff.pathToName(itemEntry.fullPath),
-														song.tempo,
-														song.info
-													] )
-											.draw( false );
-											 /*   
- $('#example tbody').on( 'click', 'button', function () {
-        var data = table.row( $(this).parents('tr') ).data();
-        alert( data[0] +"'s salary is: "+ data[ 5 ] );
-    } );
-    */
-
-
-											    
-
-
-					// Detta är NYA låtlistan! :)
-					/*
-					var tableRow = $( "#songTemplate" ).find("tr").clone();
-					tableRow.find(".songListPlay").click( function() {
-						setSong(fullPath, galleryId);
-					} );
-
-					tableRow.find(".songListTitle").text( metadata.title );
-					tableRow.find(".songListArtist").text( metadata.artist );
-					tableRow.find(".songListAlbum").text( metadata.album );
-					tableRow.find(".songListFileName").text(Troff.pathToName(itemEntry.fullPath));
-					tableRow.find(".songListTempo").text( song.tempo );
-					tableRow.find(".songListInfo").text( song.info );
-					$("#superSongTable").find("tbody").append( tableRow );
-
-					*/
-
-
-					// detta är till för gamla låtlistan:
-
-					var li = document.createElement("li");
-					var label = document.createElement("label");
-					var checkbox = document.createElement("input");
-					var div = document.createElement("div");
-					div.setAttribute("class", "flex");
-
-					//div.appendChild(x[0 ] /*document.createTextNode( metadata.artist + ", " + metadata.title)*/);
-					div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
-					checkbox.setAttribute("type", "checkbox");
-					label.setAttribute("class", "flexrow");
-					label.appendChild(checkbox);
-					label.appendChild(div);
-					li.setAttribute("fullPath", itemEntry.fullPath );
-					li.setAttribute("galleryId", mData.galleryId );
-					li.setAttribute("isDirectory", false);
-					li.appendChild(label);
-					document.getElementById("newSongListPartAllSongs").appendChild(li);
-					// Slim sim remove 
-					/*
-						This (the following if) is only to ease the transition between 
-						v0.3 to v0.4,
-						it is not used a single time after they open the app with v0.4 
-					*/
-					if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong ) {
-						setSong(itemEntry.fullPath, mData.galleryId);
-					}
-
-				} ); // end DB.getSong
-
-			}); // end chrome.mediaGalleries.getMetadata-function
-		});//end fileEntry.file-function
-
-
-
-
+		itemEntry.getMetadata(function(metadata){
+			if(metadata.title || metadata.titel || metadata.artist){
+				console.info("Haleluja! The metadata is accessable from here!!!!");
+				console.info('artist = ' + metadata.artist);
+				console.info('title = ' + metadata.title);
+			}
+		});
+		var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
+		var li = document.createElement("li");
+		var label = document.createElement("label");
+		var checkbox = document.createElement("input");
+		var div = document.createElement("div");
+		div.setAttribute("class", "flex");
+		div.appendChild(document.createTextNode(Troff.pathToName(itemEntry.fullPath)));
+		checkbox.setAttribute("type", "checkbox");
+		label.setAttribute("class", "flexrow");
+		label.appendChild(checkbox);
+		label.appendChild(div);
+		li.setAttribute("fullPath", itemEntry.fullPath );
+		li.setAttribute("galleryId", mData.galleryId );
+		li.setAttribute("isDirectory", false);
+		li.appendChild(label);
+		document.getElementById("newSongListPartAllSongs").appendChild(li);
+		// Slim sim remove 
+		/*
+			This (the following if) is only to ease the transition between 
+			v0.3 to v0.4,
+			it is not used a single time after they open the app with v0.4 
+		*/
+		if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
+			setSong(itemEntry.fullPath, mData.galleryId);
 		
 	} else {
 		//slim sim, is this else ever used?
@@ -421,6 +355,73 @@ function addItem(itemEntry) {
 	 }
 	 
 }
+
+function addItem_NEW(itemEntry) {
+	if (!itemEntry.isFile) {
+		//slim sim, is this else ever used?
+		console.info("\n\n\n*********  addItem_NEW: else! This else is used! itemEntry:", itemEntry,"\n\n");
+		//IO.alert("The else is used! Search for: code_7954");
+		var liHead = document.createElement("li");
+		var group = document.createElement("h3");
+		gruop.appendChild(document.createTextNode(itemEntry.name));
+		liHead.appendChild(group);
+		document.getElementById("newSongListPartAllSongs").appendChild(liHead);
+		return;
+	}
+
+	// simon häre 2 NY
+
+	itemEntry.file(function(file) {
+		chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
+
+
+			var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
+			var fullPath = itemEntry.fullPath;
+			var galleryId = mData.galleryId;;
+			DB.getVal( fullPath, function( song ) {
+				console.log( "addItem_NEW: Nya låtListan: song:", song, "  metadata:", metadata);
+
+				// Detta är NYA låtlistan! :)
+
+					// Detta är NY-NYA dataTable låtlistan! :)
+						$('#dataSongTable').DataTable().row.add( [
+								galleryId,
+								fullPath,
+									null,
+									null,
+									metadata.title,
+									metadata.artist,
+									metadata.album,
+									Troff.pathToName(itemEntry.fullPath),
+									song.tempo,
+									song.info
+								] )
+						.draw( false );
+
+
+
+
+				// Detta är GAM-NYA låtlistan! :)
+				/*
+				var tableRow = $( "#songTemplate" ).find( "tr" ).clone();
+				tableRow.find(".songListPlay").click( function() {
+					setSong( fullPath, galleryId );
+				} );
+
+				tableRow.find( ".songListTitle" ).text( metadata.title );
+				tableRow.find( ".songListArtist" ).text( metadata.artist );
+				tableRow.find( ".songListAlbum" ).text( metadata.album );
+				tableRow.find( ".songListFileName" ).text( Troff.pathToName( itemEntry.fullPath ) );
+				tableRow.find( ".songListTempo" ).text( song.tempo );
+				tableRow.find( ".songListInfo" ).text( song.info );
+				$( "#superSongTable" ).find("tbody").append( tableRow );
+				*/
+
+			} ); // end DB.getVal
+		} ); // end chrome.mediaGalleries.getMetadata-function
+	} );//end fileEntry.file-function
+}
+
 
 function scanGallery(entries) {
 	
@@ -450,6 +451,7 @@ function scanGallery(entries) {
 	for (var i = 0; i < entries.length; i++) {
 		if (entries[i].isFile) {
 			addItem(entries[i]);
+			addItem_NEW( entries[i] );
 			gGalleryData[gGalleryIndex].numFiles++;
 			loopFunktion(entries, gGalleryData[gGalleryIndex], i);
 		}
@@ -669,7 +671,7 @@ var TroffClass = function(){
 	this.openSettingsDialog = function( event ) {
 		$( "#outerSettingPopUpSquare" ).removeClass( "hidden" );
 	};
-	
+
 	this.openSongDialog = function( event ) {
 		$( "#outerSongListPopUpSquare" ).removeClass( "hidden" );
 	};
@@ -1634,12 +1636,6 @@ var TroffClass = function(){
 	};
 	
 	this.selectSong = function(){
-		var selectedSong = document.querySelector('#gallery .selected');
-		if(selectedSong)
-			selectedSong.classList.remove("selected");
-
-		this.classList.add("selected");
-
 		var fullPath = this.getAttribute('fullPath');
 		var galleryId = this.getAttribute('galleryId');
 		setSong(fullPath, galleryId);
@@ -1957,6 +1953,7 @@ var TroffClass = function(){
 	this.exitSerachDataTableSongList = function( event ) {
 		console.log( "exitSerachDataTableSongList -> " );
 		IO.clearEnterFunction();
+		document.getElementById('blur-hack').focus();
 	};
 	
 	this.enterSearchCreateSongList = function( event ){
@@ -2108,7 +2105,7 @@ var TroffClass = function(){
 			for(var i=0; i<aMarkers.length; i++) {
 				var oMarker = aMarkers[i];
 				var name = oMarker.name;
-				var time = oMarker.time;
+				var time = Number(oMarker.time);
 				var info = oMarker.info;
 				var color = oMarker.color || "None";
 				var nameId = oMarker.id;
@@ -2180,7 +2177,7 @@ var TroffClass = function(){
 				var bInserted = false;
 				var bContinue = false;
 				while(child) {
-					var childTime = child.childNodes[2].timeValue;
+					var childTime = parseFloat(child.childNodes[2].timeValue);
 					if(childTime !== undefined && Math.abs(time - childTime) < 0.001){
 						var markerId = child.childNodes[2].id;
 						
@@ -2522,7 +2519,7 @@ var TroffClass = function(){
 				var newTime = Math.max(0, Math.min(maxTime, markerTime) );
 				
 				for(var j=0; j<i; j++){
-					if(aAllMarkers[j].timeValue == newTime){
+					if(Number(aAllMarkers[j].timeValue) == newTime){
 						var newMarkerName = $('#'+markerId).val();
 						if(newMarkerName != aAllMarkers.eq(j).val())
 							newMarkerName += ", " + aAllMarkers.eq(j).val();
@@ -2696,7 +2693,7 @@ var TroffClass = function(){
 							return;
 						}
 						var songTime = audioVideo.duration;
-						var markerTime = child.childNodes[2].timeValue;
+						var markerTime = Number(child.childNodes[2].timeValue);
 						var myRowHeight = child.clientHeight;
 
 						var freeDistanceToTop = timeBarHeight * markerTime / songTime;
@@ -2724,7 +2721,7 @@ var TroffClass = function(){
 			var currentMarkerTime = Number($('.currentMarker')[0].timeValue, 10);
 			var currentStopTime = Number($('.currentStopMarker')[0].timeValue, 10);
 			markers.sort(function(a, b){
-				return a.childNodes[2].timeValue - b.childNodes[2].timeValue;
+				return Number(a.childNodes[2].timeValue) - Number(b.childNodes[2].timeValue);
 			});
 
 			var bSelectNext = false;
@@ -2745,14 +2742,14 @@ var TroffClass = function(){
 					$(markers[i].childNodes[3]).click();
 					bSelectNextStop = false;
 				}
-				if(markers[i].childNodes[3].timeValue == currentStopTime){
+				if(Number(markers[i].childNodes[3].timeValue) == currentStopTime){
 					bSelectNextStop = true;
 				}
 				if(bSelectNext){
 					$(markers[i].childNodes[2]).click();
 					bSelectNext = false;
 				}
-				if(markers[i].childNodes[2].timeValue == currentMarkerTime){
+				if(Number(markers[i].childNodes[2].timeValue) == currentMarkerTime){
 					bSelectNext = true;
 				}
 			}
@@ -3372,7 +3369,7 @@ var DBClass = function(){
 		for(var i=0; i<aAllMarkers.length; i++){
 			var oMarker = {};
 			oMarker.name  = aAllMarkers[i].value;
-			oMarker.time  = aAllMarkers[i].timeValue;
+			oMarker.time  = Number(aAllMarkers[i].timeValue);
 			oMarker.info  = aAllMarkers[i].info;
 			oMarker.color = aAllMarkers[i].color;
 			oMarker.id    = aAllMarkers[i].id;
@@ -3566,7 +3563,7 @@ var IOClass = function(){
 
 		document.addEventListener('keydown', IO.keyboardKeydown);
 		
-		$( ".outerDialog" ).click( function( event ) { 
+		$( ".outerDialog" ).click( function( event ) {
 			//if( $(event.delegateTarget).attr( "id") == $(event.target).attr( "id") ) {
 			if( $(event.target ).hasClass( "outerDialog" ) ) {
 				$( event.target ).addClass( "hidden" );
@@ -4341,7 +4338,7 @@ var Rate = new RateClass();
 $(document).ready( function() {
 	
 	var dataSongTable = $("#dataSongTable").DataTable({
-
+		"fixedHeader": true,
 		"paging": false,
 		"columnDefs": [
 			{
