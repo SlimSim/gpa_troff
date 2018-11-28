@@ -63,3 +63,21 @@
 #dataSongTable th:first-child {
 	z-index: 2;
 }
+
+
+
+table.dataTable thead .sorting:after, 
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after, 
+table.dataTable thead .sorting_asc_disabled:after, 
+table.dataTable thead .sorting_desc_disabled:after{
+	opacity: 0;
+	display: inline-block;
+	position: static;
+	padding-left: 10px;
+}
+
+
+table.dataTable thead tr th:nth-child(-n+2){
+	background-image: none;
+}
