@@ -357,65 +357,26 @@ function addItem(itemEntry) {
 }
 
 function addItem_NEW(itemEntry) {
-	if (!itemEntry.isFile) {
-		//slim sim, is this else ever used?
-		console.info("\n\n\n*********  addItem_NEW: else! This else is used! itemEntry:", itemEntry,"\n\n");
-		//IO.alert("The else is used! Search for: code_7954");
-		var liHead = document.createElement("li");
-		var group = document.createElement("h3");
-		gruop.appendChild(document.createTextNode(itemEntry.name));
-		liHead.appendChild(group);
-		document.getElementById("newSongListPartAllSongs").appendChild(liHead);
-		return;
-	}
-
-	// simon häre 2 NY
-
 	itemEntry.file(function(file) {
 		chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
-
 
 			var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
 			var fullPath = itemEntry.fullPath;
 			var galleryId = mData.galleryId;;
 			DB.getVal( fullPath, function( song ) {
-				console.log( "addItem_NEW: Nya låtListan: song:", song, "  metadata:", metadata);
-
-				// Detta är NYA låtlistan! :)
-
-					// Detta är NY-NYA dataTable låtlistan! :)
-						$('#dataSongTable').DataTable().row.add( [
-								galleryId,
-								fullPath,
-									null,
-									null,
-									metadata.title,
-									metadata.artist,
-									metadata.album,
-									Troff.pathToName(itemEntry.fullPath),
-									song.tempo,
-									song.info
-								] )
-						.draw( false );
-
-
-
-
-				// Detta är GAM-NYA låtlistan! :)
-				/*
-				var tableRow = $( "#songTemplate" ).find( "tr" ).clone();
-				tableRow.find(".songListPlay").click( function() {
-					setSong( fullPath, galleryId );
-				} );
-
-				tableRow.find( ".songListTitle" ).text( metadata.title );
-				tableRow.find( ".songListArtist" ).text( metadata.artist );
-				tableRow.find( ".songListAlbum" ).text( metadata.album );
-				tableRow.find( ".songListFileName" ).text( Troff.pathToName( itemEntry.fullPath ) );
-				tableRow.find( ".songListTempo" ).text( song.tempo );
-				tableRow.find( ".songListInfo" ).text( song.info );
-				$( "#superSongTable" ).find("tbody").append( tableRow );
-				*/
+				$('#dataSongTable').DataTable().row.add( [
+					galleryId,
+					fullPath,
+					null,
+					null,
+					song.tempo,
+					metadata.title,
+					metadata.artist,
+					metadata.album,
+					Troff.pathToName(itemEntry.fullPath),
+					song.info
+				] )
+				.draw( false );
 
 			} ); // end DB.getVal
 		} ); // end chrome.mediaGalleries.getMetadata-function
@@ -1929,8 +1890,6 @@ var TroffClass = function(){
 	};
 
 	this.enterSerachDataTableSongList = function( event ) {
-		console.log( "enterSerachDataTableSongList -> " );
-
 		$input = $( event.target );
 		$input.addClass('textareaEdit');
 
@@ -1951,7 +1910,6 @@ var TroffClass = function(){
 
 	};
 	this.exitSerachDataTableSongList = function( event ) {
-		console.log( "exitSerachDataTableSongList -> " );
 		IO.clearEnterFunction();
 		document.getElementById('blur-hack').focus();
 	};
@@ -4342,7 +4300,7 @@ $(document).ready( function() {
 		"paging": false,
 		"columnDefs": [
 			{
-				"targets": [ 0, 1 ],
+				"targets": [ 0, 1, 3 ],
 				"visible": false,
 				"searchable": false
 			}, {
@@ -4370,7 +4328,11 @@ $(document).ready( function() {
 		);
 	} );
 
-	$("#dataSongTable thead th").removeClass("secondaryColor")
+	//to make header primaryColor:
+	$( "#dataSongTable thead th" ).removeClass( "secondaryColor" );
+
+	// to move the searchbar away from the scrolling-area
+	$( "#dataSongTable_filter" ).appendTo( $( "#newSearchParent" ) );
 
 	DB.cleanDB();
 	DB.getAllSonglists();

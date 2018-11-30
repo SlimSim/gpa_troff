@@ -27,26 +27,22 @@
 	<meta charset="UTF-8">
 
 	<link rel="stylesheet" type="text/css" href="assets/reset.css" />
-	<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
 
 	<link rel="stylesheet" type="text/css" href="assets/DataTables/css/jquery.dataTables.min.css" /> 
 	<link rel="stylesheet" type="text/css" href="assets/DataTables/css/dataTables.bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="assets/DataTables/css/dataTables.jqueryui.min.css" />
-	<!--/public/stylesheets/datatables-bootstrap.css-->
-	<!--link rel="stylesheet" type="text/css" href=""/-->
 
 
-	<link rel="stylesheet" type="text/css" href="stylesheets/test-style.css" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/style-standard.css" />
 	<link id="colorScheme"
 		rel="stylesheet"
 		type="text/css" 
 		href="stylesheets/col1.css" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+
 
 	<script src="assets/jquery-2.1.3.min.js"></script>
-
-
 	<script type="text/javascript" src="assets/DataTables/js/jquery.dataTables.min.js"></script>
-
 	<script src="assets/buy.js"></script>
 
 
@@ -866,79 +862,30 @@
 
 			</p>
 
-			<div id="superSonglistArea" class="flexCol start scroll">
+				<div id="newSearchParent" class="py-2"></div>
 
-				<table id="dataSongTable" class="sticky-table-head">
+			<div id="superSonglistArea" class="flexCol start scroll">
+				<table id="dataSongTable" class="super-data-table">
 					<thead>
 						<tr>
 							<th class="">galleryId</th>
 							<th class="">fullPath</th>
 							<th class="primaryColor">Play</th>
 							<th class="primaryColor">Menu</th>
+							<th class="primaryColor">Tempo</th>
 							<th class="primaryColor">Title</th>
 							<th class="primaryColor">Artist</th>
 							<th class="primaryColor">Album</th>
 							<th class="primaryColor">File name</th>
-							<th class="primaryColor">Tempo</th>
 							<th class="primaryColor">Song info</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
 				</table>
-
-				<!--table id="example" class="display" width="100%"></table-->
-
-
-				<!--table id="superSongTable" class="sticky-table-head">
-					<thead>
-						<tr>
-							<th class="primaryColor">Play</th>
-							<th class="primaryColor">Menu</th>
-							<th class="primaryColor">Tempo</th>
-							<th class="primaryColor">Title</th>
-							<th class="primaryColor">Artist</th>
-							<th class="primaryColor">Album</th>
-							<th class="primaryColor">File name</th>
-							<th class="primaryColor">Song info</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table-->
 			</div>
 			<input id="buttCloseSongsPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none" value="Close" />
 		</div>
 	</div>
-
-
-
-
-<!-- Templates :) -->
-
-
-
-
-<!--table id="songTemplate" class="hidden">
-	<tr>
-		<td class="songListPlay secondaryColor" >
-			<button class="svgButt regularButton"><i class="fa fa-play-circle"></i></button>
-		</td>
-		<td class="songListMenu" ><i class="fa fa-ellipsis-v"></i></td>
-		<td class="songListTempo" ></td>
-		<td class="songListTitle" ></td>
-		<td class="songListArtist" ></td>
-		<td class="songListAlbum" ></td>
-		<td class="songListFileName" ></td>
-		<td class="songListInfo" ></td>
-	</tr>
-</div -->
-
-
-
-
-
-
-
-
 
 </body>
 </html>
