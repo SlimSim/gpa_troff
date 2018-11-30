@@ -29,6 +29,7 @@ var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'o
 
 var TROFF_SETTING_SET_THEME = "TROFF_SETTING_SET_THEME";
 var TROFF_SETTING_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTENDED_MARKER_COLOR";
+var TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR";
 var TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR";
 var TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR";
@@ -51,6 +52,7 @@ var TROFF_SETTING_KEYS = [
 	"straoSongLists",
 	TROFF_SETTING_SET_THEME,
 	TROFF_SETTING_EXTENDED_MARKER_COLOR,
+	TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR,
 	TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR,
@@ -508,8 +510,6 @@ var TroffClass = function(){
 			$( "#toggleExtendedMarkerColor").addClass( "active" );
 			DB.saveVal( TROFF_SETTING_EXTENDED_MARKER_COLOR, true );
 		}
-		
-		
 	};
 	
 	this.recallExtendedMarkerColor = function() {
@@ -521,7 +521,28 @@ var TroffClass = function(){
 		} );
 	};
 
+	this.toggleExtraExtendedMarkerColor = function( event ) {
+		if( $( "#markerList").hasClass( "extra-extended" ) ) {
+			$( "#markerList").removeClass( "extra-extended" );
+			$( "#toggleExtraExtendedMarkerColor").removeClass( "active" );
+			DB.saveVal( TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR, false );
+		} else {
+			$( "#markerList").addClass( "extra-extended" );
+			$( "#toggleExtraExtendedMarkerColor").addClass( "active" );
+			DB.saveVal( TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR, true );
+		}
+	};
 	
+	this.recallExtraExtendedMarkerColor = function() {
+		DB.getVal( TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR, function( extend ) {
+			if( extend ) {
+				$( "#markerList").addClass( "extra-extended" );
+				$( "#toggleExtraExtendedMarkerColor").addClass( "active" );
+			}
+		} );
+	};
+
+
 	this.setTheme = function( event ) {
 		var $target = $( event.target ),
 			theme = $target.data( "theme" );
@@ -569,6 +590,7 @@ var TroffClass = function(){
 	this.recallGlobalSettings = function(){
 		Troff.recallTheme();
 		Troff.recallExtendedMarkerColor();
+		Troff.recallExtraExtendedMarkerColor();
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR);
@@ -2173,6 +2195,7 @@ var TroffClass = function(){
 				document.getElementById(nameId + 'E').addEventListener('click', editM);
 			}//end for-loop
 			Troff.settAppropriateMarkerDistance();
+			Troff.fixMarkerExtraExtendedColor();
 		}; // end addMarker ****************/
 
 
@@ -2580,6 +2603,7 @@ var TroffClass = function(){
 					Number(newTime),
 					strCurrentSong
 				);
+				Troff.fixMarkerExtraExtendedColor();
 				/*
 				note: DB.updateMarker will also update the "currentStartMarker" and the
 				currentStopMarker, if the updated marker is the start or stop marker.
@@ -2820,7 +2844,29 @@ var TroffClass = function(){
 				$('#tappTempo-value').text( tempo );
 		};
 
+
+
+
+		this.fixMarkerExtraExtendedColor = function() {
+			$( "#markerList" ).children().removeClassStartingWith("extend_");
+
+			$( "#markerList" ).children( ":not(.markerColorNone)" ).each( function( index ) {
+				specialColorClass = Troff.getClassStartsWith( $(this).attr('class'), "markerColor");
+				$( this ).nextUntil( ":not(.markerColorNone)" ).addClass("extend_" + specialColorClass);
+			} );
+
+		}
+
+
 		/* standAlone Functions */
+		this.getClassStartsWith = function(classes,startString){
+			var r = $.grep(classes.split(" "),
+				function(classes,r) {
+					return 0 === classes.indexOf(startString);
+				}).join();
+			return r || !1;
+		}
+
 		this.secToDisp = function(seconds){
 				var sec = ( seconds | 0 ) % 60;
 				if ( sec < 10 )
@@ -2951,7 +2997,7 @@ var RateClass = function(){
 		var strTroffIdReview = 'mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews';
 		window.open(strChromeWebStore + strTroffName + strTroffIdReview);
 	};
-};
+}; //End RateClass
 
 
 
@@ -3535,6 +3581,7 @@ var IOClass = function(){
 		$( "#buttCloseSongsPopUpSquare" ).click ( Troff.closeSongDialog );
 
 		$( "#toggleExtendedMarkerColor" ).click ( Troff.toggleExtendedMarkerColor );
+		$( "#toggleExtraExtendedMarkerColor" ).click ( Troff.toggleExtraExtendedMarkerColor );
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
 		$( "#spaceAndEnterParent" ).find("input").click ( Troff.setButtonActiveValue );
@@ -3913,7 +3960,7 @@ var IOClass = function(){
 			"flex-direction: column;";
 
 
-		IOEnterFunction = function(){
+		IOEnterFunction = function() {
 			if(func) func( 
 				$("#"+markerNameId).val(), 
 				$("#"+markerInfoId).val(),
@@ -4345,3 +4392,10 @@ $(document).ready( function() {
 	DB.getCurrentSong();
 
 });
+
+ $.fn.removeClassStartingWith = function (filter) {
+    $(this).removeClass(function (index, className) {
+        return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
+    });
+    return this;
+};
