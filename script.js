@@ -33,16 +33,22 @@ var TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTRA_EXTENDED_MA
 var TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR";
 var TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR";
+var TROFF_SETTING_ENTER_RESET_COUNTER = "TROFF_SETTING_ENTER_RESET_COUNTER";
+var TROFF_SETTING_SPACE_RESET_COUNTER = "TROFF_SETTING_SPACE_RESET_COUNTER";
+var TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER = "TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER";
 var TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR";
 var TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR";
-var TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON = "TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON";
+var TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON = "TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON";
 var TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER = "TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER";
 var TROFF_SETTING_CONFIRM_DELETE_MARKER = "TROFF_SETTING_CONFIRM_DELETE_MARKER";
-var TROFF_SETTING_UI_ARTIST_HIDE = "TROFF_SETTING_UI_ARTIST_HIDE";
-var TROFF_SETTING_UI_TITLE_HIDE = "TROFF_SETTING_UI_TITLE_HIDE";
-var TROFF_SETTING_UI_ALBUM_HIDE = "TROFF_SETTING_UI_ALBUM_HIDE"; 
-var TROFF_SETTING_UI_PATH_HIDE = "TROFF_SETTING_UI_PATH_HIDE"; 
+var TROFF_SETTING_UI_ARTIST_SHOW = "TROFF_SETTING_UI_ARTIST_SHOW";
+var TROFF_SETTING_UI_TITLE_SHOW = "TROFF_SETTING_UI_TITLE_SHOW";
+var TROFF_SETTING_UI_ALBUM_SHOW = "TROFF_SETTING_UI_ALBUM_SHOW";
+var TROFF_SETTING_UI_PATH_SHOW = "TROFF_SETTING_UI_PATH_SHOW";
+var TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW = "TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW";
+var TROFF_SETTING_UI_ZOOM_SHOW = "TROFF_SETTING_UI_ZOOM_SHOW";
+var TROFF_SETTING_UI_LOOP_BUTTONS_SHOW = "TROFF_SETTING_UI_LOOP_BUTTONS_SHOW";
 
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -56,16 +62,22 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR,
+	TROFF_SETTING_ENTER_RESET_COUNTER,
+	TROFF_SETTING_SPACE_RESET_COUNTER,
+	TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER,
 	TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR,
-	TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON,
+	TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON,
 	TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER,
 	TROFF_SETTING_CONFIRM_DELETE_MARKER,
-	TROFF_SETTING_UI_ARTIST_HIDE,
-	TROFF_SETTING_UI_TITLE_HIDE,
-	TROFF_SETTING_UI_ALBUM_HIDE,
-	TROFF_SETTING_UI_PATH_HIDE,
+	TROFF_SETTING_UI_ARTIST_SHOW,
+	TROFF_SETTING_UI_TITLE_SHOW,
+	TROFF_SETTING_UI_ALBUM_SHOW,
+	TROFF_SETTING_UI_PATH_SHOW,
+	TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW,
+	TROFF_SETTING_UI_ZOOM_SHOW,
+	TROFF_SETTING_UI_LOOP_BUTTONS_SHOW,
 ];
 
 
@@ -569,16 +581,16 @@ var TroffClass = function(){
 	this.setButtonActiveValue = function( event ) {
 		var $target = $( event.target ),
 			id = $target.attr( "id" ),
-			idToHide = $target.data( "id-to-hide" );
+			idToShow = $target.data( "id-to-show" );
 
 		$target.toggleClass( "active" );
 
 
-		if( idToHide ) {
+		if( idToShow ) {
 			if( $target.hasClass( "active" ) ){
-				$( "#" + idToHide ).addClass( "hidden" );
+				$( "#" + idToShow ).removeClass( "hidden" );
 			} else {
-				$( "#" + idToHide ).removeClass( "hidden" );
+				$( "#" + idToShow ).addClass( "hidden" );
 			}
 		}
 
@@ -599,26 +611,32 @@ var TroffClass = function(){
 		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER);
 		Troff.recallButtonActiveValue(TROFF_SETTING_CONFIRM_DELETE_MARKER);
-		Troff.reacllUiValueHide(TROFF_SETTING_UI_ARTIST_HIDE);
-		Troff.reacllUiValueHide(TROFF_SETTING_UI_TITLE_HIDE);
-		Troff.reacllUiValueHide(TROFF_SETTING_UI_ALBUM_HIDE);
-		Troff.reacllUiValueHide(TROFF_SETTING_UI_PATH_HIDE);
-		Troff.reacllUiValueHide(TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON);
+		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_RESET_COUNTER);
+		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_RESET_COUNTER);
+		Troff.recallButtonActiveValue(TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_ARTIST_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_TITLE_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_ALBUM_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_PATH_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_ZOOM_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_UI_LOOP_BUTTONS_SHOW);
+		Troff.reacllUiValueShow(TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON);
 	};
 
-	this.reacllUiValueHide = function( databaseKey ) {
+	this.reacllUiValueShow = function( databaseKey ) {
 		DB.getVal( databaseKey, function( value ) {
 			if( value === undefined ) {
 				return;
 			}
 			var $button = $( "#" + databaseKey ),
-				idToHide = $("#" + databaseKey ).data( "id-to-hide" );
+				idToShow = $("#" + databaseKey ).data( "id-to-show" );
 			if( value ) {
 				$button.addClass( "active" );
-				$("#" + idToHide ).addClass("hidden");
+				$("#" + idToShow ).removeClass("hidden");
 			} else {
 				$button.removeClass( "active" );
-				$("#" + idToHide ).removeClass("hidden");
+				$("#" + idToShow ).addClass("hidden");
 			}
 		} );
 	}
@@ -1015,23 +1033,26 @@ var TroffClass = function(){
 
 	this.enterKnappen = function(){
 		var goToMarker = $("#" + TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR ).hasClass( "active" ),
+			updateLoopTimes = $("#" + TROFF_SETTING_ENTER_RESET_COUNTER ).hasClass( "active" ),
 			useTimer = $("#" + TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR ).hasClass( "active" );
-		Troff.spaceOrEnter( goToMarker, useTimer );
+		Troff.spaceOrEnter( goToMarker, useTimer, updateLoopTimes );
 	};// end enterKnappen
 
 	this.space = function(){
 		var goToMarker = $("#" + TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR ).hasClass( "active" ),
+			updateLoopTimes = $("#" + TROFF_SETTING_SPACE_RESET_COUNTER ).hasClass( "active" ),
 			useTimer = $("#" + TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR ).hasClass( "active" );
-		Troff.spaceOrEnter( goToMarker, useTimer );
+		Troff.spaceOrEnter( goToMarker, useTimer, updateLoopTimes );
 	}; // end space()
 	
 	this.playUiButton = function() {
 		var goToMarker = $("#" + TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR ).hasClass( "active" ),
+			updateLoopTimes = $("#" + TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER ).hasClass( "active" ),
 			useTimer = $("#" + TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR ).hasClass( "active" );
-		Troff.spaceOrEnter( goToMarker, useTimer );
+		Troff.spaceOrEnter( goToMarker, useTimer, updateLoopTimes );
 	}
 
-	this.spaceOrEnter = function( goToMarker, useTimer ) {
+	this.spaceOrEnter = function( goToMarker, useTimer, updateLoopTimes ) {
 		var audio = document.querySelector("audio, video");
 		if(!audio){
 				console.error("no song loaded");
@@ -1048,7 +1069,7 @@ var TroffClass = function(){
 					Troff.playSong();
 				}
 		} else {
-				Troff.pauseSong();
+				Troff.pauseSong(updateLoopTimes);
 		}
 		document.getElementById('blur-hack').focus();
 	}; // end spaceOrEnter()
@@ -1087,12 +1108,15 @@ var TroffClass = function(){
 		}, 1000);
 	}; // end playSong
 
-	this.pauseSong = function(){
+	this.pauseSong = function( updateLoopTimes ){
+		updateLoopTimes = updateLoopTimes!==undefined?updateLoopTimes:true;
 		var audio = document.querySelector('audio, video');
 		if (audio)
 				audio.pause();
 		Troff.setMood('pause');
-		Troff.updateLoopTimes();
+		if( updateLoopTimes ) {
+			Troff.updateLoopTimes();
+		}
 
 		if(Troff.stopTimeout)  clearInterval(Troff.stopTimeout);
 		if(Troff.stopInterval) clearInterval(Troff.stopInterval);
@@ -3138,16 +3162,22 @@ var DBClass = function(){
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR, false );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR, false );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_RESET_COUNTER, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_RESET_COUNTER, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON, false );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_CONFIRM_DELETE_MARKER, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ARTIST_HIDE, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_TITLE_HIDE, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ALBUM_HIDE, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PATH_HIDE, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ARTIST_SHOW, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_TITLE_SHOW, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ALBUM_SHOW, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PATH_SHOW, false );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ZOOM_SHOW, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_LOOP_BUTTONS_SHOW, true );
 
 
 
@@ -3585,7 +3615,6 @@ var IOClass = function(){
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
 		$( "#spaceAndEnterParent" ).find("input").click ( Troff.setButtonActiveValue );
-		//		$( "#" + TROFF_SETTING_PLAY_UI_BUTTON_HIDE_BUTTON ).click ( Troff.togglePlayUiButtonHide );
 		
 		
 		$('#buttPlayUiButtonParent').click( Troff.playUiButton );
