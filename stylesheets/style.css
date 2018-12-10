@@ -21,9 +21,16 @@
 	 https://developer.mozilla.org/en-US/docs/Web/CSS/flex
 */
 
+.textareaEdit{
+	z-index: 999;
+}
 
-video{
+video, .full-width{
 	width: 100%;
+}
+
+.contain-object{
+	object-fit: contain;
 }
 
 .fullscreen{

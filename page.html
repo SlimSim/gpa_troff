@@ -124,10 +124,10 @@
 		<div id="areaSelector" class="flexRowWrap secondaryColor">
 			<input type="button" value="Song lists" id="songlistsTab"  class="onOffButton"/>
 			<input type="button" value="Songs" id="songsTab" class="active onOffButton" />
-			<input type="button" value="States" id="statesTab"  class="onOffButton"/>
-			<input type="button" value="Settings" id="settingsTab"  class="active onOffButton"/>
+			<input type="button" value="States" id="statesTab"  class="onOffButton hideOnPicture"/>
+			<input type="button" value="Settings" id="settingsTab"  class="active onOffButton hideOnPicture"/>
 			<input type="button" value="Info" id="infoTab"  class="active onOffButton"/>
-			<input type="button" value="Countdown" id="countTab"  class="active onOffButton"/>
+			<input type="button" value="Countdown" id="countTab"  class="active onOffButton hideOnPicture"/>
 		</div>
 		<div id="areaParent" class="flexRow AreaParent" style="flex: 1; margin: 0 -4px">
 			<div id="songlistsArea" class="flexCol start">
@@ -190,7 +190,7 @@
 				</ul>
 			</div><!-- songsArea -->
 
-			<div id="stateSection" class="flexCol">
+			<div id="stateSection" class="flexCol hideOnPicture">
 				<h1>State</h1>
 				<input
 					type="button"
@@ -208,7 +208,7 @@
 				
 			</div> <!-- stateArea -->
 			
-			<div id="timeSection" class="flexCol end vScroll">
+			<div id="timeSection" class="flexCol end vScroll hideOnPicture">
 <!--        <div id="div_to_calc_height_of_timeSection"> depricated? -->
 					<h1>Settings</h1>
 					<div id="ControlTime" class="flexCol end">
@@ -358,7 +358,7 @@
 
 
 
-	<section id="markerSection" class="secondaryColor margin noVMargin">
+	<section id="markerSection" class="secondaryColor margin noVMargin hideOnPicture">
 		<div id="activePlayRegion" class="accentColor1"></div>
 		<div id="timeBarDiv">
 			<input id="timeBar" type="range" min="0" max="42" value="0"/>
@@ -398,18 +398,18 @@
 			id="songInfoArea" 
 			placeholder="Song specific info here!"
 			class="textareaStandard switch_child"></textArea>
-		<h2>Current marker info</h2>
+		<h2 class="hideOnPicture">Current marker info</h2>
 		<textArea  
 			id="markerInfoArea" 
 			style="width: inheret"
 			placeholder="Marker specific notes here!"
-			class="textareaStandard"></textArea>
+			class="hideOnPicture textareaStandard"></textArea>
 
 	</section> <!-- userNoteSection -->
 
 
 
-	<section id="infoSection" class="secondaryColor margin">
+	<section id="infoSection" class="secondaryColor margin hideOnPicture">
 		<h1>Countdown</h1>
 		<!--input type="button" value="Countdown" id="countTabOn" class="onOffButton active"-->
 		<div id="secondsLeft" class="secondsLeft">0</div>
@@ -432,10 +432,10 @@
 			>
 			<button class="onOffButton">Song List</button>
 			<button class="onOffButton">Songs</button>
-			<button class="onOffButton">States</button>
-			<button class="onOffButton">Settings</button>
+			<button class="onOffButton hideOnPicture">States</button>
+			<button class="onOffButton hideOnPicture">Settings</button>
 			<button class="onOffButton">Info</button>
-			<button class="onOffButton">Countdown</button>
+			<button class="onOffButton hideOnPicture">Countdown</button>
 		</div>
 	</section>
 
@@ -878,6 +878,15 @@
 
 					<h1>---------------- Not yet implemented ----------------</h1>
 
+					<h1>Max-brädd på rubrik-området</h1>
+					<p>(ha 4 olika alternativ (slim, medle, wide, och "infinate"))</p>
+					<p>Hur funkar det när man har många areas ("sånglist", "sångs", "states", och "settings") visade?</p>
+					<P>för man vill ju helst att den får vara bred när </P>
+					<p>
+						<b>detta borde ju skötas detta själv:</b>så fort man trycker på någon av "dom fyra" areas'arna,
+						så kollar den "hur bred är dessa 4 areas" och sen lägger den på den max-brädden på 
+						tittel-arean (dock minst 200px tex)
+					</p>
 
 					<h3>Song list - overlay or sticky to side</h3>
 						<input class="buttWidthStandard onOffButton" style="display: block;" type="button"
@@ -914,10 +923,22 @@
 
 				<div id="newSearchParent" class="py-2"></div>
 
+<div>
+		<i class="fa fa-film"></i>
+		<i class="fa fa-image"></i>
+		<i class="fa fa-music"></i>
+	<i class="fa fa-camera"></i>
+<!--
+	<i class="fa fa-movie"></i>
+	<i class="fa fa-picture"></i>
+	<i class="fa fa-sound"></i>
+-->
+</div>
 			<div id="superSonglistArea" class="flexCol start scroll">
 				<table id="dataSongTable" class="super-data-table">
 					<thead>
 						<tr>
+							<!--
 							<th class="">galleryId</th>
 							<th class="">fullPath</th>
 							<th class="primaryColor">Play</th>
@@ -928,6 +949,7 @@
 							<th class="primaryColor">Album</th>
 							<th class="primaryColor">File name</th>
 							<th class="primaryColor">Song info</th>
+							-->
 						</tr>
 					</thead>
 					<tbody></tbody>

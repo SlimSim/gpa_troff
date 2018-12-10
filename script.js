@@ -23,7 +23,8 @@ var gDirectories = [];     // used to process subdirectories
 var gGalleryArray = [];    // holds information about all top-level Galleries found - list of DomFileSystem
 var gGalleryData = [];     // hold computed information about each Gallery
 var gCurOptGrp = null;
-var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
+//var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
+var imgFormats = ['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
 var audFormats = ['wav', 'mp3'];
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'ogg', 'webm', 'wmv'];
 
@@ -126,14 +127,24 @@ function GalleryData(id) {
 	this.numDirs = 0;
 }
 
-
 function addImageToContentDiv() {
 	var content_div = document.getElementById('content');
+	var videoBox = document.createElement('div');
 	var image = document.createElement('img');
-	image.style["max-width"] = "100%";
-	image.style["max-height"] = "200px";
 
-	content_div.appendChild(image);
+	videoBox.setAttribute('id', "videoBox");
+	image.classList.add( "contain-object" );
+	image.classList.add( "full-width" );
+	Troff.setMedatadaImage(image);
+	Troff.setImageLayout();
+
+	var fsButton = document.createElement('button');
+	fsButton.addEventListener('click', Troff.forceFullscreenChange );
+	fsButton.appendChild( document.createTextNode('Fullscreen (F)') );
+	content_div.appendChild(fsButton);
+	videoBox.appendChild(image);
+	content_div.appendChild(videoBox);
+
 	return image;
 }
 
@@ -142,6 +153,7 @@ function addAudioToContentDiv() {
 	var audio = document.createElement('audio');
 	audio.addEventListener('loadedmetadata', function(e){
 		Troff.setMetadata(audio);
+		Troff.setAudioVideoLayout();
 	});
 	content_div.appendChild(audio);
 	return audio;
@@ -160,7 +172,7 @@ function addVideoToContentDiv() {
 	video.style.marginTop = margin;
 	video.style.marginBottom = margin;
 	fsButton.style.marginTop = margin;
-/*
+/*fsButton2
 	fsButton2.style.marginTop = margin;
 	fsButton2.style.marginRight = margin;
 	fsButton2.style.marginLeft = margin;
@@ -186,6 +198,7 @@ function addVideoToContentDiv() {
 
 	video.addEventListener('loadedmetadata', function(e){
 		Troff.setMetadata(video);
+		Troff.setAudioVideoLayout();
 	});
 
 	content_div.appendChild(fsButton);
@@ -235,13 +248,14 @@ function checkIfSongExists(fullPath, galleryId){
 }
 
 function setSong(fullPath, galleryId){
+	console.log("setSong ->");
 	Troff.pauseSong();
 
 	$("#gallery")
 		.children()
 		.removeClass( "selected" )
 		.filter( 'button[fullpath="' + fullPath + '"][galleryid="' + galleryId + '"]' )
-		.addClass( "selected" )
+		.addClass( "selected" );
 
 	var fsId = galleryId;
 	var fs = null;
@@ -253,12 +267,16 @@ function setSong(fullPath, galleryId){
 			break;
 		}
 	}
+
+	console.log("setSong:  fs", fs);
 	if (fs) {
 		var path = fullPath;
 		DB.setCurrentSong(path, galleryId);
 
 		Troff.setWaitForLoad(path, galleryId);
 		fs.root.getFile(path, {create: false}, function(fileEntry) {
+
+			console.log("setSong: fileEntry", fileEntry);
 			 var newElem = null;
 			 // show the file data
 			 clearContentDiv();
@@ -269,6 +287,8 @@ function setSong(fullPath, galleryId){
 					newElem = addAudioToContentDiv();
 			 else if (type == "video")
 					newElem = addVideoToContentDiv();
+
+			console.log("setSong: newElem", newElem);
 			 if (newElem) {
 					// Supported in Chrome M37 and later.
 					if (!chrome.mediaGalleries.getMetadata) {
@@ -377,18 +397,51 @@ function addItem_NEW(itemEntry) {
 			var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
 			var fullPath = itemEntry.fullPath;
 			var galleryId = mData.galleryId;;
+			/*
+			console.log("A *********************************");
+			console.log("itemEntry", itemEntry);
+			console.log("mData", mData);
+			console.log("file", file);
+			console.log("metadata", metadata);
+
+			*/
+
+			/**
+				metadata.mimeType
+				metadata.album
+				metadata.artist
+				metadata.attachedImages []
+				metadata.genre
+				metadata.duration
+				metadata.mimeType: "video/mp4", "audio/mpeg", 
+				file.type: "image/png"
+			*/
+
+
+
+			console.log("B *********************************");
 			DB.getVal( fullPath, function( song ) {
+				console.log("song:", song);
+
+				var tempo = "?",
+					info = "";
+				if( song != undefined ) {
+					tempo = song.tempo;
+					info = song.info;
+				}
+
 				$('#dataSongTable').DataTable().row.add( [
 					galleryId,
 					fullPath,
-					null,
-					null,
-					song.tempo,
+					null, // Play
+					null, // Menu ( Hidden TODO: bring forward and implement )
+					metadata.mimeType,
+					tempo,
 					metadata.title,
 					metadata.artist,
 					metadata.album,
 					Troff.pathToName(itemEntry.fullPath),
-					song.info
+					info
 				] )
 				.draw( false );
 
@@ -397,6 +450,60 @@ function addItem_NEW(itemEntry) {
 	} );//end fileEntry.file-function
 }
 
+function initSongTable() {
+	$( "#dataSongTable" ).find( "thead" ).find( "tr" )
+		.append( $('<th>').text( "galleryId" ) )
+		.append( $('<th>').text( "fullPath" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Menu" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Type" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Tempo" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Title" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Artist" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Album" ) )
+		.append( $('<th>').addClass("primaryColor").text( "File name" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Song info" ) )
+
+
+	var dataSongTable = $("#dataSongTable").DataTable({
+		"fixedHeader": true,
+		"paging": false,
+		"columnDefs": [
+			{
+				"targets": [ 0, 1, 3 ],
+				"visible": false,
+				"searchable": false
+			}, {
+				"targets": 2,
+				"data": null,
+				"orderable": false,
+				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
+			}, {
+				"targets": 3,
+				"data": null,
+				"orderable": false,
+				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
+			},
+			{
+				"targets": [ "_all" ],
+				"className": "secondaryColor",
+			}
+		]
+	} )
+	.on( 'click', 'button.loadSong', function () {
+		var data = dataSongTable.row( $(this).parents('tr') ).data();
+		setSong(
+			data[1], //fullPath
+			data[0] //galleryId
+		);
+	} );
+
+	//to make header primaryColor:
+	$( "#dataSongTable thead th" ).removeClass( "secondaryColor" );
+
+	// to move the searchbar away from the scrolling-area
+	$( "#dataSongTable_filter" ).appendTo( $( "#newSearchParent" ) );
+}
 
 function scanGallery(entries) {
 	
@@ -510,6 +617,7 @@ var TroffClass = function(){
 		var nrTapps = 0;
 		var m_zoomStartTime = 0;
 		var m_zoomEndTime = null;
+		var m_imageLayout = false;
 
 
 	this.toggleExtendedMarkerColor = function( event ) {
@@ -714,7 +822,17 @@ var TroffClass = function(){
 
 		document.getElementById('blur-hack').focus();
 	};
-	
+
+	this.setImageLayout = function(){
+		m_imageLayout = true;
+		$( ".hideOnPicture" ).addClass( "hidden" );
+	};
+	this.setAudioVideoLayout = function(){
+		m_imageLayout = false;
+		$( ".hideOnPicture" ).removeClass( "hidden" );
+	};
+
+
 	// this is regarding the f-key, IE- the actual fullscreen
 	this.forceFullscreenChange = function(){
 		var videoBox = document.querySelector('#videoBox');
@@ -738,6 +856,8 @@ var TroffClass = function(){
 	 * it should thus do the things that conect player to Troff...
 	 */
 	this.setMetadata = function(media){
+		console.log("setMetadata ->");
+		console.log("media", media);
 		var songLength = media.duration;
 		document.getElementById('timeBar').max = media.duration;
 		$('#maxTime')[0].innerHTML = Troff.secToDisp(media.duration);
@@ -745,6 +865,11 @@ var TroffClass = function(){
 		DB.getSongMetaDataOf(Troff.getCurrentSong());
 		media.addEventListener("timeupdate", Troff.timeupdateAudio );
 	};
+
+	this.setMedatadaImage = function( media ) {
+		console.log("setMetadataImage -> medai", media);
+		DB.getImageMetaDataOf(Troff.getCurrentSong());
+	}
 
 	this.getStandardMarkerInfo = function(){
 		return "This text is specific for every selected marker. "
@@ -917,6 +1042,11 @@ var TroffClass = function(){
 
 	this.getStopTime = function() {
 		var extraTime = 0;
+
+		if( $('audio, video').length === 0 ) {
+			return 0;
+		}
+
 				if( $('#buttStopAfter').hasClass('active') )
 				extraTime = $('#stopAfter').val() ? $('#stopAfter').val() : 0;
 		if($('.currentStopMarker')[0])
@@ -1773,7 +1903,16 @@ var TroffClass = function(){
 		return pap;
 	};
 	
+	this.editCurrentSongInfo = function() {
+		if( $("#songInfoArea").hasClass( "hidden" ) ) return;
+		var quickTimeOut = setTimeout(function(){
+			$( "#songInfoArea" ).click();
+			$( "#songInfoArea" ).focus();
+		}, 0);
+	}
+
 	this.editCurrentMarkerInfo = function(){
+		if( $("#markerInfoArea").hasClass( "hidden" ) ) return;
 		var quickTimeOut = setTimeout(function(){
 			document.getElementById("markerInfoArea").click();
 			document.getElementById("markerInfoArea").focus();
@@ -1804,6 +1943,8 @@ var TroffClass = function(){
 	};
 	
 	this.rememberCurrentState = function(){
+		if( $("#statesTab").hasClass( "hidden" ) ) return;
+
 		document.getElementById('blur-hack').focus();
 		var nrStates = $('#stateList').children().length + 1;
 		IO.prompt(
@@ -3510,6 +3651,8 @@ var DBClass = function(){
 
 	this.setCurrent = function(songId, key, value){
 	chrome.storage.local.get(songId, function(ret){
+		console.log("setCurrent. songId = ", songId);
+		console.log("setCurrent. ret = ", ret);
 		var song = ret[songId];
 		if(!song){
 				console.error('Error, "noSong" occurred;\n'+
@@ -3535,6 +3678,8 @@ var DBClass = function(){
 
 	this.getSongMetaDataOf = function(songId) {
 		var loadSongMetadata = function(song, songId){
+
+
 
 			Troff.selectStartBefore(song.startBefore[0], song.startBefore[1]);
 			Troff.selectStopAfter(song.stopAfter[0], song.stopAfter[1]);
@@ -3578,6 +3723,47 @@ var DBClass = function(){
 		});
 
 	}; // end getSongMetadata
+
+	this.getImageMetaDataOf = function(songId) {
+		console.log("getImageMetaDataOf -> songId = ", songId);
+		var loadSongMetadata = function(song, songId){
+			console.log("getImageMetaDataOf -> songId = ", songId, "song", song);
+			console.log("getImageMetaDataOf -> A");
+
+
+
+			Troff.setMood('pause');
+//			if(song.bPlayInFullscreen !== undefined)
+//				Troff.setPlayInFullscreen(song.bPlayInFullscreen);
+			
+			Troff.setInfo(song.info);
+			Troff.setTempo(song.tempo);
+			Troff.addButtonsOfStates(song.aStates);
+			Troff.setAreas(song.abAreas);
+
+			Troff.setCurrentSong();			
+		};// end loadSongMetadata
+		
+		chrome.storage.local.get(songId, function(ret){
+			console.log("getImageMetaDataOf: songId", songId);
+			console.log("getImageMetaDataOf: ret", ret);
+
+			var song = ret[songId];
+			
+			if(!song){ // new song:
+				song = DB.fixSongObject();
+				var obj = {};
+				obj[songId] = song;
+				chrome.storage.local.set(obj);
+				
+				loadSongMetadata(song, songId);
+			} else {
+				loadSongMetadata(song, songId);
+			}
+		});
+
+	}; // end getSongMetadata
+
 
 };// end DBClass
 
@@ -3797,6 +3983,9 @@ var IOClass = function(){
 		case 27: // esc
 			Troff.pauseSong();
 			Troff.forceNoFullscreen();
+			break;
+		case 73: // I
+			Troff.editCurrentSongInfo();
 			break;
 		case 77: // M
 			Troff.createMarker();
@@ -4371,44 +4560,7 @@ var Rate = new RateClass();
 
 $(document).ready( function() {
 	
-	var dataSongTable = $("#dataSongTable").DataTable({
-		"fixedHeader": true,
-		"paging": false,
-		"columnDefs": [
-			{
-				"targets": [ 0, 1, 3 ],
-				"visible": false,
-				"searchable": false
-			}, {
-				"targets": 2,
-				"data": null,
-				"orderable": false,
-				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
-			}, {
-				"targets": 3,
-				"data": null,
-				"orderable": false,
-				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
-			},
-			{
-				"targets": [ "_all" ],
-				"className": "secondaryColor",
-			}
-		]
-	} )
-	.on( 'click', 'button.loadSong', function () {
-		var data = dataSongTable.row( $(this).parents('tr') ).data();
-		setSong(
-			data[1], //fullPath
-			data[0] //galleryId
-		);
-	} );
-
-	//to make header primaryColor:
-	$( "#dataSongTable thead th" ).removeClass( "secondaryColor" );
-
-	// to move the searchbar away from the scrolling-area
-	$( "#dataSongTable_filter" ).appendTo( $( "#newSearchParent" ) );
+	initSongTable();
 
 	DB.cleanDB();
 	DB.getAllSonglists();
