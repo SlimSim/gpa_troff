@@ -210,8 +210,12 @@ function addVideoToContentDiv() {
 	return video;
 }
 
+function getFileExtension( filename ){
+	return filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+}
+
 function getFileType(filename) {
-	 var ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+	 var ext = getFileExtension( filename );
 	 if (imgFormats.indexOf(ext) >= 0)
 			return "image";
 	 else if (audFormats.indexOf(ext) >= 0)
@@ -219,6 +223,21 @@ function getFileType(filename) {
 	 else if (vidFormats.indexOf(ext) >= 0)
 			return "video";
 	 else return null;
+}
+
+function getFileTypeFaIcon( filename ) {
+	var type = getFileType( filename );
+
+	switch(type){
+	case "image":
+		return "fa-image";
+	case "audio":
+		return "fa-music";
+	case "video":
+		return "fa-film";
+	}
+	return "fa-question";
+	
 }
 
 function clearContentDiv() {
@@ -230,6 +249,7 @@ function clearContentDiv() {
 
 function clearList() {
 	document.getElementById("newSongListPartAllSongs").innerHTML = "";
+	$('#dataSongTable').DataTable().clear().draw();
 }
 
 function checkIfSongExists(fullPath, galleryId){
@@ -268,7 +288,6 @@ function setSong(fullPath, galleryId){
 		}
 	}
 
-	console.log("setSong:  fs", fs);
 	if (fs) {
 		var path = fullPath;
 		DB.setCurrentSong(path, galleryId);
@@ -276,7 +295,6 @@ function setSong(fullPath, galleryId){
 		Troff.setWaitForLoad(path, galleryId);
 		fs.root.getFile(path, {create: false}, function(fileEntry) {
 
-			console.log("setSong: fileEntry", fileEntry);
 			 var newElem = null;
 			 // show the file data
 			 clearContentDiv();
@@ -288,7 +306,6 @@ function setSong(fullPath, galleryId){
 			 else if (type == "video")
 					newElem = addVideoToContentDiv();
 
-			console.log("setSong: newElem", newElem);
 			 if (newElem) {
 					// Supported in Chrome M37 and later.
 					if (!chrome.mediaGalleries.getMetadata) {
@@ -390,37 +407,27 @@ function addItem(itemEntry) {
 	 
 }
 
+function sortAndValue(sortValue, stringValue) {
+	if( sortValue === undefined )
+		return "<i class=\"hidden\">" + 0 + "</i>";//<i class=\"fa " + faType + "\"></i>",
+	return "<i class=\"hidden\">" + sortValue + "</i>" + stringValue;//<i class=\"fa " + faType + "\"></i>",
+}
+
+
 function addItem_NEW(itemEntry) {
 	itemEntry.file(function(file) {
 		chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
 
 			var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
 			var fullPath = itemEntry.fullPath;
-			var galleryId = mData.galleryId;;
-			/*
-			console.log("A *********************************");
-			console.log("itemEntry", itemEntry);
-			console.log("mData", mData);
-			console.log("file", file);
-			console.log("metadata", metadata);
+			var galleryId = mData.galleryId;
+			var extension = getFileExtension( fullPath );
+			var faType = getFileTypeFaIcon(fullPath);
 
-			*/
-
-			/**
-				metadata.mimeType
-				metadata.album
-				metadata.artist
-				metadata.attachedImages []
-				metadata.genre
-				metadata.duration
-				metadata.mimeType: "video/mp4", "audio/mpeg", 
-				file.type: "image/png"
-			*/
-
-
-
-			console.log("B *********************************");
 			DB.getVal( fullPath, function( song ) {
+				console.log("itemEntry:", itemEntry);
+				console.log("metadata:", metadata);
+				console.log("file:", file);
 				console.log("song:", song);
 
 				var tempo = "?",
@@ -430,12 +437,19 @@ function addItem_NEW(itemEntry) {
 					info = song.info;
 				}
 
+
+
 				$('#dataSongTable').DataTable().row.add( [
 					galleryId,
 					fullPath,
 					null, // Play
 					null, // Menu ( Hidden TODO: bring forward and implement )
-					metadata.mimeType,
+					sortAndValue(faType, "<i class=\"fa " + faType + "\"></i>"), //"<i class=\"hidden\">" + faType + "</i><i class=\"fa " + faType + "\"></i>",
+					"." + extension,
+					metadata.genre,
+					sortAndValue( metadata.duration, Troff.secToDisp( metadata.duration ) ), //"<i class=\"hidden\">" + metadata.duration + "</i>" + Troff.secToDisp( metadata.duration ),
+					Troff.milisToDisp( file.lastModified ),
+					Troff.byteToDisp( file.size ),
 					tempo,
 					metadata.title,
 					metadata.artist,
@@ -457,6 +471,11 @@ function initSongTable() {
 		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Menu" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Type" ) )
+		.append( $('<th>').addClass("primaryColor").text( "File" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Genre" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Duration" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Modified" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Size" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Tempo" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Title" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Artist" ) )
@@ -565,7 +584,7 @@ function scanGalleries(fs) {
 }
 
 function getGalleriesInfo(results) {
-	clearContentDiv();
+	//clearContentDiv();
 	clearList();
 	if (results.length) {
 		gGalleryArray = results; // store the list of gallery directories
@@ -856,8 +875,6 @@ var TroffClass = function(){
 	 * it should thus do the things that conect player to Troff...
 	 */
 	this.setMetadata = function(media){
-		console.log("setMetadata ->");
-		console.log("media", media);
 		var songLength = media.duration;
 		document.getElementById('timeBar').max = media.duration;
 		$('#maxTime')[0].innerHTML = Troff.secToDisp(media.duration);
@@ -867,7 +884,6 @@ var TroffClass = function(){
 	};
 
 	this.setMedatadaImage = function( media ) {
-		console.log("setMetadataImage -> medai", media);
 		DB.getImageMetaDataOf(Troff.getCurrentSong());
 	}
 
@@ -3039,6 +3055,33 @@ var TroffClass = function(){
 				var min = (seconds / 60) | 0;
 				return min + ':' + sec;
 		};
+
+		this.milisToDisp = function( milis ) {
+			var date = new Date( milis );
+
+			var d = date.getDate();
+			var m = date.getMonth() + 1;
+
+			var dd = d < 10 ? "0"+d : d;
+			var mm = m < 10 ? "0"+m : m;
+ 			var year = "" + date.getFullYear();
+
+ 			return year + "-" +  mm + "-" + dd;
+		}
+
+		this.byteToDisp= function( byte ) {
+			var nrTimes = 0;
+				units = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+
+			while( byte >= 1000 ) {
+				nrTimes++;
+				byte = byte / 1000;
+				if(nrTimes > units.length)
+					return byte;
+			}
+
+			return Math.round( byte * 10 ) / 10 + units[nrTimes];
+		}
 
 		this.incrementInput = function(identifyer, amount, cbFunk){
 				$(identifyer ).val( parseInt($(identifyer).val()) + amount );
