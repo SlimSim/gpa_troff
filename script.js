@@ -25,7 +25,7 @@ var gGalleryData = [];     // hold computed information about each Gallery
 var gCurOptGrp = null;
 //var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
 var imgFormats = ['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
-var audFormats = ['wav', 'mp3'];
+var audFormats = ['wav', 'mp3', 'm4a'];
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'ogg', 'webm', 'wmv'];
 
 var TROFF_SETTING_SET_THEME = "TROFF_SETTING_SET_THEME";
@@ -172,27 +172,11 @@ function addVideoToContentDiv() {
 	video.style.marginTop = margin;
 	video.style.marginBottom = margin;
 	fsButton.style.marginTop = margin;
-/*fsButton2
-	fsButton2.style.marginTop = margin;
-	fsButton2.style.marginRight = margin;
-	fsButton2.style.marginLeft = margin;
-	fsButton3.style.marginTop = margin;
-*/
+
 	fsButton.addEventListener('click', Troff.playInFullscreenChanged);
 	fsButton.appendChild( document.createTextNode('Play in Fullscreen') );
 	fsButton.setAttribute('id', "playInFullscreenButt");
 	fsButton.setAttribute('class', "onOffButton");
-	/*
-	fsButton2.addEventListener('click', Troff.playInFullscreenChanged);
-	fsButton2.appendChild( document.createTextNode("Use 'F' to toggle Fullscreen") );
-	fsButton2.setAttribute('id', "useFtoToggleFullscreenButt");
-	
-	fsButton3.addEventListener('click', Troff.playInFullscreenChanged);
-	fsButton3.appendChild( document.createTextNode("No Fullscreen") );
-	fsButton3.setAttribute('id', "useFtoToggleFullscreenButt");
-	*/
-//  kanske ha bara en knapp, som man inte kan tobbla med 'f', och det f gör är 
-//  att den helt enkelt togglar fullscreen?
 	
 	videoBox.setAttribute('id', "videoBox");
 
@@ -202,8 +186,6 @@ function addVideoToContentDiv() {
 	});
 
 	content_div.appendChild(fsButton);
-//  content_div.appendChild(fsButton2);
-//  content_div.appendChild(fsButton3);
 	
 	videoBox.appendChild(video);
 	content_div.appendChild(videoBox);
@@ -237,7 +219,6 @@ function getFileTypeFaIcon( filename ) {
 		return "fa-film";
 	}
 	return "fa-question";
-	
 }
 
 function clearContentDiv() {
@@ -417,26 +398,22 @@ function sortAndValue(sortValue, stringValue) {
 function addItem_NEW(itemEntry) {
 	itemEntry.file(function(file) {
 		chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
-
 			var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
 			var fullPath = itemEntry.fullPath;
 			var galleryId = mData.galleryId;
 			var extension = getFileExtension( fullPath );
 			var faType = getFileTypeFaIcon(fullPath);
+			console.log("mData",mData);
 
 			DB.getVal( fullPath, function( song ) {
-				console.log("itemEntry:", itemEntry);
-				console.log("metadata:", metadata);
-				console.log("file:", file);
-				console.log("song:", song);
 
 				var tempo = "?",
-					info = "";
+					info = "",
+					titleOrFileName = metadata.title || file.name.substr(0, file.name.lastIndexOf( '.' ) - 1);
 				if( song != undefined ) {
 					tempo = song.tempo;
 					info = song.info;
 				}
-
 
 
 				$('#dataSongTable').DataTable().row.add( [
@@ -444,21 +421,21 @@ function addItem_NEW(itemEntry) {
 					fullPath,
 					null, // Play
 					null, // Menu ( Hidden TODO: bring forward and implement )
-					sortAndValue(faType, "<i class=\"fa " + faType + "\"></i>"), //"<i class=\"hidden\">" + faType + "</i><i class=\"fa " + faType + "\"></i>",
-					"." + extension,
-					metadata.genre,
-					sortAndValue( metadata.duration, Troff.secToDisp( metadata.duration ) ), //"<i class=\"hidden\">" + metadata.duration + "</i>" + Troff.secToDisp( metadata.duration ),
-					Troff.milisToDisp( file.lastModified ),
-					Troff.byteToDisp( file.size ),
-					tempo,
+					sortAndValue(faType, "<i class=\"fa " + faType + "\"></i>"),//type
+					sortAndValue( metadata.duration, Troff.secToDisp( metadata.duration ) ),//Duration
+					titleOrFileName,
 					metadata.title,
 					metadata.artist,
 					metadata.album,
-					Troff.pathToName(itemEntry.fullPath),
-					info
+					tempo,
+					metadata.genre,
+					mData.name + itemEntry.fullPath, //File Path
+					Troff.milisToDisp( file.lastModified ),
+					sortAndValue( file.size, Troff.byteToDisp( file.size ) ), 
+					info,
+					"." + extension
 				] )
 				.draw( false );
-
 			} ); // end DB.getVal
 		} ); // end chrome.mediaGalleries.getMetadata-function
 	} );//end fileEntry.file-function
@@ -471,17 +448,18 @@ function initSongTable() {
 		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Menu" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Type" ) )
-		.append( $('<th>').addClass("primaryColor").text( "File" ) )
-		.append( $('<th>').addClass("primaryColor").text( "Genre" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Duration" ) )
-		.append( $('<th>').addClass("primaryColor").text( "Modified" ) )
-		.append( $('<th>').addClass("primaryColor").text( "Size" ) )
-		.append( $('<th>').addClass("primaryColor").text( "Tempo" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Title Or File" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Title" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Artist" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Album" ) )
-		.append( $('<th>').addClass("primaryColor").text( "File name" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Tempo" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Genre" ) )
+		.append( $('<th>').addClass("primaryColor").text( "File path" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Modified" ) )
+		.append( $('<th>').addClass("primaryColor").text( "Size" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Song info" ) )
+		.append( $('<th>').addClass("primaryColor").text( "File type" ) )
 
 
 	var dataSongTable = $("#dataSongTable").DataTable({
@@ -584,7 +562,6 @@ function scanGalleries(fs) {
 }
 
 function getGalleriesInfo(results) {
-	//clearContentDiv();
 	clearList();
 	if (results.length) {
 		gGalleryArray = results; // store the list of gallery directories
@@ -636,7 +613,6 @@ var TroffClass = function(){
 		var nrTapps = 0;
 		var m_zoomStartTime = 0;
 		var m_zoomEndTime = null;
-		var m_imageLayout = false;
 
 
 	this.toggleExtendedMarkerColor = function( event ) {
@@ -843,11 +819,9 @@ var TroffClass = function(){
 	};
 
 	this.setImageLayout = function(){
-		m_imageLayout = true;
 		$( ".hideOnPicture" ).addClass( "hidden" );
 	};
 	this.setAudioVideoLayout = function(){
-		m_imageLayout = false;
 		$( ".hideOnPicture" ).removeClass( "hidden" );
 	};
 
@@ -3064,9 +3038,9 @@ var TroffClass = function(){
 
 			var dd = d < 10 ? "0"+d : d;
 			var mm = m < 10 ? "0"+m : m;
- 			var year = "" + date.getFullYear();
+			var year = "" + date.getFullYear();
 
- 			return year + "-" +  mm + "-" + dd;
+			return year + "-" +  mm + "-" + dd;
 		}
 
 		this.byteToDisp= function( byte ) {
@@ -3694,8 +3668,6 @@ var DBClass = function(){
 
 	this.setCurrent = function(songId, key, value){
 	chrome.storage.local.get(songId, function(ret){
-		console.log("setCurrent. songId = ", songId);
-		console.log("setCurrent. ret = ", ret);
 		var song = ret[songId];
 		if(!song){
 				console.error('Error, "noSong" occurred;\n'+
@@ -3721,8 +3693,6 @@ var DBClass = function(){
 
 	this.getSongMetaDataOf = function(songId) {
 		var loadSongMetadata = function(song, songId){
-
-
 
 			Troff.selectStartBefore(song.startBefore[0], song.startBefore[1]);
 			Troff.selectStopAfter(song.stopAfter[0], song.stopAfter[1]);
@@ -3768,28 +3738,16 @@ var DBClass = function(){
 	}; // end getSongMetadata
 
 	this.getImageMetaDataOf = function(songId) {
-		console.log("getImageMetaDataOf -> songId = ", songId);
-		var loadSongMetadata = function(song, songId){
-			console.log("getImageMetaDataOf -> songId = ", songId, "song", song);
-			console.log("getImageMetaDataOf -> A");
-
-
-
+		var loadImageMetadata = function(song, songId){
 			Troff.setMood('pause');
-//			if(song.bPlayInFullscreen !== undefined)
-//				Troff.setPlayInFullscreen(song.bPlayInFullscreen);
-			
 			Troff.setInfo(song.info);
 			Troff.setTempo(song.tempo);
 			Troff.addButtonsOfStates(song.aStates);
 			Troff.setAreas(song.abAreas);
-
 			Troff.setCurrentSong();			
-		};// end loadSongMetadata
+		};// end loadImageMetadata
 		
 		chrome.storage.local.get(songId, function(ret){
-			console.log("getImageMetaDataOf: songId", songId);
-			console.log("getImageMetaDataOf: ret", ret);
 
 			var song = ret[songId];
 			
@@ -3799,15 +3757,12 @@ var DBClass = function(){
 				obj[songId] = song;
 				chrome.storage.local.set(obj);
 				
-				loadSongMetadata(song, songId);
+				loadImageMetadata(song, songId);
 			} else {
-				loadSongMetadata(song, songId);
+				loadImageMetadata(song, songId);
 			}
 		});
-
 	}; // end getSongMetadata
-
-
 };// end DBClass
 
 

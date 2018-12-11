@@ -22,7 +22,7 @@
 */
 
 .textareaEdit{
-	z-index: 999;
+	z-index: 99;
 }
 
 video, .full-width{
@@ -210,6 +210,10 @@ body section{
 		appearance: slider-vertical;
 		width: 15px;
 		min-height: 42px;
+}
+
+.min-height-row{
+	min-height: 22px;
 }
 
 .doubleSliders{
