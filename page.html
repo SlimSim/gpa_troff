@@ -906,7 +906,15 @@
 			<div class="flexRow min-height-row">
 				<h1> Songs </h1>
 				<div class="flexOne" ></div>
-				<input type="button" title="Select folders to get songs from" class="regularButton" id="configure-button" value="Select folders"/>
+				<label for="columnToggleSwitch" class="switch simpleOnOffButton onOffButton normalSize m-1">
+					Column selecter
+				</label>
+				<input
+					type="button"
+					title="Select folders to get songs from"
+					class="regularButton"
+					id="configure-button"
+					value="Select folders"/>
 			</div>
 			<p>
 				ha en song-lista här till vänster (som en egen kolumn / egen sektion) 
@@ -917,8 +925,25 @@
 
 			</p>
 
+			<div>
+				<input id="columnToggleSwitch" class="switch_checkbox hidden" type="checkbox" />
+				<div id="columnToggleParent" class="switch_child p-2 primaryColor m-3">
+					<input data-column="4"  data-default="true" type="button" class="onOffButton" value="Type" />
+					<input data-column="5"  data-default="true" type="button" class="onOffButton" value="Duration" />
+					<input data-column="6"  data-default="true" type="button" class="onOffButton" value="Title or File" />
+					<input data-column="7"  data-default="false" type="button" class="onOffButton" value="Title" />
+					<input data-column="8"  data-default="true" type="button" class="onOffButton" value="Artist" />
+					<input data-column="9"  data-default="true" type="button" class="onOffButton" value="Album" />
+					<input data-column="10" data-default="true" type="button" class="onOffButton" value="Tempo" />
+					<input data-column="11" data-default="true" type="button" class="onOffButton" value="Genre" />
+					<input data-column="12" data-default="false" type="button" class="onOffButton" value="File path" />
+					<input data-column="13" data-default="false" type="button" class="onOffButton" value="Modified" />
+					<input data-column="14" data-default="false" type="button" class="onOffButton" value="Size" />
+					<input data-column="15" data-default="true" type="button" class="onOffButton" value="Song info" />
+					<input data-column="16" data-default="false" type="button" class="onOffButton" value="File type" />
+				</div>
+			</div>
 				<div id="newSearchParent" class="py-2"></div>
-
 			<div id="superSonglistArea" class="flexCol start scroll">
 				<table id="dataSongTable" class="super-data-table">
 					<thead>

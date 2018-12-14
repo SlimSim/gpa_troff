@@ -422,7 +422,7 @@ rect.svg_rect_btn {
 
 
 
-input, button, .linkButton{
+input, button, .linkButton, .simpleOnOffButton{
 	border-width: 0;
 	padding: 1px 6px;
 	font-family: sans-serif;
@@ -739,6 +739,10 @@ table {
 .centerRoundButt2{
 	right: 9.5px;
 	bottom: 14.5px;
+}
+
+.simpleOnOffButton{
+	color: black;
 }
 
 .onOffButton:focus,

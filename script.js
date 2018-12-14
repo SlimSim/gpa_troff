@@ -50,6 +50,7 @@ var TROFF_SETTING_UI_PATH_SHOW = "TROFF_SETTING_UI_PATH_SHOW";
 var TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW = "TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW";
 var TROFF_SETTING_UI_ZOOM_SHOW = "TROFF_SETTING_UI_ZOOM_SHOW";
 var TROFF_SETTING_UI_LOOP_BUTTONS_SHOW = "TROFF_SETTING_UI_LOOP_BUTTONS_SHOW";
+var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
 
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -79,6 +80,7 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW,
 	TROFF_SETTING_UI_ZOOM_SHOW,
 	TROFF_SETTING_UI_LOOP_BUTTONS_SHOW,
+	TROFF_SETTING_SONG_COLUMN_TOGGLE,
 ];
 
 
@@ -403,7 +405,6 @@ function addItem_NEW(itemEntry) {
 			var galleryId = mData.galleryId;
 			var extension = getFileExtension( fullPath );
 			var faType = getFileTypeFaIcon(fullPath);
-			console.log("mData",mData);
 
 			DB.getVal( fullPath, function( song ) {
 
@@ -495,11 +496,38 @@ function initSongTable() {
 		);
 	} );
 
+																	/*
+																	//något att titta på: ???????? slim sim :)  (för att ordna kolumnerna :) (fixa DB sparning, o interface...x ) )
+																	var table = $('#table').DataTable({ colReorder: true });
+																	$('button#newOrder').click(function() {
+																	    table.colReorder.order([3,4,2,0,1], true);
+																	});
+																	*/
+
 	//to make header primaryColor:
 	$( "#dataSongTable thead th" ).removeClass( "secondaryColor" );
 
 	// to move the searchbar away from the scrolling-area
 	$( "#dataSongTable_filter" ).appendTo( $( "#newSearchParent" ) );
+}
+
+function dataTableColumnPicker( event ) {
+	var $target = $(event.target);
+	console.log("dataTableColumnPicker: columnNr = ", $target.data('column') );
+	// Get the column API object
+	var column = $('#dataSongTable').DataTable().column( $(this).data('column') );
+
+	$target.toggleClass( "active" );
+
+	var columnVisibilityArray = $("#columnToggleParent").children().map(function(i, v){
+		return $(v).hasClass("active");
+	}).get();
+
+	DB.saveVal( TROFF_SETTING_SONG_COLUMN_TOGGLE, columnVisibilityArray );
+
+	// Toggle the visibility
+	column.visible( ! column.visible() );
+
 }
 
 function scanGallery(entries) {
@@ -614,6 +642,24 @@ var TroffClass = function(){
 		var m_zoomStartTime = 0;
 		var m_zoomEndTime = null;
 
+	this.recallSongColumnToggle = function() {
+		DB.getVal( TROFF_SETTING_SONG_COLUMN_TOGGLE, function( columnToggle ){
+			if( columnToggle === undefined ) {
+				setTimeout(function() {
+					Troff.recallSongColumnToggle();
+				}, 42);
+				return;
+			}
+			$( "#columnToggleParent" ).children().each( function( i, v ) {
+				if( columnToggle[i] ) {
+					$(v).addClass( "active" );
+				} else {
+					var column = $('#dataSongTable').DataTable().column( $(v).data('column') );
+					column.visible( false );
+				}
+			} );
+		} );
+	}
 
 	this.toggleExtendedMarkerColor = function( event ) {
 		if( $( "#markerList").hasClass( "extended-color" ) ) {
@@ -706,6 +752,7 @@ var TroffClass = function(){
 		Troff.recallTheme();
 		Troff.recallExtendedMarkerColor();
 		Troff.recallExtraExtendedMarkerColor();
+		Troff.recallSongColumnToggle();
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR);
@@ -3336,6 +3383,21 @@ var DBClass = function(){
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ZOOM_SHOW, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_LOOP_BUTTONS_SHOW, true );
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_SONG_COLUMN_TOGGLE, [
+				$("#columnToggleParent" ).find( "[data-column=4]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=5]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=6]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=7]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=8]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=9]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=10]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=11]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=12]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=13]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=14]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=15]" ).data( "default" ),
+				$("#columnToggleParent" ).find( "[data-column=16]" ).data( "default" ),
+			] );
 
 
 
@@ -3788,6 +3850,10 @@ var IOClass = function(){
 			}
 		} );
 
+		$( ".simpleOnOffButton" ).click( function( event ){
+			$( event.target ).toggleClass( "active" );
+		} );
+
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
 
@@ -3798,8 +3864,9 @@ var IOClass = function(){
 		$( "#toggleExtraExtendedMarkerColor" ).click ( Troff.toggleExtraExtendedMarkerColor );
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
-		$( "#spaceAndEnterParent" ).find("input").click ( Troff.setButtonActiveValue );
-		
+		$( "#spaceAndEnterParent" ).find("input").click( Troff.setButtonActiveValue );
+		$( "#columnToggleParent" ).find("input").click( dataTableColumnPicker );
+
 		
 		$('#buttPlayUiButtonParent').click( Troff.playUiButton );
 		$('#buttTip').click(IO.openHelpWindow);
