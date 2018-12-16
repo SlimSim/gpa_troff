@@ -22,11 +22,11 @@ p{
 .centerRoundButtCommon{
 	background-color: transparent;
 }
-.onOffButton,
+.stOnOffButton,
 .loopButt{
 	outline-color: #BDBDBD;
 }
-.onOffButton,
+.stOnOffButton,
 .loopButt{
 	background-color: #BDBDBD;
 }

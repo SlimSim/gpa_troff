@@ -31,6 +31,8 @@ var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'o
 var TROFF_SETTING_SET_THEME = "TROFF_SETTING_SET_THEME";
 var TROFF_SETTING_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTENDED_MARKER_COLOR";
 var TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR";
+var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
+/*
 var TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR";
 var TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR";
@@ -51,6 +53,8 @@ var TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW = "TROFF_SETTING_UI_PLAY_FULL_S
 var TROFF_SETTING_UI_ZOOM_SHOW = "TROFF_SETTING_UI_ZOOM_SHOW";
 var TROFF_SETTING_UI_LOOP_BUTTONS_SHOW = "TROFF_SETTING_UI_LOOP_BUTTONS_SHOW";
 var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
+var TROFF_SETTING_SONG_LISTS_LIST_SHOW = "TROFF_SETTING_SONG_LISTS_LIST_SHOW";
+*/
 
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -61,6 +65,8 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_SET_THEME,
 	TROFF_SETTING_EXTENDED_MARKER_COLOR,
 	TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR,
+	TROFF_SETTING_SONG_COLUMN_TOGGLE,
+/*
 	TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR,
@@ -80,12 +86,9 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW,
 	TROFF_SETTING_UI_ZOOM_SHOW,
 	TROFF_SETTING_UI_LOOP_BUTTONS_SHOW,
-	TROFF_SETTING_SONG_COLUMN_TOGGLE,
+	TROFF_SETTING_SONG_LISTS_LIST_SHOW,
+	*/
 ];
-
-
-
-
 
 
 var MARKER_COLOR_PREFIX = "markerColor";
@@ -727,6 +730,7 @@ var TroffClass = function(){
 		
 	};
 
+/*
 	this.setButtonActiveValue = function( event ) {
 		var $target = $( event.target ),
 			id = $target.attr( "id" ),
@@ -745,6 +749,7 @@ var TroffClass = function(){
 
 		DB.saveVal( id, $target.hasClass( "active" ) );
 	}
+	*/
 	
 
 	
@@ -753,6 +758,7 @@ var TroffClass = function(){
 		Troff.recallExtendedMarkerColor();
 		Troff.recallExtraExtendedMarkerColor();
 		Troff.recallSongColumnToggle();
+		/*
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR);
@@ -772,6 +778,7 @@ var TroffClass = function(){
 		Troff.reacllUiValueShow(TROFF_SETTING_UI_ZOOM_SHOW);
 		Troff.reacllUiValueShow(TROFF_SETTING_UI_LOOP_BUTTONS_SHOW);
 		Troff.reacllUiValueShow(TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON);
+		*/
 	};
 
 	this.reacllUiValueShow = function( databaseKey ) {
@@ -3363,7 +3370,7 @@ var DBClass = function(){
 				chrome.storage.local.set({"abGeneralAreas" : JSON.stringify([false, true])});
 			}
 
-
+			/*
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR, false );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR, false );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR, true );
@@ -3383,6 +3390,7 @@ var DBClass = function(){
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ZOOM_SHOW, true );
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_LOOP_BUTTONS_SHOW, true );
+			*/
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SONG_COLUMN_TOGGLE, [
 				$("#columnToggleParent" ).find( "[data-column=4]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=5]" ).data( "default" ),
@@ -3426,10 +3434,14 @@ var DBClass = function(){
 				delete items.strCurrentTab;
 			}
 
-			for(var key in items){
-				if( TROFF_SETTING_KEYS.indexOf( key ) != -1 ) {
+
+
+			var SETTING_KEYS = $("[data-st-save-value-key]").map(function(){return $(this).data("st-save-value-key");}).get();
+			for(var key in items) {
+				if( TROFF_SETTING_KEYS.indexOf( key ) != -1 || SETTING_KEYS.indexOf( key ) != -1 ) {
 					continue;
 				}
+
 				DB.cleanSong(key, items[key]);
 			}
 		});//end get all keys
@@ -3850,9 +3862,6 @@ var IOClass = function(){
 			}
 		} );
 
-		$( ".simpleOnOffButton" ).click( function( event ){
-			$( event.target ).toggleClass( "active" );
-		} );
 
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
@@ -3864,7 +3873,7 @@ var IOClass = function(){
 		$( "#toggleExtraExtendedMarkerColor" ).click ( Troff.toggleExtraExtendedMarkerColor );
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
-		$( "#spaceAndEnterParent" ).find("input").click( Troff.setButtonActiveValue );
+		//$( "#spaceAndEnterParent" ).find("input").click( Troff.setButtonActiveValue );
 		$( "#columnToggleParent" ).find("input").click( dataTableColumnPicker );
 
 		

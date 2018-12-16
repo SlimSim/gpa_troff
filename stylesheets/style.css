@@ -422,7 +422,7 @@ rect.svg_rect_btn {
 
 
 
-input, button, .linkButton, .simpleOnOffButton{
+input, button, .linkButton, .st-simple-on-off-button{
 	border-width: 0;
 	padding: 1px 6px;
 	font-family: sans-serif;
@@ -741,20 +741,20 @@ table {
 	bottom: 14.5px;
 }
 
-.simpleOnOffButton{
+.st-simple-on-off-button{
 	color: black;
 }
 
-.onOffButton:focus,
+.stOnOffButton:focus,
 .loopButt:focus{
 	outline: none;
 }
-.onOffButton:hover,
+.stOnOffButton:hover,
 .loopButt:hover{
 	outline-style: solid;
 	outline-width: 2px;;
 }
-.onOffButton:active,
+.stOnOffButton:active,
 .loopButt:active{
 	outline-style: solid;
 	outline-width: 4px;;
