@@ -31,8 +31,6 @@ var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'o
 var TROFF_SETTING_SET_THEME = "TROFF_SETTING_SET_THEME";
 var TROFF_SETTING_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTENDED_MARKER_COLOR";
 var TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR = "TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR";
-var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
-/*
 var TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR";
 var TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR = "TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR";
 var TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR = "TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR";
@@ -54,7 +52,6 @@ var TROFF_SETTING_UI_ZOOM_SHOW = "TROFF_SETTING_UI_ZOOM_SHOW";
 var TROFF_SETTING_UI_LOOP_BUTTONS_SHOW = "TROFF_SETTING_UI_LOOP_BUTTONS_SHOW";
 var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
 var TROFF_SETTING_SONG_LISTS_LIST_SHOW = "TROFF_SETTING_SONG_LISTS_LIST_SHOW";
-*/
 
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -65,8 +62,6 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_SET_THEME,
 	TROFF_SETTING_EXTENDED_MARKER_COLOR,
 	TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR,
-	TROFF_SETTING_SONG_COLUMN_TOGGLE,
-/*
 	TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR,
 	TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR,
 	TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR,
@@ -86,8 +81,8 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW,
 	TROFF_SETTING_UI_ZOOM_SHOW,
 	TROFF_SETTING_UI_LOOP_BUTTONS_SHOW,
+	TROFF_SETTING_SONG_COLUMN_TOGGLE,
 	TROFF_SETTING_SONG_LISTS_LIST_SHOW,
-	*/
 ];
 
 
@@ -254,7 +249,6 @@ function checkIfSongExists(fullPath, galleryId){
 }
 
 function setSong(fullPath, galleryId){
-	console.log("setSong ->");
 	Troff.pauseSong();
 
 	$("#gallery")
@@ -400,6 +394,54 @@ function sortAndValue(sortValue, stringValue) {
 }
 
 
+
+function addDirectory_NEW(directoryEntry) {
+	var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(directoryEntry.filesystem)
+	$( "#directoryList" )
+		.append(
+			$("<ul>").append( $( "<input>" )
+				.attr("type", "button")
+				.addClass("stOnOffButton")
+				.data("superFullPath", mData.name + directoryEntry.fullPath)
+				.val( directoryEntry.name ) 
+			).click(filterSuperFullPath)
+
+		);
+
+	//$( "#directoryList" ).append( $("<ul>").text( directoryEntry.name ) );
+}
+
+function addGallery_New(name, galleryId) {
+	$( "#galleryList" )
+		.append(
+			$("<ul>").append( $( "<input>" )
+				.attr("type", "button")
+				.addClass("stOnOffButton")
+				.data("superFullPath", name)
+				.val( Troff.getLastSlashName(name) ) 
+			).click(filterSuperFullPath)
+
+		);
+}
+
+function filterSuperFullPath( event ) {
+	var list = [],
+		regex;
+
+	$(event.target).toggleClass( "active" );
+
+	$( "#directoryList, #galleryList").find("input").filter( ".active" ).each(function(i, v){
+		list.push(  "^" + $(v).data("superFullPath") );
+	} );
+
+	regex = list.join("|");
+
+	$('#dataSongTable').DataTable()
+		.columns( 12 )
+		.search( regex, true, false )
+		.draw();
+}
+
 function addItem_NEW(itemEntry) {
 	itemEntry.file(function(file) {
 		chrome.mediaGalleries.getMetadata(file, {}, function(metadata) {
@@ -472,8 +514,8 @@ function initSongTable() {
 		"columnDefs": [
 			{
 				"targets": [ 0, 1, 3 ],
-				"visible": false,
-				"searchable": false
+				//"visible": false,
+				//"searchable": false
 			}, {
 				"targets": 2,
 				"data": null,
@@ -516,7 +558,6 @@ function initSongTable() {
 
 function dataTableColumnPicker( event ) {
 	var $target = $(event.target);
-	console.log("dataTableColumnPicker: columnNr = ", $target.data('column') );
 	// Get the column API object
 	var column = $('#dataSongTable').DataTable().column( $(this).data('column') );
 
@@ -567,6 +608,7 @@ function scanGallery(entries) {
 		}
 		else if (entries[i].isDirectory) {
 			gDirectories.push(entries[i]);
+			addDirectory_NEW( entries[i] );
 		}
 		else {
 			console.info("Got something other than a file or directory.");
@@ -587,12 +629,14 @@ function scanGalleries(fs) {
 	 var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(fs);
 
 	 gCurOptGrp = addGallery(mData.name, mData.galleryId);
+	 addGallery_New(mData.name, mData.galleryId);
 	 gGalleryData[gGalleryIndex] = new GalleryData(mData.galleryId);
 	 gGalleryReader = fs.root.createReader();
 	 gGalleryReader.readEntries(scanGallery, errorPrintFactory('readEntries'));
 }
 
 function getGalleriesInfo(results) {
+//	Media.getGalleriesInfo( results );
 	clearList();
 	if (results.length) {
 		gGalleryArray = results; // store the list of gallery directories
@@ -630,6 +674,56 @@ function FSstartFunc(){
 //******************************************************************************
 //* End FS - File System ----------------------------------------------------- *
 //******************************************************************************
+
+
+
+
+
+/*
+var Media = {};
+
+Media.gGalleryArray;
+
+Meida.getGalleriesInfo = function(results){
+	Media.gGalleryArray = results;
+
+	for( var i = 0; i < results.length; i++ ) {
+		Media.scanGalleries( Media.gGalleryArray[i] );
+	}
+}
+Media.scanGalleries = function() {
+	 var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(fs);
+
+	 gCurOptGrp = Media.addGallery(mData.name, mData.galleryId);
+	 Media.addGallery(mData.name, mData.galleryId);
+	 gGalleryData[gGalleryIndex] = new GalleryData(mData.galleryId);
+	 gGalleryReader = fs.root.createReader();
+	 gGalleryReader.readEntries(scanGallery, errorPrintFactory('readEntries'));
+}
+Media.AddGallery(name, id) {
+	var li = document.createElement("li");
+	var label = document.createElement("label");
+	var checkbox = document.createElement("input");
+	var optGrp = document.createElement("h3");
+	optGrp.appendChild(document.createTextNode(Troff.getLastSlashName(name)));
+	optGrp.setAttribute("id", id);
+	optGrp.setAttribute("class", "bold");
+	checkbox.setAttribute("type", "checkbox");
+	label.setAttribute("class", "flexrow");
+	label.appendChild(checkbox);
+	label.appendChild(optGrp);
+	li.appendChild(label);
+	li.setAttribute("galleryid", id);
+	li.setAttribute("fullPath", name);
+	li.setAttribute("isDirectory", true);
+	document.getElementById("newSongListPartAllSongs").appendChild(li);
+	return optGrp;
+}
+*/
+
+
+
+
 
 
 
@@ -3370,27 +3464,6 @@ var DBClass = function(){
 				chrome.storage.local.set({"abGeneralAreas" : JSON.stringify([false, true])});
 			}
 
-			/*
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_ENTER_RESET_COUNTER, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_RESET_COUNTER, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_CONFIRM_DELETE_MARKER, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ARTIST_SHOW, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_TITLE_SHOW, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ALBUM_SHOW, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PATH_SHOW, false );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_ZOOM_SHOW, true );
-			DB.fixDefaultValue( allKeys, TROFF_SETTING_UI_LOOP_BUTTONS_SHOW, true );
-			*/
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SONG_COLUMN_TOGGLE, [
 				$("#columnToggleParent" ).find( "[data-column=4]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=5]" ).data( "default" ),
