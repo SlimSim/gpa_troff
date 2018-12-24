@@ -348,13 +348,6 @@ function addGallery(name, id) {
 
 function addItem(itemEntry) {
 	if (itemEntry.isFile) {
-		itemEntry.getMetadata(function(metadata){
-			if(metadata.title || metadata.titel || metadata.artist){
-				console.info("Haleluja! The metadata is accessable from here!!!!");
-				console.info('artist = ' + metadata.artist);
-				console.info('title = ' + metadata.title);
-			}
-		});
 		var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
 		var li = document.createElement("li");
 		var label = document.createElement("label");
@@ -586,21 +579,18 @@ function addItem_NEW(itemEntry) {
 					"fullPath" : fullPath
 				};
 
-
 				$('#dataSongTable').DataTable().row.add( [
 					JSON.stringify( dataInfo ),
-					//galleryId,
-					//fullPath,
 					null, // Play
 					null, // Menu ( Hidden TODO: bring forward and implement )
 					sortAndValue(faType, "<i class=\"fa " + faType + "\"></i>"),//type
 					sortAndValue( metadata.duration, Troff.secToDisp( metadata.duration ) ),//Duration
 					titleOrFileName,
-					metadata.title,
-					metadata.artist,
-					metadata.album,
+					metadata.title || "",
+					metadata.artist || "",
+					metadata.album || "",
 					tempo,
-					metadata.genre,
+					metadata.genre || "",
 					mData.name + itemEntry.fullPath, //File Path
 					Troff.milisToDisp( file.lastModified ),
 					sortAndValue( file.size, Troff.byteToDisp( file.size ) ), 
