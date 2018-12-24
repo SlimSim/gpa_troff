@@ -17,6 +17,12 @@
 
 // "use strict";
 
+window.alert = function( alert){
+	console.warn("Alert:", alert);
+}
+
+
+
 var gGalleryIndex = 0;     // gallery currently being iterated
 var gGalleryReader = null; // the filesytem reader for the current gallery
 var gDirectories = [];     // used to process subdirectories
@@ -397,18 +403,19 @@ function sortAndValue(sortValue, stringValue) {
 
 function addDirectory_NEW(directoryEntry) {
 	var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(directoryEntry.filesystem)
+
 	$( "#directoryList" )
 		.append(
 			$("<ul>").append( $( "<input>" )
 				.attr("type", "button")
 				.addClass("stOnOffButton")
 				.data("superFullPath", mData.name + directoryEntry.fullPath)
-				.val( directoryEntry.name ) 
-			).click(filterSuperFullPath)
-
+				.data("fullPath", directoryEntry.fullPath )
+				.data("galleryId", mData.galleryId)
+				.val( directoryEntry.name )
+				.click(filterSuperFullPath)
+			)
 		);
-
-	//$( "#directoryList" ).append( $("<ul>").text( directoryEntry.name ) );
 }
 
 function addGallery_New(name, galleryId) {
@@ -418,29 +425,142 @@ function addGallery_New(name, galleryId) {
 				.attr("type", "button")
 				.addClass("stOnOffButton")
 				.data("superFullPath", name)
-				.val( Troff.getLastSlashName(name) ) 
-			).click(filterSuperFullPath)
-
+				.data("galleryId", galleryId)
+				.val( Troff.getLastSlashName(name) )
+				.click(filterSuperFullPath)
+			)
 		);
 }
 
 function filterSuperFullPath( event ) {
-	var list = [],
+	var //list = [],
+		list2 = [],
 		regex;
 
-	$(event.target).toggleClass( "active" );
 
-	$( "#directoryList, #galleryList").find("input").filter( ".active" ).each(function(i, v){
-		list.push(  "^" + $(v).data("superFullPath") );
-	} );
+	// todo: fixa att denna if går att välja i en setting :)
+	if( $("#TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT").hasClass( "active" ) ) {
+		$(event.target).toggleClass( "active" );
+		$( "#songListsList" ).find( "input" ).removeClass("selected");
+
+
+
+		list2 = getAdditiveList();
+/*
+		$( "#directoryList, #galleryList").find("input").filter( ".active" ).each(function(i, v){
+			var fullPath = $(v).data("fullPath");
+			var galleryId = $(v).data("galleryId");
+
+			if( fullPath ) {
+				list2.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + fullPath.replace("/", "\\/")  );
+			} else {
+				list2.push( "^{\"galleryId\":\"" + galleryId + "\"" );
+			}
+		} );
+		*/
+	} else {
+
+		var galleryId = $(event.target).data("galleryId");
+		var fullPath = $(event.target).data("fullPath");
+
+		if( fullPath ) {
+			list2.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + fullPath.replace("/", "\\/")  );
+		} else {
+			list2.push( "^{\"galleryId\":\"" + galleryId + "\"" );
+		}
+
+
+		$( "#songListsList" ).find( "input" ).removeClass("selected").removeClass("active");
+		$(event.target).addClass( "selected" );
+
+	}
+
+	var regex2 = list2.join("|");
+
+	$('#dataSongTable').DataTable()
+		.columns( 0 ) 
+		.search( regex2, true, false )
+		.draw();
+
+}
+
+function filterSongList(event){
+	var $target = $(event.target),
+		data = $target.data("songList"),
+		list = [],
+		regex;
+	
+	if( $("#TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT").hasClass( "active" ) ) {
+
+		if( data ) {
+
+			$(event.target).toggleClass( "active" );
+			$( "#songListsList" ).find( "input" ).removeClass("selected");
+			list = getAdditiveList();
+		} else {
+			$( "#songListsList" ).find( "input" ).removeClass("selected").removeClass("active");			
+			$target.addClass("selected");
+		}
+
+	} else {
+		$( "#songListsList" ).find( "input" ).removeClass("selected").removeClass("active");
+
+		$target.addClass( "selected" );
+
+		if( data ) {
+			$.each(data.songs, function(i, v) {
+				if( v.isDirectory ) {
+					list.push( "^{\"galleryId\":\"" + v.galleryId + "\"" );
+				} else {
+					list.push( "\"fullPath\":\"" + v.fullPath.replace("/", "\\/") + "\"}$" );
+				}
+			} );
+		}
+
+	}
+
 
 	regex = list.join("|");
 
 	$('#dataSongTable').DataTable()
-		.columns( 12 )
+		.columns( 0 )
 		.search( regex, true, false )
 		.draw();
+
 }
+
+function getAdditiveList(){
+	var list = [];
+		$( "#directoryList, #galleryList").find("input").filter( ".active" ).each(function(i, v){
+			var fullPath = $(v).data("fullPath");
+			var galleryId = $(v).data("galleryId");
+
+			if( fullPath ) {
+				list.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + fullPath.replace("/", "\\/")  );
+			} else {
+				list.push( "^{\"galleryId\":\"" + galleryId + "\"" );
+			}
+		} );
+
+		$( "#songListsList").find("input").filter( ".active" ).each(function(i, v){
+			var innerData = $(v).data("songList");
+			console.log("$(v).data(songList)", $(v).data("songList"));
+
+
+			if( innerData ) {
+				$.each(innerData.songs, function(i, vi) {
+					if( vi.isDirectory ) {
+						list.push( "^{\"galleryId\":\"" + vi.galleryId + "\"" );
+					} else {
+						list.push( "\"fullPath\":\"" + vi.fullPath.replace("/", "\\/") + "\"}$" );
+					}
+				} );
+			}
+		} );
+		return list;
+}
+
+
 
 function addItem_NEW(itemEntry) {
 	itemEntry.file(function(file) {
@@ -461,10 +581,16 @@ function addItem_NEW(itemEntry) {
 					info = song.info;
 				}
 
+				var dataInfo = {
+					"galleryId" : galleryId,
+					"fullPath" : fullPath
+				};
+
 
 				$('#dataSongTable').DataTable().row.add( [
-					galleryId,
-					fullPath,
+					JSON.stringify( dataInfo ),
+					//galleryId,
+					//fullPath,
 					null, // Play
 					null, // Menu ( Hidden TODO: bring forward and implement )
 					sortAndValue(faType, "<i class=\"fa " + faType + "\"></i>"),//type
@@ -489,8 +615,7 @@ function addItem_NEW(itemEntry) {
 
 function initSongTable() {
 	$( "#dataSongTable" ).find( "thead" ).find( "tr" )
-		.append( $('<th>').text( "galleryId" ) )
-		.append( $('<th>').text( "fullPath" ) )
+		.append( $('<th>').text( "dataInfo" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Menu" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Type" ) )
@@ -513,16 +638,16 @@ function initSongTable() {
 		"paging": false,
 		"columnDefs": [
 			{
-				"targets": [ 0, 1, 3 ],
-				//"visible": false,
+				"targets": [ 0,  2 ],
+				"visible": false,
 				//"searchable": false
 			}, {
-				"targets": 2,
+				"targets": 1,
 				"data": null,
 				"orderable": false,
 				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
 			}, {
-				"targets": 3,
+				"targets": 2,
 				"data": null,
 				"orderable": false,
 				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
@@ -534,10 +659,11 @@ function initSongTable() {
 		]
 	} )
 	.on( 'click', 'button.loadSong', function () {
-		var data = dataSongTable.row( $(this).parents('tr') ).data();
+		var dataInfo = JSON.parse(dataSongTable.row( $(this).parents('tr') ).data()[0]);
+
 		setSong(
-			data[1], //fullPath
-			data[0] //galleryId
+			dataInfo.fullPath,
+			dataInfo.galleryId
 		);
 	} );
 
@@ -1693,6 +1819,25 @@ var TroffClass = function(){
 		for(var i=0; i<aoSonglists.length; i++){
 			Troff.addSonglistToHTML(aoSonglists[i]);
 		}
+	};
+
+	this.setSonglists_NEW = function( aoSonglists ) {
+		for(var i=0; i<aoSonglists.length; i++){
+			Troff.addSonglistToHTML_NEW(aoSonglists[i]);
+		}
+	};
+
+	this.addSonglistToHTML_NEW = function( oSongList ) {
+		$( "#songListList" )
+			.append(
+				$("<ul>").append( $( "<input>" )
+					.attr("type", "button")
+					.addClass("stOnOffButton")
+					.data("songList", oSongList)
+					.val( oSongList.name )
+					.click(filterSongList)
+				)
+			);
 	};
 	
 	this.enterSongListName = function(){
@@ -3465,6 +3610,7 @@ var DBClass = function(){
 			}
 
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SONG_COLUMN_TOGGLE, [
+				$("#columnToggleParent" ).find( "[data-column=3]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=4]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=5]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=6]" ).data( "default" ),
@@ -3477,7 +3623,6 @@ var DBClass = function(){
 				$("#columnToggleParent" ).find( "[data-column=13]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=14]" ).data( "default" ),
 				$("#columnToggleParent" ).find( "[data-column=15]" ).data( "default" ),
-				$("#columnToggleParent" ).find( "[data-column=16]" ).data( "default" ),
 			] );
 
 
@@ -3599,6 +3744,7 @@ var DBClass = function(){
 		chrome.storage.local.get('straoSongLists', function(ret){
 			var straoSongLists = ret['straoSongLists'] || "[]";
 			Troff.setSonglists(JSON.parse(straoSongLists));
+			Troff.setSonglists_NEW(JSON.parse(straoSongLists));
 		});
 	};
 	
@@ -3935,6 +4081,7 @@ var IOClass = function(){
 			}
 		} );
 
+		$( "#songListAll_NEW" ).click( filterSongList );
 
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
