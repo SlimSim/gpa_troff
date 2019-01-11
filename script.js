@@ -58,6 +58,7 @@ var TROFF_SETTING_UI_ZOOM_SHOW = "TROFF_SETTING_UI_ZOOM_SHOW";
 var TROFF_SETTING_UI_LOOP_BUTTONS_SHOW = "TROFF_SETTING_UI_LOOP_BUTTONS_SHOW";
 var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
 var TROFF_SETTING_SONG_LISTS_LIST_SHOW = "TROFF_SETTING_SONG_LISTS_LIST_SHOW";
+var TROFF_CURRENT_STATE_OF_SONG_LISTS = "TROFF_CURRENT_STATE_OF_SONG_LISTS";
 
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
@@ -89,6 +90,7 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_UI_LOOP_BUTTONS_SHOW,
 	TROFF_SETTING_SONG_COLUMN_TOGGLE,
 	TROFF_SETTING_SONG_LISTS_LIST_SHOW,
+	TROFF_CURRENT_STATE_OF_SONG_LISTS,
 ];
 
 
@@ -402,11 +404,11 @@ function addDirectory_NEW(directoryEntry) {
 			$("<ul>").append( $( "<input>" )
 				.attr("type", "button")
 				.addClass("stOnOffButton")
-				.data("superFullPath", mData.name + directoryEntry.fullPath)
+				//.data("superFullPath", mData.name + directoryEntry.fullPath)
 				.data("fullPath", directoryEntry.fullPath )
 				.data("galleryId", mData.galleryId)
 				.val( directoryEntry.name )
-				.click(filterSuperFullPath)
+				.click(filterGalleryIdAndFullPath)
 			)
 		);
 }
@@ -417,15 +419,15 @@ function addGallery_New(name, galleryId) {
 			$("<ul>").append( $( "<input>" )
 				.attr("type", "button")
 				.addClass("stOnOffButton")
-				.data("superFullPath", name)
+				//.data("superFullPath", name)
 				.data("galleryId", galleryId)
 				.val( Troff.getLastSlashName(name) )
-				.click(filterSuperFullPath)
+				.click(filterGalleryIdAndFullPath)
 			)
 		);
 }
 
-function filterSuperFullPath( event ) {
+function filterGalleryIdAndFullPath( event ) {
 	var //list = [],
 		list2 = [],
 		regex;
@@ -1824,11 +1826,51 @@ var TroffClass = function(){
 					.attr("type", "button")
 					.addClass("stOnOffButton")
 					.data("songList", oSongList)
+					.attr("data-songlist-id", oSongList.id)
 					.val( oSongList.name )
 					.click(filterSongList)
 				)
 			);
 	};
+
+	this.recallCurrentStateOfSonglists = function() {
+		DB.getVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, function(o){
+
+			det enda jag behvöer gör är att slänga på active-klassen (eller selected-klassen)
+			och sen köra den del av dataTable-filter grejjen som INTE sparar till DB'n :) 
+			o.songListList
+			o.galleryList
+			o.directoryList
+
+		});
+	};
+
+	this.saveCurrentStateOfSonglists = function() {
+
+		var o = {},
+			songListList = [],
+			galleryList = [],
+			directoryList = [];
+		$("#songListList").find( "input.active" ).each(function(i, v){
+			songListList.push( $(v).data("songlist-id") );
+		} );
+		o.songListList = songListList;
+
+		$("#galleryList").find( "input.active" ).each(function(i, v){
+			galleryList.push( $(v).data("galleryId") );
+		} );
+		o.galleryList = galleryList;
+
+		$("#directoryList").find( "input.active" ).each(function(i, v){
+			directoryList.push( {
+				galleryId : $(v).data("galleryId"),
+				fullPath : $(v).data( "fullPath" )
+			} );
+		} );
+		o.directoryList = directoryList;
+
+		DB.saveVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, 0 );
+	}
 	
 	this.enterSongListName = function(){
 		IO.setEnterFunction(function(event){
@@ -2044,7 +2086,16 @@ var TroffClass = function(){
 			}
 		}
 	};
-	
+
+/*
+	this.setSonglistById_NEW = function(id){
+		if(id === 0){
+			$("#songListAll_NEW").click();
+			return;
+		}
+		$( "#songListList" ).find( "input[data-songlist-id=" + id  + "]" ).click();
+	}
+	*/
 	this.selectSong = function(){
 		var fullPath = this.getAttribute('fullPath');
 		var galleryId = this.getAttribute('galleryId');
@@ -3387,6 +3438,11 @@ var RateClass = function(){
 			aLastMonthUsage = aLastMonthUsage.filter(function(element){
 				return element > millis - millisOneMonth;
 			});
+			console.log("aLastMonthUsage.length", aLastMonthUsage.length);
+			while( aLastMonthUsage.length > 100 ) {
+				aLastMonthUsage.shift();
+			}
+
 			chrome.storage.sync.set(
 				{'straLastMonthUsage' : JSON.stringify(aLastMonthUsage)}
 			);
@@ -3403,6 +3459,7 @@ var RateClass = function(){
 			if(oData.iRatedStatus == Rate.RATED_STATUS_NOT_ASKED) {
 				Rate.showRateDialog();
 			}
+
 			if(oData.iRatedStatus == Rate.RATED_STATUS_ASK_LATER) {
 				if(Math.random() < 0.30)
 					Rate.showRateDialog();
@@ -3414,6 +3471,7 @@ var RateClass = function(){
 					Rate.showRateDialog();
 				}
 			}
+
 		});
 	};
 	
