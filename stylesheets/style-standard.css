@@ -104,3 +104,16 @@ auto - for classes that set the margin to auto
 .pl-3 {	padding-left:	10px	!important;	}
 .pl-4 {	padding-left:	15px	!important;	}
 .pl-5 {	padding-left:	20px	!important;	}
+
+
+/* Alignment */
+.text-left           { text-align: left; }
+.text-right          { text-align: right; }
+.text-center         { text-align: center; }
+.text-justify        { text-align: justify; }
+.text-nowrap         { white-space: nowrap; }
+
+/* Transformation */
+.text-lowercase      { text-transform: lowercase; }
+.text-uppercase      { text-transform: uppercase; }
+.text-capitalize     { text-transform: capitalize; }

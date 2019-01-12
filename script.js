@@ -401,13 +401,13 @@ function addDirectory_NEW(directoryEntry) {
 
 	$( "#directoryList" )
 		.append(
-			$("<ul>").append( $( "<input>" )
-				.attr("type", "button")
+			$("<ul>").append( $( "<button>" )
+//				.attr("type", "button")
 				.addClass("stOnOffButton")
 				//.data("superFullPath", mData.name + directoryEntry.fullPath)
 				.data("fullPath", directoryEntry.fullPath )
 				.data("galleryId", mData.galleryId)
-				.val( directoryEntry.name )
+				.text( directoryEntry.name )
 				.click(filterGalleryIdAndFullPath)
 			)
 		);
@@ -416,89 +416,84 @@ function addDirectory_NEW(directoryEntry) {
 function addGallery_New(name, galleryId) {
 	$( "#galleryList" )
 		.append(
-			$("<ul>").append( $( "<input>" )
-				.attr("type", "button")
+			$("<ul>").append( $( "<button>" )
+				//.attr("type", "button")
 				.addClass("stOnOffButton")
+				.addClass("text-left")
 				//.data("superFullPath", name)
 				.data("galleryId", galleryId)
-				.val( Troff.getLastSlashName(name) )
+				.text( Troff.getLastSlashName(name) )
 				.click(filterGalleryIdAndFullPath)
 			)
 		);
 }
 
 function filterGalleryIdAndFullPath( event ) {
-	var //list = [],
-		list2 = [],
+	document.getElementById('blur-hack').focus();
+	var list = [],
 		regex;
 
+	$( "#songListAll_NEW" ).removeClass( "selected" );
 
-	// todo: fixa att denna if går att välja i en setting :)
 	if( $("#TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT").hasClass( "active" ) ) {
 		$(event.target).toggleClass( "active" );
-		$( "#songListsList" ).find( "input" ).removeClass("selected");
+		$( "#songListsList" ).find( "button" ).removeClass("selected");
 
-
-
-		list2 = getAdditiveList();
-/*
-		$( "#directoryList, #galleryList").find("input").filter( ".active" ).each(function(i, v){
-			var fullPath = $(v).data("fullPath");
-			var galleryId = $(v).data("galleryId");
-
-			if( fullPath ) {
-				list2.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + fullPath.replace("/", "\\/")  );
-			} else {
-				list2.push( "^{\"galleryId\":\"" + galleryId + "\"" );
-			}
-		} );
-		*/
+		list = getAdditiveList();
 	} else {
 
 		var galleryId = $(event.target).data("galleryId");
 		var fullPath = $(event.target).data("fullPath");
 
 		if( fullPath ) {
-			list2.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + fullPath.replace("/", "\\/")  );
+			list.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + escapeRegExp( fullPath ) );
 		} else {
-			list2.push( "^{\"galleryId\":\"" + galleryId + "\"" );
+			list.push( "^{\"galleryId\":\"" + galleryId + "\"" );
 		}
 
 
-		$( "#songListsList" ).find( "input" ).removeClass("selected").removeClass("active");
+		$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");
 		$(event.target).addClass( "selected" );
 
 	}
 
-	var regex2 = list2.join("|");
+	if( list.length === 0 ) {
+		$( "#songListAll_NEW" ).addClass( "selected" );
+	}
+
+	regex = list.join("|");
 
 	$('#dataSongTable').DataTable()
 		.columns( 0 ) 
-		.search( regex2, true, false )
+		.search( regex, true, false )
 		.draw();
 
 }
 
 function filterSongList(event){
+	document.getElementById('blur-hack').focus();
 	var $target = $(event.target),
 		data = $target.data("songList"),
 		list = [],
 		regex;
-	
+	console.log("data", data);
+
+	$( "#songListAll_NEW" ).removeClass( "selected" );
+
 	if( $("#TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT").hasClass( "active" ) ) {
 
 		if( data ) {
 
 			$(event.target).toggleClass( "active" );
-			$( "#songListsList" ).find( "input" ).removeClass("selected");
+			$( "#songListsList" ).find( "button" ).removeClass("selected");
 			list = getAdditiveList();
 		} else {
-			$( "#songListsList" ).find( "input" ).removeClass("selected").removeClass("active");			
+			$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");			
 			$target.addClass("selected");
 		}
 
 	} else {
-		$( "#songListsList" ).find( "input" ).removeClass("selected").removeClass("active");
+		$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");
 
 		$target.addClass( "selected" );
 
@@ -507,13 +502,18 @@ function filterSongList(event){
 				if( v.isDirectory ) {
 					list.push( "^{\"galleryId\":\"" + v.galleryId + "\"" );
 				} else {
-					list.push( "\"fullPath\":\"" + v.fullPath.replace("/", "\\/") + "\"}$" );
+					list.push( "\"fullPath\":\"" + escapeRegExp(v.fullPath) + "\"}$" );
 				}
 			} );
 		}
 
 	}
 
+	if( list.length === 0 ) {
+		$( "#songListAll_NEW" ).addClass( "selected" );
+	}
+
+	console.log("list", list);
 
 	regex = list.join("|");
 
@@ -526,35 +526,40 @@ function filterSongList(event){
 
 function getAdditiveList(){
 	var list = [];
-		$( "#directoryList, #galleryList").find("input").filter( ".active" ).each(function(i, v){
-			var fullPath = $(v).data("fullPath");
-			var galleryId = $(v).data("galleryId");
+	$( "#directoryList, #galleryList").find("button").filter( ".active" ).each(function(i, v){
+		var fullPath = $(v).data("fullPath");
+		var galleryId = $(v).data("galleryId");
 
-			if( fullPath ) {
-				list.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + fullPath.replace("/", "\\/")  );
-			} else {
-				list.push( "^{\"galleryId\":\"" + galleryId + "\"" );
-			}
-		} );
+		if( fullPath ) {
+			list.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + escapeRegExp( fullPath ) );
+		} else {
+			list.push( "^{\"galleryId\":\"" + galleryId + "\"" );
+		}
+	} );
 
-		$( "#songListsList").find("input").filter( ".active" ).each(function(i, v){
-			var innerData = $(v).data("songList");
-			console.log("$(v).data(songList)", $(v).data("songList"));
+	$( "#songListsList").find("button").filter( ".active" ).each(function(i, v){
+		var innerData = $(v).data("songList");
+		console.log("$(v).data(songList)", $(v).data("songList"));
 
 
-			if( innerData ) {
-				$.each(innerData.songs, function(i, vi) {
-					if( vi.isDirectory ) {
-						list.push( "^{\"galleryId\":\"" + vi.galleryId + "\"" );
-					} else {
-						list.push( "\"fullPath\":\"" + vi.fullPath.replace("/", "\\/") + "\"}$" );
-					}
-				} );
-			}
-		} );
-		return list;
+		if( innerData ) {
+			$.each(innerData.songs, function(i, vi) {
+				if( vi.isDirectory ) {
+					list.push( "^{\"galleryId\":\"" + vi.galleryId + "\"" );
+				} else {
+					list.push( "\"fullPath\":\"" + escapeRegExp(vi.fullPath) + "\"}$" );
+				}
+			} );
+		}
+	} );
+	return list;
 }
 
+function escapeRegExp(string) {
+	return string
+		.replace("\"", "\\\"") // wierd extra escaping of > \" <
+		.replace(/[".*+?^${}()|[\]\\]/g, '\\$&');	// $& means the whole matched string
+}
 
 
 function addItem_NEW(itemEntry) {
@@ -1822,12 +1827,12 @@ var TroffClass = function(){
 	this.addSonglistToHTML_NEW = function( oSongList ) {
 		$( "#songListList" )
 			.append(
-				$("<ul>").append( $( "<input>" )
-					.attr("type", "button")
+				$("<ul>").append( $( "<button>" )
+//					.attr("type", "button")
 					.addClass("stOnOffButton")
 					.data("songList", oSongList)
 					.attr("data-songlist-id", oSongList.id)
-					.val( oSongList.name )
+					.text( oSongList.name )
 					.click(filterSongList)
 				)
 			);
@@ -1836,11 +1841,11 @@ var TroffClass = function(){
 	this.recallCurrentStateOfSonglists = function() {
 		DB.getVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, function(o){
 
-			det enda jag behvöer gör är att slänga på active-klassen (eller selected-klassen)
-			och sen köra den del av dataTable-filter grejjen som INTE sparar till DB'n :) 
-			o.songListList
-			o.galleryList
-			o.directoryList
+//			det enda jag behvöer gör är att slänga på active-klassen (eller selected-klassen)
+	//		och sen köra den del av dataTable-filter grejjen som INTE sparar till DB'n :) 
+	//		o.songListList
+		//	o.galleryList
+			//o.directoryList
 
 		});
 	};
