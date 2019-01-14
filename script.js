@@ -241,6 +241,11 @@ function clearList() {
 	$('#dataSongTable').DataTable().clear().draw();
 }
 
+function clearGalleryAndDirectoryList() {
+	$("#galleryList").empty();
+	$("#directoryList").empty();
+}
+
 function checkIfSongExists(fullPath, galleryId){
 	var fsId = galleryId;
 	var fs = null;
@@ -402,13 +407,11 @@ function addDirectory_NEW(directoryEntry) {
 	$( "#directoryList" )
 		.append(
 			$("<ul>").append( $( "<button>" )
-//				.attr("type", "button")
 				.addClass("stOnOffButton")
-				//.data("superFullPath", mData.name + directoryEntry.fullPath)
 				.data("fullPath", directoryEntry.fullPath )
 				.data("galleryId", mData.galleryId)
 				.text( directoryEntry.name )
-				.click(filterGalleryIdAndFullPath)
+				.click(clickSongList_NEW)
 			)
 		);
 }
@@ -417,106 +420,50 @@ function addGallery_New(name, galleryId) {
 	$( "#galleryList" )
 		.append(
 			$("<ul>").append( $( "<button>" )
-				//.attr("type", "button")
 				.addClass("stOnOffButton")
 				.addClass("text-left")
-				//.data("superFullPath", name)
 				.data("galleryId", galleryId)
 				.text( Troff.getLastSlashName(name) )
-				.click(filterGalleryIdAndFullPath)
+				.click(clickSongList_NEW)
 			)
 		);
 }
 
-function filterGalleryIdAndFullPath( event ) {
-	document.getElementById('blur-hack').focus();
-	var list = [],
-		regex;
-
-	$( "#songListAll_NEW" ).removeClass( "selected" );
-
-	if( $("#TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT").hasClass( "active" ) ) {
-		$(event.target).toggleClass( "active" );
-		$( "#songListsList" ).find( "button" ).removeClass("selected");
-
-		list = getAdditiveList();
-	} else {
-
-		var galleryId = $(event.target).data("galleryId");
-		var fullPath = $(event.target).data("fullPath");
-
-		if( fullPath ) {
-			list.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + escapeRegExp( fullPath ) );
-		} else {
-			list.push( "^{\"galleryId\":\"" + galleryId + "\"" );
-		}
-
-
-		$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");
-		$(event.target).addClass( "selected" );
-
-	}
-
-	if( list.length === 0 ) {
-		$( "#songListAll_NEW" ).addClass( "selected" );
-	}
-
-	regex = list.join("|");
-
-	$('#dataSongTable').DataTable()
-		.columns( 0 ) 
-		.search( regex, true, false )
-		.draw();
-
-}
-
-function filterSongList(event){
+function clickSongList_NEW( event ) {
 	document.getElementById('blur-hack').focus();
 	var $target = $(event.target),
 		data = $target.data("songList"),
+		galleryId = $target.data("galleryId"),
+		fullPath = $target.data("fullPath"),
 		list = [],
 		regex;
-	console.log("data", data);
 
 	$( "#songListAll_NEW" ).removeClass( "selected" );
 
 	if( $("#TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT").hasClass( "active" ) ) {
 
-		if( data ) {
-
-			$(event.target).toggleClass( "active" );
+		if( data || galleryId ) {
+			$target.toggleClass( "active" );
 			$( "#songListsList" ).find( "button" ).removeClass("selected");
-			list = getAdditiveList();
 		} else {
+			// It only enters here IF the All songs-button is pressed :)
 			$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");			
 			$target.addClass("selected");
 		}
-
 	} else {
 		$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");
-
 		$target.addClass( "selected" );
-
-		if( data ) {
-			$.each(data.songs, function(i, v) {
-				if( v.isDirectory ) {
-					list.push( "^{\"galleryId\":\"" + v.galleryId + "\"" );
-				} else {
-					list.push( "\"fullPath\":\"" + escapeRegExp(v.fullPath) + "\"}$" );
-				}
-			} );
-		}
-
 	}
 
+	filterSongTable( getFilterDataList( list ) );
+}
+
+function filterSongTable( list ) {
 	if( list.length === 0 ) {
 		$( "#songListAll_NEW" ).addClass( "selected" );
 	}
 
-	console.log("list", list);
-
 	regex = list.join("|");
-
 	$('#dataSongTable').DataTable()
 		.columns( 0 )
 		.search( regex, true, false )
@@ -524,9 +471,10 @@ function filterSongList(event){
 
 }
 
-function getAdditiveList(){
+function getFilterDataList(){
 	var list = [];
-	$( "#directoryList, #galleryList").find("button").filter( ".active" ).each(function(i, v){
+
+	$( "#directoryList, #galleryList").find("button").filter( ".active, .selected" ).each(function(i, v){
 		var fullPath = $(v).data("fullPath");
 		var galleryId = $(v).data("galleryId");
 
@@ -537,10 +485,8 @@ function getAdditiveList(){
 		}
 	} );
 
-	$( "#songListsList").find("button").filter( ".active" ).each(function(i, v){
+	$( "#songListsList").find("button").filter( ".active, .selected" ).each(function(i, v){
 		var innerData = $(v).data("songList");
-		console.log("$(v).data(songList)", $(v).data("songList"));
-
 
 		if( innerData ) {
 			$.each(innerData.songs, function(i, vi) {
@@ -761,6 +707,7 @@ function scanGalleries(fs) {
 function getGalleriesInfo(results) {
 //	Media.getGalleriesInfo( results );
 	clearList();
+	clearGalleryAndDirectoryList()
 	if (results.length) {
 		gGalleryArray = results; // store the list of gallery directories
 		gGalleryIndex = 0;
@@ -1828,24 +1775,27 @@ var TroffClass = function(){
 		$( "#songListList" )
 			.append(
 				$("<ul>").append( $( "<button>" )
-//					.attr("type", "button")
 					.addClass("stOnOffButton")
 					.data("songList", oSongList)
 					.attr("data-songlist-id", oSongList.id)
 					.text( oSongList.name )
-					.click(filterSongList)
+					.click(clickSongList_NEW)
 				)
 			);
 	};
 
 	this.recallCurrentStateOfSonglists = function() {
+		console.log("recallCurrentStateOfSonglists ->" );
 		DB.getVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, function(o){
+		console.log("recallCurrentStateOfSonglists / o =", o );
 
 //			det enda jag behvöer gör är att slänga på active-klassen (eller selected-klassen)
 	//		och sen köra den del av dataTable-filter grejjen som INTE sparar till DB'n :) 
 	//		o.songListList
 		//	o.galleryList
 			//o.directoryList
+
+//uppdatera dataTAble-listan när en ny songList skapas
 
 		});
 	};
@@ -4134,7 +4084,7 @@ var IOClass = function(){
 			}
 		} );
 
-		$( "#songListAll_NEW" ).click( filterSongList );
+		$( "#songListAll_NEW" ).click( clickSongList_NEW );
 
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
