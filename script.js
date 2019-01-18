@@ -408,8 +408,8 @@ function addDirectory_NEW(directoryEntry) {
 		.append(
 			$("<ul>").append( $( "<button>" )
 				.addClass("stOnOffButton")
-				.data("fullPath", directoryEntry.fullPath )
-				.data("galleryId", mData.galleryId)
+				.attr("data-full-path", directoryEntry.fullPath )
+				.attr("data-gallery-id", mData.galleryId)
 				.text( directoryEntry.name )
 				.click(clickSongList_NEW)
 			)
@@ -422,7 +422,7 @@ function addGallery_New(name, galleryId) {
 			$("<ul>").append( $( "<button>" )
 				.addClass("stOnOffButton")
 				.addClass("text-left")
-				.data("galleryId", galleryId)
+				.attr("data-gallery-id", galleryId)
 				.text( Troff.getLastSlashName(name) )
 				.click(clickSongList_NEW)
 			)
@@ -433,10 +433,8 @@ function clickSongList_NEW( event ) {
 	document.getElementById('blur-hack').focus();
 	var $target = $(event.target),
 		data = $target.data("songList"),
-		galleryId = $target.data("galleryId"),
-		fullPath = $target.data("fullPath"),
-		list = [],
-		regex;
+		galleryId = $target.attr("data-gallery-id"),
+		fullPath = $target.attr("data-full-path");
 
 	$( "#songListAll_NEW" ).removeClass( "selected" );
 
@@ -455,7 +453,10 @@ function clickSongList_NEW( event ) {
 		$target.addClass( "selected" );
 	}
 
-	filterSongTable( getFilterDataList( list ) );
+	Troff.saveCurrentStateOfSonglists();
+
+	filterSongTable( getFilterDataList() );
+
 }
 
 function filterSongTable( list ) {
@@ -475,8 +476,8 @@ function getFilterDataList(){
 	var list = [];
 
 	$( "#directoryList, #galleryList").find("button").filter( ".active, .selected" ).each(function(i, v){
-		var fullPath = $(v).data("fullPath");
-		var galleryId = $(v).data("galleryId");
+		var fullPath = $(v).attr("data-full-path");
+		var galleryId = $(v).attr("data-gallery-id");
 
 		if( fullPath ) {
 			list.push( "^{\"galleryId\":\"" + galleryId + "\",\"fullPath\":\"" + escapeRegExp( fullPath ) );
@@ -664,6 +665,7 @@ function scanGallery(entries) {
 		if(Troff.stopTimeout) clearInterval(Troff.stopTimeout);
 		Troff.stopTimeout = setTimeout(function(){
 			DB.getCurrentSonglist(); // this reloads the current songlist
+			Troff.recallCurrentStateOfSonglists();
 			clearInterval(Troff.stopTimeout);
 		}, 42);
 		return;
@@ -1785,46 +1787,60 @@ var TroffClass = function(){
 	};
 
 	this.recallCurrentStateOfSonglists = function() {
-		console.log("recallCurrentStateOfSonglists ->" );
-		DB.getVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, function(o){
-		console.log("recallCurrentStateOfSonglists / o =", o );
+		DB.getVal( "TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT", function( isAdditiveSelect ) {
+			DB.getVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, function( o ) {
 
-//			det enda jag behvöer gör är att slänga på active-klassen (eller selected-klassen)
-	//		och sen köra den del av dataTable-filter grejjen som INTE sparar till DB'n :) 
-	//		o.songListList
-		//	o.galleryList
-			//o.directoryList
+				var indicatorClass = isAdditiveSelect ? "active" : "selected";
 
-//uppdatera dataTAble-listan när en ny songList skapas
+				$("#songListAll_NEW").removeClass( "selected" );
 
+				o.directoryList.forEach(function(v, i){
+					$("#directoryList").find("[data-gallery-id="+v.galleryId+"]").each(function( inner_index, inner_value){
+						if( $(inner_value).data("full-path") == v.fullPath ) {
+							$(inner_value).addClass( indicatorClass );
+							$("#songListAll_NEW").removeClass( "selected" );
+						}
+					});
+				});
+				o.galleryList.forEach(function(v, i){
+					$("#galleryList").find("[data-gallery-id="+v+"]").addClass( indicatorClass );
+					$("#songListAll_NEW").removeClass( "selected" );
+				});
+				o.songListList.forEach(function(v, i){
+					$("#songListList").find("[data-songlist-id="+v+"]").addClass( indicatorClass );
+					$("#songListAll_NEW").removeClass( "selected" );
+				});
+
+				filterSongTable( getFilterDataList() );
+			});
 		});
+
 	};
 
 	this.saveCurrentStateOfSonglists = function() {
-
 		var o = {},
 			songListList = [],
 			galleryList = [],
 			directoryList = [];
-		$("#songListList").find( "input.active" ).each(function(i, v){
-			songListList.push( $(v).data("songlist-id") );
+		$("#songListList").find( ".active, .selected" ).each(function(i, v){
+			songListList.push( $(v).attr("data-songlist-id") );
 		} );
 		o.songListList = songListList;
 
-		$("#galleryList").find( "input.active" ).each(function(i, v){
-			galleryList.push( $(v).data("galleryId") );
+		$("#galleryList").find( ".active, .selected" ).each(function(i, v){
+			galleryList.push( $(v).attr("data-gallery-id") );
 		} );
 		o.galleryList = galleryList;
 
-		$("#directoryList").find( "input.active" ).each(function(i, v){
+		$("#directoryList").find( ".active, .selected" ).each(function(i, v){
 			directoryList.push( {
-				galleryId : $(v).data("galleryId"),
-				fullPath : $(v).data( "fullPath" )
+				galleryId : $(v).attr("data-gallery-id"),
+				fullPath : $(v).attr( "data-full-path" )
 			} );
 		} );
 		o.directoryList = directoryList;
 
-		DB.saveVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, 0 );
+		DB.saveVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, o );
 	}
 	
 	this.enterSongListName = function(){
@@ -3393,7 +3409,7 @@ var RateClass = function(){
 			aLastMonthUsage = aLastMonthUsage.filter(function(element){
 				return element > millis - millisOneMonth;
 			});
-			console.log("aLastMonthUsage.length", aLastMonthUsage.length);
+
 			while( aLastMonthUsage.length > 100 ) {
 				aLastMonthUsage.shift();
 			}
