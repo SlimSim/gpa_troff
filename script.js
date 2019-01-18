@@ -173,18 +173,16 @@ function addVideoToContentDiv() {
 	var video = document.createElement('video');
 
 	var fsButton = document.createElement('button');
-	var fsButton2 = document.createElement('button');
-	var fsButton3 = document.createElement('button');
 
 	var margin = "4px";
 	video.style.marginTop = margin;
 	video.style.marginBottom = margin;
-	fsButton.style.marginTop = margin;
+
 
 	fsButton.addEventListener('click', Troff.playInFullscreenChanged);
 	fsButton.appendChild( document.createTextNode('Play in Fullscreen') );
 	fsButton.setAttribute('id', "playInFullscreenButt");
-	fsButton.setAttribute('class', "onOffButton");
+	fsButton.setAttribute('class', "onOffButton mt-2 mr-2");
 	
 	videoBox.setAttribute('id', "videoBox");
 
@@ -194,6 +192,12 @@ function addVideoToContentDiv() {
 	});
 
 	content_div.appendChild(fsButton);
+
+	content_div.appendChild( $("<button>")
+		.text("Mirror Image")
+		.attr( "id", "mirrorImageButt")
+		.click( Troff.mirrorImageChanged )
+		.addClass("onOffButton mt-2 mr-2")[0] )
 	
 	videoBox.appendChild(video);
 	content_div.appendChild(videoBox);
@@ -518,6 +522,11 @@ function addItem_NEW(itemEntry) {
 			var extension = getFileExtension( fullPath );
 			var faType = getFileTypeFaIcon(fullPath);
 
+				var selected_path = Troff.getCurrentSong();
+				var selected_galleryId = Troff.getCurrentGalleryId();
+
+
+
 			DB.getVal( fullPath, function( song ) {
 
 				var tempo = "?",
@@ -533,9 +542,9 @@ function addItem_NEW(itemEntry) {
 					"fullPath" : fullPath
 				};
 
-				$('#dataSongTable').DataTable().row.add( [
+				var newRow = $('#dataSongTable').DataTable().row.add( [
 					JSON.stringify( dataInfo ),
-					null, // Play
+//					null, // Play
 					null, // Menu ( Hidden TODO: bring forward and implement )
 					sortAndValue(faType, "<i class=\"fa " + faType + "\"></i>"),//type
 					sortAndValue( metadata.duration, Troff.secToDisp( metadata.duration ) ),//Duration
@@ -551,7 +560,13 @@ function addItem_NEW(itemEntry) {
 					info,
 					"." + extension
 				] )
-				.draw( false );
+				.draw( false )
+				.node();
+
+				if(selected_path == fullPath && selected_galleryId == galleryId){
+					$( newRow ).addClass( "selected" );
+				}
+
 			} ); // end DB.getVal
 		} ); // end chrome.mediaGalleries.getMetadata-function
 	} );//end fileEntry.file-function
@@ -560,7 +575,7 @@ function addItem_NEW(itemEntry) {
 function initSongTable() {
 	$( "#dataSongTable" ).find( "thead" ).find( "tr" )
 		.append( $('<th>').text( "dataInfo" ) )
-		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
+//		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Menu" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Type" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Duration" ) )
@@ -582,7 +597,7 @@ function initSongTable() {
 		"paging": false,
 		"columnDefs": [
 			{
-				"targets": [ 0,  2 ],
+				"targets": [ 0,  1 ],
 				"visible": false,
 				//"searchable": false
 			}, {
@@ -591,7 +606,7 @@ function initSongTable() {
 				"orderable": false,
 				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
 			}, {
-				"targets": 2,
+				"targets": 1,
 				"data": null,
 				"orderable": false,
 				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
@@ -602,8 +617,11 @@ function initSongTable() {
 			}
 		]
 	} )
-	.on( 'click', 'button.loadSong', function () {
-		var dataInfo = JSON.parse(dataSongTable.row( $(this).parents('tr') ).data()[0]);
+	.on( 'click', 'tr', function () {
+		var dataInfo = JSON.parse(dataSongTable.row( $(this) ).data()[0]);
+
+		$("#dataSongTable").find(".selected").removeClass("selected");
+		$(this).addClass("selected");
 
 		setSong(
 			dataInfo.fullPath,
@@ -624,6 +642,7 @@ function initSongTable() {
 
 	// to move the searchbar away from the scrolling-area
 	$( "#dataSongTable_filter" ).appendTo( $( "#newSearchParent" ) );
+
 }
 
 function dataTableColumnPicker( event ) {
@@ -666,8 +685,9 @@ function scanGallery(entries) {
 		Troff.stopTimeout = setTimeout(function(){
 			DB.getCurrentSonglist(); // this reloads the current songlist
 			Troff.recallCurrentStateOfSonglists();
+
 			clearInterval(Troff.stopTimeout);
-		}, 42);
+		}, 100);
 		return;
 	}
 	for (var i = 0; i < entries.length; i++) {
@@ -685,6 +705,7 @@ function scanGallery(entries) {
 			console.info("Got something other than a file or directory.");
 		}
 	}
+
 	// readEntries has to be called until it returns an empty array. According to the spec,
 	// the function might not return all of the directory's contents during a given call.
 	gGalleryReader.readEntries(scanGallery, errorPrintFactory('readMoreEntries'));
@@ -1023,8 +1044,21 @@ var TroffClass = function(){
 
 	// this is regarding the "play in fullscreen" - button
 	this.setPlayInFullscreen = function(bPlayInFullscreen){
-		var butt = document.querySelector('#playInFullscreenButt');
-		butt.classList.toggle("active", bPlayInFullscreen);
+		if(bPlayInFullscreen){
+			$("#playInFullscreenButt").addClass("active");
+		} else {
+			$("#playInFullscreenButt").removeClass("active");
+		}
+	};
+
+	this.setMirrorImage = function(bMirrorImage){
+		if(bMirrorImage){
+			$("#mirrorImageButt").addClass("active");
+			$("#videoBox").addClass( "flip-horizontal" );
+		} else {
+			$("#mirrorImageButt").removeClass("active");
+			$("#videoBox").removeClass( "flip-horizontal" );
+		}
 	};
 
 	// this is regarding the "play in fullscreen" - button
@@ -1037,6 +1071,14 @@ var TroffClass = function(){
 
 		document.getElementById('blur-hack').focus();
 	};
+
+	this.mirrorImageChanged = function( event ) {
+		var bMirrorImage = !$(event.target).hasClass( "active" );
+		DB.setCurrent(strCurrentSong, 'bMirrorImage', bMirrorImage );
+		Troff.setMirrorImage( bMirrorImage );
+
+		document.getElementById('blur-hack').focus();
+	}
 
 	this.setImageLayout = function(){
 		$( ".hideOnPicture" ).addClass( "hidden" );
@@ -4018,6 +4060,8 @@ var DBClass = function(){
 			Troff.setLoopTo(song.loopTimes);
 			if(song.bPlayInFullscreen !== undefined)
 				Troff.setPlayInFullscreen(song.bPlayInFullscreen);
+			if(song.bMirrorImage !== undefined)
+				Troff.setMirrorImage(song.bMirrorImage);
 			Troff.setWaitBetweenLoops(song.wait[0], song.wait[1]);
 			
 			Troff.setInfo(song.info);

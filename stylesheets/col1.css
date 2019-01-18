@@ -18,6 +18,10 @@ p{
 	color: rgb(50, 50, 50);
 }
 
+.table-row-selectable tr:hover{
+	outline-color: dimgray;
+}
+
 .centerRoundButtCommon{
 	background-color: transparent;
 }
@@ -31,8 +35,8 @@ p{
 }
 
 .grayOut{
-		color: gray;
-		background-color: lightgray;
+	color: gray;
+	background-color: lightgray;
 }
 
 
@@ -125,19 +129,23 @@ p{
 
 /* accentColor1 */
 .selected:hover, 
+.selected td:hover,
 .currentLoop:hover, 
 .currentMarker:hover, 
 .currentStopMarker:hover,
 .selected:active,
+.selected td:active,
 .currentLoop:active, 
 .currentMarker:active, 
 .currentStopMarker:active {  outline-color: #431c5d;}  /* accentColor1 */
 
 .accentColor1,
 .selected,
+.selected td,
 .currentLoop,
 .currentMarker,
 .currentStopMarker,
+#dataSongTable tr.selected td,
 .selected.important {
 	background-color: #431c5d; /* accentColor1 */
 	color: white;

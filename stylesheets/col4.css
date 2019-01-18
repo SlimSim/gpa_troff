@@ -19,6 +19,10 @@ p{
 	color: inherit;
 }
 
+.table-row-selectable tr:hover{
+	outline-color: dimgray;
+}
+
 .centerRoundButtCommon{
 	background-color: transparent;
 }
@@ -146,16 +150,19 @@ li[isdirectory="true"]:not(:first-child) {
 
 /* accentColor1 */
 .selected:hover, 
+.selected td:hover,
 .currentLoop:hover, 
 .currentMarker:hover, 
 .currentStopMarker:hover,
 .selected:active,
+.selected td:active,
 .currentLoop:active, 
 .currentMarker:active, 
 .currentStopMarker:active {  outline-color: #AD974F; }  /* accentColor1 */
 
 .accentColor1,
 .selected,
+.selected td,
 .currentLoop,
 .currentMarker,
 .currentStopMarker,

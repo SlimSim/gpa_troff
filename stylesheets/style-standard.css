@@ -54,6 +54,34 @@ auto - for classes that set the margin to auto
 
 .my-0 {	margin-top: 	0 !important;	margin-bottom: 0	!important;	}
 
+.mt-0 {	margin-top:	0			!important;	}
+.mt-1 {	margin-top:	2px		!important;	}
+.mt-2 {	margin-top:	5px		!important;	}
+.mt-3 {	margin-top:	10px	!important;	}
+.mt-4 {	margin-top:	15px	!important;	}
+.mt-5 {	margin-top:	20px	!important;	}
+
+.mb-0 {	margin-bottom:	0			!important;	}
+.mb-1 {	margin-bottom:	2px		!important;	}
+.mb-2 {	margin-bottom:	5px		!important;	}
+.mb-3 {	margin-bottom:	10px	!important;	}
+.mb-4 {	margin-bottom:	15px	!important;	}
+.mb-5 {	margin-bottom:	20px	!important;	}
+
+.mr-0 {	margin-right:	0			!important;	}
+.mr-1 {	margin-right:	2px		!important;	}
+.mr-2 {	margin-right:	5px		!important;	}
+.mr-3 {	margin-right:	10px	!important;	}
+.mr-4 {	margin-right:	15px	!important;	}
+.mr-5 {	margin-right:	20px	!important;	}
+
+.ml-0 {	margin-left:	0			!important;	}
+.ml-1 {	margin-left:	2px		!important;	}
+.ml-2 {	margin-left:	5px		!important;	}
+.ml-3 {	margin-left:	10px	!important;	}
+.ml-4 {	margin-left:	15px	!important;	}
+.ml-5 {	margin-left:	20px	!important;	}
+
 
 .px-0 {	padding-left:	0			!important;		padding-right:	0			!important;	}
 .py-0 {	padding-top:	0			!important;		padding-bottom:	0			!important;	}
@@ -117,3 +145,8 @@ auto - for classes that set the margin to auto
 .text-lowercase      { text-transform: lowercase; }
 .text-uppercase      { text-transform: uppercase; }
 .text-capitalize     { text-transform: capitalize; }
+
+
+.flip-both					{ transform: scale(-1); }
+.flip-vertical			{ transform: scaleY(-1); }
+.flip-horizontal		{ transform: scaleX(-1); }

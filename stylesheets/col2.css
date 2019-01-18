@@ -18,6 +18,10 @@ p{
 	color: rgb(50, 50, 50);
 }
 
+.table-row-selectable tr:hover{
+	outline-color: dimgray;
+}
+
 .centerRoundButtCommon{
 	background-color: transparent;
 }
@@ -127,10 +131,12 @@ p{
 
 /* accentColor1 A700 (men kanske ännu mörkare) */
 .selected:hover, 
+.selected td:hover,
 .currentLoop:hover, 
 .currentMarker:hover, 
 .currentStopMarker:hover,
 .selected:active,
+.selected td:active,
 .currentLoop:active, 
 .currentMarker:active, 
 .currentStopMarker:active {
@@ -140,6 +146,7 @@ p{
 
 .accentColor1,
 .selected,
+.selected td,
 .currentLoop,
 .currentMarker,
 .currentStopMarker,
