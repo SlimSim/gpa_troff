@@ -29,7 +29,7 @@ var gDirectories = [];     // used to process subdirectories
 var gGalleryArray = [];    // holds information about all top-level Galleries found - list of DomFileSystem
 var gGalleryData = [];     // hold computed information about each Gallery
 var gCurOptGrp = null;
-//var imgFormats = [];//no images suporoted as of yet //['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
+
 var imgFormats = ['png', 'bmp', 'jpeg', 'jpg', 'gif', 'png', 'svg', 'xbm', 'webp'];
 var audFormats = ['wav', 'mp3', 'm4a'];
 var vidFormats = ['3gp', '3gpp', 'avi', 'flv', 'mov', 'mpeg', 'mpeg4', 'mp4', 'ogg', 'webm', 'wmv'];
@@ -410,12 +410,14 @@ function addDirectory_NEW(directoryEntry) {
 
 	$( "#directoryList" )
 		.append(
-			$("<ul>").append( $( "<button>" )
-				.addClass("stOnOffButton")
-				.attr("data-full-path", directoryEntry.fullPath )
-				.attr("data-gallery-id", mData.galleryId)
-				.text( directoryEntry.name )
-				.click(clickSongList_NEW)
+			$("<ul>")
+				.addClass("py-1")
+				.append( $( "<button>" )
+					.addClass("stOnOffButton")
+					.attr("data-full-path", directoryEntry.fullPath )
+					.attr("data-gallery-id", mData.galleryId)
+					.text( directoryEntry.name )
+					.click(clickSongList_NEW)
 			)
 		);
 }
@@ -423,12 +425,14 @@ function addDirectory_NEW(directoryEntry) {
 function addGallery_New(name, galleryId) {
 	$( "#galleryList" )
 		.append(
-			$("<ul>").append( $( "<button>" )
-				.addClass("stOnOffButton")
-				.addClass("text-left")
-				.attr("data-gallery-id", galleryId)
-				.text( Troff.getLastSlashName(name) )
-				.click(clickSongList_NEW)
+			$("<ul>")
+				.addClass("py-1")
+				.append( $( "<button>" )
+					.addClass("stOnOffButton")
+					.addClass("text-left")
+					.attr("data-gallery-id", galleryId)
+					.text( Troff.getLastSlashName(name) )
+					.click(clickSongList_NEW)
 			)
 		);
 }
@@ -1818,11 +1822,13 @@ var TroffClass = function(){
 	this.addSonglistToHTML_NEW = function( oSongList ) {
 		$( "#songListList" )
 			.append(
-				$("<ul>").append( $( "<button>" )
-					.addClass("stOnOffButton")
-					.data("songList", oSongList)
-					.attr("data-songlist-id", oSongList.id)
-					.text( oSongList.name )
+				$("<ul>")
+					.addClass("py-1")
+					.append( $( "<button>" )
+						.addClass("stOnOffButton")
+						.data("songList", oSongList)
+						.attr("data-songlist-id", oSongList.id)
+						.text( oSongList.name )
 					.click(clickSongList_NEW)
 				)
 			);
