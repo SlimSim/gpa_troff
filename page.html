@@ -116,9 +116,22 @@
 
 				<button class="svgButt regularButton"
 					type="button"
+					title="show Song Lists"
+					id="buttAttachedSongListToggle" >
+					<i class="fa fa-columns"></i>
+				</button>
+
+				<button class="svgButt regularButton"
+					type="button"
 					title="open the songs dialoug"
 					id="buttSongsDialog" >
 					<i class="fa fa-list"></i>
+				</button>
+				<button class="svgButt regularButton"
+					type="button"
+					title="open the songs dialoug"
+					id="buttSetSongsDalogToFloatingState" >
+					<i class="fa fa-external-link-alt	"></i>
 				</button>
 			</nav>
 		</div> <!-- end headArea -->
@@ -131,6 +144,8 @@
 			<input type="button" value="Countdown" id="countTab"  class="active stOnOffButton hideOnPicture"/>
 		</div>
 		<div id="areaParent" class="flexRow AreaParent" style="flex: 1; margin: 0 -4px">
+			<div id="songPickerAttachedArea" class="flexCol start">
+			</div>
 			<div id="songlistsArea" class="flexCol start">
 				<h1>Song lists</h1>
 				<div id="songListPartButtons" class="flexCol">
@@ -887,6 +902,12 @@
 									id="TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT"
 									title="If selected, clicking a song list will add those songs to the list, instead of only showing those songs"
 									value="Additive select" />
+								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active"
+									type="button"
+									data-st-save-value-key="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG"
+									id="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG"
+									title="If selected, the songs and the song lists will be shown in a floating window"
+									value="Floating Songlist" />
 							</div>
 
 						</div>
@@ -1070,6 +1091,7 @@
 					value="Search"/>
 				<input
 					type="button"
+					id="toggleSonglistsId"
 					title="Show songlists"
 					data-st-css-selector-to-hide="#songListsList"
 					data-st-save-value-key="TROFF_SETTING_SONG_LISTS_LIST_SHOW"
@@ -1105,7 +1127,7 @@
 				<div id="columnToggleParent" class="p-2 primaryColor m-3">
 					<input data-column="2"  data-default="true" type="button" class="stOnOffButton" value="Type" />
 					<input data-column="3"  data-default="true" type="button" class="stOnOffButton" value="Duration" />
-					<input data-column="4"  data-default="true" type="button" class="stOnOffButton" value="Title or File" />
+					<input data-column="4"  data-default="true" type="button" class="stOnOffButton" value="Title or File" data-show-on-attached-state="true" />
 					<input data-column="5"  data-default="false" type="button" class="stOnOffButton" value="Title" />
 					<input data-column="6"  data-default="true" type="button" class="stOnOffButton" value="Artist" />
 					<input data-column="7"  data-default="true" type="button" class="stOnOffButton" value="Album" />
@@ -1120,7 +1142,7 @@
 				<div class="flexOne"></div>
 			</div>
 			<div id="newSearchParent" class="py-2"></div>
-			<div class="flexRow">
+			<div id="songPicker" class="flexRow">
 				<div id="songListsList" class="flex-none scroll">
 					<input
 						type="button" 

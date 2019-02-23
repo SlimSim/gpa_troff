@@ -649,6 +649,64 @@ function initSongTable() {
 
 }
 
+
+
+function clickAttachedSongListToggle( event ) {
+	$("#toggleSonglistsId").trigger( "click" );
+
+	if( $("#toggleSonglistsId").hasClass( "active" ) ) {
+		$( event.target ).addClass( "active" );
+	} else {
+		$( event.target ).removeClass( "active" );
+	}
+}
+
+
+/*
+AAAAAAAAAAAAAA ok, när jag trycker på NYA song-knappen då ska den
+	toggla songlistan.
+	OM songlistan är attached, så ska den bara togglas :)
+	OM songlistan är floting, så ska den togglas :)
+
+Sen ska det finnas en setting: använde floating eller attached songList
+Sen ska det finnas en knapp på den attachade song-listan: use floating
+sen ska det finnas en knapp på den flytande song-listan: use attached
+*/
+
+//Troff.openSongDialog
+function clickSongsDialog( event ) {
+	console.log("clickSongsDialog ->");
+
+	//$( "#buttSetSongsDalogToFloatingState" ).hasClass( "active" );
+
+	if( $( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).hasClass( "active" ) ) {
+		$( "#outerSongListPopUpSquare" ).toggleClass( "hidden" );
+	} else {
+		$( "#songPickerAttachedArea" ).toggleClass( "hidden" );
+	}
+}
+
+function clickToggleFloatingSonglists( event ) {
+	if( $( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).hasClass( "active" ) ) {
+		//Note: the class will be removed by another eventlistener soon.
+		moveSongPickerToAttachedState();
+	} else {
+		moveSongPickerToFloatingState();
+	}
+}
+
+function moveSongPickerToAttachedState() {
+	dataTableShowOnlyColumnsForAttachedState();
+	$("#newSearchParent, #songPicker").detach().appendTo( $("#songPickerAttachedArea") );
+
+};
+
+function moveSongPickerToFloatingState() {
+	$("#newSearchParent, #songPicker").detach().insertBefore( "#buttCloseSongsPopUpSquare" );
+	dataTableShowColumnsForFloatingState();
+	$( "#songPickerAttachedArea" ).addClass( "hidden" );
+};
+
 function dataTableColumnPicker( event ) {
 	var $target = $(event.target);
 	// Get the column API object
@@ -666,6 +724,29 @@ function dataTableColumnPicker( event ) {
 	column.visible( ! column.visible() );
 
 }
+
+
+function dataTableShowOnlyColumnsForAttachedState() {
+	$( "#columnToggleParent" ).children().each( function( i, v ) {
+		if( $(v).data( "show-on-attached-state" ) ) {
+			$('#dataSongTable').DataTable().column( $(v).data( "column" ) ).visible( true );
+		} else {
+			$('#dataSongTable').DataTable().column( $(v).data( "column" ) ).visible( false );
+		}
+	} );
+}
+
+function dataTableShowColumnsForFloatingState() {
+	$( "#columnToggleParent" ).children().each( function( i, v ) {
+		if( $( v ).hasClass( "active" ) ) {
+			$('#dataSongTable').DataTable().column( $(v).data( "column" ) ).visible( true );
+		} else {
+			$('#dataSongTable').DataTable().column( $(v).data( "column" ) ).visible( false );
+		}
+	} );
+}
+
+
 
 function scanGallery(entries) {
 	
@@ -836,7 +917,17 @@ var TroffClass = function(){
 		var m_zoomStartTime = 0;
 		var m_zoomEndTime = null;
 
-	this.recallSongColumnToggle = function() {
+	this.recallFloatingDialog = function() {
+		DB.getVal( "TROFF_SETTING_SONG_LIST_FLOATING_DIALOG", function( floatingDialog ){
+			if( floatingDialog ) {
+				moveSongPickerToFloatingState();
+			} else {
+				moveSongPickerToAttachedState();
+			}
+		});
+	}
+
+	this.recallSongColumnToggle = function( callback ) {
 		DB.getVal( TROFF_SETTING_SONG_COLUMN_TOGGLE, function( columnToggle ){
 			if( columnToggle === undefined ) {
 				setTimeout(function() {
@@ -852,6 +943,7 @@ var TroffClass = function(){
 					column.visible( false );
 				}
 			} );
+			callback();
 		} );
 	}
 
@@ -948,7 +1040,9 @@ var TroffClass = function(){
 		Troff.recallTheme();
 		Troff.recallExtendedMarkerColor();
 		Troff.recallExtraExtendedMarkerColor();
-		Troff.recallSongColumnToggle();
+		Troff.recallSongColumnToggle( function(){
+			Troff.recallFloatingDialog();
+		});
 		/*
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR);
 		Troff.recallButtonActiveValue(TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR);
@@ -1889,7 +1983,7 @@ var TroffClass = function(){
 		o.directoryList = directoryList;
 
 		DB.saveVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, o );
-	}
+	};
 	
 	this.enterSongListName = function(){
 		IO.setEnterFunction(function(event){
@@ -4155,8 +4249,14 @@ var IOClass = function(){
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
 
-		$( "#buttSongsDialog" ).click ( Troff.openSongDialog );
+		//$( "#buttSongsDialog" ).click ( Troff.openSongDialog );
 		$( "#buttCloseSongsPopUpSquare" ).click ( Troff.closeSongDialog );
+		$( "#buttAttachedSongListToggle" ).click( clickAttachedSongListToggle );
+		$( "#buttSongsDialog" ).click( clickSongsDialog );
+		$( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).click( clickToggleFloatingSonglists );
+
+
+//		$( "#buttSetSongsDalogToFloatingState" ).click( clickSetSongsDalogToFloatingState );
 
 		$( "#toggleExtendedMarkerColor" ).click ( Troff.toggleExtendedMarkerColor );
 		$( "#toggleExtraExtendedMarkerColor" ).click ( Troff.toggleExtraExtendedMarkerColor );
