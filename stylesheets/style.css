@@ -393,6 +393,13 @@ input[type=number].numberWider{
 
 
 
+/* special for songList*/
+#songPickerAttachedArea #superSonglistArea,
+#songPickerAttachedArea #songListsList {
+	max-width: 320px;
+}
+
+
 
 
 
@@ -470,6 +477,7 @@ li[isdirectory="true"]:not(:first-child) {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	z-index: 10;
 }
 
 .innerDialog{

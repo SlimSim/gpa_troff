@@ -113,35 +113,16 @@
 					title="Share the link to this app with your freinds via email">
 					<i class="fa fa-share-alt"></i>
 				</button>
-
-				<button class="svgButt regularButton"
-					type="button"
-					title="show Song Lists"
-					id="buttAttachedSongListToggle" >
-					<i class="fa fa-columns"></i>
-				</button>
-
-				<button class="svgButt regularButton"
-					type="button"
-					title="open the songs dialoug"
-					id="buttSongsDialog" >
-					<i class="fa fa-list"></i>
-				</button>
-				<button class="svgButt regularButton"
-					type="button"
-					title="open the songs dialoug"
-					id="buttSetSongsDalogToFloatingState" >
-					<i class="fa fa-external-link-alt	"></i>
-				</button>
 			</nav>
 		</div> <!-- end headArea -->
 		<div id="areaSelector" class="flexRowWrap secondaryColor">
-			<input type="button" value="Song lists" id="songlistsTab"  class="stOnOffButton"/>
-			<input type="button" value="Songs" id="songsTab" class="active stOnOffButton" />
-			<input type="button" value="States" id="statesTab"  class="stOnOffButton hideOnPicture"/>
-			<input type="button" value="Settings" id="settingsTab"  class="active stOnOffButton hideOnPicture"/>
-			<input type="button" value="Info" id="infoTab"  class="active stOnOffButton"/>
-			<input type="button" value="Countdown" id="countTab"  class="active stOnOffButton hideOnPicture"/>
+
+			<input type="button" value="Songs2" id="buttSongsDialog"  class="stOnOffButton"/>
+
+			<input type="button" value="States" id="statesTab"  class="stOnOffButton hideOnPicture" section-to-hide="#stateSection"/>
+			<input type="button" value="Settings" id="settingsTab"  class="active stOnOffButton hideOnPicture" section-to-hide="#timeSection"/>
+			<input type="button" value="Info" id="infoTab"  class="active stOnOffButton" section-to-hide="#userNoteSection"/>
+			<input type="button" value="Countdown" id="countTab"  class="active stOnOffButton hideOnPicture" section-to-hide="#infoSection"/>
 		</div>
 		<div id="areaParent" class="flexRow AreaParent" style="flex: 1; margin: 0 -4px">
 			<div id="songPickerAttachedArea" class="flexCol start">
@@ -912,137 +893,7 @@
 
 						</div>
 
-<h1>gamla grejjen </h1>
 
-						<div id="spaceAndEnterParent">
-							<!--h3 class="pt-3 pb-2">Behaviour of keys and buttons</h3>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Enter</h4>
-								<input class="buttWidthMedium stOnOffButton" 
-									type="button"
-									id="TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR"
-									title="Jump to the start of the Active playing region on play or pause"
-									value="Go to marker" />
-								<input class="buttWidthMedium stOnOffButton" 
-									type="button"
-									id="TROFF_SETTING_ENTER_USE_TIMER_BEHAVIOUR"
-									title="If the &quot;pause before&quot; is active, use the timer before startign the song"
-									value="Use timer" />
-								<input class="buttWidthMedium stOnOffButton active" type="button"
-									id="TROFF_SETTING_ENTER_RESET_COUNTER"
-									title="If looping more than once, reset the loop-counter when pausing the song"
-									value="Reset counter" />
-							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Space</h4>
-								<input class="buttWidthMedium stOnOffButton active" 
-									type="button"
-									id="TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR"
-									title="Jump to the start of the Active playing region on play or pause"
-									value="Go to marker" />
-								<input class="buttWidthMedium stOnOffButton active" type="button"
-									id="TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR"
-									title="If the &quot;pause before&quot; is active, use the timer before startign the song"
-									value="Use timer" />
-								<input class="buttWidthMedium stOnOffButton active" type="button"
-									id="TROFF_SETTING_SPACE_RESET_COUNTER"
-									title="If looping more than once, reset the loop-counter when pausing the song"
-									value="Reset counter" />
-							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Play Button</h4>
-								<input class="buttWidthMedium stOnOffButton active" 
-									type="button"
-									id="TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR"
-									title="Jump to the start of the Active playing region on play or pause"
-									value="Go to marker" />
-								<input class="buttWidthMedium stOnOffButton active" 
-									type="button"
-									id="TROFF_SETTING_PLAY_UI_BUTTON_USE_TIMER_BEHAVIOUR"
-									title="If the &quot;pause before&quot; is active, use the timer before startign the song"
-									value="Use timer" />
-								<input class="buttWidthMedium stOnOffButton active" type="button"
-									id="TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER"
-									title="If looping more than once, reset the loop-counter when pausing the song"
-									value="Reset counter" />
-
-
-								<input class="buttWidthMedium stOnOffButton" 
-									type="button"
-									data-id-to-show="buttPlayUiButtonParent"
-									id="TROFF_SETTING_PLAY_UI_BUTTON_SHOW_BUTTON"
-									title="Show the round play/pause button next to the song name"
-									value="Show" />
-							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Select marker</h4>
-								<input class="buttWidthMedium stOnOffButton active" 
-									type="button"
-									id="TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER"
-									title="Jump to the start of the Active playing region on clicking on a marker, deselect this option if you want to be able to click markers without affect the current playback"
-									value="Go to marker" />
-							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Deleting marker</h4>
-								<input class="buttWidthMedium stOnOffButton active" 
-									type="button"
-									id="TROFF_SETTING_CONFIRM_DELETE_MARKER"
-									title="When deleting marker, a pup-up question will ask you to confirm the delete"
-									value="Confirm delete" />
-							</div >
-
-							<h3 class="pt-3 pb-2">Toggle visibility of areas</h3>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Title area</h4>
-								<!- - Show different things in the square at the top left - ->
-								<input class="buttWidthMedium stOnOffButton" 
-									type="button"
-									data-id-to-show="currentArtist"
-									id="TROFF_SETTING_UI_ARTIST_SHOW"
-									title="Show the artist name in the Title area"
-									value="Artist" />
-								<input class="buttWidthMedium stOnOffButton" 
-									type="button"
-									data-id-to-show="currentSong"
-									id="TROFF_SETTING_UI_TITLE_SHOW"
-									title="Show the title name in the Title area"
-									value="Title" />
-								<input class="buttWidthMedium stOnOffButton" 
-									type="button"
-									data-id-to-show="currentAlbum"
-									id="TROFF_SETTING_UI_ALBUM_SHOW"
-									title="Show the album name in the Title area"
-									value="Album" />
-								<input class="buttWidthMedium stOnOffButton active" 
-									type="button"
-									data-id-to-show="currentPath"
-									id="TROFF_SETTING_UI_PATH_SHOW"
-									title="Show the path to the song in the Title area"
-									value="Path" />
-							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Setting area</h4>
-
-								<input class="buttWidthMedium stOnOffButton"
-									type="button"
-									data-id-to-show="buttUnselectMarkers"
-									id="TROFF_SETTING_UI_PLAY_FULL_SONG_BUTTONS_SHOW"
-									title="Show the &quot;play full song&quot;-button"
-									value="Play full song" />
-								<input class="buttWidthMedium stOnOffButton"
-									type="button"
-									data-id-to-show="zoomParent"
-									id="TROFF_SETTING_UI_ZOOM_SHOW"
-									title="Show the zoom-buttons"
-									value="Zoom" />
-								<input class="buttWidthMedium stOnOffButton"
-									type="button"
-									data-id-to-show="loopButtons"
-									id="TROFF_SETTING_UI_LOOP_BUTTONS_SHOW"
-									title="Show the nr-of-loops-selector"
-									value="Nr of loop" />
-							</div-->
-						</div>
 
 
 					<h1>---------------- Not yet implemented ----------------</h1>
@@ -1085,7 +936,7 @@
 				<input
 					type="button"
 					title="Show Search"
-					data-st-css-selector-to-hide="#newSearchParent"
+					data-st-css-selector-to-hide="#dataSongTable_filter"
 					data-st-save-value-key="TROFF_SETTING_SEARCH_SHOW"
 					class="switch st-simple-on-off-button stOnOffButton active"
 					value="Search"/>
@@ -1101,14 +952,24 @@
 					type="button"
 					title="Show Column Selector"
 					data-st-css-selector-to-hide="#columnToggleParent"
-					class="switch st-simple-on-off-button stOnOffButton"
+					class="switch st-simple-on-off-button stOnOffButton mr-3"
 					value="Column Selector"/>
 				<input
 					type="button"
 					title="Select folders to get songs from"
-					class="regularButton"
+					class="regularButton mr-3"
 					id="configure-button"
 					value="Select folders"/>
+				<button class="regularButton mr-2 buttSetSongsDalogToAttachedState"
+					type="button"
+					title="open the songs dialog in floating window">
+					<i class="fa fa-window-minimize"></i>
+				</button>
+				<button class="regularButton mr-2 buttCloseSongsDialog"
+					type="button"
+					title="open the songs dialog in floating window">
+					<i class="fa fa-window-close"></i>
+				</button>
 			</div>
 			<p>
 
@@ -1141,7 +1002,28 @@
 				</div>
 				<div class="flexOne"></div>
 			</div>
-			<div id="newSearchParent" class="py-2"></div>
+			<div id="newSearchParent" class="py-2 flexRow flex-none full-width">
+
+				<div class="flexOne"></div>
+				<div class="flexRow hideOnSongsDalogFloatingState">
+					<button class="mr-2 regularButton"
+						type="button"
+						title="show Song Lists"
+						id="buttAttachedSongListToggle" >
+						<i class="fa fa-columns"></i>
+					</button>
+					<button class="regularButton mr-2 buttSetSongsDalogToFloatingState"
+						type="button"
+						title="open the songs dialog in floating window">
+						<i class="fa fa-window-maximize"></i>
+					</button>
+					<button class="regularButton mr-2 buttCloseSongsDialog"
+						type="button"
+						title="close the songs dialog window">
+						<i class="fa fa-window-close"></i>
+					</button>
+				</div>
+			</div>
 			<div id="songPicker" class="flexRow">
 				<div id="songListsList" class="flex-none scroll">
 					<input
@@ -1167,7 +1049,7 @@
 					</table>
 				</div>
 			</div>
-			<input id="buttCloseSongsPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none" value="Close" />
+			<input id="buttCloseSongsPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none buttCloseSongsDialog" value="Close" />
 		</div>
 	</div>
 

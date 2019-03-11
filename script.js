@@ -645,45 +645,97 @@ function initSongTable() {
 	$( "#dataSongTable thead th" ).removeClass( "secondaryColor" );
 
 	// to move the searchbar away from the scrolling-area
-	$( "#dataSongTable_filter" ).appendTo( $( "#newSearchParent" ) );
 
+
+	$( "#dataSongTable_filter" ).detach().prependTo( $( "#newSearchParent" ) );
+	$( "#dataSongTable_filter" ).find( "input" )
+		.attr("placeholder", "Search (Ctrl + F)" )
+		.detach().prependTo( $( "#dataSongTable_filter" ) );
+	$( "#dataSongTable_filter" ).find( "label" ).remove();
+
+	if( $( "#toggleSonglistsId" ).hasClass( "active" ) ) {
+		$( "#buttAttachedSongListToggle" ).addClass( "active" );
+	}
+
+
+	// Options for the observer (which mutations to observe)
+	const songListsObserverConfig = {
+	  attributes: true,
+	  childList: false,
+	  subtree: false
+	};
+
+	// Callback function to execute when mutations are observed
+	var songListsObserverCallback = function(mutationsList, observer) {
+		for (var mutation of mutationsList) {
+			if( mutation.attributeName === "class" ) {
+				var classList = mutation.target.className;
+				if( $( mutation.target ).hasClass( "active" ) ) {
+					$( "#buttAttachedSongListToggle" ).addClass( "active" );
+				} else {
+					$( "#buttAttachedSongListToggle" ).removeClass( "active" );
+				}
+				return;
+			}
+		}
+	};
+
+	// Create an observer instance linked to the callback function
+	var songListsObserver = new MutationObserver(songListsObserverCallback);
+	// Start observing the target node for configured mutations
+	songListsObserver.observe( $( "#toggleSonglistsId" )[0], songListsObserverConfig);
 }
-
-
 
 function clickAttachedSongListToggle( event ) {
 	$("#toggleSonglistsId").trigger( "click" );
+}
 
-	if( $("#toggleSonglistsId").hasClass( "active" ) ) {
-		$( event.target ).addClass( "active" );
+function reloadSongsButtonActive( event ) {
+	if( event == null || !$(event.target).hasClass( "outerDialog" ) ) {
+		return
+	}
+
+	if( $( "#outerSongListPopUpSquare" ).hasClass( "hidden" ) ) {
+		$( "#buttSongsDialog" ).removeClass( "active" );
 	} else {
-		$( event.target ).removeClass( "active" );
+		$( "#buttSongsDialog" ).addClass( "active" );
 	}
 }
 
+function closeSongDialog ( event ) {
+	$( "#outerSongListPopUpSquare" ).addClass( "hidden" );
+	$( "#songPickerAttachedArea" ).addClass( "hidden" );
+	$( "#buttSongsDialog" ).removeClass( "active" );
+};
 
-/*
-AAAAAAAAAAAAAA ok, när jag trycker på NYA song-knappen då ska den
-	toggla songlistan.
-	OM songlistan är attached, så ska den bara togglas :)
-	OM songlistan är floting, så ska den togglas :)
-
-Sen ska det finnas en setting: använde floating eller attached songList
-Sen ska det finnas en knapp på den attachade song-listan: use floating
-sen ska det finnas en knapp på den flytande song-listan: use attached
-*/
-
-//Troff.openSongDialog
-function clickSongsDialog( event ) {
-	console.log("clickSongsDialog ->");
-
-	//$( "#buttSetSongsDalogToFloatingState" ).hasClass( "active" );
-
-	if( $( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).hasClass( "active" ) ) {
-		$( "#outerSongListPopUpSquare" ).toggleClass( "hidden" );
+function openSongDialog( event ) {
+	if( $("#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).hasClass( "active" ) ) {
+		$( "#outerSongListPopUpSquare" ).removeClass( "hidden" );
 	} else {
-		$( "#songPickerAttachedArea" ).toggleClass( "hidden" );
+		$( "#songPickerAttachedArea" ).removeClass( "hidden" );
 	}
+	$( "#buttSongsDialog" ).addClass( "active" );
+}
+
+
+function clickSongsDialog( event ) {
+	if( $( event.target ).hasClass( "active" ) ) {
+		closeSongDialog();
+	} else {
+		openSongDialog();
+	}
+}
+
+function minimizeSongPicker(){
+	closeSongDialog();
+	$( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).click();
+	openSongDialog();
+}
+
+function maximizeSongPicker(){
+	closeSongDialog();
+	$( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).click();
+	openSongDialog();
 }
 
 function clickToggleFloatingSonglists( event ) {
@@ -699,12 +751,16 @@ function moveSongPickerToAttachedState() {
 	dataTableShowOnlyColumnsForAttachedState();
 	$("#newSearchParent, #songPicker").detach().appendTo( $("#songPickerAttachedArea") );
 
+	$( ".hideOnSongsDalogFloatingState" ).removeClass( "hidden" );
 };
 
 function moveSongPickerToFloatingState() {
 	$("#newSearchParent, #songPicker").detach().insertBefore( "#buttCloseSongsPopUpSquare" );
 	dataTableShowColumnsForFloatingState();
-	$( "#songPickerAttachedArea" ).addClass( "hidden" );
+	$( "#songPickerAttachedArea, .hideOnSongsDalogFloatingState" ).addClass( "hidden" );
+
+
+
 };
 
 function dataTableColumnPicker( event ) {
@@ -1114,15 +1170,6 @@ var TroffClass = function(){
 	this.openSettingsDialog = function( event ) {
 		$( "#outerSettingPopUpSquare" ).removeClass( "hidden" );
 	};
-
-	this.openSongDialog = function( event ) {
-		$( "#outerSongListPopUpSquare" ).removeClass( "hidden" );
-	};
-	this.closeSongDialog = function( event ) {
-		$( "#outerSongListPopUpSquare" ).addClass( "hidden" );
-	};
-	
-	
 
 	//Public variables:
 	this.dontShowZoomInstructions = false;
@@ -1680,7 +1727,7 @@ var TroffClass = function(){
 		return $('#stateList').children();
 	};
 	
-	this.getCurrentMarkers = function(bGetStopMarkers){
+	/*Troff*/this.getCurrentMarkers = function(bGetStopMarkers){
 		if(bGetStopMarkers){
 			return $('#markerList li input:nth-child(4)');
 		}
@@ -1690,7 +1737,7 @@ var TroffClass = function(){
 	/*
 		exportStuff, gets current song markers to the clippboard
 	*/
-	this.exportStuff = function(){
+	/*Troff*/this.exportStuff = function(){
 		Troff.toggleImportExport();
 		DB.getMarkers( strCurrentSong, function(aoMarkers){
 			var oExport = {};
@@ -1726,7 +1773,7 @@ var TroffClass = function(){
 	/*
 		importStuff, promps for a string with markers
 	*/
-	this.importStuff = function(){
+	/*Troff*/this.importStuff = function(){
 		Troff.toggleImportExport();
 		IO.prompt("Please paste the text you recieved to import the markers",
 							"Paste text here",
@@ -1805,7 +1852,7 @@ var TroffClass = function(){
 		createMarker, all, tar reda pÃ¥ tiden o namnet,
 		anropar sedan add- och save- Marker
 	 */
-	this.createMarker = function(){
+	/*Troff*/this.createMarker = function(){
 		var time = document.querySelector('audio, video').currentTime;
 		var songSRC = $('audio, video').attr('src');
 		var iMarkers =  $('#markerList li').length + 1;
@@ -1838,52 +1885,38 @@ var TroffClass = function(){
 		}, 0);
 	}; // end createMarker   ********/
 
-	this.toggleImportExport = function(){
+	/*Troff*/this.toggleImportExport = function(){
 		IO.jQueryToggle( '#outerImportExportPopUpSquare');
 		//$('#outerImportExportPopUpSquare').toggle();
 		document.getElementById('blur-hack').focus();
 	};
 
-	this.toggleInfoAndroid = function(){
+	/*Troff*/this.toggleInfoAndroid = function(){
 		IO.jQueryToggle('#outerInfoAndroidPopUpSquare');
 		document.getElementById('blur-hack').focus();
 	};
 	
 	
-	this.getLastSlashName = function(strUrl){
+	/*Troff*/this.getLastSlashName = function(strUrl){
 		var aUrl = strUrl.split("/");
 		return aUrl[aUrl.length-1];
 	};
 	
-	this.addSpacesBetweenSlash = function(strUrl){
+	/*Troff*/this.addSpacesBetweenSlash = function(strUrl){
 		return strUrl.replace(/\//g, " / ");
 	};
 
 
-	this.toggleArea = function(event){
+	/*Troff*/this.toggleArea = function(event) {
 		document.getElementById('blur-hack').focus();
-		var iArea = $(event.target).index();
-		event.target.classList.toggle('active');
-		
-		if(iArea == 4)
-			$('#userNoteSection').toggle();
-		if(iArea == 5)
-			$('#infoSection').toggle();
-		else
-			$('#areaParent').children().eq(iArea).toggle();
 
-		if(iArea < 2) {
-			DB.setGeneralAreas();
-		} else {
+		var sectionToHide = $( event.target ).attr( "section-to-hide" );
+
+		if( sectionToHide ) {
+			event.target.classList.toggle('active');
+			$( sectionToHide ).toggle();
 			DB.setCurrentAreas(Troff.getCurrentSong());
 		}
-	};
-	
-	this.setGeneralAreas = function(abGeneralAreas) {
-		$('#songlistsTab').toggleClass("active", abGeneralAreas[0]);
-		$('#songlistsArea').toggle(abGeneralAreas[0]);
-		$('#songsTab').toggleClass("active", abGeneralAreas[1]);
-		$('#songsArea').toggle(abGeneralAreas[1]);
 	};
 	
 	this.setAreas = function(abAreas) {
@@ -3737,7 +3770,7 @@ var DBClass = function(){
 		return songObject;
 	};
 	
-	this.fixDefaultValue = function( allKeys, key, valIsTrue ) {
+	/*DB*/this.fixDefaultValue = function( allKeys, key, valIsTrue ) {
 		if(allKeys.indexOf( key ) === -1 ) {
 			var obj = {};
 			obj[ key ] = valIsTrue;
@@ -3751,7 +3784,7 @@ var DBClass = function(){
 		}
 	}
 
-	this.cleanDB = function(){
+	/*DB*/this.cleanDB = function(){
 		chrome.storage.local.get(null, function(items) {
 			var allKeys = Object.keys(items);
 			if(allKeys.length === 0){ // This is the first time Troff is started:
@@ -3826,7 +3859,7 @@ var DBClass = function(){
 		});//end get all keys
 	};
 	
-	this.saveSonglists = function(){
+	/*DB*/this.saveSonglists = function(){
 		var aoSonglists = [];
 		
 		var aDOMSonglist = $('#songListPartTheLists li');
@@ -3839,16 +3872,8 @@ var DBClass = function(){
 		var straoSonglists = JSON.stringify(aoSonglists);
 		chrome.storage.local.set({'straoSongLists': straoSonglists});
 	};
-	
-	this.setGeneralAreas = function() {
-		var abGeneralAreas = [
-			$('#songlistsTab').hasClass("active"),
-			$('#songsTab').hasClass("active")
-		];
-		chrome.storage.local.set({"abGeneralAreas" : JSON.stringify(abGeneralAreas)});
-	};
 
-	this.setCurrentAreas = function(songId){
+	/*DB*/this.setCurrentAreas = function(songId){
 		chrome.storage.local.get(songId, function(ret) {
 			var song = ret[songId];
 			if(!song){
@@ -3869,39 +3894,27 @@ var DBClass = function(){
 		});
 	};
 	
-	this.setCurrentSonglist = function(iSonglistId){
+	/*DB*/this.setCurrentSonglist = function(iSonglistId){
 		chrome.storage.local.set({'iCurrentSonglist': iSonglistId});
 	};
 
-	this.setCurrentSong = function(path, galleryId){
+	/*DB*/this.setCurrentSong = function(path, galleryId){
 		var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
 		chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
 	};
 	
-	this.setZoomDontShowAgain = function(){
+	/*DB*/this.setZoomDontShowAgain = function(){
 		chrome.storage.local.set({"zoomDontShowAgain" : true});
 	};
 	
-	this.getGeneralAreas = function() {
-		chrome.storage.local.get("abGeneralAreas", function(ret) {
-			var abGeneralAreas;
-			try {
-				abGeneralAreas = JSON.parse(ret["abGeneralAreas"]);
-			} catch (e) {
-				abGeneralAreas = [false, true];
-			}
-			Troff.setGeneralAreas( abGeneralAreas ); 
-		});
-	};
-
-	this.getZoomDontShowAgain = function(){
+	/*DB*/this.getZoomDontShowAgain = function(){
 		chrome.storage.local.get("zoomDontShowAgain", function(ret){
 			var bZoomDontShowAgain = ret["zoomDontShowAgain"] || false;
 			Troff.dontShowZoomInstructions = bZoomDontShowAgain;
 		});
 	};
 
-	this.getAllSonglists = function(){
+	/*DB*/this.getAllSonglists = function(){
 		chrome.storage.local.get('straoSongLists', function(ret){
 			var straoSongLists = ret['straoSongLists'] || "[]";
 			Troff.setSonglists(JSON.parse(straoSongLists));
@@ -3909,13 +3922,13 @@ var DBClass = function(){
 		});
 	};
 	
-	this.getCurrentSonglist = function(){
+	/*DB*/this.getCurrentSonglist = function(){
 		chrome.storage.local.get('iCurrentSonglist', function(ret){
 			Troff.setSonglistById(ret['iCurrentSonglist']);
 		});
 	};
 	
-	this.getCurrentSong = function(){
+	/*DB*/this.getCurrentSong = function(){
 		chrome.storage.local.get('stroCurrentSongPathAndGalleryId', function(ret){
 			var stroSong = ret['stroCurrentSongPathAndGalleryId'];
 			if(!stroSong){
@@ -3939,7 +3952,7 @@ var DBClass = function(){
 		});
 	};
 
-	this.updateMarker = function(markerId, newName, newInfo, newColor, newTime, songId){
+	/*DB*/this.updateMarker = function(markerId, newName, newInfo, newColor, newTime, songId){
 	chrome.storage.local.get(songId, function(ret){
 		var song = ret[songId];
 		if(!song)
@@ -3960,7 +3973,7 @@ var DBClass = function(){
 	});
 	};// end updateMarker
 
-	this.saveStates = function(songId, callback){
+	/*DB*/this.saveStates = function(songId, callback){
 	chrome.storage.local.get(songId, function(ret){
 		var aAllStates = Troff.getCurrentStates();
 		var aStates = [];
@@ -3984,7 +3997,7 @@ var DBClass = function(){
 	});
 	};
 	
-	this.saveZoomTimes = function(songId, startTime, endTime) {
+	/*DB*/this.saveZoomTimes = function(songId, startTime, endTime) {
 	chrome.storage.local.get(songId, function(ret){
 		var song = ret[songId];
 		if(!song){
@@ -4007,7 +4020,7 @@ var DBClass = function(){
 	});
 	};
 
-	this.saveMarkers = function(songId, callback) {
+	/*DB*/this.saveMarkers = function(songId, callback) {
 	chrome.storage.local.get(songId, function(ret){
 		var aAllMarkers = Troff.getCurrentMarkers();
 
@@ -4045,7 +4058,7 @@ var DBClass = function(){
 
 	// this has nothing to do with "State", it just updates the DB
 	// with the songs current data
-	this.saveSongDataFromState = function(songId, oState){
+	/*DB*/this.saveSongDataFromState = function(songId, oState){
 	chrome.storage.local.get(songId, function(ret){
 					var song = ret[songId];
 		if(!song){
@@ -4072,7 +4085,7 @@ var DBClass = function(){
 		
 	};
 		
-	this.setCurrentStartAndStopMarker = function(startMarkerId, stopMarkerId,
+	/*DB*/this.setCurrentStartAndStopMarker = function(startMarkerId, stopMarkerId,
 																							 songId){
 	chrome.storage.local.get(songId, function(ret){
 		var song = ret[songId];
@@ -4091,7 +4104,7 @@ var DBClass = function(){
 
 
 
-	this.setCurrentStartMarker = function(name, songId){
+	/*DB*/this.setCurrentStartMarker = function(name, songId){
 			DB.setCurrent(songId, 'currentStartMarker', name);
 	};
 	this.setCurrentStopMarker = function(name, songId){
@@ -4120,7 +4133,7 @@ var DBClass = function(){
 		DB.setCurrent(songId, 'tempo', tempo);
 	};
 
-	this.setCurrent = function(songId, key, value){
+	/*DB*/this.setCurrent = function(songId, key, value){
 	chrome.storage.local.get(songId, function(ret){
 		var song = ret[songId];
 		if(!song){
@@ -4135,7 +4148,7 @@ var DBClass = function(){
 	});
 	};//end setCurrent
 
-	this.getMarkers = function(songId, funk) {
+	/*DB*/this.getMarkers = function(songId, funk) {
 	chrome.storage.local.get(songId, function(ret){
 		var song = ret[songId];
 		if(!song || !song.markers ){ // new song or no markers
@@ -4145,7 +4158,7 @@ var DBClass = function(){
 	});
 	};
 
-	this.getSongMetaDataOf = function(songId) {
+	/*DB*/this.getSongMetaDataOf = function(songId) {
 		var loadSongMetadata = function(song, songId){
 
 			Troff.selectStartBefore(song.startBefore[0], song.startBefore[1]);
@@ -4193,7 +4206,7 @@ var DBClass = function(){
 
 	}; // end getSongMetadata
 
-	this.getImageMetaDataOf = function(songId) {
+	/*DB*/this.getImageMetaDataOf = function(songId) {
 		var loadImageMetadata = function(song, songId){
 			Troff.setMood('pause');
 			Troff.setInfo(song.info);
@@ -4233,7 +4246,7 @@ var IOClass = function(){
 	var IOEnterFunction = false;
 	var IOArrowFunction = false;
 
-	this.startFunc = function() {
+	/*IO*/this.startFunc = function() {
 
 		document.addEventListener('keydown', IO.keyboardKeydown);
 		
@@ -4250,11 +4263,19 @@ var IOClass = function(){
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
 
 		//$( "#buttSongsDialog" ).click ( Troff.openSongDialog );
-		$( "#buttCloseSongsPopUpSquare" ).click ( Troff.closeSongDialog );
+		$( "#buttSetSongsDalogToFloatingState" ).click( moveSongPickerToFloatingState )
+		//$( "#buttCloseSongsPopUpSquare" ).click ( closeSongDialog );
+		$( ".buttCloseSongsDialog" ).click( closeSongDialog );
 		$( "#buttAttachedSongListToggle" ).click( clickAttachedSongListToggle );
-		$( "#buttSongsDialog" ).click( clickSongsDialog );
-		$( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).click( clickToggleFloatingSonglists );
 
+
+		$( "#buttSongsDialog" ).click( clickSongsDialog );
+		$( ".buttSetSongsDalogToAttachedState" ).click( minimizeSongPicker );
+		$( ".buttSetSongsDalogToFloatingState" ).click( maximizeSongPicker );
+		//$( "#buttHideSongsDalog" ).click( function(){console.log("hej 3");} );
+		$( "#outerSongListPopUpSquare" ).click( reloadSongsButtonActive );
+
+		$( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).click( clickToggleFloatingSonglists );
 
 //		$( "#buttSetSongsDalogToFloatingState" ).click( clickSetSongsDalogToFloatingState );
 
@@ -4262,7 +4283,6 @@ var IOClass = function(){
 		$( "#toggleExtraExtendedMarkerColor" ).click ( Troff.toggleExtraExtendedMarkerColor );
 		
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
-		//$( "#spaceAndEnterParent" ).find("input").click( Troff.setButtonActiveValue );
 		$( "#columnToggleParent" ).find("input").click( dataTableColumnPicker );
 
 		
@@ -4377,7 +4397,7 @@ var IOClass = function(){
 	};//end startFunc
 
 
-	this.jQueryToggle = function( idString ){
+	/*IO*/this.jQueryToggle = function( idString ){
 		if( $(idString).hasClass("hidden") ) {
 			$(idString).removeClass("hidden");
 		} else {
@@ -4385,12 +4405,12 @@ var IOClass = function(){
 		}
 	}
 
-	this.setColor = function( colClass ) {
+	/*IO*/this.setColor = function( colClass ) {
 		$('html').removeClass();
 		$('html').addClass( colClass );
 	};
 
-	this.keyboardKeydown  = function(event) {
+	/*IO*/this.keyboardKeydown  = function(event) {
 		if(IOEnterFunction){
 			if(event.keyCode == 13){
 				IOEnterFunction(event);
@@ -4583,18 +4603,18 @@ var IOClass = function(){
 
 	}; // end keyboardKeydown *****************/
 
-	this.setEnterFunction = function(func, arrowFunc){
+	/*IO*/this.setEnterFunction = function(func, arrowFunc){
 		IOEnterFunction = func;
 		if( arrowFunc !== undefined ) IOArrowFunction = arrowFunc;
 		else IOArrowFunction = false;
 	};
 	
-	this.clearEnterFunction = function(){
+	/*IO*/this.clearEnterFunction = function(){
 		IOEnterFunction = false;
 		IOArrowFunction = false;
 	};
 
-	this.promptEditMarker = function(markerId, func, funcCancle){
+	/*IO*/this.promptEditMarker = function(markerId, func, funcCancle){
 		var markerName;
 		var markerInfo;
 		var markerColor;
@@ -5028,7 +5048,7 @@ $(document).ready( function() {
 	DB.cleanDB();
 	DB.getAllSonglists();
 	DB.getZoomDontShowAgain();
-	DB.getGeneralAreas();
+//	DB.getGeneralAreas();
 	IO.startFunc();
 	//FS.startFunc();
 	FSstartFunc();
@@ -5038,8 +5058,8 @@ $(document).ready( function() {
 });
 
  $.fn.removeClassStartingWith = function (filter) {
-    $(this).removeClass(function (index, className) {
-        return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
-    });
-    return this;
+	$(this).removeClass(function (index, className) {
+		return (className.match(new RegExp("\\S*" + filter + "\\S*", 'g')) || []).join(' ')
+	});
+	return this;
 };
