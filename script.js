@@ -594,11 +594,16 @@ function initSongTable() {
 		.append( $('<th>').addClass("primaryColor").text( "Size" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Song info" ) )
 		.append( $('<th>').addClass("primaryColor").text( "File type" ) )
+	;
+
 
 
 	var dataSongTable = $("#dataSongTable").DataTable({
 		"fixedHeader": true,
 		"paging": false,
+		"createdRow": function( row, data, dataIndex ) {
+			$(row).attr( "draggable", "true");
+		},
 		"columnDefs": [
 			{
 				"targets": [ 0,  1 ],
@@ -621,6 +626,14 @@ function initSongTable() {
 			}
 		]
 	} )
+	.on( 'dragstart', 'tr', function( event ) { //function dragSongToSonglist(event){
+		if( event.dataTransfer === undefined ) {
+			event.dataTransfer = event.originalEvent.dataTransfer;
+		}
+		var jsonDataInfo = dataSongTable.row( $(this) ).data()[0];
+
+	  event.dataTransfer.setData("jsonDataInfo", jsonDataInfo);
+	})
 	.on( 'click', 'tr', function () {
 		var dataInfo = JSON.parse(dataSongTable.row( $(this) ).data()[0]);
 
@@ -684,6 +697,33 @@ function initSongTable() {
 	var songListsObserver = new MutationObserver(songListsObserverCallback);
 	// Start observing the target node for configured mutations
 	songListsObserver.observe( $( "#toggleSonglistsId" )[0], songListsObserverConfig);
+}
+
+
+
+function dropSongOnSonglist( event ) {
+	event.preventDefault();
+
+	if( event.dataTransfer === undefined ) {
+		event.dataTransfer = event.originalEvent.dataTransfer;
+	}
+
+	var dataInfo = JSON.parse( event.dataTransfer.getData("jsonDataInfo") ),
+		$target = $(event.target),
+		songList = $target.data("songList");
+
+	songList.isDirectory = false;
+	songList.songs.push( dataInfo );
+
+	$target.data("songList", songList);
+
+	DB.saveSonglists_new();
+
+	//TODO: visa en inforuta med "låten X tillagt till låtlistan Y, >Ångra<"
+}
+
+function allowDrop( ev ) {
+  ev.preventDefault();
 }
 
 function clickAttachedSongListToggle( event ) {
@@ -750,7 +790,6 @@ function clickToggleFloatingSonglists( event ) {
 function moveSongPickerToAttachedState() {
 	dataTableShowOnlyColumnsForAttachedState();
 	$("#newSearchParent, #songPicker").detach().appendTo( $("#songPickerAttachedArea") );
-
 	$( ".hideOnSongsDalogFloatingState" ).removeClass( "hidden" );
 };
 
@@ -758,9 +797,6 @@ function moveSongPickerToFloatingState() {
 	$("#newSearchParent, #songPicker").detach().insertBefore( "#buttCloseSongsPopUpSquare" );
 	dataTableShowColumnsForFloatingState();
 	$( "#songPickerAttachedArea, .hideOnSongsDalogFloatingState" ).addClass( "hidden" );
-
-
-
 };
 
 function dataTableColumnPicker( event ) {
@@ -1956,8 +1992,10 @@ var TroffClass = function(){
 						.data("songList", oSongList)
 						.attr("data-songlist-id", oSongList.id)
 						.text( oSongList.name )
-					.click(clickSongList_NEW)
-				)
+						.click(clickSongList_NEW)
+					)
+					.on( "drop", dropSongOnSonglist)
+					.on( "dragover", allowDrop)
 			);
 	};
 
@@ -3859,6 +3897,19 @@ var DBClass = function(){
 		});//end get all keys
 	};
 	
+	/*DB*/this.saveSonglists_new = function() {
+		var i,
+			aoSonglists = [],
+			aDOMSonglist = $('#songListList').find('button');
+
+		for( i=0; i<aDOMSonglist.length; i++ ){
+			aoSonglists.push(aDOMSonglist.eq(i).data('songList'));
+		}
+
+		var straoSonglists = JSON.stringify(aoSonglists);
+		chrome.storage.local.set({'straoSongLists': straoSonglists});
+	}
+
 	/*DB*/this.saveSonglists = function(){
 		var aoSonglists = [];
 		
@@ -4272,7 +4323,6 @@ var IOClass = function(){
 		$( "#buttSongsDialog" ).click( clickSongsDialog );
 		$( ".buttSetSongsDalogToAttachedState" ).click( minimizeSongPicker );
 		$( ".buttSetSongsDalogToFloatingState" ).click( maximizeSongPicker );
-		//$( "#buttHideSongsDalog" ).click( function(){console.log("hej 3");} );
 		$( "#outerSongListPopUpSquare" ).click( reloadSongsButtonActive );
 
 		$( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).click( clickToggleFloatingSonglists );
