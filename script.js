@@ -709,8 +709,20 @@ function dropSongOnSonglist( event ) {
 	}
 
 	var dataInfo = JSON.parse( event.dataTransfer.getData("jsonDataInfo") ),
+		songAlreadyExists,
 		$target = $(event.target),
 		songList = $target.data("songList");
+
+	songAlreadyExists = songList.songs.filter(function(value, index, arr){
+		return value.galleryId == dataInfo.galleryId &&
+			value.fullPath == dataInfo.fullPath;
+	} ).length > 0;
+
+	if( songAlreadyExists ) {
+		$.notify( "This song is already in " + songList.name, "info" );
+		return;
+	}
+
 
 	songList.isDirectory = false;
 	songList.songs.push( dataInfo );
@@ -719,12 +731,23 @@ function dropSongOnSonglist( event ) {
 
 	DB.saveSonglists_new();
 
-	//TODO: visa en inforuta med "låten X tillagt till låtlistan Y, >Ångra<"
+	notifyUndo( "The song was added to " + songList.name, function(){
+		var i,
+			undo_songList = $(event.target).data("songList");
+
+		undo_songList.songs = undo_songList.songs.filter(function(value, index, arr){
+			return !(value.galleryId == dataInfo.galleryId &&
+				value.fullPath == dataInfo.fullPath);
+		});
+
+		DB.saveSonglists_new();
+	} );
 }
 
 function allowDrop( ev ) {
   ev.preventDefault();
 }
+
 
 function clickAttachedSongListToggle( event ) {
 	$("#toggleSonglistsId").trigger( "click" );

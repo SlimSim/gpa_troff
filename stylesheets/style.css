@@ -39,7 +39,7 @@ video, .full-width{
 	position: absolute;
 	right: 0;
 	top: 0;
-/*  z-index: 99; */
+  z-index: 2;
 	display: flex;
 }
 
@@ -95,9 +95,12 @@ h2{
 	margin-right: 3px;
 }
 
-p{
+p, .notifyjs-corner span {
 	display: inline-block;
 	font-size: 11px;
+}
+.notifyjs-corner span {
+	padding: 4px 0;
 }
 
 .normalSize{
