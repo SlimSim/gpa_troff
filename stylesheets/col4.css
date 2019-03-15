@@ -256,3 +256,6 @@ li[isdirectory="true"]:not(:first-child) {
 .markerColorViolet {	background-color: Violet;	color: black; }
 
 
+input[type="text"], input[type="search"] {
+	border: solid 1px #EAEAEA;
+}
