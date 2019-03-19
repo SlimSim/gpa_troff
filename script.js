@@ -606,19 +606,15 @@ function initSongTable() {
 		},
 		"columnDefs": [
 			{
-				"targets": [ 0,  1 ],
+				"targets": [ 0 ],
 				"visible": false,
 				//"searchable": false
 			}, {
 				"targets": 1,
 				"data": null,
+				"className": "preventSongLoad secondaryColor",
 				"orderable": false,
-				"defaultContent": '<button class="loadSong" title="select song"><i class="fa fa-play-circle"></i></button>'
-			}, {
-				"targets": 1,
-				"data": null,
-				"orderable": false,
-				"defaultContent": '<button><i class="fa fa-ellipsis-v"></i></button>'
+				"defaultContent": '<div class="checkbox preventSongLoad"><label><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>'
 			},
 			{
 				"targets": [ "_all" ],
@@ -634,7 +630,14 @@ function initSongTable() {
 
 	  event.dataTransfer.setData("jsonDataInfo", jsonDataInfo);
 	})
-	.on( 'click', 'tr', function () {
+	.on( 'click', 'tr', function ( event ) {
+		console.log("target", event.target);
+
+		if( $( event.target ).closest( "td" ) .hasClass( "preventSongLoad" ) ) {
+			return;
+		}
+
+
 		var dataInfo = JSON.parse(dataSongTable.row( $(this) ).data()[0]);
 
 		$("#dataSongTable").find(".selected").removeClass("selected");
@@ -663,6 +666,7 @@ function initSongTable() {
 	$( "#dataSongTable_filter" ).detach().prependTo( $( "#newSearchParent" ) );
 	$( "#dataSongTable_filter" ).find( "input" )
 		.attr("placeholder", "Search (Ctrl + F)" )
+		.addClass("form-control-sm")
 		.detach().prependTo( $( "#dataSongTable_filter" ) );
 	$( "#dataSongTable_filter" ).find( "label" ).remove();
 
@@ -699,7 +703,47 @@ function initSongTable() {
 	songListsObserver.observe( $( "#toggleSonglistsId" )[0], songListsObserverConfig);
 }
 
+function onChangeSongListSelector( event ) {
+	console.log ( "onChangeSongListSelector -> ");
 
+	var $target = $( event.target ),
+		$selected = $target.find(":selected")
+		$checkboxes = $( "#dataSongTable" ).find( "input[type=checkbox]:checked" ),
+		checkedVissibleSongs = $checkboxes.closest("tr").map( function(i, v){
+			return JSON.parse( $('#dataSongTable').DataTable().row( v ).data()[0] );
+		});
+
+		
+//		$( "#dataSongTable" ).find( "input[type=checkbox]:checked" );
+
+	console.log ( "$target ", $target);
+	console.log ( "$selected ", $selected);
+	console.log ( "$parent ", $selected.parent());
+	console.log ( "$id ", $selected.parent().attr( "id" ));
+
+
+
+	/*
+	$( "#dataSongTable" ).find( "input[type=checkbox]:checked" ).closest("tr").each( function(i, v){
+		console.log( $('#dataSongTable').DataTable().row( v ).data()[0] )
+	});
+	*/
+
+	var $songlist = $("#songListList").find( '[data-songlist-id="'+$selected.val()+'"]' );
+
+	if( $selected.parent().attr( "id" ) == "songListSelectorAddToSonglist" ) {
+		addSongsToSonglist( checkedVissibleSongs, $songlist );
+	} else if(  $selected.parent().attr( "id" ) == "songListSelectorRemoveFromSonglist" ){
+		console.log("should remove " + checkedVissibleSongs + " to data-songlist-id=" + $selected.val());
+		removeSongsFromSonglist( checkedVissibleSongs, $songlist );
+	} else {
+		console.log("something wrong");
+	}
+
+	$target.val( 0 );
+	$checkboxes.prop("checked", false).prop( "checked", false );
+
+}
 
 function dropSongOnSonglist( event ) {
 	event.preventDefault();
@@ -709,39 +753,80 @@ function dropSongOnSonglist( event ) {
 	}
 
 	var dataInfo = JSON.parse( event.dataTransfer.getData("jsonDataInfo") ),
-		songAlreadyExists,
-		$target = $(event.target),
+		$target = $(event.target);
+
+	addSongsToSonglist( [dataInfo], $target );
+}
+
+function removeSongsFromSonglist( songs, $target ) {
+	console.log("target", $target);
+	var	i, 
+		songDidNotExists,
 		songList = $target.data("songList");
 
-	songAlreadyExists = songList.songs.filter(function(value, index, arr){
-		return value.galleryId == dataInfo.galleryId &&
-			value.fullPath == dataInfo.fullPath;
-	} ).length > 0;
+	$.each( songs, function(i, dataInfo) {
+		songDidNotExists = true;
+		songList.songs.forEach( function( v, i ) {
+			if( v.galleryId == dataInfo.galleryId && v.fullPath == dataInfo.fullPath) {
+				songDidNotExists = false;
+				songList.songs.splice(i, 1);
+			}
+		} );
 
-	if( songAlreadyExists ) {
-		$.notify( "This song is already in " + songList.name, "info" );
-		return;
-	}
+		if( songDidNotExists ) {
+			$.notify( "This song did not exist in " + songList.name, "info" );
+			return;
+		}
 
+		$target.data("songList", songList);
 
-	songList.isDirectory = false;
-	songList.songs.push( dataInfo );
+		notifyUndo( "The song was removed from " + songList.name, function(){
+			var i,
+				undo_songList = $target.data("songList");
 
-	$target.data("songList", songList);
+			undo_songList.songs.push( dataInfo );
 
+			DB.saveSonglists_new();
+		} );
+	});
 	DB.saveSonglists_new();
+}
 
-	notifyUndo( "The song was added to " + songList.name, function(){
-		var i,
-			undo_songList = $(event.target).data("songList");
+function addSongsToSonglist( songs, $target ) {
+	console.log("target", $target);
+	var	songAlreadyExists,
+		songList = $target.data("songList");
 
-		undo_songList.songs = undo_songList.songs.filter(function(value, index, arr){
-			return !(value.galleryId == dataInfo.galleryId &&
-				value.fullPath == dataInfo.fullPath);
-		});
+	$.each( songs, function(i, dataInfo) {
+		songAlreadyExists = songList.songs.filter(function(value, index, arr){
+			return value.galleryId == dataInfo.galleryId &&
+				value.fullPath == dataInfo.fullPath;
+		} ).length > 0;
 
-		DB.saveSonglists_new();
-	} );
+		if( songAlreadyExists ) {
+			$.notify( "This song is already in " + songList.name, "info" );
+			return;
+		}
+
+
+		songList.isDirectory = false;
+		songList.songs.push( dataInfo );
+
+		$target.data("songList", songList);
+
+		notifyUndo( "The song was added to " + songList.name, function(){
+			var i,
+				undo_songList = $target.data("songList");
+
+			undo_songList.songs = undo_songList.songs.filter(function(value, index, arr){
+				return !(value.galleryId == dataInfo.galleryId &&
+					value.fullPath == dataInfo.fullPath);
+			});
+
+			DB.saveSonglists_new();
+		} );
+	});
+	DB.saveSonglists_new();
 }
 
 function allowDrop( ev ) {
@@ -2020,6 +2105,20 @@ var TroffClass = function(){
 					.on( "drop", dropSongOnSonglist)
 					.on( "dragover", allowDrop)
 			);
+//			var o = $('<option value="Option Value2">Option Name2</option>');
+//		$("#songListSelector").append( o );
+//		$("#songListSelector").append( $('<option>').attr('value', "Option Value")
+//				.appent("Option Name");
+
+		var oAdd = $("<option>")
+			.text("Add to " + oSongList.name)
+			.val(oSongList.id);
+		$("#songListSelectorAddToSonglist").append( oAdd );
+		var oRemove = $("<option>")
+			.text("Remove from " + oSongList.name)
+			.val(oSongList.id);
+		$("#songListSelectorRemoveFromSonglist").append( oRemove );
+
 	};
 
 	this.recallCurrentStateOfSonglists = function() {
@@ -4332,6 +4431,7 @@ var IOClass = function(){
 		} );
 
 		$( "#songListAll_NEW" ).click( clickSongList_NEW );
+		$( "#songListSelector" ).change( onChangeSongListSelector );
 
 		$( "#buttSettingsDialog" ).click ( Troff.openSettingsDialog );
 		$( "#buttCloseSettingPopUpSquare" ).click ( Troff.closeSettingsDialog );
