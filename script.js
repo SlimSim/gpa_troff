@@ -899,12 +899,14 @@ function moveSongPickerToAttachedState() {
 	dataTableShowOnlyColumnsForAttachedState();
 	$("#newSearchParent, #songPicker").detach().appendTo( $("#songPickerAttachedArea") );
 	$( ".hideOnSongsDalogFloatingState" ).removeClass( "hidden" );
+	$( ".hideOnSongsDalogAttachedState" ).addClass( "hidden" );
 };
 
 function moveSongPickerToFloatingState() {
 	$("#newSearchParent, #songPicker").detach().insertBefore( "#buttCloseSongsPopUpSquare" );
 	dataTableShowColumnsForFloatingState();
 	$( "#songPickerAttachedArea, .hideOnSongsDalogFloatingState" ).addClass( "hidden" );
+	$( ".hideOnSongsDalogAttachedState" ).removeClass( "hidden" );
 };
 
 function dataTableColumnPicker( event ) {
