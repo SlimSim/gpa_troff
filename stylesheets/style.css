@@ -403,6 +403,12 @@ input[type=number].numberWider{
 	max-width: 320px;
 }
 
+#songPickerAttachedArea #songPicker {
+	/*
+	songPicker needs flex: 1; on Attached stade, but not in floating state
+	*/
+	flex: 1;
+}
 
 
 
