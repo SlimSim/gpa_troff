@@ -2234,7 +2234,7 @@ var TroffClass = function(){
 		}
 	};
 	
-	this.createNewSonglist = function(){
+	/*Troff*/this.createNewSonglist = function(){
 		Troff.resetNewSongListPartAllSongs();
 		$('#newSongListPart').show();
 		$('#songListPartButtons, #songListPartTheLists').hide();
@@ -2252,7 +2252,7 @@ var TroffClass = function(){
 		Troff.resetNewSongListPartAllSongs();
 	};
 	
-	this.removeSonglist = function(){
+	/*Troff*/this.removeSonglist = function(){
 		IO.confirm( 'Remove songlist?',
 								'Don you want to permanently remove this songlist?',
 								function(){
@@ -2281,7 +2281,7 @@ var TroffClass = function(){
 		});
 	};
 	
-	this.saveNewSongList = function(){
+	/*Troff*/this.saveNewSongList = function(){
 		$('#newSongListPart').hide();
 		$( "#searchCreateSongList" ).val( "" ).trigger( "click" );
 		IO.clearEnterFunction();
@@ -2339,7 +2339,7 @@ var TroffClass = function(){
 		
 	};
 	
-	this.getUniqueSonglistId = function(){
+	/*Troff*/this.getUniqueSonglistId = function(){
 		var iSonglistId = 1;
 		var bFinniched = false;
 		var aSonglists = $('#songListPartTheLists li');
@@ -2391,7 +2391,7 @@ var TroffClass = function(){
 		$('#songlistHelpText').hide();
 	};
 	
-	this.setSonglistById = function(id){
+	/*Troff*/this.setSonglistById = function(id){
 		if(id === 0){
 			$('#songlistAll').click();
 			return;
@@ -2420,7 +2420,7 @@ var TroffClass = function(){
 		setSong(fullPath, galleryId);
 	};
 	
-	this.showSongsHelpText = function(){
+	/*Troff*/this.showSongsHelpText = function(){
 		if($('#gallery >').filter('button').length === 0){
 			var bAllSongs = $('#songlistAll').hasClass('selected');
 			$('#SongsHelpTextNoSongs').toggle(bAllSongs);
@@ -2462,7 +2462,7 @@ var TroffClass = function(){
 	};
 
 	
-	this.addAllSongsFromGallery = function(galleryIdToAdd){
+	/*Troff*/this.addAllSongsFromGallery = function(galleryIdToAdd){
 		var allSongs = $('#newSongListPartAllSongs')
 			.children().filter('[isDirectory!=true]'); //slim sim, finns det en funktion fÃ¶r detta?
 
@@ -2496,7 +2496,7 @@ var TroffClass = function(){
 			$('#songsTab').click();
 	};
 	
-	this.selectSonglist = function(event){
+	/*Troff*/this.selectSonglist = function(event){
 		document.getElementById('blur-hack').focus();
 		$('#songListPartTheLists li input, #songlistAll').removeClass('selected');
 		this.classList.add('selected');
@@ -2531,7 +2531,7 @@ var TroffClass = function(){
 		Troff.showSongsHelpText();
 	};
 
-	this.getMediaButton = function(fullPath, galleryId){
+	/*Troff*/this.getMediaButton = function(fullPath, galleryId){
 		var pap = document.createElement("button");
 		pap.setAttribute("class", "mediaButton onOffButton");
 		var currGalleryId = Troff.getCurrentGalleryId();
@@ -2578,13 +2578,13 @@ var TroffClass = function(){
 		IO.clearEnterFunction();
 	};
 
-	this.updateSongInfo = function(){
+	/*Troff*/this.updateSongInfo = function(){
 		var strInfo = $('#songInfoArea')[0].value;
 		var songId = Troff.getCurrentSong();
 		DB.setCurrentSongInfo(strInfo, songId);
 	};
 	
-	this.rememberCurrentState = function(){
+	/*Troff*/this.rememberCurrentState = function(){
 		if( $("#statesTab").hasClass( "hidden" ) ) return;
 
 		document.getElementById('blur-hack').focus();
@@ -2642,7 +2642,7 @@ var TroffClass = function(){
 			$('#statesHelpText').hide();
 	};
 	
-	this.setState = function(stateWrapper){
+	/*Troff*/this.setState = function(stateWrapper){
 		var strState = $(stateWrapper.target).parent().attr('strState');
 		var oState = JSON.parse(strState);
 		if(oState.buttPauseBefStart !== $('#buttPauseBefStart').hasClass('active')){
@@ -2682,7 +2682,7 @@ var TroffClass = function(){
 		);
 	};
 
-	this.searchSongTot = function( event, selector, test, getText ) {
+	/*Troff*/this.searchSongTot = function( event, selector, test, getText ) {
 		function normalizeText( text ) {
 			return text
 				.toLowerCase()
@@ -2763,8 +2763,21 @@ var TroffClass = function(){
 		});
 
 	};
+
+	/*Troff*/this.showSearchAndActivate = function( event ) {
+		if( !$('#buttSongsDialog').hasClass( "active" ) ) {
+			$('#buttSongsDialog').trigger( "click" ).select();
+		}
+
+		if( !$( "[data-st-css-selector-to-hide=\"#dataSongTable_filter\"]" ).hasClass("active") ) {
+			$( "[data-st-css-selector-to-hide=\"#dataSongTable_filter\"]" ).trigger( "click" ).select();
+		}
+
+		$( "#dataSongTable_filter" ).find( "input" ).trigger( "click" ).select();
+	};
 	
-	this.enterSearch = function( event ){
+	/*Troff*/this.enterSearch = function( event ){
+		console.log("troff.enterSearch ->");
 		if( $('#songsArea').is(':hidden') ) {
 			$('#songsTab').trigger('click');
 		}
@@ -4742,8 +4755,7 @@ var IOClass = function(){
 			break;
 		case 70: // F
 			if(event.ctrlKey==1){
-				
-				$('#searchSong').trigger('click').select();
+				Troff.showSearchAndActivate();
 			}
 			else
 				Troff.forceFullscreenChange();
