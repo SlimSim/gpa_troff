@@ -577,10 +577,23 @@ function addItem_NEW(itemEntry) {
 }
 
 function initSongTable() {
+	var dataSongTable,
+		selectAllCheckbox = $( '<div class="checkbox preventSongLoad"><label><input type="checkbox" value=""><span class="cr"><i class="cr-icon fa fa-check"></i></span></label></div>' );
+
+	selectAllCheckbox.click( function( event ) {
+		var headerCheckbox = $( "#dataSongTable" ).find( "th" ).find( "input[type=checkbox]" ),
+			allCheckboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]" );
+		if( headerCheckbox.is( ":checked" ) ) {
+			allCheckboxes.prop( 'checked', true );
+		} else {
+			allCheckboxes.prop( 'checked', false );
+		}
+	} );
+
 	$( "#dataSongTable" ).find( "thead" ).find( "tr" )
 		.append( $('<th>').text( "dataInfo" ) )
 //		.append( $('<th>').addClass("primaryColor").text( "Play" ) )
-		.append( $('<th>').addClass("primaryColor").text( "Menu" ) )
+		.append( $('<th>').addClass("primaryColor").append( selectAllCheckbox ) )
 		.append( $('<th>').addClass("primaryColor").text( "Type" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Duration" ) )
 		.append( $('<th>').addClass("primaryColor").text( "Title Or File" ) )
@@ -598,7 +611,7 @@ function initSongTable() {
 
 
 
-	var dataSongTable = $("#dataSongTable").DataTable({
+	dataSongTable = $("#dataSongTable").DataTable({
 		"fixedHeader": true,
 		"paging": false,
 		"createdRow": function( row, data, dataIndex ) {
@@ -631,12 +644,9 @@ function initSongTable() {
 	  event.dataTransfer.setData("jsonDataInfo", jsonDataInfo);
 	})
 	.on( 'click', 'tr', function ( event ) {
-		console.log("target", event.target);
-
-		if( $( event.target ).closest( "td" ) .hasClass( "preventSongLoad" ) ) {
+		if( $( event.target ).closest( "td, th" ) .hasClass( "preventSongLoad" ) ) {
 			return;
 		}
-
 
 		var dataInfo = JSON.parse(dataSongTable.row( $(this) ).data()[0]);
 
@@ -708,7 +718,7 @@ function onChangeSongListSelector( event ) {
 
 	var $target = $( event.target ),
 		$selected = $target.find(":selected")
-		$checkboxes = $( "#dataSongTable" ).find( "input[type=checkbox]:checked" ),
+		$checkboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]:checked" ),
 		checkedVissibleSongs = $checkboxes.closest("tr").map( function(i, v){
 			return JSON.parse( $('#dataSongTable').DataTable().row( v ).data()[0] );
 		});
