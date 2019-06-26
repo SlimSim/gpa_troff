@@ -240,10 +240,12 @@ function clearContentDiv() {
 	 }
 }
 
+/*
 function clearList() {
 	document.getElementById("newSongListPartAllSongs").innerHTML = "";
 	$('#dataSongTable').DataTable().clear().draw();
 }
+*/
 
 function clearGalleryAndDirectoryList() {
 	$("#galleryList").empty();
@@ -357,6 +359,7 @@ function addGallery(name, id) {
 	return optGrp;
 }
 
+/*
 function addItem(itemEntry) {
 	if (itemEntry.isFile) {
 		var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(itemEntry.filesystem);
@@ -380,7 +383,7 @@ function addItem(itemEntry) {
 			This (the following if) is only to ease the transition between 
 			v0.3 to v0.4,
 			it is not used a single time after they open the app with v0.4 
-		*/
+		* /
 		if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
 			setSong(itemEntry.fullPath, mData.galleryId);
 		
@@ -396,6 +399,7 @@ function addItem(itemEntry) {
 	 }
 	 
 }
+*/
 
 function sortAndValue(sortValue, stringValue) {
 	if( sortValue === undefined )
@@ -741,7 +745,11 @@ function onChangeSongListSelector( event ) {
 
 	var $songlist = $("#songListList").find( '[data-songlist-id="'+$selected.val()+'"]' );
 
-	if( $selected.parent().attr( "id" ) == "songListSelectorAddToSonglist" ) {
+	if( $selected.val() == 1 ) {
+		console.log("should create songlist fore ", checkedVissibleSongs );
+		//$("#createSongListParent").removeClass("hidden");
+		createSongList_NEW( checkedVissibleSongs );
+	} else if( $selected.parent().attr( "id" ) == "songListSelectorAddToSonglist" ) {
 		addSongsToSonglist( checkedVissibleSongs, $songlist );
 	} else if(  $selected.parent().attr( "id" ) == "songListSelectorRemoveFromSonglist" ){
 		console.log("should remove " + checkedVissibleSongs + " to data-songlist-id=" + $selected.val());
@@ -753,6 +761,20 @@ function onChangeSongListSelector( event ) {
 	$target.val( 0 );
 	$checkboxes.prop("checked", false).prop( "checked", false );
 
+}
+
+function createSongList_NEW( songs ) {
+	$("#createSongListDialog").removeClass("hidden");
+	
+	$("#createSongListSave").on( "click.saveSongList", function( event ) {
+		console.log( "saving new songList songs:", songs);
+		
+		
+		
+		$("#createSongListName").val("");
+		$("#createSongListDialog").addClass("hidden");
+		$('#createSongListSave').off( "click.saveSongList" );
+	} );
 }
 
 function dropSongOnSonglist( event ) {
@@ -989,7 +1011,7 @@ function scanGallery(entries) {
 	}
 	for (var i = 0; i < entries.length; i++) {
 		if (entries[i].isFile) {
-			addItem(entries[i]);
+			//addItem(entries[i]);
 			addItem_NEW( entries[i] );
 			gGalleryData[gGalleryIndex].numFiles++;
 			loopFunktion(entries, gGalleryData[gGalleryIndex], i);
@@ -1017,7 +1039,7 @@ function loopFunktion(entries, galData, i) {
 function scanGalleries(fs) {
 	 var mData = chrome.mediaGalleries.getMediaFileSystemMetadata(fs);
 
-	 gCurOptGrp = addGallery(mData.name, mData.galleryId);
+	 //gCurOptGrp = addGallery(mData.name, mData.galleryId);
 	 addGallery_New(mData.name, mData.galleryId);
 	 gGalleryData[gGalleryIndex] = new GalleryData(mData.galleryId);
 	 gGalleryReader = fs.root.createReader();
@@ -1026,7 +1048,7 @@ function scanGalleries(fs) {
 
 function getGalleriesInfo(results) {
 //	Media.getGalleriesInfo( results );
-	clearList();
+	//clearList();
 	clearGalleryAndDirectoryList()
 	if (results.length) {
 		gGalleryArray = results; // store the list of gallery directories
@@ -2234,7 +2256,7 @@ var TroffClass = function(){
 		}
 	};
 	
-	/*Troff*/this.createNewSonglist = function(){
+	/*Troff* /this.createNewSonglist = function(){
 		Troff.resetNewSongListPartAllSongs();
 		$('#newSongListPart').show();
 		$('#songListPartButtons, #songListPartTheLists').hide();
@@ -2242,7 +2264,9 @@ var TroffClass = function(){
 		$('#newSongListName').focus();
 		$('#newSongListName').click();
 	};
+	*/
 	
+	/*
 	this.cancelSongList = function(){
 		document.getElementById('blur-hack').focus();
 		$('#newSongListPart').hide();
@@ -2251,8 +2275,9 @@ var TroffClass = function(){
 		$('#songListPartButtons, #songListPartTheLists').show();
 		Troff.resetNewSongListPartAllSongs();
 	};
+	*/
 	
-	/*Troff*/this.removeSonglist = function(){
+	/*Troff* /this.removeSonglist = function(){
 		IO.confirm( 'Remove songlist?',
 								'Don you want to permanently remove this songlist?',
 								function(){
@@ -2279,9 +2304,9 @@ var TroffClass = function(){
 			DB.saveSonglists(); // this saves the current songlists from html to DB
 			Troff.resetNewSongListPartAllSongs();
 		});
-	};
+	};//*/
 	
-	/*Troff*/this.saveNewSongList = function(){
+	/*Troff* /this.saveNewSongList = function(){
 		$('#newSongListPart').hide();
 		$( "#searchCreateSongList" ).val( "" ).trigger( "click" );
 		IO.clearEnterFunction();
@@ -2337,7 +2362,7 @@ var TroffClass = function(){
 		DB.saveSonglists(); // this saves the current songlists from html to DB
 		DB.getCurrentSonglist(); // this reloads the current songlist
 		
-	};
+	};//*/
 	
 	/*Troff*/this.getUniqueSonglistId = function(){
 		var iSonglistId = 1;
@@ -4510,9 +4535,9 @@ var IOClass = function(){
 		$('#buttStartBefore').click(Troff.toggleStartBefore);
 		// Don't update as the user is typing:
 		//$('#startBefore').change(Troff.updateStartBefore);
-		$('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
-		$('#searchSong')[0].addEventListener('input', Troff.searchSong);
-		$('#searchCreateSongList')[0].addEventListener('input', Troff.searchCreateSongList);
+		//$('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
+		//$('#searchSong')[0].addEventListener('input', Troff.searchSong);
+		//$('#searchCreateSongList')[0].addEventListener('input', Troff.searchCreateSongList);
 		
 		$('#buttZoom').click(Troff.zoomToMarker);
 		$('#buttZoomOut').click(Troff.zoomOut);
@@ -4522,8 +4547,8 @@ var IOClass = function(){
 		$('#markerInfoArea').change(Troff.updateMarkerInfo);
 		$('#markerInfoArea').blur(Troff.exitMarkerInfo);
 		$('#markerInfoArea').click(Troff.enterMarkerInfo);
-		$( '#searchCreateSongList' ).click( Troff.enterSearchCreateSongList );
-		$( '#searchCreateSongList' ).blur( Troff.exitSearchCreateSongList );
+		//$( '#searchCreateSongList' ).click( Troff.enterSearchCreateSongList );
+		//$( '#searchCreateSongList' ).blur( Troff.exitSearchCreateSongList );
 		$(" [type=\"search\"] " ).click( Troff.enterSerachDataTableSongList );
 		$(" [type=\"search\"] " ).blur( Troff.exitSerachDataTableSongList );
 

@@ -139,7 +139,7 @@
 		<div id="areaParent" class="flexRow AreaParent" style="flex: 1; margin: 0 -4px">
 			<div id="songPickerAttachedArea" class="flexCol start">
 			</div>
-			<div id="songlistsArea" class="flexCol start">
+			<!--div id="songlistsArea" class="flexCol start hidden">
 				<h1>Song lists</h1>
 				<div id="songListPartButtons" class="flexCol">
 					<input type="button" value="New song list" class="regularButton" id="buttNewSongList"/>
@@ -174,9 +174,9 @@
 					<ul id="newSongListPartAllSongs" 
 						class="bgEasyRead marginBottom scrollableY"></ul>
 				</div>
-			</div> <!-- songListsArea -->
+			</div> <!- - songListsArea -->
 			
-			<div id="songsArea" class="flexCol start">
+			<div id="songsArea" class="flexCol start hidden">
 				<h1>Songs</h1>
 				
 				<input 
@@ -938,7 +938,6 @@
 		</div>
 	</div>
 
-
 	
 	<div id="outerSongListPopUpSquare" class="outerDialog hidden">
 		<div id="innerSongListPopUpSquare" class="popUpSquare" >
@@ -1011,9 +1010,10 @@
 
 				<div>
 					<select id="songListSelector" class="custom-select custom-select-sm hideOnSongsDalogAttachedState">
-						<option value="0" selected>Do with selected rows...</option>
-						<optgroup id="songListSelectorAddToSonglist" label="Picnic"></optgroup>
-						<optgroup id="songListSelectorRemoveFromSonglist" label="Picnic"></optgroup>
+						<option value="0" disabled selected>Do with selected rows...</option>
+						<option value="1">Create new songlist</option>
+						<optgroup id="songListSelectorAddToSonglist" label="Add songs to songlist"></optgroup>
+						<optgroup id="songListSelectorRemoveFromSonglist" label="Remove songs from"></optgroup>
 					</select>
 				</div>
 				<div class="flexOne"></div>
@@ -1064,6 +1064,20 @@
 			<input id="buttCloseSongsPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none buttCloseSongsDialog" value="Close" />
 		</div>
 	</div>
+	
+	
+	
+	<div id="createSongListDialog" class="outerDialog hidden">
+		<div class="innerDialog mediumDialog marginDialog flexCol">
+			<h2 class="paragraph">How zoom works</h2>
+			<div id="createSongListNameParent">
+				<p class="pl-3">Song list name:</p>
+				<input type="text" id="createSongListName" class="form-control-sm editText" />
+				<input type="button" id="createSongListSave" class="regularButton" value="Save" />
+			</div>
+		</div>
+	</div>
+	
 
 </body>
 </html>
