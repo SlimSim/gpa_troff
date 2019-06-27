@@ -729,12 +729,12 @@ function onChangeSongListSelector( event ) {
 
 		
 //		$( "#dataSongTable" ).find( "input[type=checkbox]:checked" );
-
+/*
 	console.log ( "$target ", $target);
 	console.log ( "$selected ", $selected);
 	console.log ( "$parent ", $selected.parent());
 	console.log ( "$id ", $selected.parent().attr( "id" ));
-
+*/
 
 
 	/*
@@ -766,15 +766,24 @@ function onChangeSongListSelector( event ) {
 function createSongList_NEW( songs ) {
 	$("#createSongListDialog").removeClass("hidden");
 	
-	$("#createSongListSave").on( "click.saveSongList", function( event ) {
+	var saveSongList = function( event ) {
 		console.log( "saving new songList songs:", songs);
 		
-		
-		
+		document.getElementById('blur-hack').focus();
 		$("#createSongListName").val("");
 		$("#createSongListDialog").addClass("hidden");
 		$('#createSongListSave').off( "click.saveSongList" );
-	} );
+		
+		
+		
+		
+	} 
+	
+	IO.setEnterFunction(function(event){
+		saveSongList();
+		return false;
+	});
+	$("#createSongListSave").on( "click.saveSongList", saveSongList );
 }
 
 function dropSongOnSonglist( event ) {
