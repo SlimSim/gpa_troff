@@ -1010,8 +1010,8 @@
 
 				<div>
 					<select id="songListSelector" class="custom-select custom-select-sm hideOnSongsDalogAttachedState">
-						<option value="0" disabled selected>Do with selected rows...</option>
-						<option value="1">Create new songlist</option>
+						<option value="-" disabled selected>Do with selected rows...</option>
+						<option value="+">Create new songlist</option>
 						<optgroup id="songListSelectorAddToSonglist" label="Add songs to songlist"></optgroup>
 						<optgroup id="songListSelectorRemoveFromSonglist" label="Remove songs from"></optgroup>
 					</select>
@@ -1069,7 +1069,7 @@
 	
 	<div id="createSongListDialog" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog marginDialog flexCol">
-			<h2 class="paragraph">How zoom works</h2>
+			<h2 class="paragraph">New Song List</h2>
 			<div id="createSongListNameParent">
 				<p class="pl-3">Song list name:</p>
 				<input type="text" id="createSongListName" class="form-control-sm editText" />

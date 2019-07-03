@@ -68,7 +68,7 @@ function notifyUndo(infoText, callback){
 		title: span
 	}, { 
 		style: 'info-undo',
-		autoHide: false,
+		autoHide: true,
 		autoHideDelay: 7000,
 		clickToHide: true
 	});
