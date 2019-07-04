@@ -587,11 +587,8 @@ function initSongTable() {
 	selectAllCheckbox.click( function( event ) {
 		var headerCheckbox = $( "#dataSongTable" ).find( "th" ).find( "input[type=checkbox]" ),
 			allCheckboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]" );
-		if( headerCheckbox.is( ":checked" ) ) {
-			allCheckboxes.prop( 'checked', true );
-		} else {
-			allCheckboxes.prop( 'checked', false );
-		}
+		allCheckboxes.prop( 'checked', headerCheckbox.is( ":checked" ) );
+
 	} );
 
 	$( "#dataSongTable" ).find( "thead" ).find( "tr" )
@@ -748,7 +745,7 @@ function onChangeSongListSelector( event ) {
 	}
 
 	$target.val( "-" );
-	$checkboxes.prop("checked", false).prop( "checked", false );
+	$checkboxes.prop("checked", false);//.prop( "checked", false );
 
 }
 
@@ -812,13 +809,17 @@ function removeSongsFromSonglist( songs, $target ) {
 
 
 	$.each( songs, function(i, dataInfo) {
+		var index,
+			value;
 		songDidNotExists = true;
-		$.each( songList.songs, function( i, v ){ 
-			if( v.galleryId == dataInfo.galleryId && v.fullPath == dataInfo.fullPath) {
+
+		for( index = 0; index < songList.songs.length; index++ ) {
+			value = songList.songs[index];
+			if( value.galleryId == dataInfo.galleryId && value.fullPath == dataInfo.fullPath) {
 				songDidNotExists = false;
-				songList.songs.splice(i, 1);
+				songList.songs.splice(index, 1);
 			}
-		} );
+		}
 
 		if( songDidNotExists ) {
 			$.notify( "This song did not exist in " + songList.name, "info" );
@@ -828,8 +829,7 @@ function removeSongsFromSonglist( songs, $target ) {
 		$target.data("songList", songList);
 
 		notifyUndo( "The song was removed from " + songList.name, function(){
-			var i,
-				undo_songList = $target.data("songList");
+			var undo_songList = $target.data("songList");
 
 			undo_songList.songs.push( dataInfo );
 
@@ -2142,6 +2142,7 @@ var TroffClass = function(){
 
 		removeSonglist_NEW = function( event ) {
 			$(event.target).closest( "li" ).remove();
+			$("#songListSelector").find("[value=\"" + oSongList.id + "\"]").remove()
 			DB.saveSonglists_new();
 
 			notifyUndo( "The songlist \"" + oSongList.name + "\" was removed", function() {
