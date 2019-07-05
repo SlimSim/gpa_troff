@@ -651,7 +651,7 @@ function initSongTable() {
 
 		var dataInfo = JSON.parse(dataSongTable.row( $(this) ).data()[0]);
 
-		$("#dataSongTable").find(".selected").removeClass("selected");
+		$("#dataSongTable").DataTable().rows(".selected").nodes().to$().removeClass( "selected" );
 		$(this).addClass("selected");
 
 		setSong(
@@ -672,13 +672,17 @@ function initSongTable() {
 	$( "#dataSongTable thead th" ).removeClass( "secondaryColor" );
 
 	// to move the searchbar away from the scrolling-area
-
-
 	$( "#dataSongTable_filter" ).detach().prependTo( $( "#newSearchParent" ) );
 	$( "#dataSongTable_filter" ).find( "input" )
 		.attr("placeholder", "Search (Ctrl + F)" )
 		.addClass("form-control-sm")
-		.detach().prependTo( $( "#dataSongTable_filter" ) );
+		.detach().prependTo( $( "#dataSongTable_filter" ) )
+		.on( "click", Troff.enterSerachDataTableSongList )
+		.on( "keyup", Troff.onSearchKeyup )
+		.on( "blur", Troff.exitSerachDataTableSongList );
+
+	//när man tar enter så rensas inte filtret (kanske en setting om den ska ränsas?)
+
 	$( "#dataSongTable_filter" ).find( "label" ).remove();
 
 	if( $( "#toggleSonglistsId" ).hasClass( "active" ) ) {
@@ -2764,7 +2768,7 @@ var TroffClass = function(){
 		} );
 	};
 
-	this.searchSong = function( event ) {
+	/*Troff*/this.searchSong = function( event ) {
 		Troff.searchSongTot(
 			event,
 			"#gallery",
@@ -2779,7 +2783,23 @@ var TroffClass = function(){
 		}
 	};
 
-	this.enterSerachDataTableSongList = function( event ) {
+	/*Troff*/this.onSearchKeyup = function( event ) {
+
+		if( event != undefined && [37, 38, 39, 40].indexOf(event.keyCode) != -1 ) {
+			return;
+		}
+		var tBody = $("#dataSongTable").find("tbody"),
+			importantEl = tBody.find( "tr" ).filter( ".important" );
+
+		if( importantEl.length === 0  ) {
+			tBody.find( "tr" ).eq(0).addClass('important');
+		} else {
+			importantEl.slice(1).removeClass('important');
+		}
+
+	};
+
+	/*Troff*/this.enterSerachDataTableSongList = function( event ) {
 		$input = $( event.target );
 		$input.addClass('textareaEdit');
 
@@ -2787,23 +2807,51 @@ var TroffClass = function(){
 			$input.focus();
 		}
 
+		Troff.onSearchKeyup( null );
+
 		IO.setEnterFunction(function(event){
-			/*
 			if(event.ctrlKey==1){//Ctrl+Enter will exit
 				$input.val('').trigger('click');
 				document.getElementById('blur-hack').focus();
 				return false;
 			}
-			*/
+
+			$("#dataSongTable").DataTable().rows(".important").nodes().to$().trigger( "click" );
+			$("#dataSongTable").DataTable().rows(".important").nodes().to$().removeClass( "important" );
+
+			$input.val('');
+			$('#dataSongTable').DataTable().search('').draw();
+
+			document.getElementById('blur-hack').focus();
 			return true;
+		}, function(event){
+			var element = $("#dataSongTable").find("tbody").find( "tr" ).filter( ".important" ),
+				next;
+
+			if( event.keyCode == 37 || event.keyCode == 39 ) return;
+			event.preventDefault();
+
+			if( event.keyCode == 40 ) {
+				next = element.next();
+			} else {
+				next = element.prev();
+			}
+
+			if( next.length ) {
+				element.removeClass( "important" );
+				next.addClass( "important" );
+			}
 		});
 
 	};
-	this.exitSerachDataTableSongList = function( event ) {
+	/*Troff*/this.exitSerachDataTableSongList = function( event ) {
+		$("#dataSongTable").DataTable().rows(".important").nodes().to$().removeClass( "important" );
+
 		IO.clearEnterFunction();
 		document.getElementById('blur-hack').focus();
 	};
 	
+	/*
 	this.enterSearchCreateSongList = function( event ){
 
 		$input = $( event.target );
@@ -2836,8 +2884,8 @@ var TroffClass = function(){
 
 		$( "#dataSongTable_filter" ).find( "input" ).trigger( "click" ).select();
 	};
-	
-	/*Troff*/this.enterSearch = function( event ){
+
+	/*Troff* /this.enterSearch = function( event ){
 		console.log("troff.enterSearch ->");
 		if( $('#songsArea').is(':hidden') ) {
 			$('#songsTab').trigger('click');
@@ -2875,20 +2923,20 @@ var TroffClass = function(){
 			}
 		});
 	};
-	this.exitSearchCreateSongList = function( event ){
+	/*Troff* /this.exitSearchCreateSongList = function( event ){
 		Troff.exitSearchTot( event, "#newSongListPartAllSongs .important" );
 	};
-	this.exitSearch = function( event ){
+	/*Troff* /this.exitSearch = function( event ){
 		Troff.exitSearchTot( event, "#gallery .important" );
 	};
 
-	this.exitSearchTot = function( event, selector ) {
+	/*Troff* /this.exitSearchTot = function( event, selector ) {
 		$( event.target ).removeClass('textareaEdit');
 		$( selector ).removeClass('important');
 		IO.clearEnterFunction();
 	};
 	
-	this.enterMarkerInfo = function(a, b, c){
+	/*Troff*/this.enterMarkerInfo = function(a, b, c){
 		$('#markerInfoArea').addClass('textareaEdit');
 		IO.setEnterFunction(function(event){
 			if(event.ctrlKey==1){//Ctrl+Enter will exit
@@ -2903,7 +2951,7 @@ var TroffClass = function(){
 		IO.clearEnterFunction();
 	};
 	
-	this.enterEditText = function( event ) {
+	/*Troff* /this.enterEditText = function( event ) {
 		$input = $( event.target );
 		
 		$input.addClass('textareaEdit');
@@ -2916,12 +2964,12 @@ var TroffClass = function(){
 		});
 	};
 
-	this.exitEditText = function( event ){
+	/*Troff* /this.exitEditText = function( event ){
 		$( event.target ).removeClass('textareaEdit');
 		IO.clearEnterFunction();
 	};
 
-		this.updateMarkerInfo = function(){
+	/*Troff*/this.updateMarkerInfo = function(){
 			var strInfo = $('#markerInfoArea')[0].value;
 			var color = $('.currentMarker')[0].color;
 			var markerId = $('.currentMarker').attr('id');
@@ -4585,11 +4633,11 @@ var IOClass = function(){
 		$('#markerInfoArea').click(Troff.enterMarkerInfo);
 		//$( '#searchCreateSongList' ).click( Troff.enterSearchCreateSongList );
 		//$( '#searchCreateSongList' ).blur( Troff.exitSearchCreateSongList );
-		$(" [type=\"search\"] " ).click( Troff.enterSerachDataTableSongList );
-		$(" [type=\"search\"] " ).blur( Troff.exitSerachDataTableSongList );
+		//$(" [type=\"search\"] " ).click( Troff.enterSerachDataTableSongList );
+		//$(" [type=\"search\"] " ).blur( Troff.exitSerachDataTableSongList );
 
-		$('.editText').click(Troff.enterSearch);
-		$('.editText').blur(Troff.exitSearch);
+		//$('.editText').click(Troff.enterSearch);
+		//$('.editText').blur(Troff.exitSearch);
 
 
 

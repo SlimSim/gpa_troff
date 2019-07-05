@@ -204,7 +204,8 @@ li[isdirectory="true"]:not(:first-child) {
 }
 
 .accentColor2,
-.important {
+.important,
+.important td {
 	background-color: #231F20; /* accentColor2 */
 }
 .pause .secondsLeft,
@@ -216,6 +217,11 @@ li[isdirectory="true"]:not(:first-child) {
 .important{
 	color:#fff;
 	text-shadow:#fafafa 0 -1px 0; /* NOTISE: not the same color... */
+}
+
+.important td {
+	color: #fff;
+	text-shadow: none;
 }
 
 

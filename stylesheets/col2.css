@@ -185,7 +185,8 @@ p{
 }
 
 .accentColor2,
-.important {
+.important,
+.important td {
 	background-color: #D42626; /* accentColor2 */
 }
 .pause{
@@ -199,6 +200,10 @@ p{
 }
 
 
+.important td {
+	color: #fff;
+	text-shadow: none;
+}
 
 
 
