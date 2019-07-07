@@ -244,10 +244,10 @@ body section{
 		margin: 0px;
 }
 
-#ImportExportPopUpSquare{
-		display: none;
+.almost-full-size{
+	width: 90vw;
+	height: 90vh;
 }
-
 
 .plussMinusButton{
 		display: flex;
