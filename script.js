@@ -644,7 +644,7 @@ function initSongTable() {
 
 	  event.dataTransfer.setData("jsonDataInfo", jsonDataInfo);
 	})
-	.on( 'click', 'tr', function ( event ) {
+	.on( 'click', 'tbody tr', function ( event ) {
 		if( $( event.target ).closest( "td, th" ) .hasClass( "preventSongLoad" ) ) {
 			return;
 		}
@@ -3564,8 +3564,14 @@ var TroffClass = function(){
 			}
 		}; // end clearAllMarkers
 
-		this.settAppropriateActivePlayRegion = function () {
+		/*Troff*/this.settAppropriateActivePlayRegion = function () {
 			var aFirstAndLast = Troff.getFirstAndLastMarkers();
+
+			if( aFirstAndLast === null || aFirstAndLast === undefined ) {
+				setTimeout( Troff.settAppropriateActivePlayRegion, 200 );
+				return;
+			}
+
 			var firstMarkerId = aFirstAndLast[0];
 			var lastMarkerId = aFirstAndLast[1] + 'S';
 			if( $('.currentMarker').length === 0 ){
@@ -4958,6 +4964,7 @@ var IOClass = function(){
 			"height: 100vh; "+
 			"background-color: "+
 			"rgba(0, 0, 0, 0.5);"+
+			"z-index: 99;"+
 			"display: flex;align-items: center;justify-content: center;";
 		var innerDivStyle = ""+
 			"width: 200px;"+
