@@ -270,11 +270,17 @@ function checkIfSongExists(fullPath, galleryId){
 function setSong(fullPath, galleryId){
 	Troff.pauseSong();
 
-	$("#gallery")
-		.children()
-		.removeClass( "selected" )
-		.filter( 'button[fullpath="' + fullPath + '"][galleryid="' + galleryId + '"]' )
-		.addClass( "selected" );
+	if( $( "#TROFF_SETTING_SONG_LIST_CLEAR_ON_SELECT" ).hasClass( "active" ) ) {
+		$("#dataSongTable_filter").find( "input" ).val('');
+		$('#dataSongTable').DataTable().search('').draw();
+	}
+
+	var exitOnSelect = $( "#TROFF_SETTING_SONG_LIST_EXIT_ON_SELECT" ).hasClass( "active" ),
+		floatingDialog = $( "#TROFF_SETTING_SONG_LIST_FLOATING_DIALOG" ).hasClass( "active" );
+
+	if( exitOnSelect && floatingDialog ) {
+		closeSongDialog();
+	}
 
 	var fsId = galleryId;
 	var fs = null;
@@ -308,7 +314,7 @@ function setSong(fullPath, galleryId){
 			 if (newElem) {
 					// Supported in Chrome M37 and later.
 					if (!chrome.mediaGalleries.getMetadata) {
-						//console.info("I'm in the if, so no metadata...");
+
 						newElem.setAttribute('src', fileEntry.toURL());
 					} else {
 
@@ -2852,9 +2858,6 @@ var TroffClass = function(){
 
 			$("#dataSongTable").DataTable().rows(".important").nodes().to$().trigger( "click" );
 			$("#dataSongTable").DataTable().rows(".important").nodes().to$().removeClass( "important" );
-
-			$input.val('');
-			$('#dataSongTable').DataTable().search('').draw();
 
 			document.getElementById('blur-hack').focus();
 			return true;
