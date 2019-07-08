@@ -645,7 +645,10 @@ function initSongTable() {
 		if( event.dataTransfer === undefined ) {
 			event.dataTransfer = event.originalEvent.dataTransfer;
 		}
-		var jsonDataInfo = dataSongTable.row( $(this) ).data()[0];
+		var jsonDataInfo = JSON.stringify({
+			name : dataSongTable.row( $(this) ).data()[4],
+			data : JSON.parse( dataSongTable.row( $(this) ).data()[0] )
+		});
 
 	  event.dataTransfer.setData("jsonDataInfo", jsonDataInfo);
 	})
@@ -729,7 +732,10 @@ function onChangeSongListSelector( event ) {
 		$selected = $target.find(":selected"),
 		$checkboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]:checked" ),
 		checkedVissibleSongs = $checkboxes.closest("tr").map( function(i, v) {
-			return JSON.parse( $('#dataSongTable').DataTable().row( v ).data()[0] );
+			return {
+				name : $('#dataSongTable').DataTable().row( v ).data()[4],
+				data : JSON.parse( $('#dataSongTable').DataTable().row( v ).data()[0] )
+			};
 		}),
 		i,
 		songs = [];
@@ -834,8 +840,9 @@ function removeSongsFromSonglist( songs, $target ) {
 
 
 
-	$.each( songs, function(i, dataInfo) {
+	$.each( songs, function(i, song) {
 		var index,
+			dataInfo = song.data,
 			value;
 		songDidNotExists = true;
 
@@ -848,13 +855,13 @@ function removeSongsFromSonglist( songs, $target ) {
 		}
 
 		if( songDidNotExists ) {
-			$.notify( "This song did not exist in " + songList.name, "info" );
+			$.notify( song.name + " did not exist in " + songList.name, "info" );
 			return;
 		}
 
 		$target.data("songList", songList);
 
-		notifyUndo( "The song was removed from " + songList.name, function(){
+		notifyUndo( song.name + " was removed from " + songList.name, function(){
 			var undo_songList = $target.data("songList");
 
 			undo_songList.songs.push( dataInfo );
@@ -869,14 +876,16 @@ function addSongsToSonglist( songs, $target ) {
 	var	songAlreadyExists,
 		songList = $target.data("songList");
 
-	$.each( songs, function(i, dataInfo) {
+
+	$.each( songs, function(i, song) {
+		var dataInfo = song.data;
 		songAlreadyExists = songList.songs.filter(function(value, index, arr){
 			return value.galleryId == dataInfo.galleryId &&
 				value.fullPath == dataInfo.fullPath;
 		} ).length > 0;
 
 		if( songAlreadyExists ) {
-			$.notify( "This song is already in " + songList.name, "info" );
+			$.notify( song.name + " is already in " + songList.name, "info" );
 			return;
 		}
 
@@ -886,7 +895,7 @@ function addSongsToSonglist( songs, $target ) {
 
 		$target.data("songList", songList);
 
-		notifyUndo( "The song was added to " + songList.name, function(){
+		notifyUndo( song.name + " was added to " + songList.name, function(){
 			var i,
 				undo_songList = $target.data("songList");
 
