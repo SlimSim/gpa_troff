@@ -25,6 +25,9 @@ p{
 .centerRoundButtCommon{
 	background-color: transparent;
 }
+.drop-active {
+	border-color: lightgray;
+}
 .stOnOffButton,
 .loopButt{
 	outline-color: lightgray;
@@ -73,6 +76,7 @@ p{
 .colorPickerSelected{
 	border-color: purple;
 }
+
 
 
 
@@ -128,8 +132,12 @@ p{
 
 
 
-
 /* accentColor1 A700 (men kanske ännu mörkare) */
+.drop-active.selected{
+	border-color: #2DFC00; /* accentColor1 */
+	border-color: #25d200; /* accentColor1 */
+}
+
 .selected:hover, 
 .selected td:hover,
 .currentLoop:hover, 

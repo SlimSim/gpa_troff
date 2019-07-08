@@ -249,7 +249,7 @@ body section{
 	height: 90vh;
 }
 
-.plussMinusButton{
+.plussMinusButton, .flex-display{
 		display: flex;
 }
 
@@ -991,4 +991,9 @@ extend_ -> fill_
 	outline-style: auto;
 }
 
+.drop-active {
+	border: solid 20px;
+	border-left: 0px;
+	border-right: 0px;
 
+}

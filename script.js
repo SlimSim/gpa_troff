@@ -416,8 +416,11 @@ function addDirectory_NEW(directoryEntry) {
 		.append(
 			$("<ul>")
 				.addClass("py-1")
+				.addClass( "flex-display" )
 				.append( $( "<button>" )
 					.addClass("stOnOffButton")
+					.addClass( "flex-one" )
+					.addClass( "text-left" )
 					.attr("data-full-path", directoryEntry.fullPath )
 					.attr("data-gallery-id", mData.galleryId)
 					.text( directoryEntry.name )
@@ -431,8 +434,10 @@ function addGallery_New(name, galleryId) {
 		.append(
 			$("<ul>")
 				.addClass("py-1")
+				.addClass( "flex-display" )
 				.append( $( "<button>" )
 					.addClass("stOnOffButton")
+					.addClass( "flex-one" )
 					.addClass("text-left")
 					.attr("data-gallery-id", galleryId)
 					.text( Troff.getLastSlashName(name) )
@@ -791,8 +796,25 @@ function createSongList_NEW( songs ) {
 
 }
 
+function onDragleave( ev ) {
+	$( ev.target ).removeClass( "drop-active" );
+}
+
+function allowDrop( ev ) {
+	if( $( ev.target ).hasClass( "songlist" ) ) {
+		$( ev.target ).addClass( "drop-active" );
+		ev.preventDefault();
+	}
+}
+
 function dropSongOnSonglist( event ) {
+
+	if( !$( event.target ).hasClass( "songlist" ) ) {
+		return;
+	}
 	event.preventDefault();
+
+	$(event.target).removeClass( "drop-active" );
 
 	if( event.dataTransfer === undefined ) {
 		event.dataTransfer = event.originalEvent.dataTransfer;
@@ -877,10 +899,6 @@ function addSongsToSonglist( songs, $target ) {
 		} );
 	});
 	DB.saveSonglists_new();
-}
-
-function allowDrop( ev ) {
-  ev.preventDefault();
 }
 
 
@@ -2160,9 +2178,12 @@ var TroffClass = function(){
 				$("<li>")
 					.addClass("py-1")
 					.append( $("<div>")
+						.addClass( "flex-display" )
+						.addClass( "pr-2" )
 						.append( $( "<button>" )
 							.addClass("small")
 							.addClass("regularButton")
+							.addClass( "mr-2" )
 							.append(
 								$( "<i>" )
 								.addClass( "fa")
@@ -2170,7 +2191,10 @@ var TroffClass = function(){
 							).on("click", removeSonglist_NEW )
 						)
 						.append( $( "<button>" )
-							.addClass("stOnOffButton")
+							.addClass( "songlist" )
+							.addClass( "stOnOffButton" )
+							.addClass( "flex-one" )
+							.addClass( "text-left" )
 							.data("songList", oSongList)
 							.attr("data-songlist-id", oSongList.id)
 							.text( oSongList.name )
@@ -2179,6 +2203,7 @@ var TroffClass = function(){
 					)
 					.on( "drop", dropSongOnSonglist)
 					.on( "dragover", allowDrop)
+					.on( "dragleave", onDragleave)
 			);
 
 		var oAdd = $("<option>")
