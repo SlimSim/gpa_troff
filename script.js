@@ -472,16 +472,16 @@ function clickSongList_NEW( event ) {
 }
 
 function filterSongTable( list ) {
-	if( list.length === 0 ) {
-		$( "#songListAll_NEW" ).addClass( "selected" );
-	}
+	var regex = list.join("|") || false;
 
-	regex = list.join("|");
+	if( $( "#directoryList, #galleryList, #songListsList").find("button").filter( ".active, .selected" ).length == 0 ) {
+		$( "#songListAll_NEW" ).addClass( "selected" );
+		regex = "";
+	}
 	$('#dataSongTable').DataTable()
 		.columns( 0 )
 		.search( regex, true, false )
 		.draw();
-
 }
 
 function getFilterDataList(){
@@ -953,7 +953,7 @@ function moveSongPickerToAttachedState() {
 };
 
 function moveSongPickerToFloatingState() {
-	$("#newSearchParent, #songPicker").detach().insertBefore( "#buttCloseSongsPopUpSquare" );
+	$("#newSearchParent, #songPicker").detach().insertBefore( "#songPickerFloatingBase" );
 	dataTableShowColumnsForFloatingState();
 	$( "#songPickerAttachedArea, .hideOnSongsDalogFloatingState" ).addClass( "hidden" );
 	$( ".hideOnSongsDalogAttachedState" ).removeClass( "hidden" );

@@ -733,6 +733,34 @@
 								value="winning" />
 						</div>
 
+						<div>
+							<h4 class="buttWidthStandard inlineBlock">Song Lists setting</h4>
+
+							<input class="buttWidthMedium st-simple-on-off-button stOnOffButton"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT"
+								id="TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT"
+								title="If selected, clicking a song list will add those songs to the list, instead of only showing those songs"
+								value="Additive select" />
+							<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG"
+								id="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG"
+								title="If selected, the songs and the song lists will be shown in a floating window"
+								value="Floating" />
+							<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_LIST_EXIT_ON_SELECT_SONG"
+								id="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG_remove"
+								title="If selected, the floating songlist-window will be exited when a song is selected"
+								value="Exit on select" />
+							<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_LIST_EXIT_ON_SELECT_SONG"
+								id="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG_remove2"
+								title="If selected, the floating songlist-window will be exited when a song is selected"
+								value="Vad heta? Clear search on select" />
+						</div>
 
 
 						<div>
@@ -883,24 +911,6 @@
 									id="TROFF_SETTING_UI_LOOP_BUTTONS_SHOW"
 									title="Show the nr-of-loops-selector"
 									value="Nr of loop" />
-							</div>
-
-							<div>
-
-								<h4 class="buttWidthStandard inlineBlock">Song Lists setting</h4>
-
-								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton"
-									type="button"
-									data-st-save-value-key="TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT"
-									id="TROFF_SETTING_SONG_LIST_ADDITIVE_SELECT"
-									title="If selected, clicking a song list will add those songs to the list, instead of only showing those songs"
-									value="Additive select" />
-								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active"
-									type="button"
-									data-st-save-value-key="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG"
-									id="TROFF_SETTING_SONG_LIST_FLOATING_DIALOG"
-									title="If selected, the songs and the song lists will be shown in a floating window"
-									value="Floating Songlist" />
 							</div>
 
 						</div>
@@ -1061,7 +1071,8 @@
 					</table>
 				</div>
 			</div>
-			<input id="buttCloseSongsPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none buttCloseSongsDialog" value="Close" />
+			<div id="songPickerFloatingBase" class="flex-one"></div>
+			<input type="button" class="regularButton buttWidthStandard flex-none buttCloseSongsDialog" value="Close" />
 		</div>
 	</div>
 	
