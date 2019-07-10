@@ -410,6 +410,18 @@ input[type=number].numberWider{
 	flex: 1;
 }
 
+#songPickerAttachedArea #dataSongTable_filter input[type=search]{
+	max-width: 177px;
+}
+#attached-configure-button .fa-music {
+	left: 5px;
+	top: 10px;
+}
+#attached-configure-button .fa-plus {
+	left: -10px;
+	top: -10px;
+	font-size: 12px
+}
 
 
 

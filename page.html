@@ -1017,7 +1017,7 @@
 			</div>
 			<div id="newSearchParent" class="py-2 flexRow flex-none full-width">
 
-				<div>
+				<div class="pt-1 pl-2">
 					<select id="songListSelector" class="custom-select custom-select-sm hideOnSongsDalogAttachedState">
 						<option value="-" disabled selected>Do with selected rows...</option>
 						<option value="+">Create new songlist</option>
@@ -1027,7 +1027,14 @@
 				</div>
 				<div class="flexOne"></div>
 				<div class="flexRow hideOnSongsDalogFloatingState">
-					<button class="mr-2 regularButton"
+					<button class="mr-2 regularButton fa-stack fa-1x"
+						type="button"
+						title="Select folders to get songs from"
+						id="attached-configure-button" >
+					  <i class="fas fa-music fa-stack-1x"></i>
+					  <i class="fas fa-plus fa-stack-1x "></i>
+					</button>
+					<button class="mr-2 stOnOffButton"
 						type="button"
 						title="show Song Lists"
 						id="buttAttachedSongListToggle" >
@@ -1052,6 +1059,11 @@
 						id="songListAll_NEW"
 						class="selected stOnOffButton"
 						value="All songs" />
+					<input
+						type="button"
+						id="buttNewSongList_NEW"
+						class="regularButton"
+						value="New Songlist" />
 					<h2>Song lists</h2>
 					<ul id="songListList" class="flexScroll onOffParent maxWidthParent"></ul>
 					<h2>Gallery Lists</h2>
@@ -1080,6 +1092,8 @@
 	<div id="createSongListDialog" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog marginDialog flexCol">
 			<h2 class="paragraph">New Song List</h2>
+			<p>Create a songlist with <span id="newSonglistNrSongs"></span> songs in it.</p>
+			<p>You can drag and drop new songs on to this songlist from the songs-table.</p>
 			<div id="createSongListNameParent">
 				<p class="pl-3">Song list name:</p>
 				<input type="text" id="createSongListName" class="form-control-sm" />
