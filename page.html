@@ -701,40 +701,39 @@
 			<div class="flexCol vScroll">
 				<p class="pt-2">These settings are not unique to a song</p>
 				<div>
-					<h3 class="pt-3">Extended marker color</h3>
-						<div>
-							<p class="pt-2">When checked, the colors of the markers will extend down to the next marker:</p>
-							<input class="buttWidthStandard stOnOffButton" style="display: block;" type="button"
-								title="extend the marker-colors down to the next marker"
-								id="toggleExtendedMarkerColor" value="fill markers" />
-							<p class="pt-2">When checked, the colors of the markers will extend down to the next marker that has a color:</p>
-							<input class="buttWidthStandard stOnOffButton" style="display: block;" type="button"
-								title="extend the marker-colors down through markers with no color to the next marker with color"
-								id="toggleExtraExtendedMarkerColor" value="fill through" />
-						</div>
-
-						<div id="themePickerParent">
-							<h4 class="pt-3 buttWidthStandard inlineBlock">Theme</h4>
-							<input class="buttWidthStandard stOnOffButton" type="button"
+						<div id="themePickerParent" class="py-2">
+							<h4 class="pt-3 buttWidthMedium inlineBlock">Theme</h4>
+							<input class="buttWidthMedium stOnOffButton" type="button"
 								data-theme="col1"
 								title="Blue and purple"
 								value="standard" />
-							<input class="buttWidthStandard stOnOffButton" type="button"
+							<input class="buttWidthMedium stOnOffButton" type="button"
 								data-theme="col2"
 								title="Green and red"
 								value="forest" />
-							<input class="buttWidthStandard stOnOffButton" type="button"
+							<input class="buttWidthMedium stOnOffButton" type="button"
 								data-theme="col3"
 								title="Black and yellow"
 								value="sunset" />
-							<input class="buttWidthStandard stOnOffButton" type="button"
+							<input class="buttWidthMedium stOnOffButton" type="button"
 								data-theme="col4"
 								title="Gold and white"
 								value="winning" />
 						</div>
+						<div class="py-2">
+							<h4 class="pt-3 buttWidthMedium inlineBlock">Marker color</h4>
+							<!--p class="pt-2">When checked, the colors of the markers will extend down to the next marker:</p-->
+							<input class="buttWidthMedium stOnOffButton" type="button"
+								title="extend the marker-colors down to the next marker"
+								id="toggleExtendedMarkerColor" value="fill markers" />
+							<!--p class="pt-2">When checked, the colors of the markers will extend down to the next marker that has a color:</p-->
+							<input class="buttWidthMedium stOnOffButton" type="button"
+								title="extend the marker-colors down through markers with no color to the next marker with color"
+								id="toggleExtraExtendedMarkerColor" value="fill through" />
+						</div>
 
-						<div>
-							<h4 class="buttWidthStandard inlineBlock">Song Lists setting</h4>
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Song Lists</h4>
 
 							<input class="buttWidthMedium st-simple-on-off-button stOnOffButton"
 								type="button"
@@ -764,9 +763,9 @@
 
 
 						<div>
-							<h3 class="pt-3 pb-2">Behaviour of keys and buttons</h3>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Enter</h4>
+							<h3 class="pt-4 pb-2">Behaviour of keys and buttons</h3>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Enter</h4>
 								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton" 
 									type="button"
 									id="TROFF_SETTING_ENTER_GO_TO_MARKER_BEHAVIOUR"
@@ -785,8 +784,8 @@
 									title="If looping more than once, reset the loop-counter when pausing the song"
 									value="Reset counter" />
 							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Space</h4>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Space</h4>
 								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active" type="button"
 									id="TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR"
 									data-st-save-value-key="TROFF_SETTING_SPACE_GO_TO_MARKER_BEHAVIOUR"
@@ -803,8 +802,8 @@
 									title="If looping more than once, reset the loop-counter when pausing the song"
 									value="Reset counter" />
 							</div>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Play Button</h4>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Play Button</h4>
 								<input class="buttWidthMedium  st-simple-on-off-button stOnOffButton active" 
 									type="button"
 									data-st-save-value-key="TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR"
@@ -832,8 +831,8 @@
 							</div>
 
 
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Select marker</h4>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Select marker</h4>
 								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active" 
 									type="button"
 									data-st-save-value-key="TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER"
@@ -842,8 +841,8 @@
 									value="Go to marker" />
 							</div>
 
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Deleting marker</h4>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Delete marker</h4>
 								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active" 
 									type="button"
 									data-st-save-value-key="TROFF_SETTING_CONFIRM_DELETE_MARKER"
@@ -853,9 +852,9 @@
 							</div>
 
 
-							<h3 class="pt-3 pb-2">Toggle visibility of areas</h3>
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Title area</h4>
+							<h3 class="pt-4 pb-2">Toggle visibility of areas</h3>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Title area</h4>
 								<!-- Show different things in the square at the top left -->
 								<input class="st-simple-on-off-button buttWidthMedium stOnOffButton active"
 									type="button"
@@ -887,8 +886,8 @@
 									value="Path" />
 							</div>
 
-							<div>
-								<h4 class="buttWidthStandard inlineBlock">Setting area</h4>
+							<div class="py-2">
+								<h4 class="buttWidthMedium inlineBlock">Setting area</h4>
 
 								<input class="buttWidthMedium st-simple-on-off-button stOnOffButton active"
 									type="button"
