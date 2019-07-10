@@ -254,6 +254,7 @@ function clearList() {
 function clearGalleryAndDirectoryList() {
 	$("#galleryList").empty();
 	$("#directoryList").empty();
+	$("#dataSongTable").DataTable().clear();
 }
 
 function checkIfSongExists(fullPath, galleryId){
@@ -740,20 +741,20 @@ function onChangeSongListSelector( event ) {
 
 	var $target = $( event.target ),
 		$selected = $target.find(":selected"),
-		$checkboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]:checked" ),
-		checkedVissibleSongs = $checkboxes.closest("tr").map( function(i, v) {
+		//$checkboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]:checked" ),
+		/*checkedVissibleSongs = $checkboxes.closest("tr").map( function(i, v) {
 			return {
 				name : $('#dataSongTable').DataTable().row( v ).data()[4],
 				data : JSON.parse( $('#dataSongTable').DataTable().row( v ).data()[0] )
 			};
 		}),
-		i,
-		songs = [];
-
+		i,*/
+		songs = getSelectedSongs();
+/*
 	for( i = 0; i < checkedVissibleSongs.length; i++ ){
 		songs.push( checkedVissibleSongs[i] );
 	}
-
+*/
 
 
 
@@ -770,11 +771,39 @@ function onChangeSongListSelector( event ) {
 	}
 
 	$target.val( "-" );
-	$checkboxes.prop("checked", false);//.prop( "checked", false );
 
 }
 
-function createSongList_NEW( songs ) {
+function getSelectedSongs() {
+
+	var $checkboxes = $( "#dataSongTable" ).find( "td" ).find( "input[type=checkbox]:checked" ),
+		checkedVissibleSongs = $checkboxes.closest("tr").map( function(i, v) {
+			return {
+				name : $('#dataSongTable').DataTable().row( v ).data()[4],
+				data : JSON.parse( $('#dataSongTable').DataTable().row( v ).data()[0] )
+			};
+		}),
+		i,
+		songs = [];
+
+	for( i = 0; i < checkedVissibleSongs.length; i++ ){
+		songs.push( checkedVissibleSongs[i] );
+	}
+	$checkboxes.prop("checked", false);
+	return songs;
+
+}
+
+function clickButtNewSongList_NEW( event ) {
+	var songs = getSelectedSongs();
+	createSongList_NEW( songs );
+}
+
+function createSongList_NEW( songDataList ) {
+
+	var songs = songDataList.map(x => x.data);
+
+	$( "#newSonglistNrSongs" ).text( songs.length );
 	$("#createSongListDialog").removeClass("hidden");
 	
 	var saveSongList = function( event ) {
@@ -1120,7 +1149,7 @@ function getGalleriesInfo(results) {
 		IO.alert(
 			'No songs or videos found, '+
 			'please add a directory with a song or video in it.'+
-			'(do this under "Songs", and then "Select folders")'
+			'(do this under "Songs", and then "Select folders" or the "+"-sign)'
 		);
 	}
 
@@ -1131,11 +1160,20 @@ function FSstartFunc(){
 		 interactive : 'if_needed'
 	}, getGalleriesInfo);
 
+
+	$( "#configure-button, #attached-configure-button" ).on( "click", function() {
+		chrome.mediaGalleries.getMediaFileSystems({
+			interactive : 'yes'
+		}, getGalleriesInfo);
+	});
+
+/*
 	document.getElementById('configure-button').addEventListener("click", function() {
 		chrome.mediaGalleries.getMediaFileSystems({
 			interactive : 'yes'
 		}, getGalleriesInfo);
 	});
+	*/
 } // end window load
 
 
@@ -4677,6 +4715,7 @@ var IOClass = function(){
 			}
 		} );
 
+		$( "#buttNewSongList_NEW" ).on( "click", clickButtNewSongList_NEW );
 		$( "#songListAll_NEW" ).click( clickSongList_NEW );
 		$( "#songListSelector" ).change( onChangeSongListSelector );
 

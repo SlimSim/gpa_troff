@@ -924,6 +924,10 @@ extended_-_color -> color-fill
 extend_ -> fill_
 */
 
+.pv-exact-17 {
+	padding-top: 17px;
+	padding-bottom: 17px;
+}
 
 /* Marker color section */
 #markerList .markerColorAqua,
