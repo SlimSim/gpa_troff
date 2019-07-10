@@ -59,12 +59,14 @@ var TROFF_SETTING_UI_LOOP_BUTTONS_SHOW = "TROFF_SETTING_UI_LOOP_BUTTONS_SHOW";
 var TROFF_SETTING_SONG_COLUMN_TOGGLE = "TROFF_SETTING_SONG_COLUMN_TOGGLE";
 var TROFF_SETTING_SONG_LISTS_LIST_SHOW = "TROFF_SETTING_SONG_LISTS_LIST_SHOW";
 var TROFF_CURRENT_STATE_OF_SONG_LISTS = "TROFF_CURRENT_STATE_OF_SONG_LISTS";
+var TROFF_SETTING_SHOW_SONG_DIALOG = "TROFF_SETTING_SHOW_SONG_DIALOG";
 
+/*
 var TROFF_SETTING_KEYS = [
 	"stroCurrentSongPathAndGalleryId",
-	"iCurrentSonglist",
+	//"iCurrentSonglist",
 	"zoomDontShowAgain",
-	"abGeneralAreas",
+	//"abGeneralAreas",
 	"straoSongLists",
 	TROFF_SETTING_SET_THEME,
 	TROFF_SETTING_EXTENDED_MARKER_COLOR,
@@ -91,7 +93,9 @@ var TROFF_SETTING_KEYS = [
 	TROFF_SETTING_SONG_COLUMN_TOGGLE,
 	TROFF_SETTING_SONG_LISTS_LIST_SHOW,
 	TROFF_CURRENT_STATE_OF_SONG_LISTS,
+	TROFF_SETTING_SHOW_SONG_DIALOG,
 ];
+*/
 
 
 var MARKER_COLOR_PREFIX = "markerColor";
@@ -916,7 +920,6 @@ function addSongsToSonglist( songs, $target ) {
 	DB.saveSonglists_new();
 }
 
-
 function clickAttachedSongListToggle( event ) {
 	$("#toggleSonglistsId").trigger( "click" );
 }
@@ -925,11 +928,10 @@ function reloadSongsButtonActive( event ) {
 	if( event == null || !$(event.target).hasClass( "outerDialog" ) ) {
 		return
 	}
-
 	if( $( "#outerSongListPopUpSquare" ).hasClass( "hidden" ) ) {
-		$( "#buttSongsDialog" ).removeClass( "active" );
+		closeSongDialog();
 	} else {
-		$( "#buttSongsDialog" ).addClass( "active" );
+		openSongDialog();
 	}
 }
 
@@ -937,6 +939,7 @@ function closeSongDialog ( event ) {
 	$( "#outerSongListPopUpSquare" ).addClass( "hidden" );
 	$( "#songPickerAttachedArea" ).addClass( "hidden" );
 	$( "#buttSongsDialog" ).removeClass( "active" );
+	DB.saveVal( TROFF_SETTING_SHOW_SONG_DIALOG, false );
 };
 
 function openSongDialog( event ) {
@@ -945,7 +948,10 @@ function openSongDialog( event ) {
 	} else {
 		$( "#songPickerAttachedArea" ).removeClass( "hidden" );
 	}
+
 	$( "#buttSongsDialog" ).addClass( "active" );
+
+	DB.saveVal( TROFF_SETTING_SHOW_SONG_DIALOG, true );
 }
 
 
@@ -1053,7 +1059,7 @@ function scanGallery(entries) {
 
 		if(Troff.stopTimeout) clearInterval(Troff.stopTimeout);
 		Troff.stopTimeout = setTimeout(function(){
-			DB.getCurrentSonglist(); // this reloads the current songlist
+			//DB.getCurrentSonglist(); // this reloads the current songlist
 			Troff.recallCurrentStateOfSonglists();
 
 			clearInterval(Troff.stopTimeout);
@@ -1351,7 +1357,7 @@ var TroffClass = function(){
 		*/
 	};
 
-	this.reacllUiValueShow = function( databaseKey ) {
+	/*Troff* /this.reacllUiValueShow = function( databaseKey ) {
 		DB.getVal( databaseKey, function( value ) {
 			if( value === undefined ) {
 				return;
@@ -1366,7 +1372,7 @@ var TroffClass = function(){
 				$("#" + idToShow ).addClass("hidden");
 			}
 		} );
-	}
+	} */
 
 	this.recallTheme = function() {
 		DB.getVal( TROFF_SETTING_SET_THEME, function( theme ) {
@@ -1378,7 +1384,7 @@ var TroffClass = function(){
 		} );
 	};
 
-	this.recallButtonActiveValue = function(databaseKey) {// detta är det jag håller på med nu :)
+	/*Troff* /this.recallButtonActiveValue = function(databaseKey) {// detta är det jag håller på med nu :)
 		DB.getVal( databaseKey, function( goToMarker ) {
 			if( goToMarker === undefined ) {
 				return;
@@ -1390,7 +1396,7 @@ var TroffClass = function(){
 				$button.removeClass( "active" );
 			}
 		} );
-	};
+	};*/
 	
 	
 	this.closeSettingsDialog = function( event ) {
@@ -2163,11 +2169,13 @@ var TroffClass = function(){
 		$('#songInfoArea').val(info);
 	};
 	
+	/*
 	this.setSonglists = function(aoSonglists){
 		for(var i=0; i<aoSonglists.length; i++){
 			Troff.addSonglistToHTML(aoSonglists[i]);
 		}
 	};
+	*/
 
 	this.setSonglists_NEW = function( aoSonglists ) {
 		for(var i=0; i<aoSonglists.length; i++){
@@ -2301,6 +2309,7 @@ var TroffClass = function(){
 		document.getElementById('blur-hack').focus();
 	};
 	
+	/*
 	this.editSonglist = function(event){
 		$('#newSongListPart').show();
 		$('#songListPartButtons, #songListPartTheLists').hide();
@@ -2332,6 +2341,7 @@ var TroffClass = function(){
 			
 		}
 	};
+	*/
 	
 	/*Troff* /this.createNewSonglist = function(){
 		Troff.resetNewSongListPartAllSongs();
@@ -2469,6 +2479,7 @@ var TroffClass = function(){
 		$('#removeSongList').show();
 	};
 	
+	/*
 	this.addSonglistToHTML = function(oSonglist){
 		var buttE = $('<button>')
 			.attr('type', 'button')
@@ -2495,6 +2506,7 @@ var TroffClass = function(){
 		$('#songListPartTheLists').append(li);
 		$('#songlistHelpText').hide();
 	};
+	*/
 	
 	/*Troff*/this.setSonglistById = function(id){
 		if(id === 0){
@@ -2525,7 +2537,7 @@ var TroffClass = function(){
 		setSong(fullPath, galleryId);
 	};
 	
-	/*Troff*/this.showSongsHelpText = function(){
+	/*Troff TODO: REMOVE:*/this.showSongsHelpText = function(){
 		if($('#gallery >').filter('button').length === 0){
 			var bAllSongs = $('#songlistAll').hasClass('selected');
 			$('#SongsHelpTextNoSongs').toggle(bAllSongs);
@@ -2536,7 +2548,8 @@ var TroffClass = function(){
 		}
 	};
 	
-	this.selectAllSongsSonglist = function(event){
+	/*Troff* /this.selectAllSongsSonglist = function(event){
+		console.log( "selectAllSongsSonglist -> ");
 		document.getElementById('blur-hack').focus();
 		$('#songListPartTheLists li input').removeClass('selected');
 		$('#songlistAll').addClass('selected');
@@ -2546,7 +2559,7 @@ var TroffClass = function(){
 			Troff.showSongsArea();
 
 
-		DB.setCurrentSonglist(0);
+		//DB.setCurrentSonglist(0);
 
 		var aSongs = $('#newSongListPartAllSongs').children();
 		
@@ -2564,7 +2577,7 @@ var TroffClass = function(){
 			document.getElementById("gallery").appendChild(pap);
 		}
 		Troff.showSongsHelpText();
-	};
+	}; */
 
 	
 	/*Troff*/this.addAllSongsFromGallery = function(galleryIdToAdd){
@@ -2601,7 +2614,8 @@ var TroffClass = function(){
 			$('#songsTab').click();
 	};
 	
-	/*Troff*/this.selectSonglist = function(event){
+	/*Troff* /this.selectSonglist = function(event){
+		console.log("selectSonglist -->");
 		document.getElementById('blur-hack').focus();
 		$('#songListPartTheLists li input, #songlistAll').removeClass('selected');
 		this.classList.add('selected');
@@ -2634,7 +2648,7 @@ var TroffClass = function(){
 			Troff.addSongButtonToSongsList(aSongs[i].fullPath, aSongs[i].galleryId);
 		}
 		Troff.showSongsHelpText();
-	};
+	}; */
 
 	/*Troff*/this.getMediaButton = function(fullPath, galleryId){
 		var pap = document.createElement("button");
@@ -4125,20 +4139,24 @@ var DBClass = function(){
 		chrome.storage.local.get(null, function(items) {
 			var allKeys = Object.keys(items);
 			if(allKeys.length === 0){ // This is the first time Troff is started:
-				DB.saveSonglists();
-				DB.setCurrentSonglist(0);
+				DB.saveSonglists_new();
+				//DB.setCurrentSonglist(0);
 			}
 			// These is fore the first time Troff is started:
-			if(allKeys.indexOf("straoSongLists")   === -1 ) DB.saveSonglists();
-			if(allKeys.indexOf("iCurrentSonglist") === -1 ) DB.setCurrentSonglist(0);
+			if(allKeys.indexOf("straoSongLists")   === -1 ) DB.saveSonglists_new();
+			//if(allKeys.indexOf("iCurrentSonglist") === -1 ) DB.setCurrentSonglist(0);
 //      if(allKeys.indexOf("abCurrentAreas")   === -1 ) DB.setCurrentAreas(); //depricated
 			if(allKeys.indexOf("zoomDontShowAgain")=== -1 ) {
 				chrome.storage.local.set({"zoomDontShowAgain" : false});
 			}
 
+			/*
 			if( allKeys.indexOf("abGeneralAreas") === -1 ) {
 				chrome.storage.local.set({"abGeneralAreas" : JSON.stringify([false, true])});
 			}
+			*/
+
+			DB.fixDefaultValue( allKeys, TROFF_SETTING_SHOW_SONG_DIALOG, true );
 
 			DB.fixDefaultValue( allKeys, TROFF_SETTING_SONG_COLUMN_TOGGLE, [
 				$("#columnToggleParent" ).find( "[data-column=3]" ).data( "default" ),
@@ -4157,6 +4175,13 @@ var DBClass = function(){
 			] );
 
 
+			function removeIfExists( key ) {
+				if( allKeys.indexOf( key ) !== -1 ){
+					chrome.storage.local.remove( key );
+					delete items[ key ] ;
+				}
+			}
+
 
 			// Slim sim remove 
 			/*
@@ -4164,9 +4189,38 @@ var DBClass = function(){
 				It is not used a single time after they open the app with v1.0 
 				so the standard is without the if...
 			*/
+			removeIfExists( "strCurrentTab" );
+			/*
 			if(allKeys.indexOf("strCurrentTab") !== -1 ){
 				chrome.storage.local.remove("strCurrentTab");
 				delete items.strCurrentTab;
+			}
+			*/
+
+			removeIfExists( "iCurrentSonglist" );
+			/*
+			if( allKeys.indexOf( "iCurrentSonglist" ) !== -1 ) {
+				chrome.storage.local.remove( "iCurrentSonglist" );
+				delete items.iCurrentSonglist;
+			}
+			*/
+
+			removeIfExists( "iCurrentSongList" );
+
+			if( allKeys.indexOf( "abGeneralAreas" ) !== -1 ) {
+				var abGeneralAreas = JSON.parse( items.abGeneralAreas );
+				var showSongListArea = abGeneralAreas[0];
+				var showSongArea = abGeneralAreas[1];
+
+				if( showSongListArea ) {
+					clickAttachedSongListToggle();
+				}
+				if( showSongArea ) {
+					openSongDialog();
+				} else {
+					closeSongDialog();
+				}
+				removeIfExists( "abGeneralAreas" );
 			}
 			
 			
@@ -4178,20 +4232,26 @@ var DBClass = function(){
 				so the standard is without the if...
 				it is extremely safe to remove....
 			*/
+			/*
 			if( allKeys.indexOf("abCurrentAreas") !== -1 ){
 				chrome.storage.local.remove("abCurrentAreas");
 				delete items.strCurrentTab;
 			}
+			*/
 
 
 
 			var SETTING_KEYS = $("[data-st-save-value-key]").map(function(){return $(this).data("st-save-value-key");}).get();
 			for(var key in items) {
+				/*
 				if( TROFF_SETTING_KEYS.indexOf( key ) != -1 || SETTING_KEYS.indexOf( key ) != -1 ) {
 					continue;
 				}
+				*/
 
-				DB.cleanSong(key, items[key]);
+				if( key[0] == "/" ) {
+					DB.cleanSong(key, items[key]);
+				}
 			}
 		});//end get all keys
 	};
@@ -4209,19 +4269,19 @@ var DBClass = function(){
 		chrome.storage.local.set({'straoSongLists': straoSonglists});
 	}
 
-	/*DB*/this.saveSonglists = function(){
+	/*DB* /this.saveSonglists = function(){
 		var aoSonglists = [];
 		
 		var aDOMSonglist = $('#songListPartTheLists li');
 		for(var i=0; i<aDOMSonglist.length; i++){
 			aoSonglists.push(JSON.parse(aDOMSonglist[i].getAttribute('stroSonglist')));
 		}
-		$('#songlistHelpText').toggle($('#songListPartTheLists >').length === 0);
+		//$('#songlistHelpText').toggle($('#songListPartTheLists >').length === 0);
 		
 
 		var straoSonglists = JSON.stringify(aoSonglists);
 		chrome.storage.local.set({'straoSongLists': straoSonglists});
-	};
+	};*/
 
 	/*DB*/this.setCurrentAreas = function(songId){
 		chrome.storage.local.get(songId, function(ret) {
@@ -4244,9 +4304,9 @@ var DBClass = function(){
 		});
 	};
 	
-	/*DB*/this.setCurrentSonglist = function(iSonglistId){
+	/*DB* /this.setCurrentSonglist = function(iSonglistId){
 		chrome.storage.local.set({'iCurrentSonglist': iSonglistId});
-	};
+	}; */
 
 	/*DB*/this.setCurrentSong = function(path, galleryId){
 		var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
@@ -4267,16 +4327,26 @@ var DBClass = function(){
 	/*DB*/this.getAllSonglists = function(){
 		chrome.storage.local.get('straoSongLists', function(ret){
 			var straoSongLists = ret['straoSongLists'] || "[]";
-			//Troff.setSonglists(JSON.parse(straoSongLists)); //todo: ta bort denna setSonglists :) 
+			//Troff.setSonglists(JSON.parse(straoSongLists)); //todo: ta bort denna setSonglists :)
 			Troff.setSonglists_NEW(JSON.parse(straoSongLists));
 		});
 	};
 	
-	/*DB*/this.getCurrentSonglist = function(){
+	/*DB* /this.getCurrentSonglist = function(){
 		chrome.storage.local.get('iCurrentSonglist', function(ret){
 			Troff.setSonglistById(ret['iCurrentSonglist']);
 		});
-	};
+	}; */
+
+	/*DB*/this.getShowSongDialog = function() {
+		DB.getVal( TROFF_SETTING_SHOW_SONG_DIALOG, function( val ) {
+			if( val ) {
+				setTimeout(function(){
+					openSongDialog();
+				}, 42);
+			}
+		} );
+	}
 	
 	/*DB*/this.getCurrentSong = function(){
 		chrome.storage.local.get('stroCurrentSongPathAndGalleryId', function(ret){
@@ -4693,7 +4763,8 @@ var IOClass = function(){
 		$('#saveNewSongList').click(Troff.saveNewSongList);
 		$('#removeSongList').click(Troff.removeSonglist);
 		$('#cancelSongList').click(Troff.cancelSongList);
-		$('#songlistAll').click(Troff.selectAllSongsSonglist);
+		
+		//$('#songlistAll').click(Troff.selectAllSongsSonglist);
 		
 		$('#stopAfter')[0].addEventListener(
 			'input', Troff.settAppropriateActivePlayRegion
@@ -5404,7 +5475,7 @@ $(document).ready( function() {
 	FSstartFunc();
 	Rate.startFunc();
 	DB.getCurrentSong();
-
+	DB.getShowSongDialog();
 });
 
  $.fn.removeClassStartingWith = function (filter) {
