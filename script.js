@@ -4213,8 +4213,11 @@ var DBClass = function(){
 			] );
 
 
-			function removeIfExists( key ) {
-				if( allKeys.indexOf( key ) !== -1 ){
+			function ifExistsPrepAndThenRemove( key, prepFunc ) {
+				if( allKeys.indexOf( key ) !== -1 ) {
+					if( prepFunc != null ) {
+						prepFunc( key, items[ key ] );
+					}
 					chrome.storage.local.remove( key );
 					delete items[ key ] ;
 				}
@@ -4227,26 +4230,21 @@ var DBClass = function(){
 				It is not used a single time after they open the app with v1.0 
 				so the standard is without the if...
 			*/
-			removeIfExists( "strCurrentTab" );
-			/*
-			if(allKeys.indexOf("strCurrentTab") !== -1 ){
-				chrome.storage.local.remove("strCurrentTab");
-				delete items.strCurrentTab;
-			}
-			*/
+			ifExistsPrepAndThenRemove( "strCurrentTab" );
 
-			removeIfExists( "iCurrentSonglist" );
-			/*
-			if( allKeys.indexOf( "iCurrentSonglist" ) !== -1 ) {
-				chrome.storage.local.remove( "iCurrentSonglist" );
-				delete items.iCurrentSonglist;
-			}
-			*/
 
-			removeIfExists( "iCurrentSongList" );
+			ifExistsPrepAndThenRemove( "iCurrentSonglist", function( key, val ) {
+				var o = {};
+				o.songListList = val == 0 ? [] : [ val.toString() ];
+				o.galleryList = [];
+				o.directoryList = [];
+				DB.saveVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, o );
+			} );
 
-			if( allKeys.indexOf( "abGeneralAreas" ) !== -1 ) {
-				var abGeneralAreas = JSON.parse( items.abGeneralAreas );
+
+			ifExistsPrepAndThenRemove( "abGeneralAreas", function( key, val ) {
+
+				var abGeneralAreas = JSON.parse( val );
 				var showSongListArea = abGeneralAreas[0];
 				var showSongArea = abGeneralAreas[1];
 
@@ -4258,9 +4256,7 @@ var DBClass = function(){
 				} else {
 					closeSongDialog();
 				}
-				removeIfExists( "abGeneralAreas" );
-			}
-			
+			} )
 			
 			// Slim sim remove 
 			/*
