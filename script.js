@@ -1260,7 +1260,7 @@ var TroffClass = function(){
 		DB.getVal( TROFF_SETTING_SONG_COLUMN_TOGGLE, function( columnToggle ){
 			if( columnToggle === undefined ) {
 				setTimeout(function() {
-					Troff.recallSongColumnToggle();
+					Troff.recallSongColumnToggle( callback );
 				}, 42);
 				return;
 			}
