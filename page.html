@@ -233,6 +233,15 @@
 							<input type="button" title="Move more than one marker" class="regularButton" value="move markers" id="buttPromptMoveMarkers" />
 						</div>
 						<div>
+						<input
+							type="button"
+							title="Move more than one marker"
+							class="regularButton"
+							value="delete markers"
+							id="buttPromptDeleteMarkers" />
+
+						</div>
+						<div>
 							<input 
 								type="button" 
 								title="Select first and last markers (key: u)" 
@@ -690,6 +699,41 @@
 				Note: If this functionality does not work as expected; reload the song.
 			</p>
 			<input id="buttCancelMoveMarkersDialog" type="button" class="regularButton buttWidthStandard" value="Cancel" />
+		</div>
+	</div>
+
+	<div id="deleteMarkersDialog" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Delete markers</h2>
+			<p class="paragraph normalSize">
+				Delete all the markers at the same time, or delete only those markers
+				between the selected markers (including the selected markers).
+			</p>
+			<div class="flexRow">
+				<div class="flexCol">
+					<input
+							id="okDeleteSelectedMarkersDialog"
+							type="button"
+							class="regularButton"
+							value="delete selected markers"
+							title="Delete the markers between and including the selected markers" />
+				</div>
+				<div class="flexCol">
+					<input
+							id="okDeleteAllMarkersDialog"
+							type="button"
+							class="regularButton"
+							value="delete all markers"
+							title="Delete all the markers" />
+				</div>
+
+			</div>
+
+			<input
+					id="buttCancelDeleteMarkersDialog"
+					type="button"
+					class="regularButton buttWidthStandard"
+					value="Cancel" />
 		</div>
 	</div>
 

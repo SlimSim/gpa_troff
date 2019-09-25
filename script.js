@@ -3415,9 +3415,23 @@ var TroffClass = function(){
 		/*
 			removeMarker, all, Tar bort en markÃ¶r frÃ¥n html och DB
 		*/
-		this.removeMarker = function(markerId){
+		this.removeMarker = function(markerIdWithoutHash){
+			markerId = '#' + markerIdWithoutHash;
+			var oMarker = {};
+			oMarker.id = markerIdWithoutHash;
+			oMarker.name = $( markerId ).val();
+			oMarker.time = Number( $( markerId )[0].timeValue );
+			oMarker.info = $( markerId )[0].info;
+			oMarker.color = $( markerId )[0].color;
+
+			notifyUndo( "Marker " + oMarker.name + " was removed", function() {
+				aMarkers = [oMarker];
+				Troff.addMarkers( aMarkers );
+				DB.saveMarkers(Troff.getCurrentSong() ); // saves end marker to DB
+			} );
+
 			// Remove Marker from HTML
-			$('#'+markerId).closest('li').remove();
+			$( markerId ).closest('li').remove();
 			Troff.settAppropriateMarkerDistance();
 
 			// remove from DB
@@ -3443,6 +3457,23 @@ var TroffClass = function(){
 		};
 
 		/*
+			show the delete markers pop up dialog.
+		*/
+		/*Troff*/this.showDeleteMarkers = function( bDeleteSelected ) {
+			IO.setEnterFunction(Troff.deleteSelectedMarkers);
+			$( "#deleteMarkersDialog" ).removeClass( "hidden" );
+		}
+
+		/*
+			hide the delete markers pop up dialog.
+		*/
+		/*Troff*/this.hideDeleteMarkersDialog = function(){
+			$( "#deleteMarkersDialog" ).addClass( "hidden" );
+			IO.clearEnterFunction();
+		};
+
+
+		/*
 			hide the move markers pop up dialog. 
 		*/
 		this.hideMoveMarkers = function(){
@@ -3452,6 +3483,14 @@ var TroffClass = function(){
 			$('#moveMarkersNumber').val(0);
 			IO.clearEnterFunction();
 		};
+
+		/*Troff*/this.deleteAllMarkers = function() {
+			Troff.deleteMarkers( false );
+		}
+
+		/*Troff*/this.deleteSelectedMarkers = function() {
+			Troff.deleteMarkers( true );
+		}
 
 		/*
 			move all or some markers. 
@@ -3476,6 +3515,55 @@ var TroffClass = function(){
 			Troff.moveMarkers(true, true);
 		};
 		
+		/*Troff*/this.getStartAndEndMarkerNr = function( addToStartNr, addToEndNr ) {
+			addToStartNr = addToStartNr || 0;
+			addToEndNr = addToEndNr || 0;
+
+			var aAllMarkers = Troff.getCurrentMarkers(),
+				startNr = 0,
+				endNr = aAllMarkers.length,
+				selectedId = $('.currentMarker').attr('id'),
+				selectedStopId = $('.currentStopMarker').attr('id'),
+				nextAttrId,
+				attrId;
+
+
+			for(var k=0; k<aAllMarkers.length; k++){
+				if(selectedId == aAllMarkers.eq(k).attr('id'))
+					startNr = k;
+
+				nextAttrId = aAllMarkers.eq(k).next().attr('id');
+				attrId = aAllMarkers.eq(k).attr('id');
+				if(selectedStopId == aAllMarkers.eq(k).next().attr('id'))
+					endNr = k;
+			}
+			return [ startNr + addToStartNr, endNr + addToEndNr ];
+		}
+
+		/*Troff*/this.deleteMarkers = function( bDeleteSelected ) {
+			var i,
+				markerId,
+				startNumber = 1,
+				markers = $("#markerList").children(),
+				endNumber = markers.length - 1;
+
+			if( bDeleteSelected ) {
+				var [startNumber, endNumber] = Troff.getStartAndEndMarkerNr( 0, 1 );
+			}
+
+			if( markers.length - (endNumber - startNumber) < 2 ) {
+				IO.alert( "You must have at least 2 markers left" );
+				return;
+			}
+
+			for( i = startNumber; i < endNumber; i++ ) {
+				markerId = markers.eq( i ).find("input").attr("id");
+				Troff.removeMarker( markerId );
+			}
+			Troff.hideDeleteMarkersDialog();
+
+		}
+
 		/*
 			move all markers. 
 		*/
@@ -3497,17 +3585,7 @@ var TroffClass = function(){
 			var endNumber = aAllMarkers.length;
 			
 			if(bMoveSelected){
-				for(var k=0; k<aAllMarkers.length; k++){
-					var selectedId = $('.currentMarker').attr('id');
-					var selectedStopId = $('.currentStopMarker').attr('id');
-					if(selectedId == aAllMarkers.eq(k).attr('id'))
-						startNumber = k;
-	
-					var nextAttrId = aAllMarkers.eq(k).next().attr('id');
-					var attrId = aAllMarkers.eq(k).attr('id');
-					if(selectedStopId == aAllMarkers.eq(k).next().attr('id'))
-						endNumber = k+1;
-				}
+				[startNumber, endNumber] = Troff.getStartAndEndMarkerNr( 0, 1 );
 			}
 
 			for(var i=startNumber; i<endNumber; i++){
@@ -4754,7 +4832,11 @@ var IOClass = function(){
 		$('#okMoveAllMarkersDialogDown').click(Troff.moveAllMarkersDown);
 		$('#okMoveSomeMarkersDialogUp').click(Troff.moveSomeMarkersUp);
 		$('#okMoveSomeMarkersDialogDown').click(Troff.moveSomeMarkersDown);
+		$( "#okDeleteSelectedMarkersDialog" ).click( Troff.deleteSelectedMarkers );
+		$( "#okDeleteAllMarkersDialog" ).click( Troff.deleteAllMarkers );
+		$( "#buttCancelDeleteMarkersDialog" ).click( Troff.hideDeleteMarkersDialog );
 		$('#buttCancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
+		$('#buttPromptDeleteMarkers').click(Troff.showDeleteMarkers);
 		$('#buttPromptMoveMarkers').click(Troff.showMoveMarkers);
 		$('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
 		$('#buttImportExportMarker').click(Troff.toggleImportExport);
