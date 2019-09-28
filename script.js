@@ -3492,6 +3492,72 @@ var TroffClass = function(){
 			Troff.deleteMarkers( true );
 		}
 
+		/*Troff*/this.stretchSelectedMarkers = function() {
+			var aAllMarkers = Troff.getCurrentMarkers(),
+				startNumber,
+				endNumber;
+
+			[startNumber, endNumber] = Troff.getStartAndEndMarkerNr( 0, 1 );
+
+			Troff.stretchMarkers(
+				$( "#stretchMarkersNumber" ).val(),
+				aAllMarkers[startNumber].timeValue,
+				startNumber,
+				endNumber
+			);
+		}
+
+		/*Troff*/this.stretchAllMarkers = function() {
+
+			var baseValue = 0,
+				startNumber = 0,
+				endNumber = Troff.getCurrentMarkers().length;
+
+			Troff.stretchMarkers(
+				$( "#stretchMarkersNumber" ).val(),
+				baseValue,
+				startNumber,
+				endNumber
+			);
+		}
+
+		/*Troff*/this.stretchMarkers = function(stretchProcent, baseValue, startNr, endNr) {
+			var i,
+				maxTime = Number(document.getElementById('timeBar').max),
+				aAllMarkers = Troff.getCurrentMarkers(),
+				newTime,
+				markerId,
+				calculatetTime;
+
+			if( stretchProcent == 100 ) {
+				IO.alert(
+					"100% will not change markers",
+					"Stretching the markers to 100% of there orignnal position will not change the marker position.<br /><br />" +
+					"<span class=\"small\">Please change the %-value or close the Stretch markers dialog</span>."
+				);
+				return;
+			}
+
+
+			for( i = startNr; i < endNr; i++ ) {
+				markerId = aAllMarkers[i].id;
+
+				calculatetTime = ( aAllMarkers[i].timeValue - baseValue ) * stretchProcent/100 + baseValue;
+				newTime = Math.max(0, Math.min(maxTime, calculatetTime) );
+
+				Troff.checkIfMarkerIndexHasSameTimeAsOtherMarkers(i, markerId, aAllMarkers, newTime );
+
+				$('#'+markerId)[0].timeValue = newTime;
+				$('#'+markerId + 'S')[0].timeValue = newTime;
+				$('#'+markerId).prev().html( Troff.secToDisp(newTime) );
+			}
+
+			Troff.settAppropriateMarkerDistance();
+			DB.saveMarkers(Troff.getCurrentSong() );
+			$( "#stretchMarkersDialog" ).addClass( "hidden" );
+			$( "#stretchMarkersNumber" ).val( 100 );
+		}
+
 		/*
 			move all or some markers. 
 		*/
@@ -3561,7 +3627,6 @@ var TroffClass = function(){
 				Troff.removeMarker( markerId );
 			}
 			Troff.hideDeleteMarkersDialog();
-
 		}
 
 		/*
@@ -3594,24 +3659,8 @@ var TroffClass = function(){
 				var markerTime = Number(aAllMarkers[i].timeValue) + Number(value);
 				var maxTime = Number(document.getElementById('timeBar').max);
 				var newTime = Math.max(0, Math.min(maxTime, markerTime) );
-				
-				for(var j=0; j<i; j++){
-					if(Number(aAllMarkers[j].timeValue) == newTime){
-						var newMarkerName = $('#'+markerId).val();
-						if(newMarkerName != aAllMarkers.eq(j).val())
-							newMarkerName += ", " + aAllMarkers.eq(j).val();
-						$('#'+markerId).val( newMarkerName );
 
-						var newMarkerInfo = $('#'+markerId)[0].info;
-						if(newMarkerInfo !=  aAllMarkers[j].info)
-							newMarkerInfo += "\n\n" + aAllMarkers[j].info;
-						$('#'+markerId)[0].info = newMarkerInfo;
-						if( $('#' + markerId).hasClass('currentMarker') )
-							$('#markerInfoArea').val(newMarkerInfo);
-
-						aAllMarkers.eq(j).parent().remove();
-					}
-				}
+				Troff.checkIfMarkerIndexHasSameTimeAsOtherMarkers(i, markerId, aAllMarkers, newTime );
 				
 				$('#'+markerId)[0].timeValue = newTime;
 				$('#'+markerId + 'S')[0].timeValue = newTime;
@@ -3621,6 +3670,26 @@ var TroffClass = function(){
 			Troff.settAppropriateMarkerDistance();
 			DB.saveMarkers(Troff.getCurrentSong() );
 		};
+
+		/*Troff*/this.checkIfMarkerIndexHasSameTimeAsOtherMarkers = function ( markerIndex, markerId, aAllMarkers, newTime ) {
+			for(var j = 0; j < markerIndex; j++ ) {
+				if(Number(aAllMarkers[j].timeValue) == newTime){
+					var newMarkerName = $('#'+markerId).val();
+					if(newMarkerName != aAllMarkers.eq(j).val())
+						newMarkerName += ", " + aAllMarkers.eq(j).val();
+					$('#'+markerId).val( newMarkerName );
+
+					var newMarkerInfo = $('#'+markerId)[0].info;
+					if(newMarkerInfo !=  aAllMarkers[j].info)
+						newMarkerInfo += "\n\n" + aAllMarkers[j].info;
+					$('#'+markerId)[0].info = newMarkerInfo;
+					if( $('#' + markerId).hasClass('currentMarker') )
+						$('#markerInfoArea').val(newMarkerInfo);
+
+					aAllMarkers.eq(j).parent().remove();
+				}
+			}
+		}
 
 		/*
 			editMarker, all, Editerar en markÃ¶r i bÃ¥de html och DB
@@ -4789,6 +4858,11 @@ var IOClass = function(){
 			}
 		} );
 
+		//TODO: fix so that all cancelButtons use this class, and remove there id, and event-listener :) 
+		$( ".dialogCancelButton" ).click( function( event ) {
+			$( event.target ).closest(".outerDialog").addClass("hidden")
+		} );
+
 		$( "#buttNewSongList_NEW" ).on( "click", clickButtNewSongList_NEW );
 		$( "#songListAll_NEW" ).click( clickSongList_NEW );
 		$( "#songListSelector" ).change( onChangeSongListSelector );
@@ -4834,6 +4908,9 @@ var IOClass = function(){
 		$('#okMoveSomeMarkersDialogDown').click(Troff.moveSomeMarkersDown);
 		$( "#okDeleteSelectedMarkersDialog" ).click( Troff.deleteSelectedMarkers );
 		$( "#okDeleteAllMarkersDialog" ).click( Troff.deleteAllMarkers );
+		$( "#okStretchSelectedMarkersDialog" ).click( Troff.stretchSelectedMarkers );
+		$( "#okStretchAllMarkersDialog" ).click( Troff.stretchAllMarkers );
+
 		$( "#buttCancelDeleteMarkersDialog" ).click( Troff.hideDeleteMarkersDialog );
 		$('#buttCancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
 		$('#buttPromptDeleteMarkers').click(Troff.showDeleteMarkers);

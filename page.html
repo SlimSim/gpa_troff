@@ -239,7 +239,15 @@
 							class="regularButton"
 							value="delete markers"
 							id="buttPromptDeleteMarkers" />
-
+						</div>
+						<div>
+						<input
+							type="button"
+							title="Stretch the markers"
+							class="regularButton"
+							data-st-css-selector-to-toggle="#stretchMarkersDialog"
+							value="stretch markers"
+							/>
 						</div>
 						<div>
 							<input 
@@ -398,15 +406,16 @@
 			<span id="tappTempo-value">?</span>
 		</div>
 		
-		<h2><label class="switch" for="songInfoSwitch">Marker Color info</label></h2>
+		<!--h2><label class="switch" for="songInfoSwitch">Marker Color info</label></h2>
 			<p>
+				TODO:
 				vore det inte kanon om det fans en color-info sektion här där man kan
 				beskriva vad alla färgerna betyder
 				( och den ska visa färgerna, men bara de som används :) )
 			</p>
 			<p>
 				man ska också kunan välja att visa/inte visa denna, samt sång-info / marker/info
-			</p>
+			</p -->
 		
 		<h2><label class="switch" for="songInfoSwitch">Song info</label></h2>
 		<input id="songInfoSwitch" class="switch_checkbox hidden" type="checkbox" checked="true" />
@@ -680,7 +689,7 @@
 				be reloaded.
 			</p>
 			<span class="flexRow">
-				<input type="number" id="moveMarkersNumber" class="regularButton" value=0 class="numberWider"/> seconds
+				<input type="number" id="moveMarkersNumber" class="regularButton numberWider" value=0 /> seconds
 			</span>
 			<div class="flexRow">
 				<div class="flexCol">
@@ -734,6 +743,64 @@
 					type="button"
 					class="regularButton buttWidthStandard"
 					value="Cancel" />
+		</div>
+	</div>
+
+	
+	
+	<div id="stretchMarkersDialog" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Move markers</h2>
+			<p class="paragraph normalSize">
+				Move all the markers at the same time, or move only those markers 
+				between the selected markers (including the selected markers).
+
+
+			</p>
+				<label class="switch likeLink linkButton" for="stretchMarkersMoreInfoSwitch">More info</label>
+				<input id="stretchMarkersMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
+				<p class=" switch_child paragraph normalSize" >
+					Say you have 4 markers; A, B, C and D, in that order. 
+					If you select A as start-marker and C as stop-marker and move them down
+					by entering 20 seconds and hitting "Move markers down". Only marker
+					A, B and C will be moved down 20 seconds.
+					D will remain where it was.<br />
+					<br />
+					Now, say that the order after you moved the markers is A, B, D, C.
+					If you immediately move the markers again by 20 seconds by hitting 
+					"Move markers up"; only A, B and C will be moved up, 
+					D will still remain where it was, 
+					even though it was between the start and stop marker.<br />
+					In order for D to become part of the selected group, the song must 
+					be reloaded.
+				</p>
+
+			<span class="flexRow">
+				<input type="number" id="stretchMarkersNumber" class="regularButton numberWider" value=100 /> %
+			</span>
+			<div class="flexRow">
+				<input
+					id="okStretchSelectedMarkersDialog"
+					type="button"
+					class="regularButton"
+					value="stretch selected markers"
+					title="Stretch the markers between the selected markers"/>
+				<input
+					id="okStretchAllMarkersDialog"
+					type="button"
+					class="regularButton"
+					value="Stretch markers"
+					title="Stretch all  markers"/>
+			</div>
+			
+
+			<p class="paragraph smallSize">
+				Note: If this functionality does not work as expected; reload the song.
+			</p>
+			<input
+				type="button"
+				class="regularButton buttWidthStandard dialogCancelButton"
+				value="Cancel" />
 		</div>
 	</div>
 
@@ -1035,10 +1102,11 @@
 					<i class="fa fa-window-close"></i>
 				</button>
 			</div>
-			<p>
+			<!--p>
+				TODO:
 				Vore det inte kul om man kunde färglägga varje låt med färgerna? (i menyn kanske?)
 				och så kanske man kan ge låten en egen titel?
-			</p>
+			</p -->
 
 			<div class="flexRow flex-none">
 				<div id="columnToggleParent" class="p-2 primaryColor m-3">
