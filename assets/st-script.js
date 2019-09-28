@@ -1,11 +1,26 @@
 $( document ).ready( function() {
 
+	var
+
+	jQueryToggle = function( idString ){
+		if( $(idString).hasClass("hidden") ) {
+			$(idString).removeClass("hidden");
+		} else {
+			$(idString).addClass("hidden");
+		}
+	};
+
 
 /**
  * Hide and Save
  * functionality for letting a button hide another div or such 
  * also functionality for saving that value in the DB :)
 */
+
+$( "[data-st-css-selector-to-toggle]" ).on( "click", function( event ) {
+	jQueryToggle( $( event.target ).data( "st-css-selector-to-toggle" ) );
+} );
+
 
 $( ".st-simple-on-off-button" ).each( function( i, v ) {
 	var $v = $(v),
