@@ -4911,9 +4911,7 @@ var IOClass = function(){
 		$( "#okStretchSelectedMarkersDialog" ).click( Troff.stretchSelectedMarkers );
 		$( "#okStretchAllMarkersDialog" ).click( Troff.stretchAllMarkers );
 
-		$( "#buttCancelDeleteMarkersDialog" ).click( Troff.hideDeleteMarkersDialog );
 		$('#buttCancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
-		$('#buttPromptDeleteMarkers').click(Troff.showDeleteMarkers);
 		$('#buttPromptMoveMarkers').click(Troff.showMoveMarkers);
 		$('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
 		$('#buttImportExportMarker').click(Troff.toggleImportExport);
