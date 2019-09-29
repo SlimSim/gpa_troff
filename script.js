@@ -4858,6 +4858,21 @@ var IOClass = function(){
 			}
 		} );
 
+
+		$( "[data-st-css-selector-to-toggle]" ).on( "click", function( event ) {
+			var $target = $( event.target ),
+				$value = $( $target.data( "st-css-selector-to-toggle" ) );
+
+			if( $target.hasClass( "stOnOffButton" ) ) {
+				if( $value.hasClass( "hidden" ) ) {
+					$target.addClass( "active" );
+				} else {
+					$target.removeClass( "active" );
+				}
+			}
+
+		} );
+
 		//TODO: fix so that all cancelButtons use this class, and remove there id, and event-listener :) 
 		$( ".dialogCancelButton" ).click( function( event ) {
 			$( event.target ).closest(".outerDialog").addClass("hidden")

@@ -226,29 +226,44 @@
 					<div id="ControlMarker" class="flexCol end">
 						<h2>Marker</h2>
 						<div>
-							<input type="button" class="regularButton" title="Import markers to the song or export current markers" id="buttImportExportMarker" value="I/E" />
 							<input type="button" title="Add a marker to the song timeline (key: m)" class="important" id="buttMarker" value="Add M&#818;arker!" />
 						</div>
-						<div>
-							<input type="button" title="Move more than one marker" class="regularButton" value="move markers" id="buttPromptMoveMarkers" />
-						</div>
-						<div>
 						<input
 							type="button"
-							title="Move more than one marker"
-							class="regularButton"
-							data-st-css-selector-to-toggle="#deleteMarkersDialog"
-							value="delete markers"
+							title="Move, delete, stretch, import or export the markers"
+							class="stOnOffButton"
+							value="advanced"
+							data-st-css-selector-to-toggle="#extraMarkerFunctions"
 							/>
-						</div>
-						<div>
-						<input
-							type="button"
-							title="Stretch the markers"
-							class="regularButton"
-							data-st-css-selector-to-toggle="#stretchMarkersDialog"
-							value="stretch markers"
-							/>
+						<div id="extraMarkerFunctions" class="flexCol border-1 p-2 hidden">
+							<input
+								type="button"
+								class="regularButton full-width"
+								title="Import markers to the song or export current markers"
+								id="buttImportExportMarker"
+								value="import / export"
+								/>
+							<input
+								type="button"
+								title="Move more than one marker"
+								class="regularButton full-width"
+								id="buttPromptMoveMarkers"
+								value="move markers"
+								/>
+							<input
+								type="button"
+								title="Move more than one marker"
+								class="regularButton full-width"
+								data-st-css-selector-to-toggle="#deleteMarkersDialog"
+								value="delete markers"
+								/>
+							<input
+								type="button"
+								title="Stretch the markers"
+								class="regularButton full-width"
+								data-st-css-selector-to-toggle="#stretchMarkersDialog"
+								value="stretch markers"
+								/>
 						</div>
 						<div>
 							<input 

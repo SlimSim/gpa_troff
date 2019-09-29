@@ -150,3 +150,11 @@ auto - for classes that set the margin to auto
 .flip-both					{ transform: scale(-1); }
 .flip-vertical			{ transform: scaleY(-1); }
 .flip-horizontal		{ transform: scaleX(-1); }
+
+
+.border-0 {	border: solid	0		;	}
+.border-1 {	border: solid	2px	;	}
+.border-2 {	border: solid	5px	;	}
+.border-3 {	border: solid	10px;	}
+.border-4 {	border: solid	15px;	}
+.border-5 {	border: solid	20px;	}
