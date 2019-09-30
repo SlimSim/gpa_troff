@@ -529,14 +529,22 @@
 
 
 	<div id="outerImportExportPopUpSquare" class="outerDialog hidden">
-		<div class="popUpSquare" id="innerImportExportPopUpSquare" >
-			<div>
+		<div class="innerDialog mediumDialog" id="innerImportExportPopUpSquare" >
+			<h2 class="paragraph">Import Export Markers and settings</h2>
+			<p class="paragraph normalSize">
 				Export your markers, states, settings and info, or import new ones, 
 				for the current song!
-			</div>
-			<div class="flexRow center">
-				<input type="button" id="buttExportMarker" class="regularButton" value="Export markers and settings" />
-				<input type="button" id="buttImportMarker" class="regularButton" value="Import markers and settings" />
+			</p>
+			<label class="switch likeLink linkButton" for="importExportMoreInfoSwitch">More info</label>
+			<input id="importExportMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
+			<p class="switch_child paragraph normalSize" >
+				Whey you export markers, you will get a long text string ( a so called JSON string ).
+				This text-string can be saved and importet to another Troff-program with the same song.
+				Then that Troff-program will get the same markers, colors, settings and states as you have.
+			</p>
+			<div class="flexRow">
+				<input type="button" id="buttExportMarker" class="regularButton" value="export markers and settings" />
+				<input type="button" id="buttImportMarker" class="regularButton" value="import markers and settings" />
 			</div>
 			<input id="buttCancelImportExportPopUpSquare" type="button" class="regularButton buttWidthStandard" value="Cancel" />
 		</div>
