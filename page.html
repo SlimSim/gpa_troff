@@ -765,29 +765,31 @@
 	
 	<div id="stretchMarkersDialog" class="outerDialog hidden">
 		<div class="innerDialog flexCol mediumDialog">
-			<h2 class="paragraph">Move markers</h2>
+			<h2 class="paragraph">Stretch markers</h2>
 			<p class="paragraph normalSize">
-				Move all the markers at the same time, or move only those markers 
-				between the selected markers (including the selected markers).
-
-
+				Stretch all the markers so that the distance between them increases or decreases!
 			</p>
 				<label class="switch likeLink linkButton" for="stretchMarkersMoreInfoSwitch">More info</label>
 				<input id="stretchMarkersMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
 				<p class=" switch_child paragraph normalSize" >
-					Say you have 4 markers; A, B, C and D, in that order. 
-					If you select A as start-marker and C as stop-marker and move them down
-					by entering 20 seconds and hitting "Move markers down". Only marker
-					A, B and C will be moved down 20 seconds.
-					D will remain where it was.<br />
+					Say you have 5 markers A, B, C, D and E at 5, 10, 20, 50 and 150 seconds respectively,
+					if you stretch all the markers to 200%, then the markers times will
+					be increased to 200%, and they will be at 
+					10, 20, 40, 100 and 300 selconds respectively.
 					<br />
-					Now, say that the order after you moved the markers is A, B, D, C.
-					If you immediately move the markers again by 20 seconds by hitting 
-					"Move markers up"; only A, B and C will be moved up, 
-					D will still remain where it was, 
-					even though it was between the start and stop marker.<br />
-					In order for D to become part of the selected group, the song must 
-					be reloaded.
+					If you want to compress the markers, simply use a value lower than 100%.
+					<br />
+					<br />
+					If you instead select markers B and D and stretch the selected markers to 200%,
+					then the selected markers will be stretched as if there 0-value where at the B marker;
+					<br />
+					the marker B will still be at 10 seconds,
+					<br />
+					the marker C will be at 30 seconds,
+					<br />
+					the marker D will be at 90 seconds.
+					<br />
+					and the other markers will be unaffected. 
 				</p>
 
 			<span class="flexRow">
@@ -799,13 +801,13 @@
 					type="button"
 					class="regularButton"
 					value="stretch selected markers"
-					title="Stretch the markers between the selected markers"/>
+					title="Stretch the markers between the selected markers\nwith the base at the selected start marker"/>
 				<input
 					id="okStretchAllMarkersDialog"
 					type="button"
 					class="regularButton"
-					value="Stretch markers"
-					title="Stretch all  markers"/>
+					value="stretch all markers"
+					title="Stretch all the markers with the base at 0"/>
 			</div>
 			
 
