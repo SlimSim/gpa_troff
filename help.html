@@ -52,10 +52,12 @@
       <a href="#markers" class="subLink">Markers, what are those?</a>
       <a href="#playPartOfSong" class="subLink">Play only part of a song</a>
       <a href="#playFullSong" class="subLink">Play entire song</a>
-      <a href="#moveMarkers" class="subLink">move markers</a>
+      <a href="#moveMarkers" class="subLink">Move markers</a>
       <a href="#exportImport" class="subLink">Export and import settings</a>
+      <a href="#stretchMarkers" class="subLink">Stretch markers</a>
+      <a href="#deleteMarkers" class="subLink">Delete markers</a>
       <a href="#zoomOnTheTimeline" class="subLink">Zoom in the timeline</a>
-      <a href="#startBeforeStopAfter" class="subLink">start before and stop after</a>
+      <a href="#startBeforeStopAfter" class="subLink">Start before and stop after</a>
       <a href="#loop" class="subLink">Play more than once</a>
       <a href="#pauses" class="subLink">Pause and wait</a>
       <a href="#volumeAndSpeed" class="subLink">Volume and speed</a>
@@ -233,14 +235,14 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
       and change the time there.
     </p>
     <p>
-      If you click "move markers" you can move all markers at the same time,
+      If you click "advanced" followed by "move markers" you can move all markers at the same time,
       or just the markers between the two selected ones 
       (including the selected markers).
     </p>
     <h3 id="exportImport">Export and import</h3>
       <p>
         If you want to share your markers to someone, 
-        the members of you show-team or band for instance, press "I/E" and 
+        the members of you show-team or band for instance, press "advanced" followed by "import / export" and
         the import export dialog appears.
       </p>
       <p class="note">
@@ -256,13 +258,47 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
         your settings.
       </p>
       <p>
-        To import settings, click on "I/E" and then "import", paste the 
+        To import settings, click on "advanced" followed by "import / export" and then "import", paste the
         the text-string in the text-box and click ok.
       </p>
       <p class="note">
         Note: If you miss a single sign or character when copying or pasting, 
         the import will not work. Then, just try again.
       </p>
+    <h3 id="deleteMarkers">Delete markers</h3>
+    <p>
+      There are a number of ways in which you can change delete one or several markers.
+    </p>
+    <p>
+      You can click the edit button of the marker, and then press remove.
+    </p>
+    <p>
+      If you click "advanced" followed by "delete markers" you will get an option to
+      delete all markers at the same time,
+      or just the markers between the two selected ones
+      (including the selected markers).
+    </p>
+    <p class="note">
+      When a marker is deleted, there will be a notification square letting you know
+      that the marker has been deleted, as well as an undo-button in the top right corner.
+    </p>
+    <h3 id="stretchMarkers">Stretch markers</h3>
+    <p>
+      If you have markers for a song, and then stretch the length of the song in an external program
+      (for instance; using Audacity going to Effect > Change Tempo)
+      then the markers will no longer match the new length of the song.
+    </p>
+    <p>
+      Then you can stretch the markers. click "advanced" followed by "stretch marksers".
+      stretching the markers to 200% will create
+      twice as much space between the markers as before.
+      Stretching them to 50% will reduce the space to half.
+    </p>
+    <p class="note">
+      There is no "undo" functionality when stretching markers,
+      therefore it is recomended to export your markers and settings first
+      so that you can undo the stretch if it did not match your desired result.
+    </p>
     <h3 id="zoomOnTheTimeline">Zoom on the timeline</h3>
     <p>
       In Troff, you can zoom in on the timeline which makes it easier to for 
@@ -402,6 +438,20 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
       The song area is where you can select which song to play.
       The selected song is purple. If you can't find the song you want,
       it might be in another song list, or it has been removed from the computer.
+    </p>
+    <p>
+      The song area can either be in the attached state, then it will be next to the
+      states and settings, or it can be in the floating state,
+      then it be in a pop-up square.
+    </p>
+    <p>
+      You can change between the two states in the settings,
+      or with the maximize (<i class="fa fa-window-maximize"></i>)
+      and minimize (<i class="fa fa-window-minimize"></i>) buttons.
+    </p>
+    <p>
+      When the song is in the floating state,
+      more info is available about the song in a sortable table.
     </p>
   </article> <!-- songs Area -->
   <article id="songLists">
