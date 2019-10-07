@@ -69,7 +69,7 @@
     <a href="#countdown">The countdown area</a>
     <a href="#songsArea">The songs area</a>
     <a href="#songLists">The song lists area</a>
-      <a href="#addFolders" class="subLink">Add folders</a>
+      <a href="#addSongsToSonglists" class="subLink">Add songs to songlists</a>
     <a href="#states">The states area</a>
       <a href="#whatIsStates" class="subLink">What is states</a>
       <a href="#howToUseStates" class="subLink">How to use states</a>
@@ -126,8 +126,13 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
     <h2>How to add and play music or movies</h2>
     <p>
       When you start Troff, if you don't have any songs in the Songs area,
-      you must add a folder on your computer with songs in it. 
-      Do this by clicking the "Select folders" button in the Songs area, 
+      you must add a folder on your computer with songs in it.
+      Do this by clicking the
+				<i class="negative-mx-2 fa-stack fa-1x attached-configure-button">
+				  <i class="fas fa-music fa-stack-1x"></i>
+				  <i class="fas fa-plus fa-stack-1x"></i>
+				</i>-button (in the attached state) or the "Select folders" button
+			(in the floating state) in the Songs area,
       select one of the suggestion-folders or add a new folder by clicking 
       "Add Location...". When you are done, click "Apply" and you will se all
       the songs from those folders in the songs area. 
@@ -478,17 +483,30 @@ Follow Troff on facebook.com/troffmusic to get the latest information!
   </article> <!-- songs Area -->
   <article id="songLists">
     <h2>The song lists area</h2>
+    <förklara nya songlist - hur det funkar med folders / directorys och hur man skapar egna listor :) >
     <p>
       You can create song lists to only show a few songs in the songs area.
-      Click "New song list", give it a name and select which songs / folders
-      to be added.
+      There is also the "Gallery List" and "Directory List" which is
+      automaticaly created based on the folders you have selected and
+      the folders that they contain.
     </p>
-    <h3 id="addFolders">Add folders</h3>
     <p>
-      If you only add songs, only those songs will be in the song list, 
-      but if you add a folder, all the songs in that folder will be 
-      in the song list. If new songs are added to the folder,
-      they will appear in the song list the next time you start Troff!
+      Open the songlist by clicking <i class="fa fa-columns"></i> in the attached state
+      or by clicking the "songlist"-button in the floating state.
+    </p>
+    <p>
+      To create a new song list, click "New song list", give it a name.
+    </p>
+    <h3 id="addSongsToSonglists">Add songs to songlists</h3>
+    <p>
+		  There are two ways to add songs to songlists:
+		  In the attached state you can select the songs you want to add by selecting
+		  the checkbox next to every song and then click the dropdown and select "Add to ...",
+		  then all those songs will be added to that songlist.
+		  The same way makes it also possible to remove songs from songlist, youst select
+		  "Remove from ...." instead.<br />
+		  It is also possible to click and drag songs on to songlists to add them,
+		  this is possible booth in attached state and floating state.
     </p>
   </article> <!-- songLists -->
   <article id="states">

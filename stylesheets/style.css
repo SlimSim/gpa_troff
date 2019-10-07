@@ -413,11 +413,11 @@ input[type=number].numberWider{
 #songPickerAttachedArea #dataSongTable_filter input[type=search]{
 	max-width: 177px;
 }
-#attached-configure-button .fa-music {
+.attached-configure-button .fa-music {
 	left: 5px;
 	top: 10px;
 }
-#attached-configure-button .fa-plus {
+.attached-configure-button .fa-plus {
 	left: -10px;
 	top: -10px;
 	font-size: 12px
@@ -425,6 +425,22 @@ input[type=number].numberWider{
 
 
 
+.negative-my-0 {	margin-right: -0; margin-left: -0;	}
+.negative-my-1 {	margin-right: -2px; margin-left: -2px; }
+.negative-my-2 {	margin-right: -5px; margin-left: -5px; }
+.negative-my-3 {	margin-right: -10px; margin-left: -10px; }
+.negative-my-4 {	margin-right: -15px; margin-left: -15px; }
+.negative-my-5 {	margin-right: -20px; margin-left: -20px; }
+
+.negative-mx-0 {	margin-top: -0; margin-bottom: -0;	}
+.negative-mx-1 {	margin-top: -2px; margin-bottom: -2px; }
+.negative-mx-2 {	margin-top: -5px; margin-bottom: -5px; }
+.negative-mx-3 {	margin-top: -10px; margin-bottom: -10px; }
+.negative-mx-4 {	margin-top: -15px; margin-bottom: -15px; }
+.negative-mx-5 {	margin-top: -20px; margin-bottom: -20px; }
+
+
+x
 /* the style for the IO ***************************************/
 
 .buttWidthStandard{
