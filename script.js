@@ -1362,8 +1362,53 @@ var TroffClass = function(){
 		DB.saveVal( id, $target.hasClass( "active" ) );
 	}
 	*/
-	
 
+	/*Troff*/this.enterWritableField = function() {
+		IO.setEnterFunction(function(event){
+			if(event.ctrlKey==1){ //Ctrl+Enter will exit
+				document.getElementById('blur-hack').focus();
+				return false;
+			}
+			return true;
+		});
+	}
+	/*Troff*/this.exitWritableField = function() {
+		IO.clearEnterFunction();
+	}
+	
+	/*Troff*/this.okImportAllDataDialog = function() {
+		try {
+			var allDataJson = JSON.parse( $( "#importAllDataTextarea" ).val() );
+		} catch(e) {
+			console.log( "e", e );
+			IO.alert(
+				"Corrupt data string",
+				"Troff can not import the data string you have pasted.<br /><br />" +
+				"<span class=\"small\">Please make sure that the entire string " +
+				"from the export is pasted in this box.</span>"
+			);
+			return;
+		}
+
+		IO.confirm(
+			"Override all data in Troff",
+			"Are you sure you want to import this data and override all data in troff? <br />" +
+			"All your songlists, markers and settings will be overwitten with this new data",
+			function() {
+				chrome.storage.local.set( allDataJson );
+				$( "#importAllDataTextarea" ).val( "" );
+				$( ".outerDialog" ).addClass( "hidden" );
+				IO.stickyMessage(
+					"Restart required",
+					"Please restart Troff in order for the import to take effect."
+				);
+			},
+			function() {
+				$( "#importAllDataTextarea" ).val( "" );
+				$( "#outerImportAllDataPopUpSquare" ).addClass( "hidden" );
+			}
+		);
+	}
 	
 	this.recallGlobalSettings = function(){
 		Troff.recallTheme();
@@ -4926,6 +4971,11 @@ var IOClass = function(){
 		$( "#okStretchSelectedMarkersDialog" ).click( Troff.stretchSelectedMarkers );
 		$( "#okStretchAllMarkersDialog" ).click( Troff.stretchAllMarkers );
 
+		$( "#okImportAllDataDialog" ).on( "click", Troff.okImportAllDataDialog );
+
+		$( ".writableField" ).on( "click", Troff.enterWritableField );
+		$( ".writableField" ).on( "blur", Troff.exitWritableField );
+
 		$('#buttCancelMoveMarkersDialog').click(Troff.hideMoveMarkers);
 		$('#buttPromptMoveMarkers').click(Troff.showMoveMarkers);
 		$('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
@@ -5638,6 +5688,16 @@ var IOClass = function(){
 			};
 			$("#"+buttEnterId).click( IOEnterFunction );
 	}; // end alert
+
+	/*IO*/this.stickyMessage = function( textHead, textBox, innerDialogClass ) {
+		innerDialogClass = innerDialogClass !== undefined ? innerDialogClass : "flexCol mediumDialog";
+		$("<div>").addClass("outerDialog").append(
+			$("<div>").addClass("innerDialog " + innerDialogClass )
+				.append( $( "<h2>" ).text( textHead ) )
+				.append( $( "<p>" ).addClass( "paragraph normalSize" ).text( textBox ) )
+		)
+		.appendTo( "body" );
+	}
 
 	this.pressEnter = function() {
 		if(IOEnterFunction) IOEnterFunction();

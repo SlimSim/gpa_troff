@@ -469,7 +469,6 @@
 		</div>
 	</div>
 
-
 	<div id="outerImportExportPopUpSquare" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog" id="innerImportExportPopUpSquare" >
 			<h2 class="paragraph">Import Export Markers and settings</h2>
@@ -764,6 +763,19 @@
 			<h1>Global settings</h1>
 			<div class="flexCol vScroll">
 				<p class="pt-2">These settings are not unique to a song</p>
+					<div class="py-2">
+						<h4 class="pt-3 buttWidthMedium inlineBlock">Export import</h4>
+						<input class="buttWidthMedium regularButton" type="button"
+							title="Export or import the global settings"
+							data-st-css-selector-to-toggle="#outerImportExportGlobalSettingsPopUpSquare"
+							value="Settings" />
+						<input class="buttWidthMedium regularButton" type="button"
+							title="Export or import all data and all songs that is stored in Troff"
+							data-st-css-selector-to-toggle="#outerImportExportAllDataPopUpSquare"
+							value="All info" />
+						</div>
+
+
 					<div id="themePickerParent" class="py-2">
 						<h4 class="pt-3 buttWidthMedium inlineBlock">Theme</h4>
 						<input class="buttWidthMedium stOnOffButton" type="button"
@@ -1002,6 +1014,103 @@
 			<input id="buttCloseSettingPopUpSquare" type="button" class="regularButton buttWidthStandard flex-none" value="Close" />
 		</div>
 	</div>
+
+	<div id="outerImportExportAllDataPopUpSquare" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Import / Export All Data</h2>
+			<p class="paragraph normalSize">
+				Import or export All Data.
+				between the selected markers (including the selected markers).
+			</p>
+			<label class="switch likeLink linkButton" for="importExportGloablMoreInfoSwitch">More info</label>
+			<input id="importExportGloablMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
+			<p class="switch_child paragraph normalSize" >
+				Whey you export the All Data, you will get a long text string ( a so called JSON string ).
+				This text-string can be saved and importet to another Troff-program.
+				When you import the All Data, that Troff-programs All Data will be over written
+				with the settings you have.
+			</p>
+			<div class="flexRow">
+				<div class="flexCol">
+					<input
+							id="openExportAllDataDialog"
+							type="button"
+							class="regularButton"
+							value="Export"
+							title="export all data saved in troff" />
+				</div>
+				<div class="flexCol">
+					<input
+							type="button"
+							class="regularButton"
+							data-st-css-selector-to-toggle="#outerImportAllDataPopUpSquare"
+							value="Import"
+							title="overwrite all data in Troff with new (all your current data will be lost)" />
+				</div>
+
+			</div>
+
+			<input
+					type="button"
+					class="regularButton buttWidthStandard dialogCancelButton"
+					value="Cancel" />
+		</div>
+	</div>
+
+	<div id="outerImportAllDataPopUpSquare" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Import All Data Settings</h2>
+			<p class="paragraph normalSize">
+				To import new glogal settings, past the string into the box below, and klick Import.
+			</p>
+			<textarea
+				class="writableField textareaStandard min-height-9"
+				placeholder="Paste text here"
+				id="importAllDataTextarea"></textarea>
+
+			<div class="flexRow">
+				<div class="flexCol">
+					<input
+							id="okImportAllDataDialog"
+							type="button"
+							class="regularButton"
+							value="Import"
+							title="Import All Data to troff" />
+				</div>
+
+				<input
+						type="button"
+						class="regularButton buttWidthStandard dialogCancelButton"
+						value="Cancel" />
+			</div>
+		</div>
+	</div>
+
+	<div id="outerExportAllDataPopUpSquare" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Export Global Settings</h2>
+			<p class="paragraph normalSize">
+				To export new glogal settings, copy the string into the box below,
+				and paste the text-string in the Troff-program where you want to import it.
+			</p>
+			<textarea
+				class="writableField textareaStandard min-height-9"
+				id="exportAllDataTextarea"></textarea>
+
+			<div class="flexRow">
+				<input
+						type="button"
+						class="regularButton buttWidthStandard dialogCancelButton"
+						value="Ok" />
+
+				<input
+						type="button"
+						class="regularButton buttWidthStandard dialogCancelButton"
+						value="Cancel" />
+			</div>
+		</div>
+	</div>
+
 
 	
 	<div id="outerSongListPopUpSquare" class="outerDialog hidden">

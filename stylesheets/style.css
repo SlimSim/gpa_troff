@@ -220,6 +220,20 @@ body section{
 	min-height: 22px;
 }
 
+
+.min-height-0 {	min-height:	0			!important;	}
+.min-height-1 {	min-height:	2px		!important;	}
+.min-height-2 {	min-height:	5px		!important;	}
+.min-height-3 {	min-height:	10px	!important;	}
+.min-height-4 {	min-height:	15px	!important;	}
+.min-height-5 {	min-height:	20px	!important;	}
+.min-height-6 {	min-height:	40px	!important;	}
+.min-height-7 {	min-height:	80px	!important;	}
+.min-height-8 {	min-height:	160px	!important;	}
+.min-height-9 {	min-height:	320px	!important;	}
+.min-height-10{	min-height:	640px	!important;	}
+
+
 .doubleSliders{
 		display: flex;
 }
