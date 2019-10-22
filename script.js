@@ -257,6 +257,7 @@ function clearGalleryAndDirectoryList() {
 	$("#dataSongTable").DataTable().clear();
 }
 
+/*
 function checkIfSongExists(fullPath, galleryId){
 	var fsId = galleryId;
 	var fs = null;
@@ -270,7 +271,7 @@ function checkIfSongExists(fullPath, galleryId){
 	}
 	if(fs) return true;
 	return false;
-}
+}*/
 
 function setSong(fullPath, galleryId){
 	Troff.pauseSong();
@@ -2740,51 +2741,9 @@ var TroffClass = function(){
 		var galleryId = this.getAttribute('galleryId');
 		setSong(fullPath, galleryId);
 	};
-	
-	/*Troff TODO: REMOVE:*/this.showSongsHelpText = function(){
-		if($('#gallery >').filter('button').length === 0){
-			var bAllSongs = $('#songlistAll').hasClass('selected');
-			$('#SongsHelpTextNoSongs').toggle(bAllSongs);
-			$('#SongsHelpTextEmptySonglist').toggle(!bAllSongs);
-		} else {
-			$('#SongsHelpTextNoSongs').hide();
-			$('#SongsHelpTextEmptySonglist').hide();
-		}
-	};
-	
-	/*Troff* /this.selectAllSongsSonglist = function(event){
-		console.log( "selectAllSongsSonglist -> ");
-		document.getElementById('blur-hack').focus();
-		$('#songListPartTheLists li input').removeClass('selected');
-		$('#songlistAll').addClass('selected');
-		$('#gallery').empty();
-		
-		if(event.originalEvent !== undefined)
-			Troff.showSongsArea();
-
-
-		//DB.setCurrentSonglist(0);
-
-		var aSongs = $('#newSongListPartAllSongs').children();
-		
-		for(var i=0; i<aSongs.length; i++){
-			var songElement = aSongs.eq(i);
-			var fullPath = songElement.attr('fullPath');
-			var galleryId = songElement.attr('galleryId');
-			if (songElement.attr('isDirectory') === "true"){
-				var head = document.createElement("h3");
-				head.appendChild(document.createTextNode( songElement.text() ));
-				document.getElementById("gallery").appendChild(head);
-				continue;
-			}
-			var pap = Troff.getMediaButton(fullPath, galleryId);
-			document.getElementById("gallery").appendChild(pap);
-		}
-		Troff.showSongsHelpText();
-	}; */
 
 	
-	/*Troff*/this.addAllSongsFromGallery = function(galleryIdToAdd){
+	/*Troff* /this.addAllSongsFromGallery = function(galleryIdToAdd){
 		var allSongs = $('#newSongListPartAllSongs')
 			.children().filter('[isDirectory!=true]'); //slim sim, finns det en funktion fÃ¶r detta?
 
@@ -2795,9 +2754,9 @@ var TroffClass = function(){
 					allSongs.eq(i).attr('galleryid')
 				);
 		}
-	};
+	};*/
 	
-	this.addSongButtonToSongsList = function(fullPath, galleryId){
+	/*Troff* /this.addSongButtonToSongsList = function(fullPath, galleryId){
 		//check if song is already added to the songsList
 		var aAlreadyAddedSongs = $('#gallery').children().filter('button');
 		for(var i=0; i<aAlreadyAddedSongs.length; i++){
@@ -2811,50 +2770,14 @@ var TroffClass = function(){
 		
 		var pap = Troff.getMediaButton(fullPath, galleryId);
 		document.getElementById("gallery").appendChild(pap);
-	};
+	};*/
 	
-	this.showSongsArea = function(){
+	/*this.showSongsArea = function(){
 		if(!$('#songsTab').hasClass('active')) 
 			$('#songsTab').click();
-	};
-	
-	/*Troff* /this.selectSonglist = function(event){
-		console.log("selectSonglist -->");
-		document.getElementById('blur-hack').focus();
-		$('#songListPartTheLists li input, #songlistAll').removeClass('selected');
-		this.classList.add('selected');
-		if(event.originalEvent !== undefined)
-			Troff.showSongsArea();
-		var li = this.parentNode;
-		var stroSonglist = li.getAttribute('stroSonglist');
-		var oSonglist = JSON.parse(stroSonglist);
+	};*/
 
-		DB.setCurrentSonglist(oSonglist.id);
-		$('#gallery').empty();
-		
-		var aSongs = oSonglist.songs;
-		for(var i=0; i<aSongs.length; i++){
-			if(aSongs[i].isDirectory){
-				var header =  document.createElement("h3");
-				var strHeader = Troff.getLastSlashName(aSongs[i].fullPath);
-				header.appendChild(document.createTextNode(strHeader));
-				document.getElementById("gallery").appendChild(header);
-				Troff.addAllSongsFromGallery(aSongs[i].galleryId);
-				continue;
-			}
-			else if(aSongs[i].header !== undefined){
-				var oldHeader =  document.createElement("h3");
-				var strOldHeader = Troff.getLastSlashName(aSongs[i].header);
-				oldHeader.appendChild(document.createTextNode(strOldHeader));
-				document.getElementById("gallery").appendChild(oldHeader);
-				continue;
-			}
-			Troff.addSongButtonToSongsList(aSongs[i].fullPath, aSongs[i].galleryId);
-		}
-		Troff.showSongsHelpText();
-	}; */
-
-	/*Troff*/this.getMediaButton = function(fullPath, galleryId){
+	/*Troff* /this.getMediaButton = function(fullPath, galleryId){
 		var pap = document.createElement("button");
 		pap.setAttribute("class", "mediaButton onOffButton");
 		var currGalleryId = Troff.getCurrentGalleryId();
@@ -2866,7 +2789,7 @@ var TroffClass = function(){
 		pap.setAttribute("galleryId", galleryId );
 		pap.addEventListener('click', Troff.selectSong );
 		return pap;
-	};
+	};*/
 	
 	this.editCurrentSongInfo = function() {
 		if( $("#songInfoArea").hasClass( "hidden" ) ) return;
@@ -2996,16 +2919,16 @@ var TroffClass = function(){
 	};
 
 
-	this.searchCreateSongList = function( event ) {
+	/*this.searchCreateSongList = function( event ) {
 		Troff.searchSongTot(
 			event,
 			"#newSongListPartAllSongs",
 			function( el ){ return el.attr( "isDirectory" ) == "false"; },
 			function( el ){ return el.find( "div" ).text(); }
 		);
-	};
+	};*/
 
-	/*Troff*/this.searchSongTot = function( event, selector, test, getText ) {
+	/*Troff* /this.searchSongTot = function( event, selector, test, getText ) {
 		function normalizeText( text ) {
 			return text
 				.toLowerCase()
@@ -3024,9 +2947,9 @@ var TroffClass = function(){
 				}
 			}
 		} );
-	};
+	};*/
 
-	/*Troff*/this.searchSong = function( event ) {
+	/*Troff* /this.searchSong = function( event ) {
 		Troff.searchSongTot(
 			event,
 			"#gallery",
@@ -3039,7 +2962,7 @@ var TroffClass = function(){
 			importantEl.removeClass('important');
 			$('#gallery :visible:button').eq(0).addClass('important');
 		}
-	};
+	};*/
 
 	/*Troff*/this.onSearchKeyup = function( event ) {
 
