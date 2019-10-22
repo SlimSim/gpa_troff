@@ -56,7 +56,7 @@ $.notify.addStyle('info-undo', {
 		"</div>"
 });
 
-function notifyUndo(infoText, callback){
+function notifyUndo(infoText, callback, sticky = false){
 	var span = $("<span class=\"full-width\">")
 		.append( $("<p>").text( infoText ))
 		.append( $( "<button>" ).text( "undo" ).click( function() {
@@ -68,8 +68,8 @@ function notifyUndo(infoText, callback){
 		title: span
 	}, { 
 		style: 'info-undo',
-		autoHide: true,
+		autoHide: !sticky,
 		autoHideDelay: 7000,
-		clickToHide: true
+		clickToHide: !sticky
 	});
 }
