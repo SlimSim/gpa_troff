@@ -1376,11 +1376,41 @@ var TroffClass = function(){
 		IO.clearEnterFunction();
 	}
 	
-	/*Troff*/this.okImportAllDataDialog = function() {
+	/*Troff*/this.getGlobalSettins = function( callback ) {
+		chrome.storage.local.get(null, function(items) {
+			var settingItems = {};
+			for( var key in items ) {
+				if( key.startsWith( "TROFF_SETTING" ) ) {
+					settingItems[ key ] = items[ key ];
+				}
+			}
+			callback( settingItems );
+		} );
+
+	}
+
+	/*Troff*/this.openExportGlobalSettingsDialog = function() {
+		Troff.getGlobalSettins( function( settingItems ) {
+			$( "#outerExportGlobalSettingsPopUpSquare" ).removeClass( "hidden" );
+			$( "#exportGlobalSettingsTextarea" ).val( JSON.stringify( settingItems, null, 2 ) );
+		});
+	}
+
+	/*Troff*/this.openExportAllDataDialog = function() {
+		chrome.storage.local.get(null, function(items) {
+			$( "#outerExportAllDataPopUpSquare" ).removeClass( "hidden" );
+			$( "#exportAllDataTextarea" ).val( JSON.stringify( items, null, 2 ) );
+		} );
+	}
+
+	/*Troff*/this.okClearAndImportAllDataDialog = function() {
+		Troff.okImportAllDataDialog( null, true );
+	}
+
+	/*Troff*/this.okImportAllDataDialog = function( event, bClearData = false ) {
 		try {
 			var allDataJson = JSON.parse( $( "#importAllDataTextarea" ).val() );
 		} catch(e) {
-			console.log( "e", e );
 			IO.alert(
 				"Corrupt data string",
 				"Troff can not import the data string you have pasted.<br /><br />" +
@@ -1390,22 +1420,113 @@ var TroffClass = function(){
 			return;
 		}
 
+		var header = "Import all data in Troff",
+			body = "Are you sure you want to import this data to troff?";
+
+		if( bClearData ) {
+			header = "Override all data in Troff";
+			body = "Are you sure you want to import this data and override all data in Troff? <br />" +
+						"All your songlists, markers and settings will be overwitten with this new data";
+		}
+
 		IO.confirm(
-			"Override all data in Troff",
-			"Are you sure you want to import this data and override all data in troff? <br />" +
-			"All your songlists, markers and settings will be overwitten with this new data",
+			header,
+			body,
 			function() {
-				chrome.storage.local.set( allDataJson );
-				$( "#importAllDataTextarea" ).val( "" );
-				$( ".outerDialog" ).addClass( "hidden" );
-				IO.stickyMessage(
-					"Restart required",
-					"Please restart Troff in order for the import to take effect."
-				);
+				chrome.storage.local.get(null, function( originalAllData ) {
+
+					var cleanUpAndRestart = function(){
+						$( "#importAllDataTextarea" ).val( "" );
+						$( ".outerDialog" ).addClass( "hidden" );
+						var stickyMessage = IO.stickyMessage(
+							"Restart required",
+							"Please restart Troff in order for the import to take effect."
+						);
+
+						notifyUndo( "All data was uppdated", function() {
+							chrome.storage.local.set( originalAllData );
+							stickyMessage.remove();
+						}, true );
+					}
+
+					if( bClearData ) {
+
+						chrome.storage.local.clear(function() {
+							chrome.storage.local.set( allDataJson );
+							cleanUpAndRestart();
+						});
+					} else {
+						chrome.storage.local.set( allDataJson );
+						cleanUpAndRestart();
+					}
+
+				} );
 			},
 			function() {
 				$( "#importAllDataTextarea" ).val( "" );
 				$( "#outerImportAllDataPopUpSquare" ).addClass( "hidden" );
+			}
+		);
+	}
+
+	/*Troff*/this.okImportGlobalSettingsDialog = function() {
+		try {
+			var globalSettingsJson = JSON.parse( $( "#importGlobalSettingsTextarea" ).val() );
+		} catch(e) {
+			IO.alert(
+				"Corrupt data string",
+				"Troff can not import the data string you have pasted.<br /><br />" +
+				"<span class=\"small\">Please make sure that the entire string " +
+				"from the export is pasted in this box.</span>"
+			);
+			return;
+		}
+
+		var allKeys = Object.keys( globalSettingsJson );
+
+		nonAcceptableKeys = [];
+		allKeys.forEach(key => {
+			if( !key.startsWith( "TROFF_SETTING" ) ) {
+				nonAcceptableKeys.push( key );
+			}
+		});
+
+		if( nonAcceptableKeys.length > 0 ){
+
+			IO.alert(
+				"Unacceptable keys",
+				"You seem to import things which are not settings, " +
+				"the following keys are not acceptable:<br /><span class=\"small\">" +
+				nonAcceptableKeys.map(key => key + "<br />")
+				+ "</span>"
+			);
+			return;
+		}
+
+
+		IO.confirm(
+			"Override global settings in Troff",
+			"Are you sure you want to import these global settings and override them in Troff?",
+			function() {
+				Troff.getGlobalSettins( function( originalSettingItems ) {
+					chrome.storage.local.set( globalSettingsJson );
+					$( "#importGlobalSettingsTextarea" ).val( "" );
+					$( ".outerDialog" ).addClass( "hidden" );
+					var stickyMessage = IO.stickyMessage(
+						"Restart required",
+						"Please restart Troff in order for the import to take effect."
+					);
+
+					notifyUndo( "Your global settings was uppdated", function() {
+						chrome.storage.local.set( originalSettingItems );
+						stickyMessage.remove();
+					}, true );
+				} );
+				//lägga till notifyUndo (x x true) här  :)
+			},
+			function() {
+				$( "#importGlobalSettingsTextarea" ).val( "" );
+				$( "#outerImportGlobalSettingsPopUpSquare" ).addClass( "hidden" );
 			}
 		);
 	}
@@ -2354,7 +2475,7 @@ var TroffClass = function(){
 
 	};
 
-	this.saveCurrentStateOfSonglists = function() {
+	/*Troff*/this.saveCurrentStateOfSonglists = function() {
 		var o = {},
 			songListList = [],
 			galleryList = [],
@@ -4404,6 +4525,9 @@ var DBClass = function(){
 				$("#columnToggleParent" ).find( "[data-column=15]" ).data( "default" ),
 			] );
 
+			if( allKeys.indexOf( TROFF_CURRENT_STATE_OF_SONG_LISTS ) == -1 ) {
+				Troff.saveCurrentStateOfSonglists();
+			}
 
 			function ifExistsPrepAndThenRemove( key, prepFunc ) {
 				if( allKeys.indexOf( key ) !== -1 ) {
@@ -4566,6 +4690,12 @@ var DBClass = function(){
 
 	/*DB*/this.getShowSongDialog = function() {
 		DB.getVal( TROFF_SETTING_SHOW_SONG_DIALOG, function( val ) {
+			if( val === undefined ) {
+				setTimeout(function(){
+					DB.getShowSongDialog();
+				}, 42);
+			}
+
 			if( val ) {
 				setTimeout(function(){
 					openSongDialog();
@@ -4971,7 +5101,11 @@ var IOClass = function(){
 		$( "#okStretchSelectedMarkersDialog" ).click( Troff.stretchSelectedMarkers );
 		$( "#okStretchAllMarkersDialog" ).click( Troff.stretchAllMarkers );
 
+		$( "#openExportGlobalSettingsDialog" ).on( "click", Troff.openExportGlobalSettingsDialog );
+		$( "#openExportAllDataDialog" ).on( "click", Troff.openExportAllDataDialog );
 		$( "#okImportAllDataDialog" ).on( "click", Troff.okImportAllDataDialog );
+		$( "#okClearAndImportAllDataDialog" ).on( "click", Troff.okClearAndImportAllDataDialog );
+		$( "#okImportGlobalSettingsDialog" ).on( "click", Troff.okImportGlobalSettingsDialog );
 
 		$( ".writableField" ).on( "click", Troff.enterWritableField );
 		$( ".writableField" ).on( "blur", Troff.exitWritableField );
@@ -5670,7 +5804,7 @@ var IOClass = function(){
 					$("body").append($("<div id='"+outerId+"' class='outerDialog'>"+
 						"<div id='"+innerId+"' style='"+innerDivStyle+
 										 "' class='secondaryColor'><h2 style='"+hStyle+"'>" + textHead +
-										 "</h2><p style='"+pStyle+"' type='text' id='"+textId+
+										 "</h2><p class=\"full-width\" style='"+pStyle+"' type='text' id='"+textId+
 										 "'>"+textBox+"</p> <input type='button' id='"+buttEnterId+
 										 "'class='regularButton' value='OK'/></div></div>"));
 					$("#"+textId).val(textBox).select();
@@ -5691,7 +5825,7 @@ var IOClass = function(){
 
 	/*IO*/this.stickyMessage = function( textHead, textBox, innerDialogClass ) {
 		innerDialogClass = innerDialogClass !== undefined ? innerDialogClass : "flexCol mediumDialog";
-		$("<div>").addClass("outerDialog").append(
+		return $("<div>").addClass("outerDialog").append(
 			$("<div>").addClass("innerDialog " + innerDialogClass )
 				.append( $( "<h2>" ).text( textHead ) )
 				.append( $( "<p>" ).addClass( "paragraph normalSize" ).text( textBox ) )

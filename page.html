@@ -480,7 +480,7 @@
 			<input id="importExportMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
 			<p class="switch_child paragraph normalSize" >
 				Whey you export markers, you will get a long text string ( a so called JSON string ).
-				This text-string can be saved and importet to another Troff-program with the same song.
+				This text-string can be saved and imported to another Troff-program with the same song.
 				Then that Troff-program will get the same markers, colors, settings and states as you have.
 			</p>
 			<div class="flexRow">
@@ -770,9 +770,9 @@
 							data-st-css-selector-to-toggle="#outerImportExportGlobalSettingsPopUpSquare"
 							value="Settings" />
 						<input class="buttWidthMedium regularButton" type="button"
-							title="Export or import all data and all songs that is stored in Troff"
+							title="Export or import all data and all song-info that is stored in Troff"
 							data-st-css-selector-to-toggle="#outerImportExportAllDataPopUpSquare"
-							value="All info" />
+							value="All data" />
 						</div>
 
 
@@ -1015,20 +1015,119 @@
 		</div>
 	</div>
 
+
+	<div id="outerImportExportGlobalSettingsPopUpSquare" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Import / Export Global Settings</h2>
+			<p class="paragraph normalSize">
+				Import or export your glogal settings.
+			</p>
+			<label class="switch likeLink linkButton" for="importExportGloablSettingsMoreInfoSwitch">More info</label>
+			<input id="importExportGloablSettingsMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
+			<p class="switch_child paragraph normalSize" >
+				Whey you export the global settings, you will get a long text string ( a so called JSON string ).
+				This text-string can be saved and imported to another Troff-program.
+				When you import the global settings, the global settings of that Troff-program will be over written
+				with the global settings you import.
+			</p>
+			<div class="flexRow">
+				<div class="flexCol">
+					<input
+							id="openExportGlobalSettingsDialog"
+							type="button"
+							class="regularButton"
+							value="Export"
+							title="export your global settings saved in troff" />
+				</div>
+				<div class="flexCol">
+					<input
+							type="button"
+							class="regularButton"
+							data-st-css-selector-to-toggle="#outerImportGlobalSettingsPopUpSquare"
+							value="Import"
+							title="overwrite your global settings in Troff with new" />
+				</div>
+
+			</div>
+
+			<input
+					type="button"
+					class="regularButton buttWidthStandard dialogCancelButton"
+					value="Cancel" />
+		</div>
+	</div>
+
+	<div id="outerImportGlobalSettingsPopUpSquare" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Import Global Settings</h2>
+			<p class="paragraph normalSize">
+				To import new global settings, past the string into the box below, and klick Import.
+			</p>
+			<textarea
+				class="writableField textareaStandard min-height-9"
+				id="importGlobalSettingsTextarea"></textarea>
+
+			<div class="flexRow">
+				<div class="flexCol">
+					<input
+							id="okImportGlobalSettingsDialog"
+							type="button"
+							class="regularButton"
+							value="Import"
+							title="Import global settings to troff" />
+				</div>
+
+				<input
+						type="button"
+						class="regularButton buttWidthStandard dialogCancelButton"
+						value="Cancel" />
+			</div>
+		</div>
+	</div>
+
+	<div id="outerExportGlobalSettingsPopUpSquare" class="outerDialog hidden">
+		<div class="innerDialog flexCol mediumDialog">
+			<h2 class="paragraph">Export Global Settings</h2>
+			<p class="paragraph normalSize">
+				To export your glogal settings, copy the string into the box below,
+				and paste the text-string in the Troff-program where you want to import it.
+			</p>
+			<textarea
+				class="writableField textareaStandard min-height-9"
+				id="exportGlobalSettingsTextarea"></textarea>
+
+			<div class="flexRow">
+				<input
+						type="button"
+						class="regularButton buttWidthStandard dialogCancelButton"
+						value="Ok" />
+
+				<input
+						type="button"
+						class="regularButton buttWidthStandard dialogCancelButton"
+						value="Cancel" />
+			</div>
+		</div>
+	</div>
+
+
 	<div id="outerImportExportAllDataPopUpSquare" class="outerDialog hidden">
 		<div class="innerDialog flexCol mediumDialog">
 			<h2 class="paragraph">Import / Export All Data</h2>
 			<p class="paragraph normalSize">
-				Import or export All Data.
-				between the selected markers (including the selected markers).
+				Import or export all the data that is saved in Troff.
 			</p>
-			<label class="switch likeLink linkButton" for="importExportGloablMoreInfoSwitch">More info</label>
-			<input id="importExportGloablMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
+			<label class="switch likeLink linkButton" for="importExportAllDataMoreInfoSwitch">More info</label>
+			<input id="importExportAllDataMoreInfoSwitch" class="switch_checkbox hidden" type="checkbox" />
 			<p class="switch_child paragraph normalSize" >
-				Whey you export the All Data, you will get a long text string ( a so called JSON string ).
-				This text-string can be saved and importet to another Troff-program.
-				When you import the All Data, that Troff-programs All Data will be over written
-				with the settings you have.
+				Whey you export all data, you will get a long text string ( a so called JSON string ).
+				This text-string can be saved and imported to other Troff-programs.
+				When you import all data, all the data in that Troff-programs will be over written
+				with the data you import.
+				<br />
+				<b>NOTE:</b> All the markers and song-spesiffic info will also be exported and imported,
+				however, if the path to the song is not the same when you import the data, 
+				then the markers will not be added to the song.
 			</p>
 			<div class="flexRow">
 				<div class="flexCol">
@@ -1059,9 +1158,9 @@
 
 	<div id="outerImportAllDataPopUpSquare" class="outerDialog hidden">
 		<div class="innerDialog flexCol mediumDialog">
-			<h2 class="paragraph">Import All Data Settings</h2>
+			<h2 class="paragraph">Import All Data</h2>
 			<p class="paragraph normalSize">
-				To import new glogal settings, past the string into the box below, and klick Import.
+				To import and overwride all the data in Troff, past the string into the box below, and klick Import.
 			</p>
 			<textarea
 				class="writableField textareaStandard min-height-9"
@@ -1069,14 +1168,18 @@
 				id="importAllDataTextarea"></textarea>
 
 			<div class="flexRow">
-				<div class="flexCol">
-					<input
-							id="okImportAllDataDialog"
-							type="button"
-							class="regularButton"
-							value="Import"
-							title="Import All Data to troff" />
-				</div>
+				<input
+						id="okImportAllDataDialog"
+						type="button"
+						class="regularButton"
+						value="Only Import"
+						title="Import All Data to troff" />
+				<input
+						id="okClearAndImportAllDataDialog"
+						type="button"
+						class="regularButton"
+						value="Clear and Import"
+						title="Remove all data from troff and Import new data" />
 
 				<input
 						type="button"
@@ -1088,9 +1191,9 @@
 
 	<div id="outerExportAllDataPopUpSquare" class="outerDialog hidden">
 		<div class="innerDialog flexCol mediumDialog">
-			<h2 class="paragraph">Export Global Settings</h2>
+			<h2 class="paragraph">Export All Data</h2>
 			<p class="paragraph normalSize">
-				To export new glogal settings, copy the string into the box below,
+				To export all data storred in Troff, copy the string into the box below,
 				and paste the text-string in the Troff-program where you want to import it.
 			</p>
 			<textarea
