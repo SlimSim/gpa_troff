@@ -240,12 +240,24 @@
 							-->
 						<div>
 							<input type="button" title="Toggle; start a few seconds before the start marker (key: b)" value="start b&#818;efore" id="buttStartBefore" class="buttWidthStandard stOnOffButton"/>
-							<input type="number" title="Set how many seconds before the start marker to start (key: shift/alt b)" value="3" min="0"    id="startBefore" />
+							<input
+								type="number"
+								class="numberWide"
+								title="Set how many seconds before the start marker to start (key: shift/alt b)"
+								value="3"
+								min="0"
+								id="startBefore" />
 						</div>
 		
 						<div>
 							<input type="button" title="Toggle; stop a few seconds after the stop marker (key: a)" value="stop a&#818;fter" id="buttStopAfter" class="buttWidthStandard stOnOffButton"/>
-							<input type="number" title="Set how many seconds after the stop marker to stop (key: shift/alt a)" value="2" min="0"  id="stopAfter" />
+							<input
+								type="number"
+								class="numberWide"
+								title="Set how many seconds after the stop marker to stop (key: shift/alt a)"
+								value="2"
+								min="0"
+								id="stopAfter" />
 						</div>
 					</div> <!-- ControlMarker -->
 		
@@ -257,19 +269,43 @@
 								title="Toggle; wait a few seconds before song starts to play (key: p)" 
 								value="p&#818;ause before" 
 								id="buttPauseBefStart"
-								class="buttWidthMedium stOnOffButton active" />
-							<input type="number" title="Set how many seconds to wait before song starts to play (key: shift/alt p)" value="3" id="pauseBeforeStart"  />
+								class="buttWidthMedium-small stOnOffButton active" />
+							<input
+								type="number"
+								class="numberWide"
+								title="Set how many seconds to wait before song starts to play (key: shift/alt p)"
+								value="3"
+								id="pauseBeforeStart"  />
 						</div>
 
 						<div class="XLoopOff">
 							<input type="button" 
-								class="buttWidthMedium stOnOffButton active" 
-								value="wait between"
+								class="buttWidthMedium-small stOnOffButton active"
+								value="w&#818;ait between"
 								id="buttWaitBetweenLoops"/> 
 							<input type="number" 
 								title="Set how many seconds to wait between each loop"  
+								class="numberWide"
 								value="1" 
 								id="waitBetweenLoops"  /> 
+						</div>
+						<div class="flexRow">
+							<input
+								type="button"
+								title="Toggle; increment the speed of the song for every loop until this value (requires more than 1 loop)"
+								data-save-on-song-toggle-class="active"
+								data-save-on-song-toggle-class-default-value="false"
+								value="Increment until"
+								id="buttIncrementUntil"
+								class="buttWidthMedium-small stOnOffButton grayout-next-on-non-active">
+							<input
+								type="number"
+								id="incrementUntilValue"
+								class="numberWide"
+								min="50"
+								max="200"
+								data-save-on-song-value="100"
+								value="100" />
 						</div>
 						
 						<span class="loopSquare" id="loopButtons" >

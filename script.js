@@ -1961,39 +1961,71 @@ var TroffClass = function(){
 		document.getElementById("timeBar").value = dTime;
 	}; // end timeupdateAudio
 
-	this.atEndOfLoop = function(){
-			var audio = document.querySelector('audio, video');
+	/*Troff*/this.atEndOfLoop = function(){
+		var audio = document.querySelector('audio, video');
 		Troff.goToStartMarker();
 		var dTime = audio.currentTime;
 		audio.pause();
 
-		if( Troff.isLoopOn() ){
-			if(Troff.isLoopInfinite() ) {
-				Troff.playSong( Troff.getWaitBetweenLoops()*1000 );
-			} else {
-				if ( IO.loopTimesLeft()>1 ){
-					IO.loopTimesLeft( -1 );
-					Troff.playSong( Troff.getWaitBetweenLoops()*1000 );
-				} else {
-					IO.loopTimesLeft( $('#loopTimes').val() );
-					Troff.pauseSong();
-				}
-			} // end else
+		if( Troff.isLoopInfinite() ) {
+			Troff.doIncrementSpeed();
+			Troff.playSong( Troff.getWaitBetweenLoops() * 1000 );
 		} else {
-			Troff.pauseSong(); //This is needed because it setts the mood to 'pause'
-		}
+			if ( IO.loopTimesLeft()>1 ){
+				IO.loopTimesLeft( -1 );
+				Troff.doIncrementSpeed();
+				Troff.playSong( Troff.getWaitBetweenLoops() * 1000 );
+			} else {
+				IO.loopTimesLeft( $('#loopTimes').val() );
+				Troff.pauseSong();
+			}
+		} // end else
+
 	}; // end atEndOfLoop
 
 
-	this.isLoopOn = function(){
-		return !$('#buttLoopOff').hasClass('currentLoop');
-	};
+//	this.isLoopOn = function(){
+//		return !$('#buttLoopOff').hasClass('currentLoop');
+//	};
 
 	this.isLoopInfinite = function(){
 		return $('#buttLoopInf').hasClass('currentLoop');
 	};
 
-	// goToStartMarker anvÃ¤nds nÃ¤r man updaterar startBefore / trycker pÃ¥ StartBefore  / trycker pÃ¥ en marker???
+	/*Troff*/this.doIncrementSpeed = function(){
+		if( !$( "#buttIncrementUntil" ).hasClass( "active" ) ) {
+			return;
+		}
+
+		var loopTimesLeft,
+			speedDiffLeft,
+			incrementSpeedBy,
+			incrementUntill = parseInt( $( "#incrementUntilValue" ).val() ),
+			currentSpeed = $('audio, video')[0].playbackRate * 100;
+
+
+		speedDiffLeft = incrementUntill - currentSpeed;
+
+		if( Troff.isLoopInfinite() ) {
+			if( speedDiffLeft == 0 ) {
+				incrementSpeedBy = 0
+			} else {
+				incrementSpeedBy = speedDiffLeft > 0 ? 1 : -1;
+			}
+
+			$('#speedBar').val( currentSpeed + incrementSpeedBy );
+
+		} else {
+			loopTimesLeft = parseInt( IO.loopTimesLeft() );
+			incrementSpeedBy = speedDiffLeft / loopTimesLeft;
+
+			$('#speedBar').val( currentSpeed + incrementSpeedBy );
+		}
+
+		Troff.speedUpdate();
+	}
+
+	// goToStartMarker används när man updaterar startBefore / trycker på StartBefore  / trycker på en marker???
 	this.goToStartMarker = function(){
 		document.querySelector('audio, video').currentTime = Troff.getStartTime();
 	}; // end goToStartMarker
@@ -4419,7 +4451,7 @@ var DBClass = function(){
 			// These is fore the first time Troff is started:
 			if(allKeys.indexOf("straoSongLists")   === -1 ) DB.saveSonglists_new();
 			//if(allKeys.indexOf("iCurrentSonglist") === -1 ) DB.setCurrentSonglist(0);
-//      if(allKeys.indexOf("abCurrentAreas")   === -1 ) DB.setCurrentAreas(); //depricated
+			//if(allKeys.indexOf("abCurrentAreas")   === -1 ) DB.setCurrentAreas(); //depricated
 			if(allKeys.indexOf("zoomDontShowAgain")=== -1 ) {
 				chrome.storage.local.set({"zoomDontShowAgain" : false});
 			}
@@ -4832,19 +4864,23 @@ var DBClass = function(){
 		DB.setCurrent(songId, 'tempo', tempo);
 	};
 
-	/*DB*/this.setCurrent = function(songId, key, value){
-	chrome.storage.local.get(songId, function(ret){
-		var song = ret[songId];
-		if(!song){
-				console.error('Error, "noSong" occurred;\n'+
-				'songId=' + songId + ', key=' + key + ', value=' + value);
-				return;
-		}
-		song[key] = value;
-		var obj = {};
-		obj[songId] = song;
-		chrome.storage.local.set(obj);
-	});
+	/*DB*/this.setCurrent = function( songId, key, value, callback ) {
+		chrome.storage.local.get(songId, function(ret){
+			var song = ret[songId];
+			if(!song){
+					console.error('Error, "noSong" occurred;\n'+
+					'songId=' + songId + ', key=' + key + ', value=' + value);
+					return;
+			}
+			song[key] = value;
+			var obj = {};
+			obj[songId] = song;
+			chrome.storage.local.set(obj);
+
+			if( callback ) {
+				callback();
+			}
+		});
 	};//end setCurrent
 
 	/*DB*/this.getMarkers = function(songId, funk) {
@@ -4858,7 +4894,36 @@ var DBClass = function(){
 	};
 
 	/*DB*/this.getSongMetaDataOf = function(songId) {
-		var loadSongMetadata = function(song, songId){
+		var loadSongMetadata = function(song, songId) {
+
+			$( "[data-save-on-song-toggle-class]" ).each( function( i, element ){
+				var $target = $( element ),
+					classToToggleAndSave = $target.data( "save-on-song-toggle-class" ),
+					key = "TROFF_CLASS_TO_TOGGLE_" + $target.attr( "id" ),
+					value = song[key];
+
+				if( value === undefined ) {
+					value = $target.data( "save-on-song-toggle-class-default-value" );
+				}
+
+				if( value ) {
+					$target.addClass( classToToggleAndSave );
+				} else {
+					$target.removeClass( classToToggleAndSave );
+				}
+			});
+
+			$( "[data-save-on-song-value]" ).each( function( i, element ){
+				var $target = $( element ),
+					key = "TROFF_VALUE_" + $target.attr( "id" ),
+					value = song[key];
+
+				if( value === undefined ) {
+					value = $target.data( "save-on-song-value" );
+				}
+
+				$target.val( value );
+			});
 
 			Troff.selectStartBefore(song.startBefore[0], song.startBefore[1]);
 			Troff.selectStopAfter(song.stopAfter[0], song.stopAfter[1]);
@@ -5044,6 +5109,11 @@ var IOClass = function(){
 		$('#buttImportMarker').click(Troff.importStuff);
 		$('#buttPauseBefStart').click(Troff.togglePauseBefStart);
 		$('#buttStartBefore').click(Troff.toggleStartBefore);
+
+
+		$("[data-save-on-song-toggle-class]").click( IO.saveOnSongToggleClass );
+		$("[data-save-on-song-value]").change( IO.saveOnSongValue );
+
 		// Don't update as the user is typing:
 		//$('#startBefore').change(Troff.updateStartBefore);
 		//$('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
@@ -5778,6 +5848,51 @@ var IOClass = function(){
 		else
 				$('.loopTimesLeft').html( input );
 	};
+
+	/*IO*/this.saveOnSongValue = function( event ) {
+		document.getElementById('blur-hack').focus();
+
+		var $target = $( event.target ),
+			id = $target.attr( "id" ),
+			value = $target.val();
+
+		if( id == undefined ) {
+			console.error( 'this element is missing "id", can not save!', $target );
+			return;
+		}
+
+		key = "TROFF_VALUE_" + id;
+
+		DB.setCurrent(Troff.getCurrentSong(), key, value );
+
+	}
+
+	/*IO*/this.saveOnSongToggleClass = function( event ) {
+		document.getElementById('blur-hack').focus();
+
+		var $target = $( event.target ),
+			targetHasClass,
+			id = $target.attr( "id" ),
+			classToToggleAndSave = $target.data( "save-on-song-toggle-class" );
+
+		if( id == undefined ) {
+			console.error( 'this element is missing "id", can not save!', $target );
+			return;
+		}
+
+		if( classToToggleAndSave == undefined ) {
+			console.error( 'this element is missing "classToToggleAndSave", can not toggle!', $target );
+			return;
+		}
+
+		$target.toggleClass( classToToggleAndSave );
+
+		key = "TROFF_CLASS_TO_TOGGLE_" + id;
+		value = $target.hasClass( classToToggleAndSave );
+
+		DB.setCurrent(Troff.getCurrentSong(), key, value );
+
+	}
 
 }; // end IOClass
 

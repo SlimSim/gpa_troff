@@ -37,6 +37,7 @@ p{
 	background-color: lightgray;
 }
 
+.grayout-next-on-non-active:not(.active) ~*,
 .grayOut{
 	color: gray;
 	background-color: lightgray;

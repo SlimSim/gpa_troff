@@ -362,6 +362,11 @@ input[type=number]{
 		text-align: center;
 }
 
+input[type=number].numberWide {
+	width: 27px; /*enough for typing in "100" */
+	text-align: center;
+	padding: 0;
+}
 input[type=number].numberWider{
 	width: 36px; /*enough for typing in "3600" = 1h */
 	text-align: right;
@@ -454,11 +459,15 @@ input[type=number].numberWider{
 .negative-mx-5 {	margin-top: -20px; margin-bottom: -20px; }
 
 
-x
+
 /* the style for the IO ***************************************/
 
 .buttWidthStandard{
 	width: 85px;
+}
+
+.buttWidthMedium-small {
+	width: 102px;
 }
 
 .buttWidthMedium{
@@ -840,7 +849,6 @@ table {
 	outline-style: solid;
 	outline-width: 4px;
 }
-
 
 
 .textareaStandard{
