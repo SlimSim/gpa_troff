@@ -4353,14 +4353,14 @@ var DBClass = function(){
 							//not a song to be cleened, this was a attribute used before v0.4
 		}
 		
-		songObject = DB.fixSongObject(songObject);
+		songObject = DB.fixSongObject(songObject, songId);
 		
 		var obj = {};
 		obj[songId] = songObject;
 		chrome.storage.local.set(obj);
 	}; // end cleanSong
 	
-	this.fixSongObject = function(songObject){
+	this.fixSongObject = function(songObject, songId){
 
 		if (songObject === undefined) songObject = {};
 		
@@ -4391,14 +4391,41 @@ var DBClass = function(){
 		oMarkerEnd.color = "None";
 		oMarkerEnd.id = "markerNr1";
 	
-		if(!songObject.startBefore) songObject.startBefore = [false, 4];
-		if(!songObject.stopAfter) songObject.stopAfter = [false, 2];
-		if(!songObject.pauseBefStart) songObject.pauseBefStart = [true, 3];
-		if(!songObject.speed) songObject.speed = 100;
-		if(!songObject.volume) songObject.volume = 100;
-		if(!songObject.loopTimes) songObject.loopTimes = 1;
-		if(!songObject.wait) songObject.wait = [true, 1];
-		if(!$.isArray(songObject.wait)) songObject.wait = [true, songObject.wait];
+
+		if(!songObject.startBefore) songObject.startBefore = [
+			$("#TROFF_SETTING_SONG_DEFAULT_START_BEFORE_ON").hasClass( "active" ),
+			$("#TROFF_SETTING_SONG_DEFAULT_START_BEFORE_VALUE").val()
+		];
+		if(!songObject.stopAfter) songObject.stopAfter = [
+			$("#TROFF_SETTING_SONG_DEFAULT_STOP_AFTER_ON").hasClass( "active" ),
+			$("#TROFF_SETTING_SONG_DEFAULT_STOP_AFTER_VALUE").val()
+		];
+		if(!songObject.pauseBefStart) songObject.pauseBefStart = [
+			$("#TROFF_SETTING_SONG_DEFAULT_PAUSE_BEFORE_ON").hasClass( "active" ),
+			$("#TROFF_SETTING_SONG_DEFAULT_PAUSE_BEFORE_VALUE").val()
+		];
+		if(!songObject.speed) songObject.speed = $("#TROFF_SETTING_SONG_DEFAULT_SPEED_VALUE").val();
+		if(!songObject.volume) songObject.volume = $("#TROFF_SETTING_SONG_DEFAULT_VOLUME_VALUE").val();
+		if(!songObject.loopTimes) songObject.loopTimes =
+				$("#TROFF_SETTING_SONG_DEFAULT_NR_LOOPS_INFINIT_IS_ON").hasClass( "active" ) ?
+				"inf" :
+				$("#TROFF_SETTING_SONG_DEFAULT_NR_LOOPS_VALUE").val();
+		if(!songObject.wait) songObject.wait = [
+			$("#TROFF_SETTING_SONG_DEFAULT_WAIT_BETWEEN_ON").hasClass( "active" ),
+			$("#TROFF_SETTING_SONG_DEFAULT_WAIT_BETWEEN_VALUE").val()
+		];
+
+
+
+
+
+		/* Slim sim remove
+		 * These below is just to update the database from old structures to new :)
+		 */
+		if(!$.isArray(songObject.wait)) songObject.wait = [
+			$("#TROFF_SETTING_SONG_DEFAULT_WAIT_BETWEEN_ON").hasClass( "active" ),
+			songObject.wait
+		];
 		if(!songObject.info ) songObject.info = "";
 		if(!songObject.tempo) songObject.tempo = "?";
 		if(songObject.tempo == "NaN") songObject.tempo = "?";
@@ -4422,7 +4449,6 @@ var DBClass = function(){
 			songObject.currentStartMarker = oMarkerStart.id;
 		if(!songObject.currentStopMarker)
 			songObject.currentStopMarker = (oMarkerEnd.id + 'S');
-
 
 		return songObject;
 	};
@@ -4546,7 +4572,7 @@ var DBClass = function(){
 
 
 
-			var SETTING_KEYS = $("[data-st-save-value-key]").map(function(){return $(this).data("st-save-value-key");}).get();
+			//var SETTING_KEYS = $("[data-st-save-value-key]").map(function(){return $(this).data("st-save-value-key");}).get();
 			for(var key in items) {
 				/*
 				if( TROFF_SETTING_KEYS.indexOf( key ) != -1 || SETTING_KEYS.indexOf( key ) != -1 ) {
@@ -4900,10 +4926,12 @@ var DBClass = function(){
 				var $target = $( element ),
 					classToToggleAndSave = $target.data( "save-on-song-toggle-class" ),
 					key = "TROFF_CLASS_TO_TOGGLE_" + $target.attr( "id" ),
+					defaultElementId,
 					value = song[key];
 
 				if( value === undefined ) {
-					value = $target.data( "save-on-song-toggle-class-default-value" );
+					defaultElementId = $target.data( "troff-css-selector-to-get-default" );
+					value = $( defaultElementId ).hasClass( classToToggleAndSave );
 				}
 
 				if( value ) {
@@ -4919,7 +4947,8 @@ var DBClass = function(){
 					value = song[key];
 
 				if( value === undefined ) {
-					value = $target.data( "save-on-song-value" );
+					defaultElementId = $target.data( "troff-css-selector-to-get-default" );
+					value = $( defaultElementId ).val();
 				}
 
 				$target.val( value );
@@ -4945,9 +4974,7 @@ var DBClass = function(){
 			Troff.setTempo(song.tempo);
 			Troff.addButtonsOfStates(song.aStates);
 			Troff.setAreas(song.abAreas);
-
 			Troff.setCurrentSong();
-			
 			Troff.zoom(song.zoomStartTime, song.zoomEndTime);
 
 		};// end loadSongMetadata

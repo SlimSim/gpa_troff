@@ -246,6 +246,7 @@
 								title="Set how many seconds before the start marker to start (key: shift/alt b)"
 								value="3"
 								min="0"
+								data-troff-css-selector-to-get-default="#TROFF_SETTING_SONG_DEFAULT_START_BEFORE_VALUE"
 								id="startBefore" />
 						</div>
 		
@@ -297,6 +298,7 @@
 								data-save-on-song-toggle-class-default-value="false"
 								value="increment until"
 								id="buttIncrementUntil"
+								data-troff-css-selector-to-get-default="#TROFF_SETTING_SONG_DEFAULT_INCREMENT_UNTIL_ON"
 								class="buttWidthMedium-small stOnOffButton grayout-next-on-non-active">
 							<input
 								type="number"
@@ -305,6 +307,7 @@
 								min="50"
 								max="200"
 								data-save-on-song-value="100"
+								data-troff-css-selector-to-get-default="#TROFF_SETTING_SONG_DEFAULT_INCREMENT_UNTIL_VALUE"
 								value="100" />
 						</div>
 						
@@ -1021,6 +1024,122 @@
 								title="Show the nr-of-loops-selector"
 								value="nr of loop" />
 						</div>
+
+
+						<h3 class="pt-4 pb-2">Standard values for songs</h3>
+						<p class="pt-2">
+							When loading a new song, these values will be the ones that the song get.
+						</p>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Start before</h4>
+							<input class="st-simple-on-off-button buttWidthMedium stOnOffButton"
+								type="button"
+								data-troff-default-class="active"
+								data-st-save-value-key="TROFF_SETTING_SONG_DEFAULT_START_BEFORE_ON"
+								id="TROFF_SETTING_SONG_DEFAULT_START_BEFORE_ON"
+								value="on" />
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_START_BEFORE_VALUE"
+								data-st-save-current-value="4"
+								value="0" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Stop after</h4>
+							<input class="st-simple-on-off-button buttWidthMedium stOnOffButton"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_DEFAULT_STOP_AFTER_ON"
+								id="TROFF_SETTING_SONG_DEFAULT_STOP_AFTER_ON"
+								value="on" />
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_STOP_AFTER_VALUE"
+								data-st-save-current-value="2"
+								value="0" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Pause before</h4>
+							<input class="st-simple-on-off-button buttWidthMedium stOnOffButton active"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_DEFAULT_PAUSE_BEFORE_ON"
+								id="TROFF_SETTING_SONG_DEFAULT_PAUSE_BEFORE_ON"
+								value="on" />
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_PAUSE_BEFORE_VALUE"
+								data-st-save-current-value="3"
+								value="0" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Wait between</h4>
+							<input class="st-simple-on-off-button buttWidthMedium stOnOffButton active"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_DEFAULT_WAIT_BETWEEN_ON"
+								id="TROFF_SETTING_SONG_DEFAULT_WAIT_BETWEEN_ON"
+								value="on" />
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_WAIT_BETWEEN_VALUE"
+								data-st-save-current-value="1"
+								value="0" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Increment until</h4>
+							<input class="st-simple-on-off-button buttWidthMedium stOnOffButton"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_DEFAULT_INCREMENT_UNTIL_ON"
+								id="TROFF_SETTING_SONG_DEFAULT_INCREMENT_UNTIL_ON"
+								value="on" />
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_INCREMENT_UNTIL_VALUE"
+								data-st-save-current-value="100"
+								value="0" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Nr loops</h4>
+							<input class="st-simple-on-off-button buttWidthMedium stOnOffButton"
+								type="button"
+								data-st-save-value-key="TROFF_SETTING_SONG_DEFAULT_NR_LOOPS_INFINIT_IS_ON"
+								id="TROFF_SETTING_SONG_DEFAULT_NR_LOOPS_INFINIT_IS_ON"
+								value="&infin;" />
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_NR_LOOPS_VALUE"
+								data-st-save-current-value="1"
+								min=1
+								max=9
+								value="1" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Volume</h4>
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_VOLUME_VALUE"
+								data-st-save-current-value="100"
+								min=0
+								max=100
+								value="1" />
+						</div>
+
+						<div class="py-2">
+							<h4 class="buttWidthMedium inlineBlock">Speed</h4>
+							<input class="numberWider"
+								type="number"
+								id="TROFF_SETTING_SONG_DEFAULT_SPEED_VALUE"
+								data-st-save-current-value="100"
+								min=50
+								max=200
+								value="1" />
+						</div>
+
 
 					</div>
 
