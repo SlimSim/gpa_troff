@@ -4469,7 +4469,9 @@ var DBClass = function(){
 
 	/*DB*/this.cleanDB = function(){
 		chrome.storage.local.get(null, function(items) {
+			console.log("cleanDB: items", items);
 			var allKeys = Object.keys(items);
+			console.log("cleanDB: allKeys", allKeys);
 			if(allKeys.length === 0){ // This is the first time Troff is started:
 				DB.saveSonglists_new();
 				//DB.setCurrentSonglist(0);
@@ -5930,6 +5932,15 @@ var Rate = new RateClass();
 
 $(document).ready( function() {
 	
+	$( "#dismisNewVersionModal" ).on( "click", function() {
+		$( "#newVersionModal" ).remove();
+	});
+
+	var milisAt_2020_06_11 = 1591826400000;
+	if( new Date().getTime() > milisAt_2020_06_11 ) {
+		$( "#newVersionModal" ).removeClass( "hidden" );
+	}
+
 	initSongTable();
 
 	DB.cleanDB();
