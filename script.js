@@ -187,7 +187,7 @@ function addVideoToContentDiv() {
 	fsButton.appendChild( document.createTextNode('Play in Fullscreen') );
 	fsButton.setAttribute('id', "playInFullscreenButt");
 	fsButton.setAttribute('class', "onOffButton mt-2 mr-2");
-	
+
 	videoBox.setAttribute('id', "videoBox");
 
 	video.addEventListener('loadedmetadata', function(e){
@@ -202,7 +202,7 @@ function addVideoToContentDiv() {
 		.attr( "id", "mirrorImageButt")
 		.click( Troff.mirrorImageChanged )
 		.addClass("onOffButton mt-2 mr-2")[0] )
-	
+
 	videoBox.appendChild(video);
 	content_div.appendChild(videoBox);
 	return video;
@@ -390,15 +390,15 @@ function addItem(itemEntry) {
 		li.setAttribute("isDirectory", false);
 		li.appendChild(label);
 		document.getElementById("newSongListPartAllSongs").appendChild(li);
-		// Slim sim remove 
+		// Slim sim remove
 		/*
-			This (the following if) is only to ease the transition between 
+			This (the following if) is only to ease the transition between
 			v0.3 to v0.4,
-			it is not used a single time after they open the app with v0.4 
+			it is not used a single time after they open the app with v0.4
 		* /
 		if(Troff.iCurrentGalleryId == -1 && itemEntry.fullPath == Troff.strCurrentSong )
 			setSong(itemEntry.fullPath, mData.galleryId);
-		
+
 	} else {
 		//slim sim, is this else ever used?
 		console.info("\n\n\n********* else! This else is used! itemEntry:", itemEntry,"\n\n");
@@ -409,7 +409,7 @@ function addItem(itemEntry) {
 		liHead.appendChild(group);
 		document.getElementById("newSongListPartAllSongs").appendChild(liHead);
 	 }
-	 
+
 }
 */
 
@@ -474,7 +474,7 @@ function clickSongList_NEW( event ) {
 			$( "#songListsList" ).find( "button" ).removeClass("selected");
 		} else {
 			// It only enters here IF the All songs-button is pressed :)
-			$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");			
+			$( "#songListsList" ).find( "button" ).removeClass("selected").removeClass("active");
 			$target.addClass("selected");
 		}
 	} else {
@@ -581,7 +581,7 @@ function addItem_NEW(itemEntry) {
 					metadata.genre || "",
 					mData.name + itemEntry.fullPath, //File Path
 					Troff.milisToDisp( file.lastModified ),
-					sortAndValue( file.size, Troff.byteToDisp( file.size ) ), 
+					sortAndValue( file.size, Troff.byteToDisp( file.size ) ),
 					info,
 					"." + extension
 				] )
@@ -806,7 +806,7 @@ function createSongList_NEW( songDataList ) {
 
 	$( "#newSonglistNrSongs" ).text( songs.length );
 	$("#createSongListDialog").removeClass("hidden");
-	
+
 	var saveSongList = function( event ) {
 		var clearCreateSongList = function(){
 			document.getElementById('blur-hack').focus();
@@ -815,7 +815,7 @@ function createSongList_NEW( songDataList ) {
 			$('#createSongListSave').off( "click.saveSongList" );
 			IO.clearEnterFunction();
 		};
-		
+
 		if( $( "#createSongListName" ).val() === "" ) {
 			clearCreateSongList();
 			return;
@@ -827,12 +827,12 @@ function createSongList_NEW( songDataList ) {
 			songs : songs
 		};
 
-		Troff.addSonglistToHTML_NEW( newSongList ); 
+		Troff.addSonglistToHTML_NEW( newSongList );
 		DB.saveSonglists_new();
 
 		clearCreateSongList();
-	} 
-	
+	}
+
 	IO.setEnterFunction(function(event){
 		saveSongList();
 		return false;
@@ -874,7 +874,7 @@ function dropSongOnSonglist( event ) {
 
 function removeSongsFromSonglist( songs, $target ) {
 
-	var	i, 
+	var	i,
 		songDidNotExists,
 		songList = $target.data("songList");
 
@@ -1070,7 +1070,7 @@ function dataTableShowColumnsForFloatingState() {
 
 
 function scanGallery(entries) {
-	
+
 	// when the size of the entries array is 0,
 	// we've processed all the directory contents
 	if (entries.length === 0) {
@@ -1288,7 +1288,7 @@ var TroffClass = function(){
 			DB.saveVal( TROFF_SETTING_EXTENDED_MARKER_COLOR, true );
 		}
 	};
-	
+
 	this.recallExtendedMarkerColor = function() {
 		DB.getVal( TROFF_SETTING_EXTENDED_MARKER_COLOR, function( extend ) {
 			if( extend ) {
@@ -1309,7 +1309,7 @@ var TroffClass = function(){
 			DB.saveVal( TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR, true );
 		}
 	};
-	
+
 	this.recallExtraExtendedMarkerColor = function() {
 		DB.getVal( TROFF_SETTING_EXTRA_EXTENDED_MARKER_COLOR, function( extend ) {
 			if( extend ) {
@@ -1330,7 +1330,7 @@ var TroffClass = function(){
 
 //slim sim here
 
-// testa att använda chrome.runtime.getManifest().short_name 
+// testa att använda chrome.runtime.getManifest().short_name
 // för att kolla test eller prod :)
 
 /*
@@ -1340,7 +1340,7 @@ var TroffClass = function(){
 		*/
 		DB.saveVal( TROFF_SETTING_SET_THEME, theme);
 
-		
+
 	};
 
 /*
@@ -1376,7 +1376,7 @@ var TroffClass = function(){
 	/*Troff*/this.exitWritableField = function() {
 		IO.clearEnterFunction();
 	}
-	
+
 	/*Troff*/this.getGlobalSettins = function( callback ) {
 		chrome.storage.local.get(null, function(items) {
 			var settingItems = {};
@@ -1531,7 +1531,7 @@ var TroffClass = function(){
 			}
 		);
 	}
-	
+
 	this.recallGlobalSettings = function(){
 		Troff.recallTheme();
 		Troff.recallExtendedMarkerColor();
@@ -1602,8 +1602,8 @@ var TroffClass = function(){
 			}
 		} );
 	};*/
-	
-	
+
+
 	this.closeSettingsDialog = function( event ) {
 		$( "#outerSettingPopUpSquare" ).addClass( "hidden" );
 	};
@@ -1617,7 +1617,7 @@ var TroffClass = function(){
 	this.firstTimeUser = function(){
 		$('#firstTimeUserDialog').removeClass( "hidden" );
 	};
-	
+
 	this.firstTimeUserDialogTour = function(){
 		$('#firstTimeUserDialog').addClass("hidden");
 		IO.openHelpWindow();
@@ -1684,7 +1684,7 @@ var TroffClass = function(){
 			videoBox.classList.add('fullscreen');
 		}
 	};
-	
+
 	// this is regarding the f/esc-key, IE- the actual fullscreen
 	this.forceNoFullscreen = function(){
 		var videoBox = document.querySelector('#videoBox');
@@ -1854,13 +1854,13 @@ var TroffClass = function(){
 				IO.confirm('Out of range', 'You pressed outside the playing region, '
 					+ 'do you want to add a marker to the end of the song?', function(){
 					var songLength = Number(document.getElementById('timeBar').max);
-					
+
 					var oMarker = {};
 					oMarker.name = "End";
 					oMarker.time = songLength;
 					oMarker.info = "";
 					oMarker.id = Troff.getNewMarkerId();
-			
+
 					aMarkers = [oMarker];
 					Troff.addMarkers(aMarkers); // adds marker to html
 					DB.saveMarkers(Troff.getCurrentSong() ); // saves end marker to DB
@@ -2043,7 +2043,7 @@ var TroffClass = function(){
 			useTimer = $("#" + TROFF_SETTING_SPACE_USE_TIMER_BEHAVIOUR ).hasClass( "active" );
 		Troff.spaceOrEnter( goToMarker, useTimer, updateLoopTimes );
 	}; // end space()
-	
+
 	this.playUiButton = function() {
 		var goToMarker = $("#" + TROFF_SETTING_PLAY_UI_BUTTON_GO_TO_MARKER_BEHAVIOUR ).hasClass( "active" ),
 			updateLoopTimes = $("#" + TROFF_SETTING_PLAY_UI_BUTTON_RESET_COUNTER ).hasClass( "active" ),
@@ -2060,7 +2060,7 @@ var TroffClass = function(){
 
 		if( goToMarker ) {
 			Troff.goToStartMarker();
-		} 
+		}
 		if( Troff.getMood() == 'pause' ) {
 				if( useTimer && $('#buttPauseBefStart').hasClass('active') ) {
 					Troff.playSong( $('#pauseBeforeStart').val() * 1000 );
@@ -2198,7 +2198,7 @@ var TroffClass = function(){
 	this.getCurrentStates = function(){
 		return $('#stateList').children();
 	};
-	
+
 	/*Troff*/this.getCurrentMarkers = function(bGetStopMarkers){
 		if(bGetStopMarkers){
 			return $('#markerList li input:nth-child(4)');
@@ -2237,7 +2237,7 @@ var TroffClass = function(){
 			}
 			oExport.strSongInfo = $('#songInfoArea').val();
 			var sExport = JSON.stringify(oExport);
-			
+
 			IO.prompt("Copy the marked text to export your markers", sExport);
 		});
 	}; // end exportStuff
@@ -2251,8 +2251,8 @@ var TroffClass = function(){
 							"Paste text here",
 							function(sImport){
 			var oImport = JSON.parse(sImport);
-			if( oImport.strSongInfo !== undefined && 
-					oImport.aoStates !== undefined && 
+			if( oImport.strSongInfo !== undefined &&
+					oImport.aoStates !== undefined &&
 					oImport.aoMarkers !== undefined ){
 				importMarker(oImport.aoMarkers);
 				importSonginfo(oImport.strSongInfo);
@@ -2281,7 +2281,7 @@ var TroffClass = function(){
 					aMarkers[i].info = aMarkers[i].info || "";
 					aMarkers[i].color = aMarkers[i].color || "None";
 					//:allow for version 0.3.0 end here
-					
+
 					aMarkers[i].id = aMarkerId[i];
 				}
 				Troff.addMarkers(aMarkers); // adds marker to html
@@ -2306,12 +2306,12 @@ var TroffClass = function(){
 							return currMarker.attr('id');
 						}
 					}
-					
+
 					console.error("returnerar första markören...");
 					return aCurrMarkers.eq(0).children().eq(2).attr('id');
-					
+
 				}
-				
+
 				aoStates.map(function(s){
 					Troff.addButtonsOfStates([JSON.stringify(s)]);
 				});
@@ -2330,7 +2330,7 @@ var TroffClass = function(){
 		var iMarkers =  $('#markerList li').length + 1;
 
 		var quickTimeout = setTimeout(function(){
-			
+
 			var oFI = {};
 			oFI.strHead = "Please enter the marker name here";
 			var iMarkers =  $('#markerList li').length + 1;
@@ -2341,14 +2341,14 @@ var TroffClass = function(){
 
 			IO.promptEditMarker(0, function(newMarkerName, newMarkerInfo, newMarkerColor, newTime){
 				if(newMarkerName === "") return;
-				
+
 				var oMarker = {};
 				oMarker.name = newMarkerName;
 				oMarker.time = newTime;
 				oMarker.info = newMarkerInfo || "";
 				oMarker.color = newMarkerColor;
 				oMarker.id = Troff.getNewMarkerId();
-	
+
 				var markers = [oMarker];
 				Troff.addMarkers(markers); // adds marker to html
 				DB.saveMarkers(Troff.getCurrentSong() );
@@ -2367,13 +2367,13 @@ var TroffClass = function(){
 		IO.jQueryToggle('#outerInfoAndroidPopUpSquare');
 		document.getElementById('blur-hack').focus();
 	};
-	
-	
+
+
 	/*Troff*/this.getLastSlashName = function(strUrl){
 		var aUrl = strUrl.split("/");
 		return aUrl[aUrl.length-1];
 	};
-	
+
 	/*Troff*/this.addSpacesBetweenSlash = function(strUrl){
 		return strUrl.replace(/\//g, " / ");
 	};
@@ -2390,7 +2390,7 @@ var TroffClass = function(){
 			DB.setCurrentAreas(Troff.getCurrentSong());
 		}
 	};
-	
+
 	this.setAreas = function(abAreas) {
 		$('#statesTab').toggleClass("active", abAreas[0]);
 		$('#stateSection').toggle(abAreas[0]);
@@ -2401,11 +2401,11 @@ var TroffClass = function(){
 		$('#countTab').toggleClass("active", abAreas[3]);
 		$('#infoSection').toggle(abAreas[3]);
 	};
-	
+
 	this.setInfo = function(info){
 		$('#songInfoArea').val(info);
 	};
-	
+
 	/*
 	this.setSonglists = function(aoSonglists){
 		for(var i=0; i<aoSonglists.length; i++){
@@ -2533,7 +2533,7 @@ var TroffClass = function(){
 
 		DB.saveVal( TROFF_CURRENT_STATE_OF_SONG_LISTS, o );
 	};
-	
+
 	this.enterSongListName = function(){
 		IO.setEnterFunction(function(event){
 			document.getElementById('blur-hack').focus();
@@ -2545,7 +2545,7 @@ var TroffClass = function(){
 		IO.clearEnterFunction();
 		document.getElementById('blur-hack').focus();
 	};
-	
+
 	/*
 	this.editSonglist = function(event){
 		$('#newSongListPart').show();
@@ -2554,7 +2554,7 @@ var TroffClass = function(){
 		var oSonglist = JSON.parse(li.getAttribute('stroSonglist'));
 		$('#newSongListName').val(oSonglist.name);
 		$('#newSongListName').attr('iSonglistId', oSonglist.id);
-		
+
 		var aSongList = [];
 		var aRows = $('#newSongListPartAllSongs li');
 		var aSongs = oSonglist.songs;
@@ -2575,11 +2575,11 @@ var TroffClass = function(){
 					aRows[i].children[0].children[0].checked = true;
 				}
 			}
-			
+
 		}
 	};
 	*/
-	
+
 	/*Troff* /this.createNewSonglist = function(){
 		Troff.resetNewSongListPartAllSongs();
 		$('#newSongListPart').show();
@@ -2589,7 +2589,7 @@ var TroffClass = function(){
 		$('#newSongListName').click();
 	};
 	*/
-	
+
 	/*
 	this.cancelSongList = function(){
 		document.getElementById('blur-hack').focus();
@@ -2600,7 +2600,7 @@ var TroffClass = function(){
 		Troff.resetNewSongListPartAllSongs();
 	};
 	*/
-	
+
 	/*Troff* /this.removeSonglist = function(){
 		IO.confirm( 'Remove songlist?',
 								'Don you want to permanently remove this songlist?',
@@ -2611,7 +2611,7 @@ var TroffClass = function(){
 			$('#songListPartButtons, #songListPartTheLists').show();
 			document.getElementById('blur-hack').focus();
 			var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
-			
+
 			var aSonglists = $('#songListPartTheLists li');
 			for(var j=0; j<aSonglists.length; j++){
 				var oCurrSonglist = JSON.parse(aSonglists.eq(j).attr('stroSonglist'));
@@ -2629,7 +2629,7 @@ var TroffClass = function(){
 			Troff.resetNewSongListPartAllSongs();
 		});
 	};//*/
-	
+
 	/*Troff* /this.saveNewSongList = function(){
 		$('#newSongListPart').hide();
 		$( "#searchCreateSongList" ).val( "" ).trigger( "click" );
@@ -2637,7 +2637,7 @@ var TroffClass = function(){
 
 
 		$('#songListPartButtons, #songListPartTheLists').show();
-		
+
 		document.getElementById('blur-hack').focus();
 		var name = $('#newSongListName').val();
 		if(name === "" || name === undefined) {
@@ -2645,7 +2645,7 @@ var TroffClass = function(){
 			return -1;
 		}
 		var iSonglistId = parseInt($('#newSongListName').attr('iSonglistId'));
-		
+
 		var aSonglist = [];
 		var aRows = $('#newSongListPartAllSongs li');
 		for(var i=0; i<aRows.length; i++){
@@ -2685,9 +2685,9 @@ var TroffClass = function(){
 		Troff.resetNewSongListPartAllSongs();
 		DB.saveSonglists(); // this saves the current songlists from html to DB
 		DB.getCurrentSonglist(); // this reloads the current songlist
-		
+
 	};//*/
-	
+
 	/*Troff*/this.getUniqueSonglistId = function(){
 		var iSonglistId = 1;
 		var bFinniched = false;
@@ -2708,14 +2708,14 @@ var TroffClass = function(){
 				return iSonglistId;
 		}
 	};
-	
+
 	this.resetNewSongListPartAllSongs = function(){
 		$('#newSongListName').attr('iSonglistId', 0);
 		$('#newSongListName').val('');
 		$('#newSongListPartAllSongs li label input').attr('checked', false);
 		$('#removeSongList').show();
 	};
-	
+
 	/*
 	this.addSonglistToHTML = function(oSonglist){
 		var buttE = $('<button>')
@@ -2744,7 +2744,7 @@ var TroffClass = function(){
 		$('#songlistHelpText').hide();
 	};
 	*/
-	
+
 	/*Troff*/this.setSonglistById = function(id){
 		if(id === 0){
 			$('#songlistAll').click();
@@ -2774,7 +2774,7 @@ var TroffClass = function(){
 		setSong(fullPath, galleryId);
 	};
 
-	
+
 	/*Troff* /this.addAllSongsFromGallery = function(galleryIdToAdd){
 		var allSongs = $('#newSongListPartAllSongs')
 			.children().filter('[isDirectory!=true]'); //slim sim, finns det en funktion fÃ¶r detta?
@@ -2787,7 +2787,7 @@ var TroffClass = function(){
 				);
 		}
 	};*/
-	
+
 	/*Troff* /this.addSongButtonToSongsList = function(fullPath, galleryId){
 		//check if song is already added to the songsList
 		var aAlreadyAddedSongs = $('#gallery').children().filter('button');
@@ -2796,16 +2796,16 @@ var TroffClass = function(){
 				 aAlreadyAddedSongs.eq(i).attr('galleryid') === galleryId)
 				return;
 		}
-		
-		if(!checkIfSongExists(fullPath, galleryId)) 
+
+		if(!checkIfSongExists(fullPath, galleryId))
 			return;
-		
+
 		var pap = Troff.getMediaButton(fullPath, galleryId);
 		document.getElementById("gallery").appendChild(pap);
 	};*/
-	
+
 	/*this.showSongsArea = function(){
-		if(!$('#songsTab').hasClass('active')) 
+		if(!$('#songsTab').hasClass('active'))
 			$('#songsTab').click();
 	};*/
 
@@ -2822,7 +2822,7 @@ var TroffClass = function(){
 		pap.addEventListener('click', Troff.selectSong );
 		return pap;
 	};*/
-	
+
 	this.editCurrentSongInfo = function() {
 		if( $("#songInfoArea").hasClass( "hidden" ) ) return;
 		var quickTimeOut = setTimeout(function(){
@@ -2839,7 +2839,7 @@ var TroffClass = function(){
 			clearInterval(quickTimeOut);
 		}, 0);
 	};
-		
+
 	this.enterSongInfo = function(a, b, c){
 		$('#songInfoArea').addClass('textareaEdit');
 		IO.setEnterFunction(function(event){
@@ -2861,19 +2861,19 @@ var TroffClass = function(){
 		var songId = Troff.getCurrentSong();
 		DB.setCurrentSongInfo(strInfo, songId);
 	};
-	
+
 	/*Troff*/this.rememberCurrentState = function(){
 		if( $("#statesTab").hasClass( "hidden" ) ) return;
 
 		document.getElementById('blur-hack').focus();
 		var nrStates = $('#stateList').children().length + 1;
 		IO.prompt(
-			"Remember state of settings to be recalled later", 
-			"State " + nrStates, 
+			"Remember state of settings to be recalled later",
+			"State " + nrStates,
 			function(stateName){
-			
+
 			if(stateName === "") return;
-				
+
 			var state = {};
 			state.name = stateName;
 			state.buttPauseBefStart = $('#buttPauseBefStart').hasClass('active');
@@ -2889,17 +2889,17 @@ var TroffClass = function(){
 			state.speedBar = $('#speedBar').val();
 			state.currentMarker = $('.currentMarker').attr('id');
 			state.currentStopMarker = $('.currentStopMarker').attr('id');
-			
+
 			Troff.addButtonsOfStates([JSON.stringify(state)]);
 			DB.saveStates(Troff.getCurrentSong());
 		});
 
 	};
-	
+
 	this.addButtonsOfStates = function(astrState){
 		for(var i=0; i<astrState.length; i++){
 			var oState = JSON.parse(astrState[i]);
-			
+
 			$('<div>')
 				.append(
 					$('<input>')
@@ -2919,7 +2919,7 @@ var TroffClass = function(){
 		if(astrState.length !== 0)
 			$('#statesHelpText').hide();
 	};
-	
+
 	/*Troff*/this.setState = function(stateWrapper){
 		var strState = $(stateWrapper.target).parent().attr('strState');
 		var oState = JSON.parse(strState);
@@ -3060,7 +3060,7 @@ var TroffClass = function(){
 		IO.clearEnterFunction();
 		document.getElementById('blur-hack').focus();
 	};
-	
+
 	/*
 	this.enterSearchCreateSongList = function( event ){
 
@@ -3103,14 +3103,14 @@ var TroffClass = function(){
 		$input = $( event.target );
 		$input.addClass('textareaEdit');
 		Troff.searchSong( event );
-		
+
 		IO.setEnterFunction(function(event){
 			if(event.ctrlKey==1){//Ctrl+Enter will exit
 				$('#searchSong').val('').trigger('click');
 				document.getElementById('blur-hack').focus();
 				return false;
 			}
-			
+
 			$('#gallery .important').trigger('click');
 			$('#searchSong').val('').trigger('click');
 			return true;
@@ -3120,7 +3120,7 @@ var TroffClass = function(){
 
 			if( event.keyCode == 37 || event.keyCode == 39 ) return;
 			event.preventDefault();
-			
+
 			if(event.keyCode == 40) {
 				next = element.nextUntil(null,"button:not(.hidden)").eq(0);
 			} else {
@@ -3145,7 +3145,7 @@ var TroffClass = function(){
 		$( selector ).removeClass('important');
 		IO.clearEnterFunction();
 	};
-	
+
 	/*Troff*/this.enterMarkerInfo = function(a, b, c){
 		$('#markerInfoArea').addClass('textareaEdit');
 		IO.setEnterFunction(function(event){
@@ -3160,10 +3160,10 @@ var TroffClass = function(){
 		$('#markerInfoArea').removeClass('textareaEdit');
 		IO.clearEnterFunction();
 	};
-	
+
 	/*Troff* /this.enterEditText = function( event ) {
 		$input = $( event.target );
-		
+
 		$input.addClass('textareaEdit');
 		IO.setEnterFunction(function(event){
 			if(event.ctrlKey==1){//Ctrl+Enter will exit
@@ -3186,9 +3186,9 @@ var TroffClass = function(){
 			var time = $('.currentMarker')[0].timeValue;
 			var markerName = $('.currentMarker').val();
 			var songId = Troff.getCurrentSong();
-			
+
 			$('.currentMarker')[0].info = strInfo;
-			
+
 			DB.updateMarker(markerId, markerName, strInfo, color, time, songId);
 
 		};
@@ -3200,14 +3200,14 @@ var TroffClass = function(){
 				denna funktion , nedan, anvÃ¤nds fÃ¶r sista markÃ¶ren om den har tiden "max"
 				det som ska tas bort Ã¤r alltsÃ¥ denna funktion och anropet till den.
 				det Ã¤r tÃ¤mligen sjÃ¤lvfÃ¶rklarande om man sÃ¶ker efter funktionsnamnet...
-				max-check Ã¤r redundant nÃ¤r alla lÃ¥tar (som har db-data sparat) 
+				max-check Ã¤r redundant nÃ¤r alla lÃ¥tar (som har db-data sparat)
 				har Ã¶ppnats i v0.4 eller senare?
 			*/
 			var tmpUpdateMarkerSoonBcMax = function(){
 				DB.updateMarker(nameId, name, info, color, Number(time), song);
 				clearInterval(quickTimeOut);
 			};
-			
+
 			var startM = function() {
 				Troff.selectMarker(this.id);
 				document.getElementById('blur-hack').focus();
@@ -3231,7 +3231,7 @@ var TroffClass = function(){
 
 				// slim sim remove!
 				/*
-					this entire if, below is used for debugging in the transition 
+					this entire if, below is used for debugging in the transition
 					between v0.3 to v0.4, can be removed before v0.4
 					use for debugging new marker system with ID saved and passed around
 					(instead of using marker-name...)
@@ -3244,9 +3244,9 @@ var TroffClass = function(){
 					console.error(aMarkers[i]);
 					return -1;
 				}
-				
+
 				var maxTime = Number(document.getElementById('timeBar').max);
-				
+
 				if(time == "max" || time > maxTime){
 					time = maxTime;
 					var song = Troff.getCurrentSong();
@@ -3299,7 +3299,7 @@ var TroffClass = function(){
 					var childTime = parseFloat(child.childNodes[2].timeValue);
 					if(childTime !== undefined && Math.abs(time - childTime) < 0.001){
 						var markerId = child.childNodes[2].id;
-						
+
 						if(child.childNodes[2].info != info){
 							updated = true;
 							var newMarkerInfo = child.childNodes[2].info + "\n\n" + info;
@@ -3312,7 +3312,7 @@ var TroffClass = function(){
 							updated = true;
 							$('#'+markerId).val(newMarkerName);
 						}
-						
+
 						bContinue = true;
 						break;
 					} else if (time < childTime){
@@ -3400,7 +3400,7 @@ var TroffClass = function(){
 			document.getElementById('blur-hack').focus();
 			DB.setCurrentStartMarker(startMarkerId, strCurrentSong );
 		};
-		
+
 		this.unselectStopMarker = function(){
 			var aFirstAndLast = Troff.getFirstAndLastMarkers();
 			var startMarkerId = aFirstAndLast[0];
@@ -3420,7 +3420,7 @@ var TroffClass = function(){
 		this.selectMarker = function(markerId){
 			var startTime = Number($('#'+markerId)[0].timeValue);
 			var stopTime = Troff.getStopTime();
-			
+
 			// if stopMarker befor Marker - unselect stopMarker:
 			if(stopTime <= (startTime +0.5)){
 				$('.currentStopMarker').removeClass('currentStopMarker');
@@ -3437,11 +3437,11 @@ var TroffClass = function(){
 			$('.currentMarker').removeClass('currentMarker');
 			$('#'+markerId).addClass('currentMarker');
 			$('#markerInfoArea').val($('#'+markerId)[0].info);
-			
+
 			if( $("#" + TROFF_SETTING_ON_SELECT_MARKER_GO_TO_MARKER ).hasClass( "active" ) ) {
 				Troff.goToStartMarker();
 			}
-			
+
 			Troff.settAppropriateActivePlayRegion();
 
 			DB.setCurrentStartAndStopMarker(markerId, stopMarker, strCurrentSong);
@@ -3494,11 +3494,11 @@ var TroffClass = function(){
 			$('#startBefore').toggleClass('grayOut');
 			Troff.updateStartBefore();
 			Troff.setCurrentStartBefore();
-			
+
 			Troff.settAppropriateActivePlayRegion();
 			document.getElementById('blur-hack').focus();
 		};
-		
+
 		this.selectStartBefore = function(bActive, iStartBefore){
 				$('#startBefore').val(iStartBefore);
 				if(bActive){
@@ -3524,7 +3524,7 @@ var TroffClass = function(){
 	this.removeState = function(){
 		var that = this;
 		IO.confirm("Remove state",
-			"This action can not be undone", 
+			"This action can not be undone",
 			function(){
 			$(that).parent().remove();
 			DB.saveStates(Troff.getCurrentSong());
@@ -3532,7 +3532,7 @@ var TroffClass = function(){
 				$('#statesHelpText').show();
 		});
 	};
-	
+
 		/*
 			removeMarker, all, Tar bort en markÃ¶r frÃ¥n html och DB
 		*/
@@ -3567,7 +3567,7 @@ var TroffClass = function(){
 		};
 
 		/*
-			show the move markers pop up dialog. 
+			show the move markers pop up dialog.
 		*/
 		this.showMoveMarkers = function(){
 			IO.setEnterFunction(function(){
@@ -3595,7 +3595,7 @@ var TroffClass = function(){
 
 
 		/*
-			hide the move markers pop up dialog. 
+			hide the move markers pop up dialog.
 		*/
 		this.hideMoveMarkers = function(){
 			$('#moveMarkersDialog').addClass( "hidden" );
@@ -3680,7 +3680,7 @@ var TroffClass = function(){
 		}
 
 		/*
-			move all or some markers. 
+			move all or some markers.
 		*/
 		this.moveAllMarkersUp = function(){
 			$('#moveMarkersNumber').val(- $('#moveMarkersNumber').val());
@@ -3696,12 +3696,12 @@ var TroffClass = function(){
 		this.moveSomeMarkersDown = function(){
 			Troff.moveMarkers(true, false);
 		};
-		
+
 		this.moveOneMarkerDown = function(val){
 			$('#moveMarkersNumber').val( val );
 			Troff.moveMarkers(true, true);
 		};
-		
+
 		/*Troff*/this.getStartAndEndMarkerNr = function( addToStartNr, addToEndNr ) {
 			addToStartNr = addToStartNr || 0;
 			addToEndNr = addToEndNr || 0;
@@ -3751,17 +3751,17 @@ var TroffClass = function(){
 		}
 
 		/*
-			move all markers. 
+			move all markers.
 		*/
 		this.moveMarkers = function(bMoveSelected, bOneMarker){
 			$('#moveMarkersDialog').addClass( "hidden" );
 			IO.clearEnterFunction();
-			
+
 			var value = $('#moveMarkersNumber').val();
 			$('#moveMarkersNumber').val( 0 );
 
 			var aAllMarkers = Troff.getCurrentMarkers();
-			
+
 			if(bOneMarker){
 				bMoveSelected = true;
 				aAllMarkers = $('.currentMarker');
@@ -3769,25 +3769,25 @@ var TroffClass = function(){
 
 			var startNumber = 0;
 			var endNumber = aAllMarkers.length;
-			
+
 			if(bMoveSelected){
 				[startNumber, endNumber] = Troff.getStartAndEndMarkerNr( 0, 1 );
 			}
 
 			for(var i=startNumber; i<endNumber; i++){
 				var markerId = aAllMarkers[i].id;
-				
+
 				var markerTime = Number(aAllMarkers[i].timeValue) + Number(value);
 				var maxTime = Number(document.getElementById('timeBar').max);
 				var newTime = Math.max(0, Math.min(maxTime, markerTime) );
 
 				Troff.checkIfMarkerIndexHasSameTimeAsOtherMarkers(i, markerId, aAllMarkers, newTime );
-				
+
 				$('#'+markerId)[0].timeValue = newTime;
 				$('#'+markerId + 'S')[0].timeValue = newTime;
 				$('#'+markerId).prev().html( Troff.secToDisp(newTime) );
 			}
-			
+
 			Troff.settAppropriateMarkerDistance();
 			DB.saveMarkers(Troff.getCurrentSong() );
 		};
@@ -3850,7 +3850,7 @@ var TroffClass = function(){
 			if(newMarkerInfo != oldMarkerInfo){
 				updated = true;
 				$('#'+markerId)[0].info = newMarkerInfo;
-				
+
 				if( $('#' + markerId).hasClass('currentMarker') )
 					$('#markerInfoArea').val(newMarkerInfo);
 			}
@@ -3906,7 +3906,7 @@ var TroffClass = function(){
 			$('#stateList').empty();
 			$('#statesHelpText').show();
 		}; // end clearAllStates
-		
+
 		/*
 			clearAllMarkers - HTML, clears markers
 		*/
@@ -3955,7 +3955,7 @@ var TroffClass = function(){
 
 		this.settAppropriateMarkerDistance = function () {
 				var child = $('#markerList li:first-child')[0];
-			
+
 				var timeBarHeight = $('#timeBar').height() - 10;
 				var totalDistanceTop = 4;
 
@@ -3988,10 +3988,10 @@ var TroffClass = function(){
 				}
 				Troff.settAppropriateActivePlayRegion();
 		}; // end settAppropriateMarkerDistance
-		
+
 		this.selectNext = function(reverse){
 			var markers = $('#markerList').children();
-			
+
 			var currentMarkerTime = Number($('.currentMarker')[0].timeValue, 10);
 			var currentStopTime = Number($('.currentStopMarker')[0].timeValue, 10);
 			markers.sort(function(a, b){
@@ -4000,7 +4000,7 @@ var TroffClass = function(){
 
 			var bSelectNext = false;
 			var bSelectNextStop = false;
-			
+
 			if(reverse){
 				for(var i=markers.length-1; i>-1; i--) {
 					checkOrSelect(i);
@@ -4010,7 +4010,7 @@ var TroffClass = function(){
 					checkOrSelect(j);
 				}
 			}
-			
+
 			function checkOrSelect(i){
 				if(bSelectNextStop){
 					$(markers[i].childNodes[3]).click();
@@ -4029,19 +4029,19 @@ var TroffClass = function(){
 			}
 		};
 
-		
+
 		this.zoomDontShowAgain = function(){
 			$('#zoomInstructionDialog').addClass( "hidden" );
 			Troff.dontShowZoomInstructions = true;
 			DB.setZoomDontShowAgain();
 			IO.clearEnterFunction();
 		};
-		
+
 		this.zoomDialogOK = function(){
 			$('#zoomInstructionDialog').addClass( "hidden" );
 			IO.clearEnterFunction();
 		};
-		
+
 		this.zoomOut = function(){
 			document.getElementById('blur-hack').focus();
 			Troff.zoom(0, Number(document.getElementById('timeBar').max));
@@ -4064,7 +4064,7 @@ var TroffClass = function(){
 			}
 			Troff.zoom(startTime, endTime);
 		};
-		
+
 		this.zoom = function(startTime, endTime){
 
 			//NOTE all distances is in vh, unless otherwise specified
@@ -4079,15 +4079,15 @@ var TroffClass = function(){
 
 			m_zoomStartTime = startTime;
 			m_zoomEndTime = endTime;
-			
+
 			DB.saveZoomTimes(strCurrentSong, startTime, endTime);
-			
+
 			var winHeightPX = window.innerHeight;
-			
+
 			var mPX = parseInt($('#timeBar').css('marginTop'));
-			
+
 			var mDiv = 8;//parseInt($('#timeBar').css('marginTop'))
-			
+
 			var oH = 100; //original Height of div
 			var m = (mPX + mDiv) * oH / winHeightPX; // original margin between timebar and div
 			var mT = 2 * m; //total margin
@@ -4096,11 +4096,11 @@ var TroffClass = function(){
 			var tL = Number(document.getElementById('timeBar').max);
 			var t1 = startTime / tL;
 			var t2 = endTime / tL;
-			
+
 			var zt = 1 / (t2 - t1); // == tL/(endTime - startTime);
 			var zd = (zt * oh + mT)/oH;
 			var mt = t1 * oh * zt;
-			
+
 			var height = 100 * zd;
 			var marginTop = -mt;
 			$('#markerSection').css("height", (height + "vh"));
@@ -4213,7 +4213,7 @@ var RateClass = function(){
 	this.RATED_STATUS_NO_THANKS = 2;
 	this.RATED_STATUS_ASK_LATER = 3;
 	this.RATED_STATUS_ALREADY_RATED = 4;
-	
+
 	this.startFunc = function(){
 		chrome.storage.sync.get([
 			'millisFirstTimeStartingApp',
@@ -4227,12 +4227,12 @@ var RateClass = function(){
 				Rate.firstTimeStartingAppFunc();
 				return;
 			}
-			
+
 			if(oData.iRatedStatus == Rate.RATED_STATUS_ALREADY_RATED) return;
 
 			var millisOneMonth = 2678400000; // nr of millisecunds in a month!
 			var aLastMonthUsage = JSON.parse(oData.straLastMonthUsage);
-			
+
 			var d = new Date();
 			var millis = d.getTime();
 			aLastMonthUsage.push(millis);
@@ -4249,16 +4249,16 @@ var RateClass = function(){
 			chrome.storage.sync.set(
 				{'straLastMonthUsage' : JSON.stringify(aLastMonthUsage)}
 			);
-			
+
 			// return if no conection
 			if(!navigator.onLine) return;
-			
+
 			// return if user has used the app for less than 3 months
 			if(millis - oData.millisFirstTimeStartingApp < 3*millisOneMonth ) return;
-			
+
 			// return if user has used Troff less than 4 times durring the last month
 			if(aLastMonthUsage.length < 4) return;
-			
+
 			if(oData.iRatedStatus == Rate.RATED_STATUS_NOT_ASKED) {
 				Rate.showRateDialog();
 			}
@@ -4267,7 +4267,7 @@ var RateClass = function(){
 				if(Math.random() < 0.30)
 					Rate.showRateDialog();
 			}
-			
+
 			if(oData.iRatedStatus == Rate.RATED_STATUS_NO_THANKS) {
 				if(aLastMonthUsage.length < 20) return;
 				if(Math.random() < 0.05){
@@ -4277,7 +4277,7 @@ var RateClass = function(){
 
 		});
 	};
-	
+
 
 	this.firstTimeStartingAppFunc = function(){
 		var d = new Date();
@@ -4290,7 +4290,7 @@ var RateClass = function(){
 			'straLastMonthUsage' : straLastMonthUsage
 		});
 	};
-	
+
 	this.showRateDialog = function(){
 		IO.setEnterFunction(function(){
 			Rate.rateDialogRateNow();
@@ -4299,7 +4299,7 @@ var RateClass = function(){
 			$('#rateDialog').removeClass( "hidden" );
 		}
 	};
-	
+
 	this.rateDialogNoThanks = function(){
 		document.getElementById('blur-hack').focus();
 		IO.clearEnterFunction();
@@ -4317,7 +4317,7 @@ var RateClass = function(){
 		IO.clearEnterFunction();
 		$('#rateDialog').addClass("hidden");
 		chrome.storage.sync.set({'iRatedStatus' : Rate.RATED_STATUS_ALREADY_RATED});
-		
+
 		var strChromeWebStore = 'https://chrome.google.com/webstore/detail/';
 		var strTroffName = 'troff-training-with-music/';
 		var strTroffIdReview = 'mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews';
@@ -4328,7 +4328,7 @@ var RateClass = function(){
 
 
 var DBClass = function(){
-	
+
 	this.saveVal = function( key, value) {
 		var o = {};
 		o[ key ] = value;
@@ -4340,7 +4340,7 @@ var DBClass = function(){
 			returnFunction( item[ key ] );
 		} );
 	};
-	
+
 	this.cleanSong = function(songId, songObject){
 
 		if(songId === "strCurrentSongPath"){
@@ -4349,26 +4349,26 @@ var DBClass = function(){
 			var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
 			chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
 			chrome.storage.local.remove("strCurrentSongPath");
-			return; //It is returning here because songId === strCurrentSongPath is 
+			return; //It is returning here because songId === strCurrentSongPath is
 							//not a song to be cleened, this was a attribute used before v0.4
 		}
-		
+
 		songObject = DB.fixSongObject(songObject, songId);
-		
+
 		var obj = {};
 		obj[songId] = songObject;
 		chrome.storage.local.set(obj);
 	}; // end cleanSong
-	
+
 	this.fixSongObject = function(songObject, songId){
 
 		if (songObject === undefined) songObject = {};
-		
+
 		if(songObject.hasOwnProperty('iWaitBetweenLoops')){
 			songObject.wait = songObject.iWaitBetweenLoops;
 			delete songObject.iWaitBetweenLoops;
-		} 
-	
+		}
+
 		var songLength;
 		try{
 			songLength = Number(document.getElementById('timeBar').max);
@@ -4390,7 +4390,7 @@ var DBClass = function(){
 		oMarkerEnd.info  = "";
 		oMarkerEnd.color = "None";
 		oMarkerEnd.id = "markerNr1";
-	
+
 
 		if(!songObject.startBefore) songObject.startBefore = [
 			$("#TROFF_SETTING_SONG_DEFAULT_START_BEFORE_ON").hasClass( "active" ),
@@ -4434,25 +4434,25 @@ var DBClass = function(){
 		if(!songObject.zoomStartTime) songObject.zoomStartTime = 0;
 
 
-		/* Slim sim remove 
+		/* Slim sim remove
 		 * remove the zoomEndTime == 42, I will continue on null instead.....
-		 * This is only for fixing the zoom to 42 second-bug introduced sometime 
+		 * This is only for fixing the zoom to 42 second-bug introduced sometime
 		 * and fixed for version 1.01?
 		 */
 
 		if(!songObject.zoomEndTime || songObject.zoomEndTime == 42) songObject.zoomEndTime = null;
-		
+
 		if(!songObject.markers) songObject.markers = [oMarkerStart, oMarkerEnd];
-		if(!songObject.abAreas) 
+		if(!songObject.abAreas)
 			songObject.abAreas = [false, true, true, true];
-		if(!songObject.currentStartMarker) 
+		if(!songObject.currentStartMarker)
 			songObject.currentStartMarker = oMarkerStart.id;
 		if(!songObject.currentStopMarker)
 			songObject.currentStopMarker = (oMarkerEnd.id + 'S');
 
 		return songObject;
 	};
-	
+
 	/*DB*/this.fixDefaultValue = function( allKeys, key, valIsTrue ) {
 		if(allKeys.indexOf( key ) === -1 ) {
 			var obj = {};
@@ -4523,10 +4523,10 @@ var DBClass = function(){
 			}
 
 
-			// Slim sim remove 
+			// Slim sim remove
 			/*
 				This following if is only to ease the transition between v0.5 to v1.0
-				It is not used a single time after they open the app with v1.0 
+				It is not used a single time after they open the app with v1.0
 				so the standard is without the if...
 			*/
 			ifExistsPrepAndThenRemove( "strCurrentTab" );
@@ -4556,11 +4556,11 @@ var DBClass = function(){
 					closeSongDialog();
 				}
 			} )
-			
-			// Slim sim remove 
+
+			// Slim sim remove
 			/*
 				This following if is only ever used in the test-version
-				It is not used a single time after they open the app with this test 
+				It is not used a single time after they open the app with this test
 				version
 				so the standard is without the if...
 				it is extremely safe to remove....
@@ -4588,7 +4588,7 @@ var DBClass = function(){
 			}
 		});//end get all keys
 	};
-	
+
 	/*DB*/this.saveSonglists_new = function() {
 		var i,
 			aoSonglists = [],
@@ -4604,13 +4604,13 @@ var DBClass = function(){
 
 	/*DB* /this.saveSonglists = function(){
 		var aoSonglists = [];
-		
+
 		var aDOMSonglist = $('#songListPartTheLists li');
 		for(var i=0; i<aDOMSonglist.length; i++){
 			aoSonglists.push(JSON.parse(aDOMSonglist[i].getAttribute('stroSonglist')));
 		}
 		//$('#songlistHelpText').toggle($('#songListPartTheLists >').length === 0);
-		
+
 
 		var straoSonglists = JSON.stringify(aoSonglists);
 		chrome.storage.local.set({'straoSongLists': straoSonglists});
@@ -4636,7 +4636,7 @@ var DBClass = function(){
 			chrome.storage.local.set(obj);
 		});
 	};
-	
+
 	/*DB* /this.setCurrentSonglist = function(iSonglistId){
 		chrome.storage.local.set({'iCurrentSonglist': iSonglistId});
 	}; */
@@ -4645,11 +4645,11 @@ var DBClass = function(){
 		var stroSong = JSON.stringify({"strPath":path, "iGalleryId": galleryId});
 		chrome.storage.local.set({'stroCurrentSongPathAndGalleryId': stroSong});
 	};
-	
+
 	/*DB*/this.setZoomDontShowAgain = function(){
 		chrome.storage.local.set({"zoomDontShowAgain" : true});
 	};
-	
+
 	/*DB*/this.getZoomDontShowAgain = function(){
 		chrome.storage.local.get("zoomDontShowAgain", function(ret){
 			var bZoomDontShowAgain = ret["zoomDontShowAgain"] || false;
@@ -4664,7 +4664,7 @@ var DBClass = function(){
 			Troff.setSonglists_NEW(JSON.parse(straoSongLists));
 		});
 	};
-	
+
 	/*DB* /this.getCurrentSonglist = function(){
 		chrome.storage.local.get('iCurrentSonglist', function(ret){
 			Troff.setSonglistById(ret['iCurrentSonglist']);
@@ -4686,7 +4686,7 @@ var DBClass = function(){
 			}
 		} );
 	}
-	
+
 	/*DB*/this.getCurrentSong = function(){
 		chrome.storage.local.get('stroCurrentSongPathAndGalleryId', function(ret){
 			var stroSong = ret['stroCurrentSongPathAndGalleryId'];
@@ -4696,10 +4696,10 @@ var DBClass = function(){
 			}
 			var oSong = JSON.parse(stroSong);
 			if(oSong.iGalleryId == -1){
-				// Slim sim remove 
+				// Slim sim remove
 				/*
 					This if is only to ease the transition between v0.3 to v0.4
-					it is not used a single time after they open the app with v0.4 
+					it is not used a single time after they open the app with v0.4
 					so the standard is the else, it should NOT be removed!
 				*/
 				Troff.strCurrentSong = oSong.strPath;
@@ -4707,7 +4707,7 @@ var DBClass = function(){
 			} else {
 				setSong(oSong.strPath, oSong.iGalleryId);
 			}
-			
+
 		});
 	};
 
@@ -4755,7 +4755,7 @@ var DBClass = function(){
 		}
 	});
 	};
-	
+
 	/*DB*/this.saveZoomTimes = function(songId, startTime, endTime) {
 	chrome.storage.local.get(songId, function(ret){
 		var song = ret[songId];
@@ -4763,16 +4763,16 @@ var DBClass = function(){
 			console.error('Error "saveZoomTimes, noSong" occurred, songId=' + songId);
 			song = DB.getStandardSong();
 		}
-		
+
 		song.zoomStartTime = startTime;
 		song.zoomEndTime = endTime;
 
-		/* Slim sim remove 
-		 * This is only for fixing the zoom to 42 second-bug introduced sometime 
+		/* Slim sim remove
+		 * This is only for fixing the zoom to 42 second-bug introduced sometime
 		 * and fixed for version 1.01?
 		 */
 		if(song.zoomEndTime == 42) song.zoomEndTime = 42.000000001;
-		
+
 		var obj = {};
 		obj[songId] = song;
 		chrome.storage.local.set(obj);
@@ -4807,7 +4807,7 @@ var DBClass = function(){
 		var obj = {};
 		obj[songId] = song;
 		chrome.storage.local.set(obj);
-		
+
 		if( callback ) {
 			callback();
 		}
@@ -4825,7 +4825,7 @@ var DBClass = function(){
 												' songId=' +songId);
 				return;
 		}
-		
+
 		song.volume = oState.volumeBar;
 		song.speed = oState.speedBar;
 		song.pauseBefStart = [oState.buttPauseBefStart, oState.pauseBeforeStart];
@@ -4836,14 +4836,14 @@ var DBClass = function(){
 		if($('#'+ oState.currentStopMarker).length)
 			song.currentStopMarker = oState.currentStopMarker;
 		song.wait = [oState.buttWaitBetweenLoops, oState.waitBetweenLoops];
-		
+
 		var obj = {};
 		obj[songId] = song;
 		chrome.storage.local.set(obj);
 	});
-		
+
 	};
-		
+
 	/*DB*/this.setCurrentStartAndStopMarker = function(startMarkerId, stopMarkerId,
 																							 songId){
 	chrome.storage.local.get(songId, function(ret){
@@ -4887,7 +4887,7 @@ var DBClass = function(){
 	this.setCurrentSongInfo = function(info, songId){
 		DB.setCurrent(songId, 'info', info);
 	};
-	
+
 	this.setCurrentTempo = function(tempo, songId){
 		DB.setCurrent(songId, 'tempo', tempo);
 	};
@@ -4971,7 +4971,7 @@ var DBClass = function(){
 			if(song.bMirrorImage !== undefined)
 				Troff.setMirrorImage(song.bMirrorImage);
 			Troff.setWaitBetweenLoops(song.wait[0], song.wait[1]);
-			
+
 			Troff.setInfo(song.info);
 			Troff.setTempo(song.tempo);
 			Troff.addButtonsOfStates(song.aStates);
@@ -4980,17 +4980,17 @@ var DBClass = function(){
 			Troff.zoom(song.zoomStartTime, song.zoomEndTime);
 
 		};// end loadSongMetadata
-		
+
 		chrome.storage.local.get(songId, function(ret){
 
 			var song = ret[songId];
-			
+
 			if(!song){ // new song:
 				song = DB.fixSongObject();
 				var obj = {};
 				obj[songId] = song;
 				chrome.storage.local.set(obj);
-				
+
 				loadSongMetadata(song, songId);
 			} else {
 				loadSongMetadata(song, songId);
@@ -5006,19 +5006,19 @@ var DBClass = function(){
 			Troff.setTempo(song.tempo);
 			Troff.addButtonsOfStates(song.aStates);
 			Troff.setAreas(song.abAreas);
-			Troff.setCurrentSong();			
+			Troff.setCurrentSong();
 		};// end loadImageMetadata
-		
+
 		chrome.storage.local.get(songId, function(ret){
 
 			var song = ret[songId];
-			
+
 			if(!song){ // new song:
 				song = DB.fixSongObject();
 				var obj = {};
 				obj[songId] = song;
 				chrome.storage.local.set(obj);
-				
+
 				loadImageMetadata(song, songId);
 			} else {
 				loadImageMetadata(song, songId);
@@ -5042,7 +5042,7 @@ var IOClass = function(){
 	/*IO*/this.startFunc = function() {
 
 		document.addEventListener('keydown', IO.keyboardKeydown);
-		
+
 		$( ".outerDialog" ).click( function( event ) {
 			//if( $(event.delegateTarget).attr( "id") == $(event.target).attr( "id") ) {
 			if( $(event.target ).hasClass( "outerDialog" ) ) {
@@ -5065,7 +5065,7 @@ var IOClass = function(){
 
 		} );
 
-		//TODO: fix so that all cancelButtons use this class, and remove there id, and event-listener :) 
+		//TODO: fix so that all cancelButtons use this class, and remove there id, and event-listener :)
 		$( ".dialogCancelButton" ).click( function( event ) {
 			$( event.target ).closest(".outerDialog").addClass("hidden")
 		} );
@@ -5095,11 +5095,11 @@ var IOClass = function(){
 
 		$( "#toggleExtendedMarkerColor" ).click ( Troff.toggleExtendedMarkerColor );
 		$( "#toggleExtraExtendedMarkerColor" ).click ( Troff.toggleExtraExtendedMarkerColor );
-		
+
 		$( "#themePickerParent" ).find("input").click ( Troff.setTheme );
 		$( "#columnToggleParent" ).find("input").click( dataTableColumnPicker );
 
-		
+
 		$('#buttPlayUiButtonParent').click( Troff.playUiButton );
 		$('#buttTip').click(IO.openHelpWindow);
 
@@ -5148,10 +5148,10 @@ var IOClass = function(){
 		//$('#startBefore')[0].addEventListener('input', Troff.updateStartBefore);
 		//$('#searchSong')[0].addEventListener('input', Troff.searchSong);
 		//$('#searchCreateSongList')[0].addEventListener('input', Troff.searchCreateSongList);
-		
+
 		$('#buttZoom').click(Troff.zoomToMarker);
 		$('#buttZoomOut').click(Troff.zoomOut);
-		
+
 		$('#areaSelector >').click(Troff.toggleArea);
 
 		$('#markerInfoArea').change(Troff.updateMarkerInfo);
@@ -5176,9 +5176,9 @@ var IOClass = function(){
 		$('#saveNewSongList').click(Troff.saveNewSongList);
 		$('#removeSongList').click(Troff.removeSonglist);
 		$('#cancelSongList').click(Troff.cancelSongList);
-		
+
 		//$('#songlistAll').click(Troff.selectAllSongsSonglist);
-		
+
 		$('#stopAfter')[0].addEventListener(
 			'input', Troff.settAppropriateActivePlayRegion
 		);
@@ -5204,13 +5204,13 @@ var IOClass = function(){
 		$('#rateDialogNoThanks').click(Rate.rateDialogNoThanks);
 		$('#rateDialogAskLater').click(Rate.rateDialogAskLater);
 		$('#rateDialogRateNow').click(Rate.rateDialogRateNow);
-		
+
 		$('#firstTimeUserDialogTour').click(Troff.firstTimeUserDialogTour);
 		$('#firstTimeUserDialogOK').click(Troff.firstTimeUserDialogOK);
-		
+
 		$('#zoomInstructionDialogDontShowAgain').click(Troff.zoomDontShowAgain);
 		$('#zoomInstructionDialogOK').click(Troff.zoomDialogOK);
-		
+
 		$('#infoAndroidDonate').click(function() {
 			$('#donate').click();
 		});
@@ -5220,12 +5220,12 @@ var IOClass = function(){
 			document.getElementById('blur-hack').focus();
 		});
 		$('.loopButt').click( Troff.setLoop );
-		
-		
+
+
 		window.addEventListener('resize', function(){
 			Troff.settAppropriateMarkerDistance();
 		});
-		
+
 		Troff.recallGlobalSettings();
 
 	};//end startFunc
@@ -5263,7 +5263,7 @@ var IOClass = function(){
 		//if 0 to 9 or bakspace, del, alt, arrows in a input-field, return,
 		//---- site add "numpad"
 		if(
-				$(':input[type="number"]' ).is(":focus") 
+				$(':input[type="number"]' ).is(":focus")
 				&&
 				(
 					(event.keyCode>=48 && event.keyCode<=57) || //numbers
@@ -5285,7 +5285,7 @@ var IOClass = function(){
 				var number = event.keyCode - 48;
 				Troff.setLoopTo(number);
 		}
-		
+
 		var altTime = 0.08333333333; // one frame
 		var regularTime = 0.8333333333; // 10 freames
 		var shiftTime = 8.333333333; // 100 frames
@@ -5367,10 +5367,10 @@ var IOClass = function(){
 			break;
 		case 65: // A
 			if(event.shiftKey==1)
-				Troff.incrementInput('#stopAfter', 1, 
+				Troff.incrementInput('#stopAfter', 1,
 														 Troff.settAppropriateActivePlayRegion);
 			else if(event.altKey==1)
-				Troff.incrementInput('#stopAfter',-1, 
+				Troff.incrementInput('#stopAfter',-1,
 														 Troff.settAppropriateActivePlayRegion);
 			else
 				Troff.toggleStopAfter();
@@ -5441,7 +5441,7 @@ var IOClass = function(){
 		if( arrowFunc !== undefined ) IOArrowFunction = arrowFunc;
 		else IOArrowFunction = false;
 	};
-	
+
 	/*IO*/this.clearEnterFunction = function(){
 		IOEnterFunction = false;
 		IOArrowFunction = false;
@@ -5496,8 +5496,8 @@ var IOClass = function(){
 
 
 		IOEnterFunction = function() {
-			if(func) func( 
-				$("#"+markerNameId).val(), 
+			if(func) func(
+				$("#"+markerNameId).val(),
 				$("#"+markerInfoId).val(),
 				$(".colorPickerSelected").attr("color"),
 				$("#"+markerTimeId).val()
@@ -5506,7 +5506,7 @@ var IOClass = function(){
 			IOEnterFunction = false;
 		};
 
-		
+
 		var buttOK = $("<input>", {
 			"type":"button",
 			"class":"regularButton",
@@ -5552,7 +5552,7 @@ var IOClass = function(){
 				}
 			}
 		});
-		
+
 		function setColor(){
 			$('.colorPickerSelected').removeClass('colorPickerSelected');
 			this.classList.add('colorPickerSelected');
@@ -5573,13 +5573,13 @@ var IOClass = function(){
 							}).click(setColor);
 		}
 		var butColor0 = generateColorBut("None");
-		
+
 		var butColor1 = generateColorBut("Bisque");
 		var butColor2 = generateColorBut("Aqua");
 		var butColor3 = generateColorBut("Chartreuse");
 		var butColor4 = generateColorBut("Coral");
 		var butColor5 = generateColorBut("Pink");
-		
+
 		var butColor6 = generateColorBut("Burlywood");
 		var butColor7 = generateColorBut("Darkcyan");
 		var butColor8 = generateColorBut("Yellowgreen");
@@ -5622,13 +5622,13 @@ var IOClass = function(){
 												"rows": 6,
 												"style":"margin-left:13px; padding: 4px; width:100%;"
 										}));
-										
+
 		var row4 = $("<span>", {"class": "oneRow"})
 									.append(
 										$("<div>", {"class": "flexCol flex"})
 										.append($("<p>").append("Color:"))
 										.append($("<p>", {"id":markerColorId}).append("red"))
-									) 
+									)
 									.append(
 										$("<div>", {"class":"flexRowWrap"})
 										.append(butColor0)
@@ -5687,7 +5687,7 @@ var IOClass = function(){
 		var bDouble  = oInput.bDouble;
 		var strTextarea = oInput.strTextarea || "";
 		var strTextareaPlaceholder = oInput.strTextareaPlaceholder || "";
-		
+
 		var time = Date.now();
 		var buttEnterId = "buttOkId" + time;
 
@@ -5714,7 +5714,7 @@ var IOClass = function(){
 		if(bDouble){
 			strTextareaHTML = "<textarea placeholder='"+strTextareaPlaceholder+"'"+
 										"id='"+textareaId+"'>"+strTextarea+"</textarea>";
-		} 
+		}
 
 		$("body").append($("<div id='"+outerId+"' style='"+outerDivStyle+
 							 "'><div id='"+innerId+"' style='"+innerDivStyle+
@@ -5861,7 +5861,7 @@ var IOClass = function(){
 
 	this.openHelpWindow = function() {
 		//    chrome.app.window.create('help.html');
-		
+
 		chrome.app.window.create(
 			'help.html',
 			{bounds: {width:742, height:600}, minWidth:300, minHeight:200,  id:"HelpWin"}
@@ -5931,9 +5931,12 @@ var IO = new IOClass();
 var Rate = new RateClass();
 
 $(document).ready( function() {
-	
+
 	$( "#dismisNewVersionModal" ).on( "click", function() {
 		$( "#newVersionModal" ).remove();
+	});
+	$( "#dismisNewVersion2Modal" ).on( "click", function() {
+		$( "#newVersionModal2" ).remove();
 	});
 
 	var milisAt_2020_06_11 = 1591826400000;

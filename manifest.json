@@ -1,9 +1,9 @@
 {
-  "name": "Troff - Training with music",
-  "short_name": "Troff",
-  "version": "1.2.1",
+  "name": "Old Troff - Training with music",
+  "short_name": "Old Troff",
+  "version": "1.2.3",
   "manifest_version": 2,
-  "description": "Training with music - A Music player that let you loop a part of a song, slow it down and create markers on the song timeline.",
+  "description": "Training with music - use https://troff.app instead. A Music player that let you loop, adjust the tempo and create markers!",
   "permissions": [
     "storage"
     ,{"mediaGalleries": ["read", "allAutoDetected"]}
@@ -18,5 +18,12 @@
       "scripts": ["runtime.js"]
     }
   },
-  "offline_enabled": true
+	"offline_enabled": true,
+	"related_applications": [
+	  {
+		 "platform": "webapp",
+		 "url": "https://troff.app"
+	  }
+	],
+	"prefer_related_applications": false
 }
