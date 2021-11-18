@@ -5939,11 +5939,6 @@ $(document).ready( function() {
 		$( "#newVersionModal2" ).remove();
 	});
 
-	var milisAt_2020_06_11 = 1591826400000;
-	if( new Date().getTime() > milisAt_2020_06_11 ) {
-		$( "#newVersionModal" ).removeClass( "hidden" );
-	}
-
 	initSongTable();
 
 	DB.cleanDB();
