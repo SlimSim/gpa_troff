@@ -68,6 +68,33 @@
 
 <body class="backgroundColor">
 
+<div id="newVersionModal3" class="outerDialog">
+  <div class="innerDialog flexCol" style="
+  		padding-top: 40px;
+  		overflow: auto;
+  		align-items: center;">
+		<div style="width: 100%;margin-top: -28px;">
+				<button id="dismissNewVersion3Modal" style="float: right;">X</button>
+		</div>
+    <div style="display: block; padding: 20px; padding-top: 1vh; max-width: 500px; text-align: center;">
+			<h1 style="font-size: 18px">You can copy your markers from this version to new troff!</h1>
+   		<h2 style="margin: 20px;">
+				<a target="_blank" href="https://troff.app">troff.app</a>
+			</h2>
+      <p style="display: block; font-size: 13px;">
+      	If you want to bring all your markers into the new Troff,
+				you can copy them under "advanced", "import / export", and "export markers and settings".
+				Then simply add that song to
+				<a target="_blank" href="https://troff.app">troff.app</a>
+				and import the markers under "advanced", "import / export", and "import markers and settings".
+      </p>
+			<p style="display: block; padding-top: 12px;">
+				<a target="_blank" href="https://troff.app/help.html#exportImport">read more here</a>
+			</p>
+    </div>
+  </div>
+</div><!--end of id newVersionModal3 -->
+
 <div id="newVersionModal2" class="outerDialog">
   <div class="innerDialog flexCol" style="
   		width: 90vw;
@@ -109,9 +136,9 @@
     </div>
 
 
-  </div>
+  </div> <!--end of id newVersionModal2 -->
 
-  <div id="newVersionModal" class="outerDialog">
+  <div id="newVersionModal1" class="outerDialog">
     <div class="innerDialog flexCol" style="
     		width: 90vw;
     		height: 90vh;
@@ -160,7 +187,7 @@
       <div style="flex: 1;">
       </div>
       <div class="flexRow">
-        <input type="button" value="I want to continue to use this version" id="dismisNewVersionModal" />
+        <input type="button" value="I want to continue to use this version" id="dismisNewVersion1Modal" />
       </div>
 
 
@@ -192,7 +219,7 @@
 				</span>
 			</nav>
 			<div id="mediaInfoBox" class="flexCol halfMarginParent">
-				<a href="#" id="readMoreAndroidTroff" class="center padding-bottom">Get Troff for Android</a>
+				<a href="https://troff.app" target="_blank" class="center padding-bottom">Use the new troff.app instead!</a>
 				<div id="currentArtist">
 					Please select a song or movie from the songs area
 				</div>
@@ -577,38 +604,6 @@
 <!--
 --------------- POP UP DIALOGS: ----------------
 -->
-
-	<div id="outerInfoAndroidPopUpSquare" class="outerDialog hidden" >
-		<div class="popUpSquare" id="innerInfoAndroidPopUpSquare" >
-			<div class="flexCol">
-				<p>Troff is now avalable as a very early beta app for Android.</p>
-				<p>
-					As of mars 2017, only markers is implemented, but if you want to get
-					it for Android and follow the development, become a beta tester here:
-				</p>
-				<a target="_blank" href="https://play.google.com/apps/testing/slimsimapps.troff">
-					Become beta tester of Troff for Android!
-				</a>
-				<p>
-					Please note that there may be bugs (if you encouter any, please
-					submit them to slimsimapps@gmail.com).
-				</p>
-				<p>
-					New features will be implemented quite slowly since there is only
-					one spare time developer.
-				</p>
-				<p>Have patience.</p>
-				<p>
-					If you want to support the development,
-					please donate <a href="#" id="infoAndroidDonate">here</a>,
-					like Troff on <a target="_blank" href="https://www.facebook.com/troffmusic/">Facebook</a> and
-					rate on <a target="_blank" href="https://chrome.google.com/webstore/detail/troff-training-with-music/mebbbmcjdgoipnkpmfjndbolgdnakppl/reviews">Chome Web Store</a> and
-					<a target="_blank" href="https://play.google.com/store/apps/details?id=slimsimapps.troff&ah=XovIcdxEAyEJCMvQHpPKkKHLdqU&hl=sv#details-reviews">Google Play</a>.
-				</p>
-			</div>
-			<input id="buttCancelInfoAndroidPopUpSquare" type="button" class="regularButton buttWidthStandard" value="Cancel" />
-		</div>
-	</div>
 
 	<div id="outerImportExportPopUpSquare" class="outerDialog hidden">
 		<div class="innerDialog mediumDialog" id="innerImportExportPopUpSquare" >

@@ -273,8 +273,16 @@ function checkIfSongExists(fullPath, galleryId){
 	return false;
 }*/
 
+function showRandomNewVersionPopUp() {
+	//random number inclusively between 1 and 3:
+	var randomNumber = Math.floor(Math.random() * 3 + 1 );
+		$( "#newVersionModal" + randomNumber ).removeClass("hidden");
+}
+
 function setSong(fullPath, galleryId){
 	Troff.pauseSong();
+
+	showRandomNewVersionPopUp();
 
 	if( $( "#TROFF_SETTING_SONG_LIST_CLEAR_ON_SELECT" ).hasClass( "active" ) ) {
 		$("#dataSongTable_filter").find( "input" ).val('');
@@ -2362,12 +2370,6 @@ var TroffClass = function(){
 		//$('#outerImportExportPopUpSquare').toggle();
 		document.getElementById('blur-hack').focus();
 	};
-
-	/*Troff*/this.toggleInfoAndroid = function(){
-		IO.jQueryToggle('#outerInfoAndroidPopUpSquare');
-		document.getElementById('blur-hack').focus();
-	};
-
 
 	/*Troff*/this.getLastSlashName = function(strUrl){
 		var aUrl = strUrl.split("/");
@@ -5043,14 +5045,6 @@ var IOClass = function(){
 
 		document.addEventListener('keydown', IO.keyboardKeydown);
 
-		$( ".outerDialog" ).click( function( event ) {
-			//if( $(event.delegateTarget).attr( "id") == $(event.target).attr( "id") ) {
-			if( $(event.target ).hasClass( "outerDialog" ) ) {
-				$( event.target ).addClass( "hidden" );
-			}
-		} );
-
-
 		$( "[data-st-css-selector-to-toggle]" ).on( "click", function( event ) {
 			var $target = $( event.target ),
 				$value = $( $target.data( "st-css-selector-to-toggle" ) );
@@ -5132,8 +5126,6 @@ var IOClass = function(){
 		$('#buttPromptMoveMarkersMoreInfo').click(Troff.toggleMoveMarkersMoreInfo);
 		$('#buttImportExportMarker').click(Troff.toggleImportExport);
 		$('#buttCancelImportExportPopUpSquare').click(Troff.toggleImportExport);
-		$('#readMoreAndroidTroff').click(Troff.toggleInfoAndroid);
-		$('#buttCancelInfoAndroidPopUpSquare').click(Troff.toggleInfoAndroid);
 		$('#buttExportMarker').click(Troff.exportStuff);
 		$('#buttImportMarker').click(Troff.importStuff);
 		$('#buttPauseBefStart').click(Troff.togglePauseBefStart);
@@ -5932,11 +5924,14 @@ var Rate = new RateClass();
 
 $(document).ready( function() {
 
-	$( "#dismisNewVersionModal" ).on( "click", function() {
-		$( "#newVersionModal" ).remove();
+	$( "#dismisNewVersion1Modal" ).on( "click", function() {
+		$( "#newVersionModal1" ).addClass("hidden");
 	});
 	$( "#dismisNewVersion2Modal" ).on( "click", function() {
-		$( "#newVersionModal2" ).remove();
+		$( "#newVersionModal2" ).addClass("hidden");
+	});
+	$( "#dismissNewVersion3Modal" ).on( "click", function() {
+		$( "#newVersionModal3" ).addClass("hidden");
 	});
 
 	initSongTable();

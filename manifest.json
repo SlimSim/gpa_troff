@@ -1,7 +1,7 @@
 {
   "name": "Old Troff - Training with music",
   "short_name": "Old Troff",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "manifest_version": 2,
   "description": "Training with music - use https://troff.app instead. A Music player that let you loop, adjust the tempo and create markers!",
   "permissions": [
